@@ -33,6 +33,7 @@ import time
 #
 from Tables import TableCanvas, ColumnHeader, MyTable
 from TableModels import TableModel
+from Tables_Import import TableImporter
 from Prefs import Preferences
 
 class TablesApp(Frame):
@@ -252,8 +253,26 @@ class TablesApp(Frame):
         return
         
     def import_csv(self):
-        #importer = TableImporter()
-        #importer.show_import_dialog()
+        importer = TableImporter()
+        import tkFileDialog,os
+        result = None
+        self.datafile = None
+        savedir = os.getcwd()
+        project_name = ''
+        
+        filename=tkFileDialog.askopenfile(defaultextension='.csv',
+                                                initialdir=savedir,
+                                                initialfile=project_name,
+                                                filetypes=[("Data file","*.csv")],
+                                                title='Choose data from a .csv file saved as excel spreadsheet in .csv format (comma separated list)',
+                                                parent=self.tablesapp_win)
+        if filename and os.path.exists(filename.name) and os.path.isfile(filename.name):
+            datafile = filename.name
+            
+        modeldata = importer.ImportTableModel(self.tablesapp_win, datafile)
+        sheetdata={}
+        sheetdata['sheet1']=modeldata
+        self.new_project(sheetdata)
         return
         
     def export_csv(self):
