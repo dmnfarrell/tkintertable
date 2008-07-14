@@ -119,7 +119,6 @@ class TablesApp(Frame):
         
         self.IO_menu={'01Import from csv file':{'cmd':self.import_cvs},
                       '02Export to csv file':{'cmd':self.export_cvs},
-                      '03Import external fileset':{'cmd':self.import_fileset},
                       }
         
         self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
@@ -232,9 +231,9 @@ class TablesApp(Frame):
         
     def open_project(self):
         import tkFileDialog, os    
-        filename=tkFileDialog.askopenfilename(defaultextension='.labbook',
+        filename=tkFileDialog.askopenfilename(defaultextension='.table"',
                                                   initialdir=os.getcwd(),
-                                                  filetypes=[("Pickle file","*.labbook"),
+                                                  filetypes=[("Pickle file","*.table"),
                                                              ("All files","*.*")],
                                                   parent=self.tablesapp_win)
         if os.path.isfile(filename):
@@ -261,9 +260,9 @@ class TablesApp(Frame):
         """Save as a new filename"""               
         import tkFileDialog, os
         filename=tkFileDialog.asksaveasfilename(parent=self.tablesapp_win,
-                                                defaultextension='.labbook',
+                                                defaultextension='.table',
                                                 initialdir=self.defaultsavedir,
-                                                filetypes=[("Labbook project","*.labbook"),
+                                                filetypes=[("TableApp project","*.table"),
                                                            ("All files","*.*")])
         if not filename:
             print 'Returning'
@@ -314,69 +313,6 @@ class TablesApp(Frame):
         exporter.ExportTableData(self.currenttable)
         return
     
-    def import_fileset(self):
-        """Import a series of external files in a folder"""
-        if self.parent == None:
-            import tkMessageBox
-            tkMessageBox.showwarning("Not available", "You can't use this feature outside PEAT.")
-            return
-        #get folder
-        import tkFileDialog, os
-        importdir=tkFileDialog.askdirectory(initialdir=os.getcwd(),title='Select directory files'
-                                            ,mustexist=1,parent=self.tablesapp_win)
-        if not importdir:
-            return
-        peatapp = self.parent
-        protein = self.peatinfo['record']
-        field = self.peatinfo['column']
-        import os
-        files = os.listdir(importdir)
-        okfiles = []
-        files.sort()
-        for f in files:
-            #if file.find(pattern)!=-1 and file[0]!='.':
-            okfiles.append(os.path.join(importdir,f))
-        #print 'files to be used:', okfiles 
-                
-        #create new sheet
-        sheetname = self.add_Sheet()
-        self.notebook.selectpage(sheetname)
-        #add a col
-        model=self.currenttable.getModel()
-        model.deleteColumn(1)
-        model.deleteRow(0)
-        model.addColumn('testfiles', 'File')
-        row=0
-        
-        import PEATDialog
-        self.pb=PEATDialog.PEATDialog(self.tablesapp_win, option='progressbar',message='Importing files')
-        self.pb.update_progress(0)
-        total = len(okfiles)
-        
-        #iterate over filenames in folder and add one row for each file
-        for f in okfiles:            
-            filename=os.path.split(f)[-1]
-            #create row
-            if filename.find('.') != -1:
-                name = filename.split('.')[0]
-            else:
-                name = filename
-            model.addRow(name)
-            print 'adding', filename
-            #now add file to this table row, col
-            #try:
-            self.currenttable.add_file(peatapp, f, 
-                                   protein_name=protein,field_name=field,
-                                   sheet=sheetname, row=row, col=1 )
-            row=row+1
-            #except:
-            #    print 'failed to add', filename
-            c=float(row)/float(total)*100.0            
-            self.pb.update_progress(c)
-            self.currenttable.redrawTable()
-            #self.update_idletasks()
-        self.pb.close()    
-        return
         
     def add_Sheet(self, sheetname=None, sheetdata=None):
         """Add a new sheet - handles all the table creation stuff"""
@@ -547,7 +483,7 @@ class TablesApp(Frame):
     def online_documentation(self,event=None):
         """Open the online documentation"""
         import webbrowser
-        link='http://enzyme.ucd.ie/PEAT/'
+        link='http://sourceforge.net/projects/tkintertable/'
         webbrowser.open(link,autoraise=1)
         return
         
