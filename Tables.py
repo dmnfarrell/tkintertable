@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 """
     Created January 2008
-    Tkinter table class
+    TableCanvas Class
     Copyright (C) Damien Farrell
  
     This program is free software; you can redistribute it and/or
@@ -32,6 +33,10 @@ class TableCanvas(Canvas):
                          relief=GROOVE,
                          scrollregion=(0,0,600,600)) 
         self.parentframe = parent
+        #get platform into a variable
+        import platform
+        self.platform=platform.system()
+        print self.platform
         self.model = model
         self.width=800
         self.height=600 
@@ -40,10 +45,14 @@ class TableCanvas(Canvas):
         self.horizlines=1
         self.vertlines=1
         self.autoresizecols = 0
+        self.paging = 0
+        self.rowsperpage = 10
+        self.currentpage = None
+        self.navFrame = None
         self.inset=2
         self.x_start=40
         self.y_start=1
-        self.linewidth=1.0        
+        self.linewidth=1.0    
         self.thefont = "Arial 12"
         self.cellbackgr = '#9999CC'
         self.entrybackgr = 'white'
@@ -68,8 +77,25 @@ class TableCanvas(Canvas):
             self.cols=8
         self.tablewidth=(self.cellwidth)*self.cols            
         self.tableheader = ColumnHeader(self.parentframe, self) 
-        self.do_bindings() 
-        print 'Initialised tablecanvas'
+        self.do_bindings()
+        #
+        #column specific actions, define for every column type in the model
+        #when you add a column type you should edit this dict
+                 
+        self.columnactions = {'text' : {"Edit":  'draw_cellentry' },
+                              'number' : {"Edit": 'draw_cellentry' }}
+        #
+        #print self.columnactions
+        #print 'Initialised tablecanvas'
+        
+        return
+    
+    def mouse_wheel(self, event):
+        """Handle mouse wheel scroll for windows"""
+        if event.num == 5 or event.delta == -120:
+            event.widget.yview_scroll(1, UNITS)        
+        if event.num == 4 or event.delta == 120:
+            event.widget.yview_scroll(-1, UNITS)
         return
         
     def do_bindings(self):
@@ -86,16 +112,20 @@ class TableCanvas(Canvas):
         
         self.bind("<Control-x>", self.delete_Row)
         self.bind("<Control-n>", self.add_Row)
+        self.bind("<Delete>", self.delete_Cell)
         
-        self.parentframe.master.bind("<Right>", self.handle_arrow_keys)
-        self.parentframe.master.bind("<Left>", self.handle_arrow_keys)
-        self.parentframe.master.bind("<Up>", self.handle_arrow_keys)
-        self.parentframe.master.bind("<Down>", self.handle_arrow_keys)
-        self.parentframe.master.bind("<KP_8>", self.handle_arrow_keys)
+        if not hasattr(self,'parentapp'):
+            self.parentapp = self.parentframe
+        self.parentapp.master.bind("<Right>", self.handle_arrow_keys)
+        self.parentapp.master.bind("<Left>", self.handle_arrow_keys)
+        self.parentapp.master.bind("<Up>", self.handle_arrow_keys)
+        self.parentapp.master.bind("<Down>", self.handle_arrow_keys)
+        self.parentapp.master.bind("<KP_8>", self.handle_arrow_keys)
         
         self.parentframe.master.bind("<Return>", self.handle_arrow_keys)
         self.parentframe.master.bind("<Tab>", self.handle_arrow_keys)
-        
+        if 'windows' in self.platform:
+            self.bind("<MouseWheel>", self.mouse_wheel)            
         self.bind('<Button-4>', lambda event: event.widget.yview_scroll(-1, UNITS))
         self.bind('<Button-5>', lambda event: event.widget.yview_scroll(1, UNITS)) 
         return
@@ -103,7 +133,11 @@ class TableCanvas(Canvas):
     def getModel(self):
         """Get the current table model"""        
         return self.model
-
+    
+    def setModel(self,model):
+        self.model = model
+        return
+    
     def createTableFrame(self):
         """Adds column header and scrollbars and combines them with
            the current table adding all to the master frame provided in constructor.
@@ -133,16 +167,10 @@ class TableCanvas(Canvas):
     def redrawTable(self, event=None):
         """Draw the table from scratch based on it's model data""" 
         import time
-        print 'redrawing',time.time()  
+        #print 'redrawing',time.time()  
         model = self.model
         self.rows=self.model.getRowCount()
-        self.cols=self.model.getColumnCount()
-   
-        #Show a progress dialog if long redraw?
-        #from PEATDialog import PEATDialog
-        #if self.rows > 100:
-        #    progresswin = self.show_progressbar()
-                        
+        self.cols=self.model.getColumnCount()                      
         self.tablewidth=(self.cellwidth)*self.cols
         self.configure(bg=self.cellbackgr)
         #determine col positions for first time
@@ -150,16 +178,47 @@ class TableCanvas(Canvas):
         #set sort order
         if self.sortcol != None:
             self.model.setSortOrder(self.sortcol, self.reverseorder)
-        self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rows+10))
-        self.draw_grid()   
+
+        #check if large no. of records and switch to paging view
+        if self.paging == 0 and self.rows >= 1000:
+            self.paging = 1
+        #if using paging, we only want to display the current page..
+        if self.paging == 1:
+            self.numpages = int(math.ceil(self.rows/self.rowsperpage))
+            if self.currentpage == None:
+                self.currentpage = 0
+            self.drawNavFrame()
+        else: 
+            try:
+                self.navFrame.destroy()
+                self.navFrame.forget()
+            except:
+                pass            
+                
+        #determine current range of rows to draw if paging
+        if self.paging == 1 and self.rows>self.rowsperpage:            
+            lower=self.currentpage*self.rowsperpage
+            upper=lower+self.rowsperpage
+            if upper>=self.rows:
+                upper=self.rows
+            self.rowrange=range(lower,upper)            
+            #print 'self.rowrange',self.rowrange
+            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rowsperpage+10))
+        else:
+            self.rowrange = range(0,self.rows)            
+            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rows+10))
+            
+        self.draw_grid() 
         self.update_idletasks() 
         self.draw_rowheader()
         self.tableheader.redraw()
         align=None
         self.delete('fillrect')
-        #now draw model data in cells   
+                        
+        #now draw model data in cells  
+        rowpos=0
         if self.model!=None:            
-            for row in range(self.rows):
+            for row in self.rowrange:
                 for col in range(self.cols):  
                     if model.getColumnName(col) == 'Name':  
                         align='w' 
@@ -168,17 +227,15 @@ class TableCanvas(Canvas):
                     bgcolor = self.model.getColorAt(row,col, 'bg')
                     fgcolor = self.model.getColorAt(row,col, 'fg')
                     text = self.model.getValueAt(row,col)
-                    self.draw_Text(row, col, text, fgcolor, align)
+                    self.draw_Text(rowpos, col, text, fgcolor, align)
                     if bgcolor != None:
-                        self.draw_rect(row,col, color=bgcolor)
-                #if self.rows > 100:   
-                #    self.bar.updateProgress(row/self.rows*100)
-                #self.update_idletasks()
-        #progresswin.destroy() 
+                        self.draw_rect(rowpos,col, color=bgcolor)
+                rowpos+=1           
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)  
         if len(self.multiplerowlist)>1:
             self.drawMultipleRows(self.multiplerowlist)
+        
         return   
 
     def resizeTable(self, event):
@@ -203,13 +260,11 @@ class TableCanvas(Canvas):
                 x_pos=x_pos+w                
             self.col_positions.append(x_pos)
         self.tablewidth = self.col_positions[len(self.col_positions)-1]
-        #print 'set col Positions'
-        #print self.col_positions    
+  
         return
         
     def sortTable(self, sortcol=None, reverse=0):
-        """Set up sort order dict based on currently selected field"""
-        #if sortcol == None:
+        """Set up sort order dict based on currently selected field"""        
         self.sortcol = self.currentcol
         self.reverseorder = reverse
         self.redrawTable() 
@@ -220,12 +275,95 @@ class TableCanvas(Canvas):
         apply(self.xview,args)
         apply(self.tableheader.xview,args)
         return
+    
+    def drawNavFrame(self):
+        """Draw the frame for selecting pages when paging is on"""
+        print 'adding page frame'
+        import Table_images
+        self.navFrame = Frame(self.parentframe)
+        self.navFrame.grid(row=4,column=0,columnspan=1,sticky='news',padx=1,pady=1,ipady=1)        
+        pagingbuttons = { 'start' : self.first_Page, 'prev' : self.prev_Page, 
+                          'next' : self.next_Page, 'end' : self.last_Page}
+        images = { 'start' : Table_images.start(), 'prev' : Table_images.prev(), 
+                   'next' : Table_images.next(), 'end' : Table_images.end()}        
+        skeys=['start', 'prev', 'next', 'end']                  
+        for i in skeys:
+            b = Button(self.navFrame, text=i, command=pagingbuttons[i], 
+                        relief=GROOVE, 
+                        image=images[i])
+            b.image = images[i]
+            b.pack(side=LEFT)                
+        Label(self.navFrame,text='Page '+str(self.currentpage+1)+' of '+ str(self.numpages+1),fg='white',
+                  bg='#3366CC',relief=SUNKEN).pack(side=LEFT,ipadx=2,ipady=2,padx=4)
+        Label(self.navFrame,text='Goto Record:').pack(side=LEFT,padx=3)
+        self.gotorecordvar = StringVar()
+        Entry(self.navFrame,textvariable=self.gotorecordvar,
+                  width=8,bg='white').pack(side=LEFT,ipady=3,padx=2)
+        Label(self.navFrame,text=str(self.rows)+' records').pack(side=LEFT,padx=3)
+        Button(self.navFrame,text='Normal View',command=self.paging_Off,
+                   bg='#99CCCC',relief=GROOVE).pack(side=LEFT,padx=3)
+        return
+
+    def paging_Off(self):
+        self.rows=self.model.getRowCount()
+        if self.rows >= 1000:
+            tkMessageBox.showwarning("Warning",
+                                     "This table has over 1000 rows.\n You should stay in page view.",
+                                     parent=self.parentframe) 
+        else:    
+            self.paging = 0
+            self.usepagingvar.set(0)
+            self.redrawTable()
+        return
+    
+    def first_Page(self):
+        """Go to next page"""
+        self.currentpage = 0
+        self.redrawTable()
+        return
         
-    def add_Row(self):
+    def last_Page(self):
+        """Go to next page"""
+        self.currentpage = self.numpages
+        self.redrawTable() 
+        return
+        
+    def prev_Page(self):
+        """Go to next page"""
+        if self.currentpage > 0: 
+            self.currentpage -= 1
+            self.redrawTable() 
+        return
+        
+    def next_Page(self):
+        """Go to next page"""
+        if self.currentpage < self.numpages: 
+            self.currentpage += 1
+            self.redrawTable()        
+        return
+
+    def get_AbsoluteRow(self, row):
+        """This function always returns the corrected absolute row number, 
+           whether if paging is on or not"""
+        if self.paging == 0:
+            return row
+        absrow = row+self.currentpage*self.rowsperpage        
+        return absrow
+    
+    def check_PageView(self, row):
+        """Check if row clickable for page view"""
+        if self.paging == 1:
+            absrow = self.get_AbsoluteRow(row)
+            if absrow >= self.rows or row > self.rowsperpage:
+                return 1
+        return 0        
+                
+    def add_Row(self, rowname=None):
         """Add a new row"""
-        rowname = tkSimpleDialog.askstring("New row name?",
-                                           "Enter row name:",
-                                           parent=self.parentframe)
+        if rowname == None:
+            rowname = tkSimpleDialog.askstring("New row name?",
+                                               "Enter row name:",
+                                               parent=self.parentframe)
         if rowname != None:
             if rowname == '':
                 tkMessageBox.showwarning("Whoops",
@@ -245,15 +383,15 @@ class TableCanvas(Canvas):
     def add_Column(self, newname=None):
         """Add a new column"""
         if newname == None:
-            d = SimpleTableDialog(title="New Column",
-                                                #"Enter Column Name?",
-                                                parent=self.parentframe)
+            d = SimpleTableDialog(title="New Column",                                               
+                                  parent=self.parentframe, table=self)
+            
             if d.result == None:
                 return
             else:    
                 coltype = d.result[0]
                 newname = d.result[1]
-                print coltype, newname
+                #print coltype, newname
         if newname != None:
             if newname in self.getModel().columnNames:
                 tkMessageBox.showwarning("Name exists",
@@ -296,7 +434,14 @@ class TableCanvas(Canvas):
         if n:
             col = self.getSelectedColumn()
             self.model.deleteColumn(col)
-            self.redrawTable()     
+            self.currentcol = self.currentcol - 1
+            self.redrawTable() 
+        return
+
+    def delete_Cell(self):
+        """Clear the cell contents"""
+        self.model.deleteCellRecord(self.currentrow,self.currentcol)
+        self.redrawTable()
         return
     
     def autoAdd_Rows(self, numrows=None):
@@ -321,30 +466,47 @@ class TableCanvas(Canvas):
                                                 parent=self.parentframe)
         import string
         alphabet = string.lowercase[:26]
-        i=0
-        j=0
+        currcols=self.model.getColumnCount()
+        #find where to start
+        if currcols <= 25:
+            i=currcols-1
+            j=0
+        else:
+            i=int(currcols%25)
+            j=int(round(currcols/25,1))     
+        
         for x in range(numcols):
             if i >= len(alphabet):
                 i=0
                 j=j+1
-            self.model.addColumn(alphabet[i]+str(j)) 
-            print alphabet[i]+str(j)
+            name = alphabet[i]+str(j)    
+            if name in self.model.columnNames:
+                pass                
+            else:
+                self.model.addColumn(name) 
             i=i+1    
         self.parentframe.configure(width=self.width)
         self.redrawTable()         
         return
 
-    def findValue(self, searchstring=None):
+    def findValue(self, searchstring=None, findagain=None):
         """Return the row/col for the input value"""
         if searchstring == None:
             searchstring = tkSimpleDialog.askstring("Search table.",
                                                "Enter search value",
                                                parent=self.parentframe)            
-        found=0  
+        found=0 
+        if findagain == None or not hasattr(self,'foundlist'):
+            self.foundlist=[]
         if self.model!=None:            
             for row in range(self.rows):
-                for col in range(self.cols):  
-                    text = self.model.getValueAt(row,col)
+                for col in range(self.cols):                    
+                    text = str(self.model.getValueAt(row,col))  
+                    if text=='' or text==None:
+                        continue
+                    cell=row,col
+                    if findagain == 1 and cell in self.foundlist:    
+                        continue
                     if text.lower().find(searchstring.lower())!=-1:
                         print 'found in',row,col
                         found=1
@@ -353,6 +515,12 @@ class TableCanvas(Canvas):
                         self.draw_rect(row, col, color='red', tag='searchrect', delete=0)
                         self.lift('searchrect')
                         self.lift('celltext'+str(row)+str(col))
+                        #add row/col to foundlist
+                        self.foundlist.append(cell)
+                        #need to scroll to centre the cell here..
+                        x,y = self.getCanvasPos(row, col)                         
+                        self.xview('moveto', x)
+                        self.yview('moveto', y)
                         return row, col
         if found==0:
             self.delete('searchrect')
@@ -384,8 +552,7 @@ class TableCanvas(Canvas):
         recnames=[]
         for row in self.multiplerowlist:
             recnames.append(self.model.getRecName(row))
-        return recnames
-        
+        return recnames        
     
     def get_row_clicked(self, event):
         """get row where event on canvas occurs"""
@@ -417,9 +584,9 @@ class TableCanvas(Canvas):
                 #print None
                 pass        
         #return colc  
-    
+         
     def setSelectedRow(self, row):
-        """Set currently selected row"""
+        """Set currently selected row"""   
         self.currentrow = row
         return
         
@@ -454,7 +621,15 @@ class TableCanvas(Canvas):
         x2=x1+w       
         y2=y1+h        
         return x1,y1,x2,y2       
-    
+
+    def getCanvasPos(self, row, col):
+        """Get the cell x-y coords as a fraction of canvas size"""
+        x1,y1,x2,y2 = self.getCellCoords(row,col)        
+        cx=float(x1)/self.tablewidth
+        cy=float(y1)/(self.rows*self.rowheight)
+        print cx,cy
+        return cx, cy
+            
     def isInsideTable(self,x,y):
         """Returns true if x-y coord is inside table bounds"""
         if self.x_start < x < self.tablewidth and self.y_start < y < self.rows*self.rowheight:
@@ -467,14 +642,52 @@ class TableCanvas(Canvas):
         """Set the row height"""
         self.rowheight = h
         return
-        
-    def handle_left_click(self, event):
-        """Respond to a single press"""        
-        #which row and column is the click inside?
+
+    def clearSelected(self):
         self.delete('rect')
         self.delete('entry')
         self.delete('tooltip')
         self.delete('searchrect')
+        return
+
+    def gotoprevRow(self):
+        """Programmatically set previous row - eg. for button events"""
+        self.clearSelected()
+        current = self.getSelectedRow()
+        self.setSelectedRow(current-1)
+        self.startrow = current-1
+        self.endrow = current-1
+        #reset multiple selection list
+        self.multiplerowlist=[]
+        self.multiplerowlist.append(self.currentrow)        
+        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRow()
+        coltype = self.model.getColumnType(self.currentcol)
+        if coltype == 'text' or coltype == 'number':
+            self.draw_cellentry(self.currentrow, self.currentcol)        
+        return
+        
+    def gotonextRow(self):
+        """Programmatically set next row - eg. for button events"""
+        self.clearSelected()
+        current = self.getSelectedRow()
+        self.setSelectedRow(current+1)
+        self.startrow = current+1
+        self.endrow = current+1
+        #reset multiple selection list
+        self.multiplerowlist=[]
+        self.multiplerowlist.append(self.currentrow)        
+        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRow()
+        coltype = self.model.getColumnType(self.currentcol)
+        if coltype == 'text' or coltype == 'number':
+            self.draw_cellentry(self.currentrow, self.currentcol)        
+        return
+        
+    def handle_left_click(self, event):
+        """Respond to a single press"""        
+        #which row and column is the click inside?
+        self.clearSelected()
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         #ensure popup menus are removed if present
@@ -484,6 +697,9 @@ class TableCanvas(Canvas):
             self.tableheader.rightmenu.destroy()           
         rowclicked = self.get_row_clicked(event)
         colclicked = self.get_col_clicked(event)
+        if self.check_PageView(rowclicked) == 1:
+            return
+
         self.startrow = rowclicked 
         self.endrow = rowclicked 
         #reset multiple selection list
@@ -494,6 +710,9 @@ class TableCanvas(Canvas):
             self.set_selected_col(colclicked)
             self.draw_selected_rect(self.currentrow, self.currentcol)
             self.drawSelectedRow()
+            coltype = self.model.getColumnType(colclicked)
+            if coltype == 'text' or coltype == 'number':
+                self.draw_cellentry(rowclicked, colclicked)
         return
 
     def handle_left_release(self,event):
@@ -521,8 +740,11 @@ class TableCanvas(Canvas):
         
     def handle_mouse_drag(self, event):
         """Handle mouse moved with button held down, multiple selections"""
+        if hasattr(self, 'cellentry'):
+            self.cellentry.destroy()
         rowover = self.get_row_clicked(event)
-        #colover = self.get_col_clicked(event)
+        if self.check_PageView(rowover) == 1:
+            return
         if rowover > self.rows or self.startrow > self.rows: #or 0 > colover > self.cols:
             #print rowover
             return
@@ -570,12 +792,16 @@ class TableCanvas(Canvas):
         elif event.keysym == 'Left':
             self.currentcol  = self.currentcol -1
         self.draw_selected_rect(self.currentrow, self.currentcol)
+        coltype = self.model.getColumnType(self.currentcol)
+        if coltype == 'text' or coltype == 'number':
+            self.delete('entry')
+            self.draw_cellentry(self.currentrow, self.currentcol)
         return
         
     def handle_double_click(self, event):
         """Do double click stuff. Selected row/cols will already have
            been set with single click binding"""
-        print 'double click'         
+        #print 'double click'         
         self.draw_cellentry(self.currentrow, self.currentcol)
         return        
         
@@ -587,7 +813,10 @@ class TableCanvas(Canvas):
         rowclicked = self.get_row_clicked(event)
         colclicked = self.get_col_clicked(event)     
         if colclicked == None:
-            #self.rightmenu = self.popupMenu(event, outside=1)
+            self.rightmenu = self.popupMenu(event, outside=1)
+            return
+        if self.check_PageView(rowclicked) == 1:
+            self.rightmenu = self.popupMenu(event, outside=1)
             return
         if len(self.multiplerowlist) > 1:
             if rowclicked in self.multiplerowlist:
@@ -608,7 +837,9 @@ class TableCanvas(Canvas):
         """Handle mouse motion on table"""
         self.delete('tooltip')
         row = self.get_row_clicked(event)
-        col = self.get_col_clicked(event) 
+        col = self.get_col_clicked(event)
+        if self.check_PageView(row) == 1:
+            return
         if 0 <= row < self.rows and 0 <= col < self.cols:
             self.draw_tooltip(row, col)
         
@@ -616,7 +847,7 @@ class TableCanvas(Canvas):
         
     def gotonextCell(self, event):
         """Move highlighted cell to next cell in row or a new col"""
-        print 'next'    
+        #print 'next'    
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         self.currentcol=self.currentcol+1
@@ -631,20 +862,21 @@ class TableCanvas(Canvas):
     
     def setcellColor(self, row, col=None, newColor=None, key=None):
         """Set the cell color and save it in the model color"""
-        model = self.getModel()      
+        model = self.getModel()
+        absrow = self.get_AbsoluteRow(row)
         if newColor == None:
             import tkColorChooser
             ctuple, newColor = tkColorChooser.askcolor(title='pick a color')
             if newColor == None:
                 return
-            print ctuple, newColor
+            #print ctuple, newColor
         def setcolor(row, col):
-            model.setColorAt(row, col, newColor, key)
-            text = self.model.getValueAt(row,col)
+            model.setColorAt(absrow, col, newColor, key)
+            text = model.getValueAt(absrow,col)
             #redraw the cell text or fill
             if key=='fg':
                 self.draw_Text(row,col, text, fgcolor=newColor)
-            elif key=='bg':    
+            elif key=='bg':  
                 self.draw_rect(row,col, color=newColor)
         # col is none, do all cols
         if col == None:
@@ -665,31 +897,49 @@ class TableCanvas(Canvas):
         return
     
     def popupMenu(self, event, rows=None, outside=None):
-        """Add left and right click behaviour for canvas"""
+        """Add left and right click behaviour for canvas, should not have to override
+            this function, it will take its values from defined dicts in constructor"""
         if outside == None: 
             row = self.get_row_clicked(event)
             col = self.get_col_clicked(event)
             coltype = self.model.getColumnType(col)
         popupmenu = Menu(self, tearoff = 0)  
         def popupFocusOut(event):
-            popupmenu.unpost() 
+            popupmenu.unpost()
+
+        def add_commands(fieldtype): 
+            """Add commands to popup menu for col type"""
+            #add column actions for this table type defined in self.columnactions
+            functions = self.columnactions[fieldtype]
+            for f in functions.keys():  
+                func = getattr(self, functions[f])                
+                popupmenu.add_command(label=f, command= lambda : func(row,col))
+            return            
+
+        def add_defaultcommands():           
+            """now add general actions for all cells""" 
+            defaultactions={"Set Fill Color" : lambda : self.setcellColor(row,col,key='bg') if rows==None else self.setcellColors(rows, key='bg'),
+                            "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
+                            "Fill Down" : lambda : self.fill_down(rows),
+                            "Clear Data" : self.delete_Cell,
+                            "Show Prefs" : self.showtablePrefs}            
+            for action in defaultactions.keys():                
+                if action == 'Fill Down' and rows == None:
+                    pass
+                else:
+                    popupmenu.add_command(label=action, command=defaultactions[action])                
+            return
+                                     
         #if outside table, just show general items    
         if outside == 1:            
-            popupmenu.add_command(label="Show Prefs", command=lambda : self.showtablePrefs())
-        else:     
-            popupmenu.add_command(label="Edit", command=lambda : self.draw_cellentry(row,col))  
-            if rows != None:
-                popupmenu.add_command(label="Fill Down", command=lambda : self.fill_down(rows))
-                popupmenu.add_command(label="Set Fill Color", command=lambda : self.setcellColors(rows, key='bg'))
-                popupmenu.add_command(label="Set Text Color", command=lambda : self.setcellColors(rows, key='fg'))
-                
-            else:
-                popupmenu.add_command(label="Set Fill Color", command=lambda : self.setcellColor(row,col,key='bg'))
-                popupmenu.add_command(label="Set Text Color", command=lambda : self.setcellColor(row,col,key='fg'))
-            popupmenu.add_command(label="Show Prefs", command=lambda : self.showtablePrefs())
+            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
+            popupmenu.add_command(label="Export Table", command= self.exportTable)
+        else:
+            if self.columnactions.has_key(coltype):  
+                add_commands(coltype) 
+            add_defaultcommands()
             
-        popupmenu.bind("<FocusOut>", popupFocusOut)
-        #self.bind("<Button-3>", popupFocusOut)
+        popupmenu.bind("<FocusOut>", popupFocusOut)  
         popupmenu.focus_set()
         popupmenu.post(event.x_root, event.y_root)  
         return popupmenu
@@ -700,9 +950,12 @@ class TableCanvas(Canvas):
         """Fill down a column"""
         model = self.model
         col = self.currentcol 
-        val = model.getValueAt(rowlist[0],col)        
-        for r in rowlist:            
-            model.setValueAt(val, r, col)
+        absrow  = self.get_AbsoluteRow(rowlist[0])
+        val = model.getValueAt(absrow,col)        
+        for r in rowlist: 
+            absr=self.get_AbsoluteRow(r)
+            print r, absr
+            model.setValueAt(val, absr, col)
             #print 'setting', val, 'at row', r 
         self.redrawTable()    
         return
@@ -716,8 +969,8 @@ class TableCanvas(Canvas):
     
     def draw_grid(self):
         """Draw the table grid lines"""
-        self.delete('gridline','text')
-        rows=self.rows
+        self.delete('gridline','text')    
+        rows=len(self.rowrange)
         cols=self.cols
         w=self.cellwidth
         h=self.rowheight
@@ -746,11 +999,10 @@ class TableCanvas(Canvas):
         self.delete('rowheader')
         x_start=self.x_start
         y_start=self.y_start
-        h=self.rowheight
-        
-        rows=self.rows
-        for row in range(rows):  
-            x1,y1,x2,y2 = self.getCellCoords(row,0)
+        h=self.rowheight 
+        rowpos=0
+        for row in self.rowrange:            
+            x1,y1,x2,y2 = self.getCellCoords(rowpos,0)
             self.create_rectangle(0,y1,x_start-2,y2,
                                       fill='gray75', 
                                       outline='white',
@@ -760,9 +1012,8 @@ class TableCanvas(Canvas):
                                       text=row+1,
                                       fill='black',
                                       font=self.thefont,
-                                      tag='rowheader')           
-        
-        #self.lower('rowheader')
+                                      tag='rowheader')        
+            rowpos+=1
         return
         
     def draw_new_row(self):
@@ -811,13 +1062,13 @@ class TableCanvas(Canvas):
         self.lower(recttag)
         return
         
-    def draw_cellentry(self,row,col, text=None):
-        """When the user double clicks on a cell, bring up entry window"""
+    def draw_cellentry(self, row, col, text=None):
+        """When the user double clicks on a text/number cell, bring up entry window"""
         
-        #w=self.cellwidth
+        absrow = self.get_AbsoluteRow(row)
         h=self.rowheight  
         model=self.getModel()
-        text = self.model.getValueAt(row, col)
+        text = self.model.getValueAt(absrow, col)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         #Draw an entry window
@@ -828,12 +1079,12 @@ class TableCanvas(Canvas):
             coltype = self.model.getColumnType(col)
             if coltype == 'number':
                 sta = self.check_data_entry(e)
-                print sta
+                #print sta
                 if sta == 1:                    
-                    model.setValueAt(value,row,col)
-            else:         
-                model.setValueAt(value,row,col)
-            color = self.model.getColorAt(row,col,'fg')
+                    model.setValueAt(value,absrow,col)
+            elif coltype == 'text':         
+                model.setValueAt(value,absrow,col)
+            color = self.model.getColorAt(absrow,col,'fg')
             self.draw_Text(row, col, value, color)
             if e.keysym=='Return':
                 self.delete('entry')
@@ -870,7 +1121,8 @@ class TableCanvas(Canvas):
             except ValueError:    
                 event.widget.configure(bg='red')
                 return 0
-        
+        elif value == '':            
+            return 1
         return 1
         
     def draw_Text(self, row, col, celltxt, fgcolor=None, align=None):
@@ -879,6 +1131,12 @@ class TableCanvas(Canvas):
         h=self.rowheight  
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
+        #
+        # If celltxt is a number then we make it a string
+        #
+        import types
+        if type(celltxt) is types.FloatType or type(celltxt) is types.IntType:
+            celltxt=str(celltxt)
         #if cell width is less than x, print nothing
         if w<=15:
             return
@@ -954,16 +1212,28 @@ class TableCanvas(Canvas):
         self.lower('multiplesel')
         self.lower('fillrect')
         return
+
+    #
+    # ----
+    #
        
     def draw_tooltip(self, row, col):
         """Draw a tooltip showing contents of cell"""
         
+        absrow = self.get_AbsoluteRow(row)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1          
-        text = self.model.getValueAt(row,col)
+        text = self.model.getValueAt(absrow,col)
         if isinstance(text, dict):
             if text.has_key('link'):
                 text = text['link']
+
+        #
+        # If text is a number we make it a string
+        #
+        import types
+        if type(text) is types.FloatType or type is types.IntType:
+            text=str(text)
         if text == NoneType or text == '' or len(text)<=3:
             return
         import tkFont
@@ -1006,7 +1276,7 @@ class TableCanvas(Canvas):
         return str(newcolor)
 
     def removeColors(self):
-        """Remove all color formatting"""
+        """Remove all color formatting"""        
         self.model.resetcolors()
         return
         
@@ -1022,7 +1292,7 @@ class TableCanvas(Canvas):
         self.prefswindow.title('Preferences')
      
         frame1=Frame(self.prefswindow)
-        frame1.pack()
+        frame1.pack(side=LEFT)
         frame2=Frame(self.prefswindow)
         frame2.pack()
         def close_prefsdialog():
@@ -1055,11 +1325,16 @@ class TableCanvas(Canvas):
         row=row+1
         Checkbutton(frame1, text="Auto resize columns", variable=self.autoresizecolsvar,
                     onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
-        
         row=row+1
-        lblfont=Label(frame1,text='Cell Font:')
+        Checkbutton(frame1, text="Use paging", variable=self.usepagingvar,
+                    onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')        
+        row=row+1
+        Label(frame1, text='Rows/page:').grid(row=row,column=0, sticky='news')
+        Entry(frame1, textvariable=self.rowsperpagevar,bg='white',width=12,relief='groove').grid(row=row,column=1, pady=2,sticky='ns')
+        row=row+1
+        lblfont=Label(frame2,text='Cell Font:')
         lblfont.grid(row=row,column=0,padx=3,pady=2)
-        fontentry_button=Menubutton(frame1,textvariable=self.celltextfontvar,
+        fontentry_button=Menubutton(frame2,textvariable=self.celltextfontvar,
 					relief=RAISED,width=16)          
         fontentry_menu=Menu(fontentry_button,tearoff=0)
         fontentry_button['menu']=fontentry_menu
@@ -1074,25 +1349,25 @@ class TableCanvas(Canvas):
                                             indicatoron=1)                                         
         fontentry_button.grid(row=row,column=1, sticky='nes', padx=3,pady=2)
         row=row+1
-        lblfontsize=Label(frame1,text='Text Size:')
+        lblfontsize=Label(frame2,text='Text Size:')
         lblfontsize.grid(row=row,column=0,padx=3,pady=2)
-        fontsizeentry=Scale(frame1,from_=8,to=30,resolution=1,orient='horizontal',
+        fontsizeentry=Scale(frame2,from_=8,to=30,resolution=1,orient='horizontal',
                             relief='ridge',variable=self.celltextsizevar)                                              
         
         fontsizeentry.grid(row=row,column=1, sticky='wens',padx=3,pady=2)
         row=row+1
         #colors
 
-        cellbackgrbutton = Button(frame1, text='table background', bg=self.cellbackgr,
+        cellbackgrbutton = Button(frame2, text='table background', bg=self.cellbackgr,
                                 relief='groove', command=self.setcellbackgr)
         cellbackgrbutton.grid(row=row,column=0,columnspan=2, sticky='news',padx=3,pady=2)         
         row=row+1
-        grid_colorbutton = Button(frame1, text='grid color', bg=self.grid_color,
+        grid_colorbutton = Button(frame2, text='grid color', bg=self.grid_color,
                                 foreground='black', highlightcolor='white',
                                 relief='groove', command=self.setgrid_color)
         grid_colorbutton.grid(row=row,column=0,columnspan=2,  sticky='news',padx=3,pady=2) 
         row=row+1 
-        rowselectedcolorbutton = Button(frame1, text='row highlight color', bg=self.rowselectedcolor,
+        rowselectedcolorbutton = Button(frame2, text='row highlight color', bg=self.rowselectedcolor,
                                 foreground='black', highlightcolor='white',
                                 relief='groove', command=self.setrowselectedcolor)
         rowselectedcolorbutton.grid(row=row,column=0,columnspan=2,  sticky='news',padx=3,pady=2) 
@@ -1127,6 +1402,7 @@ class TableCanvas(Canvas):
         self.prefs = prefs  
         defaultprefs = {'horizlines':1, 'vertlines':1, 'rowheight':20, 'cellwidth':120,
                         'autoresizecols': 0,
+                        'paging': 0, 'rowsperpage' : 50,
                         'celltextsize':12, 'celltextfont':'Arial',
                         'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
                         'linewidth' : self.linewidth,
@@ -1150,6 +1426,10 @@ class TableCanvas(Canvas):
         self.horizlinesvar.set(self.prefs.get('horizlines'))     
         self.vertlinesvar = IntVar()
         self.vertlinesvar.set(self.prefs.get('vertlines'))
+        self.usepagingvar = IntVar()
+        self.usepagingvar.set(self.prefs.get('paging'))
+        self.rowsperpagevar = StringVar()
+        self.rowsperpagevar.set(self.prefs.get('rowsperpage'))        
         self.celltextsizevar = IntVar()
         self.celltextsizevar.set(self.prefs.get('celltextsize'))      
         self.celltextfontvar = StringVar()
@@ -1173,10 +1453,13 @@ class TableCanvas(Canvas):
             self.prefs.set('linewidth', self.linewidthvar.get())
             self.linewidth = self.linewidthvar.get()           
             self.prefs.set('autoresizecols', self.autoresizecolsvar.get())
-            self.autoresizecols = self.autoresizecolsvar.get()            
+            self.autoresizecols = self.autoresizecolsvar.get()  
+            self.paging = self.usepagingvar.get()
+            self.prefs.set('paging', self.usepagingvar.get())
+            self.rowsperpage = int(self.rowsperpagevar.get())
+            self.prefs.set('rowsperpage', self.rowsperpagevar.get())            
             self.prefs.set('celltextsize', self.celltextsizevar.get())
-            self.prefs.set('celltextfont', self.celltextfontvar.get())
-            print self.cellbackgr
+            self.prefs.set('celltextfont', self.celltextfontvar.get())            
             self.prefs.set('cellbackgr', self.cellbackgr)
             self.prefs.set('grid_color', self.grid_color)            
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)  
@@ -1184,7 +1467,7 @@ class TableCanvas(Canvas):
         except ValueError:
             pass
         self.prefs.save_prefs()
-        print 'saved prefs'        
+               
         return
         
     #
@@ -1211,8 +1494,9 @@ class TableCanvas(Canvas):
     def check_hyperlink(self,event=None):
         """Check if a hyperlink was clicked"""
         row = self.get_row_clicked(event)
-        col = self.get_col_clicked(event) 
-        recdata = self.model.getValueAt(row, col) 
+        col = self.get_col_clicked(event)
+        absrow = self.get_AbsoluteRow(row)
+        recdata = self.model.getValueAt(absrow, col) 
         try:
             link = recdata['link']
             import webbrowser
@@ -1241,6 +1525,14 @@ class TableCanvas(Canvas):
         self.bar.frame.grid(row=1,column=1,columnspan=2,padx=2,pady=4)
         
         return progress_win
+     
+    def exportTable(self, filename=None):
+        """Do a simple export of the cell contents to csv"""
+        from Tables_IO import TableExporter
+        exporter = TableExporter()
+        exporter.ExportTableData(self)
+        return
+        
         
 class ColumnHeader(Canvas):
     """Class that takes it's size and rendering from a parent table
@@ -1261,10 +1553,7 @@ class ColumnHeader(Canvas):
             self.bind('<Button-3>',self.handle_right_click)
             self.bind('<B1-Motion>', self.handle_mouse_drag)   
             self.bind('<Motion>', self.handle_mouse_move)
-            #self.bind('<ButtonRelease-3>',self.handle_right_release)
-            #self.tag_bind('vertline', '<Any-Enter>', self.handle_enter_divider) 
-            #self.tag_bind('vertline', '<Leave>', self.handle_leave_divider) 
-            #self.redraw()
+
             
         return
         
@@ -1485,89 +1774,119 @@ class ColumnHeader(Canvas):
 # --- Table sub-classes ---
 #
 
-class PEATTable(TableCanvas):
-    """Sub-class of Tablecanvas, with some additions for PEAT main table"""
-    def __init__(self, parent=None, model=None, parentapp=None):
-        if parentapp != None:
-            self.parentapp = parentapp
-            print 'we are inside PEAT'
+        
+class LabbookTable(TableCanvas):
+    """Sub-class of Tablecanvas, with some changes in behaviour to make
+       a more spreadsheet-like interface for labbook"""
+    def __init__(self, parent=None, model=None, sheetname=None, peat=None, peatinfo=None):
         TableCanvas.__init__(self, parent, model)
-        self.sortcol = 0        
-        print 'peattable'        
+        if sheetname != None:
+            self.sheetname=sheetname
+        if parent != None:
+            self.parent = parent 
+        else:
+            self.parent = None
+        #inside peat?
+        if peat != None:
+            self.peatapp = peat
+            self.peatinfo = peatinfo  #info on peat row and column that contains this table
+            print 'self.peatinfo',self.peatinfo
+        else:
+            self.peatapp = None
+            self.peatinfo = None            
+        self.cellbackgr = '#FFFAF0'
+        self.entrybackgr = 'white'
+        self.grid_color = 'gray50'
+        self.selectedcolor = 'yellow'
+        self.rowselectedcolor = '#B0E0E6'
+        self.multipleselectioncolor = '#ECD672'
+        self.fileicons = {'txt': 'txticon','img':'imageicon','pdf':'pdficon',
+                        'other':'blankicon','zip':'zipicon','doc':'docicon',
+                        'xls':'ssheeticon'}
+        self.columnactions['File'] = {"Edit File": 'edit_File' ,
+                                       "View File" : 'view_File' }
+        self.columnactions['Table'] = {"Edit Table": 'edit_Table' } 
+        self.columnactions['Ekin'] = {"Open Ekin": 'open_Ekin' } 
+        print 'labbooktable'
         return
 
-    def do_bindings(self):
-        """Bind keys and mouse clicks - overriden"""
-        self.bind("<Button-1>",self.handle_left_click)
-        self.bind("<Double-Button-1>",self.handle_double_click)
-        self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
-        self.bind("<Shift-Button-1>", self.handle_left_shift_click)
+    def draw_file_tooltip(self, row, col):
+        """Draw a tooltip for image and file previews"""
+        import os
+        h=self.height
+        x1,y1,x2,y2 = self.getCellCoords(row,col)
+        w=x2-x1
+        absrow = self.get_AbsoluteRow(row)
+        text = self.model.getValueAt(absrow,col)
+        if text == '' or text == None:
+            return  
+        try:
+            location = self.model.getCellRecord(absrow,col)['location']
+        except:
+            location == None
         
-        self.bind("<ButtonRelease-1>", self.handle_left_release)
-        self.bind("<Button-3>", self.handle_right_click)
-        self.bind('<B1-Motion>', self.handle_mouse_drag)         
-        self.bind('<Motion>', self.handle_motion) 
-        self.bind("<Tab>", self.gotonextCell)
+        extension = text.split('.')[-1] 
+        if extension in ['jpg','jpeg','tiff','tif','gif','ps','png','ico']:
+            extension = 'img' 
+        if extension in ['gz','bz','jar']:
+            extension = 'zip'  
+        if not self.fileicons.has_key(extension):
+            extension = 'other'
         
-        self.bind("<Control-x>", self.delete_Row)
-        self.bind("<Control-n>", self.add_Row)
-        #bind to parentapp instead of parentframe for PEAT
-        self.parentapp.master.bind("<Right>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Left>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Up>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Down>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<KP_8>", self.handle_arrow_keys)
+        #Check if its an image and try to make thumbnail.. needs PIL
+        if extension == 'img' and location != None:
+            path=os.path.join(self.peatapp.data['DBfilesSVN'], location)
+            self.pic = self.get_image_thumb(path)
+            isthumb=1
+        #if can't get thumb, just create icon for the file type    
+        if self.pic == None:            
+            import File_images
+            func = getattr(File_images, self.fileicons[extension])
+            self.pic = func()
+            isthumb=0
+            
+        imgobj = self.create_image(x1+w/1.5,y2+2, image=self.pic, anchor='nw')
+        if isthumb == 1:
+            box = self.bbox(imgobj)
+            xa=box[0]-1
+            ya=box[1]-1
+            xb=box[2]+1
+            yb=box[3]+1
+            self.create_rectangle(xa,ya,xb,yb,tag='tooltip',fill='black')
+            self.lift(imgobj)
         
-        self.parentframe.master.bind("<Return>", self.handle_arrow_keys)
-        self.bind('<Button-4>', lambda event: event.widget.yview_scroll(-1, UNITS))
-        self.bind('<Button-5>', lambda event: event.widget.yview_scroll(1, UNITS)) 
+        #now draw text
+        import tkFont
+        sfont = tkFont.Font (family='Arial', size=12, weight='bold')
+        obj=self.create_text(x1+w/1.5,y2,text=text,
+                                anchor='sw',    
+                                font=sfont,tag='tooltip')        
+        box = self.bbox(obj)
+        x1=box[0]
+        y1=box[1]
+        x2=box[2]+1
+        y2=box[3]+1        
+        self.create_rectangle(x1+1,y1+1,x2+1,y2+1,tag='tooltip',fill='black')
+        self.create_rectangle(x1,y1,x2,y2,tag='tooltip',fill='lightyellow')        
+        self.lift(obj) 
+        
         return
     
-    def add_Row(self, recname=None):
-        """Add a new rec in PEAT, need special dialog"""
-        def checkrow_name(rowname):
-            if rowname == '':
-                tkMessageBox.showwarning("Whoops", "Name should not be blank.")
-            if self.getModel().data.has_key(rowname):
-                tkMessageBox.showwarning("Name exists", "Record already exists!")
-                    
-        if recname == None:
-            recname = tkSimpleDialog.askstring("New rec name?", "Enter rec name:")
-        checkrow_name(recname)    
-        self.model.addRow(recname)
-        self.setSelectedRow(self.model.getRecordIndex(recname))
-        self.redrawTable()    
-        return
-
-
-    def add_Column(self, newname=None, fieldtype=None, defaultval=None):
-        """Add a new column"""
-        if newname == None:
-            newname = tkSimpleDialog.askstring("New Column Name?", "Enter Column Name?")
-        if newname != None:
-            if newname in self.getModel().columnNames:
-                tkMessageBox.showwarning("Name exists", "Name already exists in table.")
-            else:                
-                self.model.addColumn(newname, defaultval) 
-                self.parentframe.configure(width=self.width)
-                self.tableheader.delete('dragrect')
-                self.redrawTable()          
-        return
-        
-
-    def delete_Column(self):
-        """Delete currently selected column"""
-        col = self.getSelectedColumn()
-        colname = self.model.getColumnName(col) 
-        if colname in self.getModel().static_fields.keys():
-            tkMessageBox.showwarning("Static field", "This field can't be deleted.")
-            return
-        n =  tkMessageBox.askyesno("Delete",  "Delete This Column?")
-        if n:
-            self.model.deleteColumn(col)
-            self.tableheader.delete('dragrect')
-            self.redrawTable()     
-        return
+    def get_image_thumb(self, infile):
+        """Create an image thumbnail for img types"""
+        print 'getting thumbnail......'
+        try:
+            from PIL import Image, ImageTk
+        except:
+            return None   
+        import os        
+        size = 200,200         
+        file, ext = os.path.splitext(infile)
+        im = Image.open(infile)
+        im.thumbnail(size, Image.ANTIALIAS)
+        tkim = ImageTk.PhotoImage(im)
+        #im.save(file + ".thumbnail", "GIF")
+        return tkim
         
     def handle_double_click(self, event):
         """Do double click stuff. Selected row/cols will already have
@@ -1575,139 +1894,251 @@ class PEATTable(TableCanvas):
         col = self.get_col_clicked(event) 
         if col == None:
             return
+            
         coltype = self.model.getColumnType(col)
-        if coltype == 'text' or coltype == 'Text': 
+        if coltype == 'text' or coltype == 'number': 
             self.draw_cellentry(self.currentrow, self.currentcol)
-        elif coltype == 'PDB':
-            self.view_structure(self.currentrow, self.currentcol)
-        elif coltype == 'Notes':     
-            self.editNotes(self.currentrow, self.currentcol)
         elif coltype == 'File':
-            self.viewexternalFile(self.currentrow, self.currentcol)
-        elif coltype in self.model.ekintypes:
-            self.openEkin(self.currentrow, self.currentcol,coltype)          
-        return 
-        
-    def popupMenu(self, event, rows=None, outside=None):
-        """Add left and right click behaviour for canvas"""
-        row = self.get_row_clicked(event)
-        col = self.get_col_clicked(event)
-        coltype = self.model.getColumnType(col)
-        popupmenu = Menu(self, tearoff = 0)  
-        def popupFocusOut(event):
-            popupmenu.unpost()
-        if outside == 1:            
-            popupmenu.add_command(label="Show Prefs", command=lambda : self.showtablePrefs())
-        else:          
-            if coltype == 'text':    
-                popupmenu.add_command(label="Edit", command=lambda : self.draw_cellentry(row,col))
-            elif coltype == 'PDB':
-                popupmenu.add_command(label="View Structure", command=lambda : self.view_structure(row,col))                
-               
-            elif coltype == 'Notes':
-                popupmenu.add_command(label="Edit Notes", command=lambda : self.editNotes(row,col))
-            elif coltype == 'Link':
-                popupmenu.add_command(label="Edit Link", command=lambda : self.editLink(row,col))                
-            elif coltype == 'File':
-                popupmenu.add_command(label="View File", command=lambda : self.viewexternalFile(row,col))
-            elif coltype == 'Table':
-                popupmenu.add_command(label="Edit Table", command=lambda : self.editTable(row,col))
-                
-            elif coltype in self.model.ekintypes:
-                popupmenu.add_command(label="Open Ekin", command=lambda : self.openEkin(row,col,coltype))
-            elif coltype == 'pKa system':
-                popupmenu.add_command(label="Send to pKa", command=lambda : self.sendtopka(row,col,coltype))      
-            if rows != None:
-                popupmenu.add_command(label="Set Fill Color", command=lambda : self.setcellColors(rows, key='bg'))
-                popupmenu.add_command(label="Set Text Color", command=lambda : self.setcellColors(rows, key='fg'))
-            else:
-                popupmenu.add_command(label="Set Fill Color", command=lambda : self.setcellColor(row,col, key='bg'))
-                popupmenu.add_command(label="Set Text Color", command=lambda : self.setcellColor(row,col, key='fg'))
-                
-            popupmenu.add_command(label="Show Prefs", command=lambda : self.showtablePrefs())
-        popupmenu.bind("<FocusOut>", popupFocusOut)        
-        popupmenu.focus_set()
-        popupmenu.post(event.x_root, event.y_root)  
-        return popupmenu
- 
-    # --- Extra functions for handling PEAT data types ---
+            try:
+                self.view_File(self.currentrow, self.currentcol)
+            except:
+                #self.edit_File(self.currentrow, self.currentcol)
+                pass
+        elif coltype == 'Table':
+            self.edit_Table(self.currentrow, self.currentcol)
+        elif coltype == 'Ekin':
+            self.open_Ekin(self.currentrow, self.currentcol)
+        return
 
-    def editNotes(self, row,col):
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)  
-        self.parentapp.edit_notes(protein=protein,field_name=colname)
+    def handle_motion(self, event):
+        """Handle mouse motion overridden to handle file type tooltips"""
+        self.delete('tooltip')
+        self.pic = None
+        row = self.get_row_clicked(event)
+        col = self.get_col_clicked(event) 
+        if col == None:
+            return
+        if self.check_PageView(row) == 1:
+            return
+        coltype = self.model.getColumnType(col)
+        if 0 <= row < self.rows and 0 <= col < self.cols:
+            if coltype == 'File':
+                self.draw_file_tooltip(row, col)
+            else:
+                self.draw_tooltip(row, col)
         return
         
-    def editLink(self, row, col):
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)  
-        self.parentapp.edit_link(protein=protein,field_name=colname)
-        return
-        
-    def editTable(self,row,col):
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)    
-        self.parentapp.edit_table_data(protein=protein,field_name=colname)
-  
-        return
-        
-    
-    def viewexternalFile(self,row,col):
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)    
-        self.parentapp.display_file(protein=protein,field_name=colname)
-  
-        return
-        
-    def openEkin(self,row,col,coltype):
-        """Pass record details into main app and open ekin from there"""        
-        import copy
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)       
-        self.parentapp.start_Ekin(protein=protein,field_name=colname,mode=coltype)
-        
-        #import Ekin
-        #ekindata = copy.deepcopy(rec[colname])
-        #Ekin.Ekin(parent=self.parentapp,mode=coltype,data=ekindata,protein=protein,field=colname)
-        return 
- 
-    def sendtopka(self,row,col,coltype):
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)  
-        self.parentapp.send_system_to_pKa_system(protein=protein,field_name=colname,mode=coltype)
-        return
-     
-    def view_structure(self, row, col):
-        """Pass record details into main app and show pdb structure in yasara"""
-        model = self.getModel()       
-        colname = model.getColumnName(col)
-        protein = model.getRecName(row)  
-        self.parentapp.display_structure(protein=protein,field_name=colname)
-        return
-        
-class MyTable(TableCanvas):
-    """Sub-class of Tablecanvas, with some changes in behaviour to make
-       a customised table - just an example"""
-    def __init__(self, parent=None, model=None):
-        TableCanvas.__init__(self, parent, model)
-        self.cellbackgr = '#FFFAF0'
-        self.entrybackgr = 'white'
-        self.grid_color = 'gray50'
-        self.selectedcolor = 'yellow'
-        self.rowselectedcolor = '#B0E0E6'
-        self.multipleselectioncolor = '#ECD672'
        
+    def view_File(self, row, col):
+        """View an external file"""
+        print 'viewing file...'
+        model = self.getModel()
+        celldata = model.getCellRecord(row, col)
+        if celldata != None:
+            filename = celldata['filename']
+            location = celldata['location']
+            peatapp.launch_file(filename, location)     
+        
         return
         
+        
+    def edit_File(self, row, col):
+        """Dialog for adding a file to a cell. Called when within PEAT only """
+        if self.peatapp == None:
+            print 'no peat!'
+            tkMessageBox.showwarning("Not available",
+                         "You cannot add a file outside PEAT." )  
+            return
+        peatapp = self.peatapp
+        model = self.getModel()
+        celldata = model.getCellRecord(row, col)
+        #colname = model.getColumnName(col)
+        #recname = model.getRecName(row)
+        if celldata != None:
+            currentfilename = celldata['filename']
+            location = celldata['location']
+        else:
+            currentfilename='No file'                   
+        #
+        # Call add external file from peat?? 
+        #        
+        protein = self.peatinfo['record']
+        field = self.peatinfo['column']
+        
+        launch_win=Toplevel()       
+        launch_win.title('File manager')
+        launch_win.focus_set()
+        launch_win.grab_set()
+        from EAT_DB import PEAT_window 
+        if self.parent:
+            PEAT_window.set_geometry(self.parent,launch_win)
+        Label(launch_win,text='Filename: %s' %currentfilename).grid(row=0,column=0,columnspan=3) 
+        Button(launch_win, text='View file',
+                               command=lambda : peatapp.launch_file(currentfilename, location),
+                               bg='#33CC99',
+                               relief=GROOVE).grid(row=1,column=0,columnspan=3)
+        
+        self.filename=StringVar()
+        self.filename.set('')
+        Entry(launch_win,textvariable=self.filename,width=25).grid(row=2,column=0)
+        def find_file():
+            savedir=peatapp.preferences.get('datadir')
+            import tkFileDialog
+            filename=tkFileDialog.askopenfilename(defaultextension='.*',
+                                                  initialdir=savedir,
+                                                  filetypes=[("All files","*.*")],
+                                                  parent=launch_win)
+            self.filename.set(filename)
+            return
+        
+        def addfile():
+            self.add_file(peatapp, self.filename.get(), 
+                                           protein_name=protein,field_name=field,
+                                           sheet=self.sheetname,row=row,col=col,
+                                           oldfilename=currentfilename,
+                                           window=launch_win)
+            launch_win.destroy()
+            return
+            
+        Button(launch_win,text='Browse',command=find_file,
+                               bg='#FFFF99',
+                               relief=GROOVE).grid(row=2,column=1)
+        
+        if currentfilename=='No file':
+            txt='Add file to project'
+        else:
+            txt='Replace file'
+        Button(launch_win,text=txt,command=addfile,
+                               bg='#FFFF99',
+                               relief=GROOVE).grid(row=3,column=0)
+                    
+        return                                                     
+
+    def add_file(self, peatapp, filename, protein_name, field_name, sheet,
+                            row, col, oldfilename=None, window=None):
+        """Add a file to the database via the table - needs to be callable outside table"""
+        model = self.getModel()
+        colname = model.getColumnName(col)
+        recname = model.getRecName(row)       
+        print oldfilename
+        filename, location = peatapp.add_external_file(filename, window=window,
+                                                           protein_name=protein_name,column=field_name,
+                                                           sheet=sheet,row=recname,col=colname,
+                                                           oldfilename=oldfilename)
+        #print filename, location
+         
+        model.setValueAt(None,row,col, filename=filename,location=location)
+        color = model.getColorAt(row,col,'fg')
+        value = model.getValueAt(row,col)
+        self.draw_Text(row, col, value, color)
+        #print model.data        
+        return
+
+    '''def get_external_filenames(self):
+        """Returns all external filenames stored as part of this table"""
+        model = self.getModel()
+        filenames = model.get_external_filename()        
+        return filenames'''
+    
+        
+    def edit_Table(self, row, col):
+        """Edit a nested table"""
+        #Done by opening up another instance of labbook and returning the data to the parent
+
+        #get cell data and pass to labbook as a new table
+        model = self.getModel()
+        tabledata= model.getCellRecord(row,col)
+        refname = str(row)+'_'+str(col)
+        if self.peatinfo != None:
+            refname =  self.peatinfo['record']+'_'+self.peatinfo['column']+'_'+refname
+        from Labbook import LabbookApp
+        if tabledata:
+            self.sublabbook = LabbookApp(parent=self, title=refname, data=tabledata)
+        else:
+            self.sublabbook = LabbookApp(parent=self, title=refname)
+        self.master.wait_window(self.sublabbook.labbook_win)
+        
+        # did we get any data back?
+        if not hasattr(self,'templabbookdata'):
+            self.templabbookdata=None
+        else:   
+            model.setValueAt(self.templabbookdata, row, col)
+            self.redrawTable()
+            self.templabbookdata=None
+           
+        return
+
+    def open_Ekin(self, row, col):
+        """Edit Ekin data, can be used outside PEAT, but does not contain protein and
+           field references"""
+        model = self.getModel()
+        cell_data = model.getCellRecord(row,col)
+        if not cell_data:
+            ed = EkinModesDialog(title="Select Mode",                                               
+                                  parent=self.parentframe)
+            mode = ed.result
+            print 'MODE',mode
+            ekindata = None            
+            #cell_data={}
+            #cell_data['mode'] = mode
+            #model.setValueAt(self.Ekindata, row, col)
+        else:
+            mode=cell_data['mode']
+            ekindata=cell_data['ekindata']
+        import EAT_DB.Ekin as Ekin
+        EK=Ekin.Ekin(parent=self,mode=mode,data=ekindata,allowreturntoDB=1)
+        self.Ekindata=None
+        self.master.wait_window(EK.ekin_win)
+        if not getattr(self,'Ekindata',None):
+            self.Ekindata=None
+        else:
+            newdata={}
+            newdata['mode']=mode
+            newdata['ekindata']=self.Ekindata
+            model.setValueAt(newdata, row, col)
+            self.redrawTable()
+            self.Ekindata=None
+        return
+        
+class EkinModesDialog(tkSimpleDialog.Dialog):
+    def __init__(self, parent, title=None):   
+        self.ekinmodes = ['General', 'Simple enzyme kinetic',
+                    'Enzyme pH-activity', 'pH-stability',
+                    'NMR titration', 'Protein stability',
+                    'Amyloid formation']
+        tkSimpleDialog.Dialog.__init__(self, parent, title)                    
+                    
+    def body(self, master):                  
+            
+        import Pmw
+        self.themode=StringVar()
+        self.mode_choice = Pmw.OptionMenu(
+            parent = master,labelpos = 'w',
+            label_text = 'Enter mode:',
+            menubutton_textvariable = self.themode,
+            items = self.ekinmodes,
+            initialitem = 'General',
+            menubutton_width = 16)              
+        self.mode_choice.pack(pady=5)
+        return self.mode_choice
+        
+    def apply(self): 
+        self.result = self.themode.get()
+        return       
+                
 
 class SimpleTableDialog(tkSimpleDialog.Dialog):
-    """Simple dialog to get data for new cols and rows""" 
+    """Simple dialog to get data for new cols and rows"""
+
+    def __init__(self, parent, title=None, table=None):
+        
+        if table != None:
+            self.items = table.getModel().getDefaultTypes()
+        else:
+            self.items=['text','number']        
+        tkSimpleDialog.Dialog.__init__(self, parent, title) 
+        
+ 
     def body(self, master):
 
         Label(master, text="Column Type:").grid(row=0)
@@ -1717,8 +2148,8 @@ class SimpleTableDialog(tkSimpleDialog.Dialog):
         self.b1 = Menubutton(master,textvariable=self.v1,relief=RAISED)
         self.menu=Menu(self.b1,tearoff=0)
         self.b1['menu']=self.menu
-        items=['text','number']
-        for option in items:
+        
+        for option in self.items:
             self.menu.add_radiobutton(label=option,
                                           variable=self.v1,
                                           value=option,
@@ -1734,5 +2165,4 @@ class SimpleTableDialog(tkSimpleDialog.Dialog):
         second = self.e2.get()
         self.result = first, second
         return
-
 

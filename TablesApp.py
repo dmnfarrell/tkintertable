@@ -23,6 +23,7 @@
 # Import system modules
 #
 from Tkinter import *
+import Pmw 
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import re
 import os
@@ -31,25 +32,29 @@ import time
 #
 # Import Local modules
 #
-from Tables import TableCanvas, ColumnHeader, MyTable
+
+from Custom import MyTable
 from TableModels import TableModel
-from Tables_Import import TableImporter
+from Tables_IO import TableImporter
 from Prefs import Preferences
 
 class TablesApp(Frame):
     """
-    Table app
-    """
-    
+    Tables app
+    """    
+
     def __init__(self,parent=None,data=None):
         "Initialize the application."
         self.parent=parent
+        
         #If there is data to be loaded, show the dialog first
         if not self.parent:
             Frame.__init__(self)
             self.tablesapp_win=self.master
+            
         else:
             self.tablesapp_win=Toplevel()
+                
 
         # Get platform into a variable
         import platform
@@ -59,19 +64,22 @@ class TablesApp(Frame):
 
         self.preferences=Preferences('TablesApp',{'check_for_update':1})
         self.loadprefs()
-        
-        self.tablesapp_win.title('Tables Application')
+	self.tablesapp_win.title('Tables Application')
         self.tablesapp_win.geometry('+200+100')
         self.x_size=1000
         self.y_size=500
         self.createMenuBar()
         self.apptoolBar = ToolBar(self.tablesapp_win, self)
         self.apptoolBar.pack(fill=BOTH, expand=NO)
+        #add find bar
+        #self.createSearchBar()
+        
         if data != None:
             self.data = data
             self.new_project(data)
         else:
             self.new_project()
+
         self.tablesapp_win.protocol('WM_DELETE_WINDOW',self.quit)    
         return
 
@@ -83,29 +91,46 @@ class TablesApp(Frame):
                         '03Close':{'cmd':self.close_project},
                         '04Save':{'cmd':self.save_project},
                         '05Save As':{'cmd':self.save_as_project},
-                        '06Preferences..':{'cmd':self.showPrefsDialog},
-                        '07Quit':{'cmd':self.quit}}
+                        '06Preferences..':{'cmd':self.showPrefsDialog},                        
+                        '08Quit':{'cmd':self.quit}}
+        if self.parent:
+            self.proj_menu['08Return to Database']={'cmd':self.return_data}
         self.proj_menu=self.create_pulldown(self.menu,self.proj_menu)
         self.menu.add_cascade(label='Project',menu=self.proj_menu['var'])
+
+        self.records_menu={'01Add Row':{'cmd':self.add_Row},
+                         '02Delete Row':{'cmd':self.delete_Row},   
+                         '03Add Column':{'cmd':self.add_Column},
+                         '04Delete Column':{'cmd':self.delete_Column},
+                         '05Auto Add Rows':{'cmd':self.autoAdd_Rows},
+                         '06Auto Add Columns':{'cmd':self.autoAdd_Columns},
+                         '07Find':{'cmd':self.createSearchBar},
+                         }
+        self.records_menu=self.create_pulldown(self.menu,self.records_menu)
+        self.menu.add_cascade(label='Records',menu=self.records_menu['var'])  
         
-        self.IO_menu={'01Import from csv file':{'cmd':self.import_csv},
-                      '02Export to csv file':{'cmd':self.export_csv}
+        self.sheet_menu={'01Add Sheet':{'cmd':self.add_Sheet},
+                         '02Remove Sheet':{'cmd':self.delete_Sheet},
+                         '03Copy Sheet':{'cmd':self.copy_Sheet},
+                         '04Rename Sheet':{'cmd':self.rename_Sheet},
+                         }
+        self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
+        self.menu.add_cascade(label='Sheet',menu=self.sheet_menu['var'])  
+        
+        self.IO_menu={'01Import from csv file':{'cmd':self.import_cvs},
+                      '02Export to csv file':{'cmd':self.export_cvs},
+                      '03Import external fileset':{'cmd':self.import_fileset},
                       }
         
         self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
         self.menu.add_cascade(label='Import/Export',menu=self.IO_menu['var'])
+        
 
-        self.sheet_menu={'01Add Sheet':{'cmd':self.add_Sheet},
-                         '02Remove Sheet':{'cmd':self.delete_Sheet},
-                         '03Add Row':{'cmd':self.add_Row},
-                         '04Delete Row':{'cmd':self.delete_Row},   
-                         '05Add Column':{'cmd':self.add_Column},
-                         '06Delete Column':{'cmd':self.delete_Column},
-                         '07Auto Add Rows':{'cmd':self.autoAdd_Rows},
-                         '08Find':{'cmd':self.findValue},
-                         }
-        self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
-        self.menu.add_cascade(label='Sheet',menu=self.sheet_menu['var'])       
+        self.view_menu = Menu(self.menu, tearoff=0)
+        self.view_menu.add_radiobutton(label="Normal View", state=ACTIVE,command=self.normal_view)
+        self.view_menu.add_radiobutton(label="Page View", command=self.page_view)
+        self.menu.add_cascade(label='View',menu=self.view_menu)
+             
         #
         # Help menu
         #
@@ -144,6 +169,25 @@ class TablesApp(Frame):
                     var.add_command(label='%-25s' %(item[2:]),command=command)
         dict['var']=var
         return dict
+
+    def createSearchBar(self, event=None):
+        """Add a find entry box"""
+        frame = Frame(self.tablesapp_win)
+        row=0
+        def close():
+            frame.destroy()
+        self.findtext=StringVar()
+        self.findbox=Entry(frame,textvariable=self.findtext,width=30,bg='white')
+        self.findbox.grid(row=row,column=1,sticky='news',columnspan=2,padx=2,pady=2)
+        self.findbox.bind('<Return>',self.do_find_text)
+        Label(frame,text='Find:').grid(row=row,column=0,sticky='ew')
+        self.findagainbutton=Button(frame,text='Find Again', command=self.do_find_again)
+        self.findagainbutton.grid(row=row,column=3,sticky='news',padx=2,pady=2)
+        self.cbutton=Button(frame,text='Close', command=close)
+        self.cbutton.grid(row=row,column=4,sticky='news',padx=2,pady=2)
+        frame.pack(fill=BOTH, expand=NO)
+        return 
+        
         
     def loadprefs(self):
         """Setup default prefs file if any of the keys are not present"""
@@ -170,8 +214,7 @@ class TablesApp(Frame):
             self.currenttable.destroy()
 
         #Create the sheets dict 
-        self.sheets = {}        
-        import Pmw    
+        self.sheets = {}      
         self.notebook = Pmw.NoteBook(self.tablesapp_win, raisecommand=self.setcurrenttable)
         self.notebook.pack(fill='both', expand=1, padx=4, pady=4)
         if data !=None:
@@ -189,9 +232,9 @@ class TablesApp(Frame):
         
     def open_project(self):
         import tkFileDialog, os    
-        filename=tkFileDialog.askopenfilename(defaultextension='.tble',
+        filename=tkFileDialog.askopenfilename(defaultextension='.labbook',
                                                   initialdir=os.getcwd(),
-                                                  filetypes=[("Pickle file","*.tble"),
+                                                  filetypes=[("Pickle file","*.labbook"),
                                                              ("All files","*.*")],
                                                   parent=self.tablesapp_win)
         if os.path.isfile(filename):
@@ -218,9 +261,9 @@ class TablesApp(Frame):
         """Save as a new filename"""               
         import tkFileDialog, os
         filename=tkFileDialog.asksaveasfilename(parent=self.tablesapp_win,
-                                                defaultextension='.tble',
+                                                defaultextension='.labbook',
                                                 initialdir=self.defaultsavedir,
-                                                filetypes=[("Table project","*.tble"),
+                                                filetypes=[("Labbook project","*.labbook"),
                                                            ("All files","*.*")])
         if not filename:
             print 'Returning'
@@ -252,31 +295,87 @@ class TablesApp(Frame):
             self.currenttable.destroy()        
         return
         
-    def import_csv(self):
+    def import_cvs(self):
         importer = TableImporter()
-        import tkFileDialog,os
-        result = None
-        self.datafile = None
-        savedir = os.getcwd()
-        project_name = ''
+        #datafile = importer.open_File(self.tablesapp_win)
         
-        filename=tkFileDialog.askopenfile(defaultextension='.csv',
-                                                initialdir=savedir,
-                                                initialfile=project_name,
-                                                filetypes=[("Data file","*.csv")],
-                                                title='Choose data from a .csv file saved as excel spreadsheet in .csv format (comma separated list)',
-                                                parent=self.tablesapp_win)
-        if filename and os.path.exists(filename.name) and os.path.isfile(filename.name):
-            datafile = filename.name
-            
-        modeldata = importer.ImportTableModel(self.tablesapp_win, datafile)
+        #just use the dialog to load and import the file
+        importdialog = importer.import_Dialog(self.tablesapp_win)         
+        self.tablesapp_win.wait_window(importdialog)
+        modeldata = importer.modeldata
+        #modeldata = importer.ImportTableModel(datafile)
         sheetdata={}
         sheetdata['sheet1']=modeldata
         self.new_project(sheetdata)
         return
         
-    def export_csv(self):
+    def export_cvs(self):
+        exporter = TableExporter()
+        exporter.ExportTableData(self.currenttable)
+        return
+    
+    def import_fileset(self):
+        """Import a series of external files in a folder"""
+        if self.parent == None:
+            import tkMessageBox
+            tkMessageBox.showwarning("Not available", "You can't use this feature outside PEAT.")
+            return
+        #get folder
+        import tkFileDialog, os
+        importdir=tkFileDialog.askdirectory(initialdir=os.getcwd(),title='Select directory files'
+                                            ,mustexist=1,parent=self.tablesapp_win)
+        if not importdir:
+            return
+        peatapp = self.parent
+        protein = self.peatinfo['record']
+        field = self.peatinfo['column']
+        import os
+        files = os.listdir(importdir)
+        okfiles = []
+        files.sort()
+        for f in files:
+            #if file.find(pattern)!=-1 and file[0]!='.':
+            okfiles.append(os.path.join(importdir,f))
+        #print 'files to be used:', okfiles 
+                
+        #create new sheet
+        sheetname = self.add_Sheet()
+        self.notebook.selectpage(sheetname)
+        #add a col
+        model=self.currenttable.getModel()
+        model.deleteColumn(1)
+        model.deleteRow(0)
+        model.addColumn('testfiles', 'File')
+        row=0
         
+        import PEATDialog
+        self.pb=PEATDialog.PEATDialog(self.tablesapp_win, option='progressbar',message='Importing files')
+        self.pb.update_progress(0)
+        total = len(okfiles)
+        
+        #iterate over filenames in folder and add one row for each file
+        for f in okfiles:            
+            filename=os.path.split(f)[-1]
+            #create row
+            if filename.find('.') != -1:
+                name = filename.split('.')[0]
+            else:
+                name = filename
+            model.addRow(name)
+            print 'adding', filename
+            #now add file to this table row, col
+            #try:
+            self.currenttable.add_file(peatapp, f, 
+                                   protein_name=protein,field_name=field,
+                                   sheet=sheetname, row=row, col=1 )
+            row=row+1
+            #except:
+            #    print 'failed to add', filename
+            c=float(row)/float(total)*100.0            
+            self.pb.update_progress(c)
+            self.currenttable.redrawTable()
+            #self.update_idletasks()
+        self.pb.close()    
         return
         
     def add_Sheet(self, sheetname=None, sheetdata=None):
@@ -299,12 +398,13 @@ class TablesApp(Frame):
             model = TableModel(sheetdata)   
         else:    
             model = TableModel()
-
-        self.currenttable = MyTable(page, model)        
+            
+        #create the table
+        self.currenttable = MyTable(page, model) 
         #Add some empty data if no data
         if sheetdata == None:
-            self.currenttable.autoAdd_Columns(3) 
-            self.currenttable.autoAdd_Rows(4)
+            self.currenttable.autoAdd_Columns(1) 
+            self.currenttable.autoAdd_Rows(1)
         #Load preferences into table
         self.currenttable.loadPrefs(self.preferences)
         #This handles all the canvas and header in the frame passed to constructor
@@ -312,13 +412,33 @@ class TablesApp(Frame):
         #add the table to the sheet dict
         self.sheets[sheetname] = self.currenttable
         self.saved = 0
-        return
+        return sheetname
     
     def delete_Sheet(self):
         """Delete a sheet"""
         s = self.notebook.getcurselection()
         self.notebook.delete(s)
         del self.sheets[s]
+        return
+       
+    def copy_Sheet(self, newname=None):
+        """Copy a sheet"""               
+        newdata = self.currenttable.getModel().getData().copy()
+        if newname==None:
+            self.add_Sheet(None, newdata)
+        else:
+            self.add_Sheet(newname, newdata)
+        return
+          
+    def rename_Sheet(self):
+        """Rename a sheet"""
+        s = self.notebook.getcurselection()
+        newname = tkSimpleDialog.askstring("New sheet name?", "Enter new sheet name:",
+                                                initialvalue=s)
+        if newname == None:
+            return
+        self.copy_Sheet(newname)
+        self.delete_Sheet()
         return
         
     def setcurrenttable(self, event):
@@ -359,11 +479,47 @@ class TablesApp(Frame):
         self.currenttable.autoAdd_Rows()             
         self.saved = 0        
         return
+    
+    def autoAdd_Columns(self):
+        """Auto add x rows"""
+        self.currenttable.autoAdd_Columns()             
+        self.saved = 0 
+        return    
 
     def findValue(self):
         self.currenttable.findValue()
         return
-              
+
+    def do_find_text(self, event=None):
+        """Find the text in the table"""
+        if not hasattr(self,'currenttable'):
+            return
+        import string
+        if string.strip(self.findtext.get())=='':
+            return
+        searchstring=self.findtext.get() 
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring)
+        return
+      
+    def do_find_again(self, event=None):
+        """Find again"""
+        if not hasattr(self,'currenttable'):
+            return
+        searchstring=self.findtext.get() 
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring, findagain=1)        
+        return
+    
+    def normal_view(self,event=None):
+        self.currenttable.paging_Off()
+        return
+        
+    def page_view(self,event=None):
+        self.currenttable.paging = 1
+        self.currenttable.redrawTable()
+        return
+         
         
     def about_Tables(self):
         self.ab_win=Toplevel()
@@ -391,7 +547,7 @@ class TablesApp(Frame):
     def online_documentation(self,event=None):
         """Open the online documentation"""
         import webbrowser
-        link='http://tkintertable.sourceforge.net/'
+        link='http://enzyme.ucd.ie/PEAT/'
         webbrowser.open(link,autoraise=1)
         return
         
