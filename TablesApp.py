@@ -41,8 +41,7 @@ from Prefs import Preferences
 class TablesApp(Frame):
     """
     Tables app
-    """    
-
+    """ 
     def __init__(self,parent=None,data=None):
         "Initialize the application."
         self.parent=parent
@@ -53,8 +52,7 @@ class TablesApp(Frame):
             self.tablesapp_win=self.master
             
         else:
-            self.tablesapp_win=Toplevel()
-                
+            self.tablesapp_win=Toplevel()                
 
         # Get platform into a variable
         import platform
