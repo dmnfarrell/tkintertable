@@ -329,18 +329,13 @@ class TablesApp(Frame):
                                                 initialvalue='sheet'+str(noshts+1))
         checksheet_name(sheetname)    
         page = self.notebook.add(sheetname)    
-        #Create the table and model
-        if sheetdata !=None:
-            model = TableModel(sheetdata)   
+        #Create the table and model if data present
+        if sheetdata != None:
+            model = TableModel(sheetdata)
+            self.currenttable = MyTable(page, model) 
         else:    
-            model = TableModel()
-            
-        #create the table
-        self.currenttable = MyTable(page, model) 
-        #Add some empty data if no data
-        if sheetdata == None:
-            self.currenttable.autoAdd_Columns(1) 
-            self.currenttable.autoAdd_Rows(1)
+            self.currenttable = MyTable(page) 
+   
         #Load preferences into table
         self.currenttable.loadPrefs(self.preferences)
         #This handles all the canvas and header in the frame passed to constructor

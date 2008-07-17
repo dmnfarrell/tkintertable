@@ -22,7 +22,7 @@
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
     
-    def __init__(self, newdict=None):
+    def __init__(self, newdict=None, rows=None, columns=None):
         import copy
         self.data = None    # holds the table dict
         self.colors = {}    # holds cell colors
@@ -38,14 +38,13 @@ class TableModel(object):
         if newdict == None:
             self.data = {}
             # Define the starting column names and locations in the table.
-            self.columnNames = ['Name']
-            self.columntypes = {'Name':'text'}
+            self.columnNames = ['1']
+            self.columntypes = {'1':'text'}
             self.columnOrder = None
             #record column labels for use in a table header
             self.columnlabels={}  
             for colname in self.columnNames:
                 self.columnlabels[colname]=colname   
-                
         else:
             self.data = copy.deepcopy(newdict)
             self.columnNames=copy.deepcopy(self.data['columnnames'])
@@ -80,6 +79,14 @@ class TableModel(object):
         self.default_display = {'text' : 'showstring',
                                 'number' : 'numtostring'}
 
+        #add rows and cols if they are given in the constructor
+        if newdict == None:
+            if rows != None:
+                for r in range(rows):
+                    self.addRow()
+            if columns != None:
+                for c in range(columns):
+                    self.addColumn()
         return
 
     def getDefaultTypes(self):
@@ -244,7 +251,7 @@ class TableModel(object):
             self.data[name]['Name'] = name
         else:
             self.data[name]['Name'] = ''
-        
+        print self.data[name]
         self.reclist = self.data.keys()
         self.reclist.sort()        
 

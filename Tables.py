@@ -20,6 +20,7 @@
 """
 
 from Tkinter import *
+from TableModels import TableModel
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import math
@@ -37,7 +38,6 @@ class TableCanvas(Canvas):
         import platform
         self.platform=platform.system()
         print self.platform
-        self.model = model
         self.width=800
         self.height=600 
         self.cellwidth=150                         
@@ -67,14 +67,16 @@ class TableCanvas(Canvas):
         #for multiple selections
         self.startrow = self.endrow = None
         self.multiplerowlist=[]
-        self.col_positions=[]       #record current column grid positions
-        
-        if self.model!=None:
-            self.rows=self.model.getRowCount()
-            self.cols=self.model.getColumnCount()
+        self.col_positions=[]       #record current column grid positions        
+
+        if model == None:
+            self.model = TableModel(rows=10,columns=5)
+
         else:    
-            self.rows=30
-            self.cols=8
+            self.model = model        
+        self.rows=self.model.getRowCount()
+        self.cols=self.model.getColumnCount()
+
         self.tablewidth=(self.cellwidth)*self.cols            
         self.tableheader = ColumnHeader(self.parentframe, self) 
         self.do_bindings()
@@ -87,7 +89,7 @@ class TableCanvas(Canvas):
         #
         #print self.columnactions
         #print 'Initialised tablecanvas'
-        
+        self.prefs = None
         return
     
     def mouse_wheel(self, event):
@@ -142,7 +144,8 @@ class TableCanvas(Canvas):
         """Adds column header and scrollbars and combines them with
            the current table adding all to the master frame provided in constructor.
            Table is then redrawn."""
-
+        if self.prefs == None:
+            self.loadPrefs()
         #Add the table and header to the frame  
         self.Yscrollbar=Scrollbar (self.parentframe,orient=VERTICAL,command=self.yview)
         self.Yscrollbar.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
