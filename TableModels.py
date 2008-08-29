@@ -72,15 +72,16 @@ class TableModel(object):
             for i in self.columnOrder.keys():
                 self.columnNames.append(self.columnOrder[i] )
                 i=i+1
-            print self.columnNames
+            #print self.columnNames
         
-        self.defaulttypes = ['text', 'number']
+        self.defaulttypes = ['text', 'number','formula']
         #setup default display for column types
         self.default_display = {'text' : 'showstring',
-                                'number' : 'numtostring'}
+                                'number' : 'numtostring',
+                                'formula' : 'evaluate'}
 
         #add rows and cols if they are given in the constructor
-        if newdict == None:
+        if newdict == None:            
             if rows != None:
                 for r in range(rows):
                     self.addRow()
@@ -171,6 +172,8 @@ class TableModel(object):
                  value = cell
              elif coltype == 'number':
                  value = str(cell)
+             elif coltype == 'formula':
+                 value = self.doFormula(cell)                 
              else:
                  value = 'other'
          if value==None:        
@@ -250,8 +253,7 @@ class TableModel(object):
         if name != None:
             self.data[name]['Name'] = name
         else:
-            self.data[name]['Name'] = ''
-        print self.data[name]
+            self.data[name]['Name'] = ''        
         self.reclist = self.data.keys()
         self.reclist.sort()        
 
@@ -350,17 +352,18 @@ class TableModel(object):
         name = self.reclist[rowIndex]
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
+        print coltype
         if coltype == 'number':
             try:
                 if value == '': #need this to allow deletion of values
-                    self.data[name][colname] = ''                    
+                    self.data[name][colname] = ''
                 else:    
                     self.data[name][colname] = float(value)
             except:
                 pass
         else:
             self.data[name][colname] = value
-        
+        print self.data
         return
         
     def getColorAt(self, rowIndex, columnIndex, key='bg'):
@@ -390,3 +393,18 @@ class TableModel(object):
         self.colors['bg']={}        
         return
      
+    def doFormula(self, cellformula):
+        """Evaluate the formula for a cell"""        
+        symbols = ['+','-','*','/']
+        import re 
+        #example - take the formula row/cells and get their values
+        #insert them in and just run eval?
+        #p=re.compile(
+        #print 'formula', cellformula
+        print 
+        return cellformula
+  
+    @classmethod
+    def getFormulaCoords(cls):
+        
+        return

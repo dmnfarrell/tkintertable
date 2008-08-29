@@ -605,6 +605,14 @@ class TableCanvas(Canvas):
     def getSelectedColumn(self):
         """Get currently selected column"""
         return self.currentcol
+   
+    def select_All(self):
+        """Select all rows"""
+        self.startrow = 0
+        self.endrow = self.rows
+        self.multiplerowlist = range(self.startrow,self.endrow)
+        self.drawMultipleRows(self.multiplerowlist)
+        return
         
     def getCellCoords(self, row, col):
         """Get x-y coordinates to drawing a cell in a given row/col"""
@@ -925,6 +933,7 @@ class TableCanvas(Canvas):
                             "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
                             "Fill Down" : lambda : self.fill_down(rows),
                             "Clear Data" : self.delete_Cell,
+                            "Select All" : self.select_All,
                             "Show Prefs" : self.showtablePrefs}            
             for action in defaultactions.keys():                
                 if action == 'Fill Down' and rows == None:
@@ -1085,7 +1094,7 @@ class TableCanvas(Canvas):
                 #print sta
                 if sta == 1:                    
                     model.setValueAt(value,absrow,col)
-            elif coltype == 'text':         
+            elif coltype == 'text' or coltype == 'formula': 
                 model.setValueAt(value,absrow,col)
             color = self.model.getColorAt(absrow,col,'fg')
             self.draw_Text(row, col, value, color)
@@ -1714,6 +1723,7 @@ class ColumnHeader(Canvas):
         popupmenu.add_command(label="Sort by "+ collabel +' (descending)', command=lambda : self.table.sortTable(reverse=1))
         popupmenu.add_command(label="Delete This Column", command=self.table.delete_Column)
         popupmenu.add_command(label="Add New Column", command=self.table.add_Column)
+        
         popupmenu.bind("<FocusOut>", popupFocusOut)
         #self.bind("<Button-3>", popupFocusOut)
         popupmenu.focus_set()
