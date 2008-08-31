@@ -74,11 +74,10 @@ class TableModel(object):
                 i=i+1
             #print self.columnNames
         
-        self.defaulttypes = ['text', 'number','formula']
+        self.defaulttypes = ['text', 'number']
         #setup default display for column types
         self.default_display = {'text' : 'showstring',
-                                'number' : 'numtostring',
-                                'formula' : 'evaluate'}
+                                'number' : 'numtostring'}
 
         #add rows and cols if they are given in the constructor
         if newdict == None:            
@@ -167,13 +166,15 @@ class TableModel(object):
          #value = 
          colname = self.getColumnName(columnIndex)
          coltype = self.columntypes[colname]
-         if not isinstance(cell,dict):             
-             if coltype == 'text' or coltype == 'Text':  
+         if not isinstance(cell,dict):
+             if str(cell).startswith('='):
+                 value = self.doFormula(cell)      
+             elif coltype == 'text' or coltype == 'Text':  
                  value = cell
              elif coltype == 'number':
                  value = str(cell)
-             elif coltype == 'formula':
-                 value = self.doFormula(cell)                 
+             #elif coltype == 'formula':
+             #    value = self.doFormula(cell)                 
              else:
                  value = 'other'
          if value==None:        
@@ -392,17 +393,46 @@ class TableModel(object):
         self.colors['fg']={}
         self.colors['bg']={}        
         return
-     
+
+    def getRecColNames(self, rowIndex, ColIndex):
+        """Returns the rec and col name as a tuple"""
+        recname = self.getRecName(0)
+        colname = self.getColumnName(0)
+        return (recname, colname)
+    
+
+    def appendtoFormula(self, formula, rowIndex, colIndex):
+        """Add the input cell to the formula"""
+        cellRec = getRecColNames(rowIndex, colIndex)
+        formula.append(cellRec)
+        return 
+    
     def doFormula(self, cellformula):
-        """Evaluate the formula for a cell"""        
-        symbols = ['+','-','*','/']
-        import re 
-        #example - take the formula row/cells and get their values
-        #insert them in and just run eval?
-        #p=re.compile(
+        """Evaluate the formula for a cell and return the result"""        
+        operands = ['+','-','*','/', '%']
         #print 'formula', cellformula
-        print 
-        return cellformula
+        ops = []
+        vals = []
+        print cellformula
+        
+        formula = eval(cellformula.strip('='))
+        print formula
+        #cellformula = [('1','1'), '*', ('2','1')]
+        for i in formula:
+            if i in operands:
+                ops.append(i)
+            else:
+                recname = i[0]; col= i[1]
+                if self.data.has_key(recname):
+                    v = self.data[recname][col]
+                    vals.append(v)
+                else:
+                    return ''
+        print vals, ops
+        print vals[0] + ops[0] + vals[1]
+        result = eval(vals[0] + ops[0] + vals[1])
+        
+        return str(result)
   
     @classmethod
     def getFormulaCoords(cls):

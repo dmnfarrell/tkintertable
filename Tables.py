@@ -21,6 +21,7 @@
 
 from Tkinter import *
 from TableModels import TableModel
+from TablePlot import pylabPlotter as plt
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import math
@@ -66,6 +67,7 @@ class TableCanvas(Canvas):
         self.reverseorder = 0
         #for multiple selections
         self.startrow = self.endrow = None
+        self.startcol = self.endcol = None
         self.multiplerowlist=[]
         self.col_positions=[]       #record current column grid positions        
 
@@ -659,6 +661,7 @@ class TableCanvas(Canvas):
         self.delete('entry')
         self.delete('tooltip')
         self.delete('searchrect')
+        self.delete('colrect')
         return
 
     def gotoprevRow(self):
@@ -712,7 +715,9 @@ class TableCanvas(Canvas):
             return
 
         self.startrow = rowclicked 
-        self.endrow = rowclicked 
+        self.endrow = rowclicked
+        self.startcol = colclicked
+        self.endcol = colclicked
         #reset multiple selection list
         self.multiplerowlist=[]
         self.multiplerowlist.append(rowclicked)
@@ -724,6 +729,8 @@ class TableCanvas(Canvas):
             coltype = self.model.getColumnType(colclicked)
             if coltype == 'text' or coltype == 'number':
                 self.draw_cellentry(rowclicked, colclicked)
+            elif coltype == 'formula':
+                self.enterFormula(rowclicked, colclicked)
         return
 
     def handle_left_release(self,event):
@@ -754,6 +761,7 @@ class TableCanvas(Canvas):
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         rowover = self.get_row_clicked(event)
+        colover = self.get_col_clicked(event)
         if self.check_PageView(rowover) == 1:
             return
         if rowover > self.rows or self.startrow > self.rows: #or 0 > colover > self.cols:
@@ -761,6 +769,16 @@ class TableCanvas(Canvas):
             return
         else:
             self.endrow = rowover
+        #do columns    
+        if colover > self.cols or self.startcol > self.cols:
+            return
+        else:
+            self.endcol = colover
+            if self.endcol < self.startcol:
+                self.multiplecollist=range(self.endcol, self.startcol+1)
+            else:
+                self.multiplecollist=range(self.startcol, self.endcol+1)
+            #print self.multiplecollist
         #draw the selected rows    
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:                
@@ -769,6 +787,8 @@ class TableCanvas(Canvas):
             else:
                 self.multiplerowlist=range(self.startrow, self.endrow+1)
                 self.drawMultipleRows(self.multiplerowlist)
+            #draw selected cells outline using row and col lists
+            self.drawMultipleCells()    
         else:
             self.delete('multiplesel')
         #print self.multiplerowlist    
@@ -934,6 +954,7 @@ class TableCanvas(Canvas):
                             "Fill Down" : lambda : self.fill_down(rows),
                             "Clear Data" : self.delete_Cell,
                             "Select All" : self.select_All,
+                            "Plot Selected" : self.plot_Selected,
                             "Show Prefs" : self.showtablePrefs}            
             for action in defaultactions.keys():                
                 if action == 'Fill Down' and rows == None:
@@ -973,8 +994,41 @@ class TableCanvas(Canvas):
         return
     
     def fill_across(self):
-        """Fill across a row"""
+        """Fill across a row?"""
         
+        return
+
+    def getSelectionValues(self):
+        """Get values for current multiple cell selection"""
+        rows = self.multiplerowlist
+        cols = self.multiplecollist
+        model = self.model
+        
+        if len(rows)<2 or len(cols)<2:
+            return None
+        lists = []
+        for c in cols:
+            x=[]
+            for r in rows:
+                absr=self.get_AbsoluteRow(r)
+                val = model.getValueAt(absr,c) 
+                x.append(float(val))
+            lists.append(x)    
+        print lists        
+        return lists
+    
+    def plot_Selected(self):
+        """Plot the selected data if possible"""
+        x=[1,2,3,4,5]
+        y=[2,5,8,9,10]
+        plotlists = self.getSelectionValues()
+        print 'pltlists', plotlists
+        x = plotlists[0]
+        plotlists.remove(x)
+        for y in plotlists:
+            print 'y:',y
+            plt.plotXY(x, y)
+        plt.show()
         return
     
     #--- Drawing stuff ---
@@ -1080,7 +1134,11 @@ class TableCanvas(Canvas):
         absrow = self.get_AbsoluteRow(row)
         h=self.rowheight  
         model=self.getModel()
-        text = self.model.getValueAt(absrow, col)
+        cellvalue = self.model.getCellRecord(absrow, col)
+        if cellvalue != None and cellvalue.startswith('='):
+            text = cellvalue
+        else:    
+            text = self.model.getValueAt(absrow, col)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         #Draw an entry window
@@ -1094,8 +1152,9 @@ class TableCanvas(Canvas):
                 #print sta
                 if sta == 1:                    
                     model.setValueAt(value,absrow,col)
-            elif coltype == 'text' or coltype == 'formula': 
+            elif coltype == 'text': 
                 model.setValueAt(value,absrow,col)
+  
             color = self.model.getColorAt(absrow,col,'fg')
             self.draw_Text(row, col, value, color)
             if e.keysym=='Return':
@@ -1136,7 +1195,11 @@ class TableCanvas(Canvas):
         elif value == '':            
             return 1
         return 1
-        
+
+    def enterFormula(self, row, col):
+
+        return
+    
     def draw_Text(self, row, col, celltxt, fgcolor=None, align=None):
         """Draw the text inside a cell area"""
         self.delete('celltext'+str(row)+str(col))
@@ -1208,6 +1271,19 @@ class TableCanvas(Canvas):
         self.lower('fillrect')
         return
 
+    def drawSelectedCol(self):
+        """Draw an outline rect fot the current column selection"""
+        self.delete('colrect')
+        col=self.currentcol
+        x1,y1,x2,y2 = self.getCellCoords(0,col)
+        y2 = self.rows * self.rowheight
+        rect = self.create_rectangle(x1,y1,x2,y2,
+                                     outline='blue',width=2,
+                                     tag='colrect')
+        
+        
+        return
+    
     def drawMultipleRows(self, rowlist):
         """Draw more than one row selection"""
         self.delete('multiplesel')
@@ -1225,6 +1301,20 @@ class TableCanvas(Canvas):
         self.lower('fillrect')
         return
 
+    def drawMultipleCells(self):
+        """Draw an outline box for multiple cell selection"""
+        self.delete('multicellrect')
+        rows = self.multiplerowlist
+        cols = self.multiplecollist
+        x1,y1,a,b = self.getCellCoords(rows[0],cols[00])
+        c,d,x2,y2 = self.getCellCoords(rows[len(rows)-1],cols[len(cols)-1])
+        
+        rect = self.create_rectangle(x1,y1,x2,y2,
+                             outline='blue',width=2,
+                             tag='multicellrect')
+        self.getSelectionValues()
+        return
+    
     #
     # ----
     #
@@ -1622,7 +1712,8 @@ class ColumnHeader(Canvas):
                         color='red', outline='white')
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()
-            
+        #finally, draw the selected col on the table
+        self.table.drawSelectedCol()   
         return
 
     def handle_left_release(self,event):

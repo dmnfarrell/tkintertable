@@ -439,6 +439,10 @@ class TablesApp(Frame):
         if self.currenttable!=None:
             self.currenttable.findValue(searchstring, findagain=1)        
         return
+
+    def plot(self, event=None):
+        self.currenttable.plot_Selected()
+        return
     
     def normal_view(self,event=None):
         self.currenttable.paging_Off()
@@ -507,6 +511,7 @@ class ToolBar(Frame):
         self.add_button('Delete record', self.parentapp.delete_Row, img)
         img = Logo_images.del_col()
         self.add_button('Delete col', self.parentapp.delete_Column, img)
+        self.add_button('Plot', self.parentapp.plot)
     
         return
 
