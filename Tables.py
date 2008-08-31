@@ -662,6 +662,7 @@ class TableCanvas(Canvas):
         self.delete('tooltip')
         self.delete('searchrect')
         self.delete('colrect')
+        self.delete('multicellrect')
         return
 
     def gotoprevRow(self):
@@ -1002,18 +1003,28 @@ class TableCanvas(Canvas):
         """Get values for current multiple cell selection"""
         rows = self.multiplerowlist
         cols = self.multiplecollist
-        model = self.model
-        
+        model = self.model        
         if len(rows)<2 or len(cols)<2:
             return None
         lists = []
+        def evalrow(row):
+            if val == None or val == '':
+                return 0
+            try:
+               float(val)
+            except:
+               return 0
+            
         for c in cols:
-            x=[]
-            for r in rows:
+            x=[]            
+            for r in rows: 
                 absr=self.get_AbsoluteRow(r)
-                val = model.getValueAt(absr,c) 
-                x.append(float(val))
-            lists.append(x)    
+                val = model.getValueAt(absr,c)                
+                if val == None or val == '':                              
+                    continue           
+                x.append(val)
+            lists.append(x)
+               
         print lists        
         return lists
     
@@ -1310,7 +1321,7 @@ class TableCanvas(Canvas):
         c,d,x2,y2 = self.getCellCoords(rows[len(rows)-1],cols[len(cols)-1])
         
         rect = self.create_rectangle(x1,y1,x2,y2,
-                             outline='blue',width=2,
+                             outline='blue',width=2,activefill='red',activestipple='gray25',
                              tag='multicellrect')
         self.getSelectionValues()
         return

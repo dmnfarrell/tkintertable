@@ -44,7 +44,7 @@ class pylabPlotter(object):
         """Do xy plot of 2 lists and show correlation"""
         #cc = numpy.corrcoef(numpy.array([x,y]))        
         #print 'correlation coeff.:', cc[1,0]        
-        plotfig = pylab.plot(x, y, 'p')
+        plotfig = pylab.plot(x, y)
         pylab.title(title)
         pylab.xlabel(xlabel)
         pylab.ylabel(ylabel)        
@@ -78,8 +78,11 @@ class pylabPlotter(object):
     def showStats(cls):
 
         return
-
     
+    @classmethod
+    def plotPrefs(cls):
+        cls.points = 'p'
+        return
    
 
     
