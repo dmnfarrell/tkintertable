@@ -37,9 +37,15 @@ class pylabPlotter(object):
     """An interface to matplotlib for plotting Table data"""
     
     colors = ['#0000A0','#FF0000','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
-    symbols = ['p','-']
-    symbol = 'p'
+    linestyles = ['p','-','--']
+    shapes = ['p','-','--',':','steps','.' ,'o','^','<','s','+','x','D','1','4','h'] 
+    legend_positions = ['best', 'upper left','upper center','upper right',
+                         'center left','center','center right'
+                         'lower left','lower center','lower right']    
+    shape = 'p'
     grid = 1 
+    xscale = 0
+    yscale = 0
         
     def __init__(self):
         
@@ -49,10 +55,19 @@ class pylabPlotter(object):
     def plotXY(cls, x, y,title=None,xlabel=None,ylabel=None):
         """Do xy plot of 2 lists and show correlation"""
         
-        plotfig = pylab.plot(x, y, cls.symbol)
+        if cls.xscale == 1:
+            if cls.yscale == 1:
+                plotfig = pylab.loglog(x, y, cls.shape)
+            else:    
+                plotfig = pylab.semilogx(x, y, cls.shape)    
+        elif cls.yscale == 1:
+            plotfig = pylab.semilogy(x, y, cls.shape) 
+        else:                    
+            plotfig = pylab.plot(x, y, cls.shape)
         pylab.title(title)
         pylab.xlabel(xlabel)
-        pylab.ylabel(ylabel)        
+        pylab.ylabel(ylabel)
+        #pylab.legend(datalines,self.xdata.keys(),shadow=True,numpoints=1,loc=legloc)        
         if cls.grid == 1:
             print 'cls.grid',cls.grid
             pylab.grid(True)
@@ -93,12 +108,15 @@ class pylabPlotter(object):
         return
         
     @classmethod  
-    def setOptions(cls, symbol=None, grid=None):
+    def setOptions(cls, shape=None, grid=None, xscale=None, yscale=None):
         """Set the options before plotting"""
-        if symbol != None:
-            cls.symbol = symbol
+        if shape != None:
+            cls.shape = shape
         if grid != None:
             cls.grid = grid
-
+        if xscale != None:
+            cls.xscale = xscale
+        if yscale != None:
+            cls.yscale = yscale          
         return
         

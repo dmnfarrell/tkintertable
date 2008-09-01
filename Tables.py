@@ -766,7 +766,7 @@ class TableCanvas(Canvas):
         colover = self.get_col_clicked(event)
         if self.check_PageView(rowover) == 1:
             return
-        if rowover > self.rows or self.startrow > self.rows: #or 0 > colover > self.cols:
+        if rowover >= self.rows or self.startrow > self.rows:
             #print rowover
             return
         else:
@@ -1035,8 +1035,10 @@ class TableCanvas(Canvas):
     def plot_Selected(self):
         """Plot the selected data if possible"""
         plt.clear()
-        plt.setOptions(symbol=self.pltsymbol.get(), grid=self.pltgrid.get())
+        plt.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
+                        xscale=self.xscalevar.get(), yscale=self.yscalevar.get())
         plotlists = self.getSelectionValues()
+        
         print 'pltlists', plotlists
         #xlbl = 
         #ylbl = 
@@ -1053,32 +1055,61 @@ class TableCanvas(Canvas):
         self.pltgrid = IntVar()        
         self.pltsymbol = StringVar()
         self.pltsymbol.set('p')
+        self.legendvar = StringVar()
+        self.legendvar.set(0)
+        self.xscalevar = IntVar()
+        self.yscalevar = IntVar()
+        self.xscalevar.set(0)
+        self.yscalevar.set(0)        
         return
         
     def plotSetup(self):
         """Plot prefs dialog""" 
         self.plotprefswin=Toplevel()
         self.plotprefswin.geometry('+300+450')
-        self.plotprefswin.title('Plot Preferences')     
-        frame1=Frame(self.plotprefswin)
-        frame1.pack(side=LEFT)
-        frame2=Frame(self.plotprefswin)
-        frame2.pack()
-        def close_prefsdialog():
-            self.plotprefswin.destroy() 
+        self.plotprefswin.title('Plot Preferences')
         row=0
+        frame1=LabelFrame(self.plotprefswin, text='General')
+        frame1.grid(row=row,column=0,sticky='news',padx=2,pady=2) 
+        def close_prefsdialog():
+            self.plotprefswin.destroy()    
+            
         Checkbutton(frame1, text="Grid lines", variable=self.pltgrid,
-                    onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
+                    onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky='news')
+        Label(frame1,text='Symbol:').grid(row=1,column=0,padx=2,pady=2)
+        symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
+					                relief=RAISED,width=16)          
+        symbol_menu = Menu(symbolbutton, tearoff=0)
+        symbolbutton['menu'] = symbol_menu        
+        for text in plt.shapes:
+            symbol_menu.add_radiobutton(label=text,
+                                            variable=self.pltsymbol,
+                                            value=text,
+                                            indicatoron=1)  
+        symbolbutton.grid(row=1,column=1, sticky='news')
         row=row+1
-        #Checkbutton(frame1, text="Vertical Grid lines", variable=self.vgvar,
-        #            onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')    
-        #row=row+1  
+        legendframe = LabelFrame(self.plotprefswin, text="Legend Pos") 
+        i=0
+        for p in plt.legend_positions: 
+            Radiobutton(legendframe,text=p,variable=self.legendvar,value=i).pack(pady=2)
+            i=i+1        
+        legendframe.grid(row=row,column=0,sticky='news',padx=2,pady=2)        
+        row=0
+        scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
+        scales={0:'norm',1:'log'}
+        for i in range(0,2):
+            Radiobutton(scalesframe,text='x-'+scales[i],variable=self.xscalevar,
+                            value=i).grid(row=0,column=i,pady=2)
+            Radiobutton(scalesframe,text='y-'+scales[i],variable=self.yscalevar,
+                            value=i).grid(row=1,column=i,pady=2)
         
+        scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)      
+        row=row+1
         frame=Frame(self.plotprefswin)
-        frame.pack() 
-        b = Button(frame, text="Plot", command=self.plot_Selected)
+        frame.grid(row=row,column=1,sticky='news',padx=2,pady=2)   
+        b = Button(frame, text="Plot", command=self.plot_Selected, relief=GROOVE, bg='#99ccff')
         b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
-        c=Button(frame,text='Close', command=close_prefsdialog)
+        c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
         c.grid(row=row,column=0,sticky='news',padx=4,pady=4) 
         self.plotprefswin.focus_set()
         self.plotprefswin.grab_set()
