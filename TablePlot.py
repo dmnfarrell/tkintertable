@@ -20,6 +20,7 @@
 """
 
 import sys, os
+from Tkinter import *
 try:
     import numpy
 except:
@@ -35,22 +36,27 @@ except:
 class pylabPlotter(object):
     """An interface to matplotlib for plotting Table data"""
     
+    colors = ['#0000A0','#FF0000','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
+    symbols = ['p','-']
+    symbol = 'p'
+    grid = 1 
+        
     def __init__(self):
-
+        
         return
 
     @classmethod
     def plotXY(cls, x, y,title=None,xlabel=None,ylabel=None):
         """Do xy plot of 2 lists and show correlation"""
-        #cc = numpy.corrcoef(numpy.array([x,y]))        
-        #print 'correlation coeff.:', cc[1,0]        
-        plotfig = pylab.plot(x, y)
+        
+        plotfig = pylab.plot(x, y, cls.symbol)
         pylab.title(title)
         pylab.xlabel(xlabel)
         pylab.ylabel(ylabel)        
-        #pylab.figtext(0.1,0.2,cc[1,0])
-        #plotfig = pylab.plot(x, x, 'r')
-        #pylab.show()
+        if cls.grid == 1:
+            print 'cls.grid',cls.grid
+            pylab.grid(True)
+        
         return plotfig
 
     @classmethod          
@@ -68,7 +74,13 @@ class pylabPlotter(object):
             pylab.xlabel(xlabel)
             pylab.ylabel(ylabel)        
         return histogram
-    
+        
+    @classmethod  
+    def clear(cls):
+        """clear plot"""
+        pylab.clf()
+        return
+        
     @classmethod
     def show(cls):
         pylab.show()
@@ -76,13 +88,17 @@ class pylabPlotter(object):
     
     @classmethod
     def showStats(cls):
+        #cc = numpy.corrcoef(numpy.array([x,y]))  
+        #print 'correlation coeff.:', cc[1,0]           
+        return
+        
+    @classmethod  
+    def setOptions(cls, symbol=None, grid=None):
+        """Set the options before plotting"""
+        if symbol != None:
+            cls.symbol = symbol
+        if grid != None:
+            cls.grid = grid
 
         return
-    
-    @classmethod
-    def plotPrefs(cls):
-        cls.points = 'p'
-        return
-   
-
-    
+        

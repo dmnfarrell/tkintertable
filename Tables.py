@@ -92,6 +92,7 @@ class TableCanvas(Canvas):
         #print self.columnactions
         #print 'Initialised tablecanvas'
         self.prefs = None
+        self.setupPlotVars()
         return
     
     def mouse_wheel(self, event):
@@ -950,14 +951,17 @@ class TableCanvas(Canvas):
 
         def add_defaultcommands():           
             """now add general actions for all cells""" 
+            order = ["Set Fill Color","Set Text Color","Fill Down","Clear Data","Select All",
+                    "Plot Selected","Plot Options","Show Prefs"]
             defaultactions={"Set Fill Color" : lambda : self.setcellColor(row,col,key='bg') if rows==None else self.setcellColors(rows, key='bg'),
                             "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
                             "Fill Down" : lambda : self.fill_down(rows),
                             "Clear Data" : self.delete_Cell,
                             "Select All" : self.select_All,
                             "Plot Selected" : self.plot_Selected,
+                            "Plot Options" : self.plotSetup,
                             "Show Prefs" : self.showtablePrefs}            
-            for action in defaultactions.keys():                
+            for action in order:                
                 if action == 'Fill Down' and rows == None:
                     pass
                 else:
@@ -1030,10 +1034,12 @@ class TableCanvas(Canvas):
     
     def plot_Selected(self):
         """Plot the selected data if possible"""
-        x=[1,2,3,4,5]
-        y=[2,5,8,9,10]
+        plt.clear()
+        plt.setOptions(symbol=self.pltsymbol.get(), grid=self.pltgrid.get())
         plotlists = self.getSelectionValues()
         print 'pltlists', plotlists
+        #xlbl = 
+        #ylbl = 
         x = plotlists[0]
         plotlists.remove(x)
         for y in plotlists:
@@ -1041,7 +1047,45 @@ class TableCanvas(Canvas):
             plt.plotXY(x, y)
         plt.show()
         return
-    
+
+    def setupPlotVars(self):
+        """ """
+        self.pltgrid = IntVar()        
+        self.pltsymbol = StringVar()
+        self.pltsymbol.set('p')
+        return
+        
+    def plotSetup(self):
+        """Plot prefs dialog""" 
+        self.plotprefswin=Toplevel()
+        self.plotprefswin.geometry('+300+450')
+        self.plotprefswin.title('Plot Preferences')     
+        frame1=Frame(self.plotprefswin)
+        frame1.pack(side=LEFT)
+        frame2=Frame(self.plotprefswin)
+        frame2.pack()
+        def close_prefsdialog():
+            self.plotprefswin.destroy() 
+        row=0
+        Checkbutton(frame1, text="Grid lines", variable=self.pltgrid,
+                    onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
+        row=row+1
+        #Checkbutton(frame1, text="Vertical Grid lines", variable=self.vgvar,
+        #            onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')    
+        #row=row+1  
+        
+        frame=Frame(self.plotprefswin)
+        frame.pack() 
+        b = Button(frame, text="Plot", command=self.plot_Selected)
+        b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
+        c=Button(frame,text='Close', command=close_prefsdialog)
+        c.grid(row=row,column=0,sticky='news',padx=4,pady=4) 
+        self.plotprefswin.focus_set()
+        self.plotprefswin.grab_set()
+        #self.plotprefswin.wait_window()
+        
+        return
+        
     #--- Drawing stuff ---
     
     def draw_grid(self):
