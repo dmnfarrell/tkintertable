@@ -70,11 +70,11 @@ class TableCanvas(Canvas):
         self.startcol = self.endcol = None
         self.multiplerowlist=[]
         self.col_positions=[]       #record current column grid positions        
-
+        self.mode = 'normal'
+        
         if model == None:
             self.model = TableModel(rows=10,columns=5)
-
-        else:    
+        else:  
             self.model = model        
         self.rows=self.model.getRowCount()
         self.cols=self.model.getColumnCount()
@@ -547,6 +547,11 @@ class TableCanvas(Canvas):
         """Get the currently selected record"""
         rec = self.model.getRecordAtRow(self.currentrow)
         return rec
+
+    def get_currentColName(self):
+        """Get the currently selected record name"""
+        colname = self.model.getColumnName(self.currentcol)
+        return colname 
         
     def get_currentRecordName(self):
         """Get the currently selected record name"""
@@ -560,6 +565,19 @@ class TableCanvas(Canvas):
             recnames.append(self.model.getRecName(row))
         return recnames        
     
+    def get_currentRecCol(self):
+        """Get the clicked rec and col names as a tuple"""
+        recname = self.get_currentRecordName()
+        colname = self.get_currentColName()        
+        return (recname, colname)
+
+    def get_RecCol(self, row, col):
+        """Get the rec and colnames for supplied row/col"""
+        recname = self.model.getRecName(row)
+        colname = self.model.getColumnName(col)        
+        return (recname, colname)
+    
+
     def get_row_clicked(self, event):
         """get row where event on canvas occurs"""
         h=self.rowheight
@@ -704,15 +722,18 @@ class TableCanvas(Canvas):
         """Respond to a single press"""        
         #which row and column is the click inside?
         self.clearSelected()
+        rowclicked = self.get_row_clicked(event)
+        colclicked = self.get_col_clicked(event)
+        if self.mode == 'formula':
+            self.handleFormulaClick(rowclicked, colclicked)
+            return        
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         #ensure popup menus are removed if present
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()        
         if hasattr(self.tableheader, 'rightmenu'):
-            self.tableheader.rightmenu.destroy()           
-        rowclicked = self.get_row_clicked(event)
-        colclicked = self.get_col_clicked(event)
+            self.tableheader.rightmenu.destroy()        
         if self.check_PageView(rowclicked) == 1:
             return
 
@@ -877,7 +898,7 @@ class TableCanvas(Canvas):
             self.draw_tooltip(row, col)
         
         return
-        
+
     def gotonextCell(self, event):
         """Move highlighted cell to next cell in row or a new col"""
         #print 'next'    
@@ -889,7 +910,35 @@ class TableCanvas(Canvas):
             self.currentcol = self.currentcol+1
         self.draw_selected_rect(self.currentrow, self.currentcol)
         return
+    
+    def handleFormulaClick(self, row, col):
+        """Do a dialog for cell formula entry"""
+        print row, col
+        cell = self.get_RecCol(row, col)
+        model = self.getModel()
+        absrow = self.get_AbsoluteRow(row)           
+        self.formulaText.insert(END, str(cell))
+        return
+
+    def formula_Dialog(self, row, col):
+        """Formula dialog"""
+        def cancel():
+            if hasattr(self,'formulaWin'):
+                self.formulaWin.destroy()
+        def calculate():
+            #get text area contents and do formula
+            return
         
+        self.formulaWin = Toplevel()
+        self.formulaWin.title('Enter Formula')
+        self.formulaText = Text(self.formulaWin, width=50, height=10, bg='white',relief=GROOVE)
+        self.formulaText.pack(side=LEFT,padx=2,pady=2)
+        cancelbutton=Button(self.formulaWin, text='Cancel',relief=GROOVE,command=cancel)
+        cancelbutton.pack(fill=BOTH,padx=2,pady=2)
+        donebutton=Button(self.formulaWin, text='Done',relief=GROOVE,command=calculate)
+        donebutton.pack(fill=BOTH,padx=2,pady=2)        
+        
+        return
         
     # --- Some cell specific actions here ---
     
@@ -1036,7 +1085,9 @@ class TableCanvas(Canvas):
         """Plot the selected data if possible"""
         plt.clear()
         plt.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
-                        xscale=self.xscalevar.get(), yscale=self.yscalevar.get())
+                       xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
+                       showlegend = self.pltlegend.get(),
+                       legendloc = self.legendloc.get())
         plotlists = self.getSelectionValues()
         
         print 'pltlists', plotlists
@@ -1052,11 +1103,12 @@ class TableCanvas(Canvas):
 
     def setupPlotVars(self):
         """ """
-        self.pltgrid = IntVar()        
+        self.pltgrid = IntVar()
+        self.pltlegend = IntVar()
         self.pltsymbol = StringVar()
         self.pltsymbol.set('p')
-        self.legendvar = StringVar()
-        self.legendvar.set(0)
+        self.legendloc = IntVar()
+        self.legendloc.set(0)
         self.xscalevar = IntVar()
         self.yscalevar = IntVar()
         self.xscalevar.set(0)
@@ -1064,7 +1116,7 @@ class TableCanvas(Canvas):
         return
         
     def plotSetup(self):
-        """Plot prefs dialog""" 
+        """Plot options dialog""" 
         self.plotprefswin=Toplevel()
         self.plotprefswin.geometry('+300+450')
         self.plotprefswin.title('Plot Preferences')
@@ -1076,7 +1128,10 @@ class TableCanvas(Canvas):
             
         Checkbutton(frame1, text="Grid lines", variable=self.pltgrid,
                     onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky='news')
-        Label(frame1,text='Symbol:').grid(row=1,column=0,padx=2,pady=2)
+        Checkbutton(frame1, text="Legend", variable=self.pltlegend,
+                    onvalue=1, offvalue=0).grid(row=1,column=0, columnspan=2, sticky='news')
+      
+        Label(frame1,text='Symbol:').grid(row=2,column=0,padx=2,pady=2)
         symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
 					                relief=RAISED,width=16)          
         symbol_menu = Menu(symbolbutton, tearoff=0)
@@ -1086,14 +1141,14 @@ class TableCanvas(Canvas):
                                             variable=self.pltsymbol,
                                             value=text,
                                             indicatoron=1)  
-        symbolbutton.grid(row=1,column=1, sticky='news')
+        symbolbutton.grid(row=2,column=1, sticky='news')
         row=row+1
         legendframe = LabelFrame(self.plotprefswin, text="Legend Pos") 
         i=0
         for p in plt.legend_positions: 
-            Radiobutton(legendframe,text=p,variable=self.legendvar,value=i).pack(pady=2)
+            Radiobutton(legendframe,text=p,variable=self.legendloc,value=i).pack(pady=2)
             i=i+1        
-        legendframe.grid(row=row,column=0,sticky='news',padx=2,pady=2)        
+        legendframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)        
         row=0
         scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
         scales={0:'norm',1:'log'}
@@ -1106,7 +1161,7 @@ class TableCanvas(Canvas):
         scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)      
         row=row+1
         frame=Frame(self.plotprefswin)
-        frame.grid(row=row,column=1,sticky='news',padx=2,pady=2)   
+        frame.grid(row=row,column=0,sticky='news',padx=2,pady=2)   
         b = Button(frame, text="Plot", command=self.plot_Selected, relief=GROOVE, bg='#99ccff')
         b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
         c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
@@ -1232,10 +1287,21 @@ class TableCanvas(Canvas):
         txtvar.set(text)
         def callback(e):
             value = txtvar.get()
-            coltype = self.model.getColumnType(col)
+            if value == '=':
+                self.mode = 'formula'
+                print self.mode
+                #do a dialog that gets the formula into a text area
+                #then they can click on the cells they want
+                #when done the user presses ok and its entered into the cell
+                #self.handleCellFormula(row, col)                
+                self.cellentry.destroy()
+                self.formula_Dialog(row, col)
+                return
+                    
+            coltype = self
+            model.getColumnType(col)
             if coltype == 'number':
                 sta = self.check_data_entry(e)
-                #print sta
                 if sta == 1:                    
                     model.setValueAt(value,absrow,col)
             elif coltype == 'text': 
@@ -1247,7 +1313,8 @@ class TableCanvas(Canvas):
                 self.delete('entry')
                 #self.draw_rect(row, col)
                 #self.gotonextCell(e)
-                        
+            return
+            
         self.cellentry=Entry(self.parentframe,width=20, 
                         textvariable=txtvar,
                         bg=self.entrybackgr,

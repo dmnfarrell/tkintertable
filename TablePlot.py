@@ -46,7 +46,11 @@ class pylabPlotter(object):
     grid = 1 
     xscale = 0
     yscale = 0
-        
+    showlegend = 0
+    legendloc = 'best'
+    legendlines = []
+    legendnames = []
+    
     def __init__(self):
         
         return
@@ -67,7 +71,12 @@ class pylabPlotter(object):
         pylab.title(title)
         pylab.xlabel(xlabel)
         pylab.ylabel(ylabel)
-        #pylab.legend(datalines,self.xdata.keys(),shadow=True,numpoints=1,loc=legloc)        
+        #legend
+        cls.legendlines.append(plotfig)
+        cls.legendnames.append('A')
+        if cls.showlegend == 1:
+            pylab.legend(cls.legendlines,cls.legendnames,shadow=True,
+                         numpoints=1,loc=cls.legendloc)        
         if cls.grid == 1:
             print 'cls.grid',cls.grid
             pylab.grid(True)
@@ -94,6 +103,8 @@ class pylabPlotter(object):
     def clear(cls):
         """clear plot"""
         pylab.clf()
+        cls.legendlines = []
+        cls.legendnames = []
         return
         
     @classmethod
@@ -108,7 +119,8 @@ class pylabPlotter(object):
         return
         
     @classmethod  
-    def setOptions(cls, shape=None, grid=None, xscale=None, yscale=None):
+    def setOptions(cls, shape=None, grid=None, xscale=None, yscale=None,
+                    showlegend=None, legendloc=None ):
         """Set the options before plotting"""
         if shape != None:
             cls.shape = shape
@@ -117,6 +129,10 @@ class pylabPlotter(object):
         if xscale != None:
             cls.xscale = xscale
         if yscale != None:
-            cls.yscale = yscale          
+            cls.yscale = yscale
+        if showlegend != None:
+            cls.showlegend = showlegend
+        if legendloc != None:
+            cls.legendloc = cls.legend_positions[legendloc]     
         return
         
