@@ -19,6 +19,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
+from types import *
+
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
     
@@ -413,42 +415,41 @@ class TableModel(object):
         #print 'formula', cellformula
         ops = []
         cells = []
-        vals = []
-        #print cellformula
+        vals = []           
+        cellformula = cellformula.strip('=')  
         
-        cellformula = cellformula.strip('=')
-        
-        #cellformula = "('1','1')*('2','1')/('1','2')"
         import re
         p = re.compile('[*/+-]')
         x = p.split(cellformula)
-        for i in x:
+        for i in x:            
             cells.append(eval(i))
         ops = p.findall(cellformula)            
         print cells, ops  
         #get cell coords into values
         for i in cells:
-            recname = i[0]; col= i[1]
-            if self.data.has_key(recname):
-                v = self.data[recname][col]
-                vals.append(v)
+            if type(i) is TupleType:
+                recname = i[0]; col= i[1]
+                if self.data.has_key(recname):
+                    v = self.data[recname][col]
+                    vals.append(v)
+                else:
+                    return 
+            elif type(i) is IntType or type(i) is FloatType:
+                vals.append(i)
             else:
-                return 
+                return
+                
         print vals, ops
-
         #finally create expression string to evaluate        
         j=0
         expr = ''
         for v in vals:            
-            expr += v
+            expr += str(float(v))
             if j < len(ops):
                 expr += ops[j]
                 j=j+1
         print 'expr', expr                    
-        result = float(eval(expr)) 
-        return str(result)
+        result = eval(expr)
+        return str(round(result,3))
   
-    @classmethod
-    def getFormulaCoords(cls):
-        
-        return
+
