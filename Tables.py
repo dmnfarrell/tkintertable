@@ -916,28 +916,48 @@ class TableCanvas(Canvas):
         print row, col
         cell = self.get_RecCol(row, col)
         model = self.getModel()
-        absrow = self.get_AbsoluteRow(row)           
+        absrow = self.get_AbsoluteRow(row)  
         self.formulaText.insert(END, str(cell))
+        self.formulaText.focus_set()
+        #self.formulaWin.grab_set()
+        self.formulaWin.deiconify()        
+        
         return
 
     def formula_Dialog(self, row, col):
         """Formula dialog"""
-        def cancel():
+        absrow = self.get_AbsoluteRow(row)
+        def close():
             if hasattr(self,'formulaWin'):
                 self.formulaWin.destroy()
+            self.mode = 'normal'    
         def calculate():
             #get text area contents and do formula
+            f = '='+self.formulaText.get(1.0, END)
+            f = f.strip('\n')
+            self.model.setValueAt(f,absrow,col)
+            value = self.model.doFormula(f)
+            color = self.model.getColorAt(absrow,col,'fg')
+            self.draw_Text(row, col, value, color)
+            close()
+            self.mode = 'normal'
             return
+        def clear():
+            self.formulaText.delete(1.0, END) 
         
-        self.formulaWin = Toplevel()
-        self.formulaWin.title('Enter Formula')
+        self.formulaWin = Toplevel(takefocus=True)        
+        self.formulaWin.title('Enter Formula')        
         self.formulaText = Text(self.formulaWin, width=50, height=10, bg='white',relief=GROOVE)
         self.formulaText.pack(side=LEFT,padx=2,pady=2)
-        cancelbutton=Button(self.formulaWin, text='Cancel',relief=GROOVE,command=cancel)
+        cancelbutton=Button(self.formulaWin, text='Cancel',
+                            relief=GROOVE,bg='#99ccff',command=close)
         cancelbutton.pack(fill=BOTH,padx=2,pady=2)
-        donebutton=Button(self.formulaWin, text='Done',relief=GROOVE,command=calculate)
+        donebutton=Button(self.formulaWin, text='Done',
+                          relief=GROOVE,bg='#99ccff',command=calculate)
         donebutton.pack(fill=BOTH,padx=2,pady=2)        
-        
+        clrbutton=Button(self.formulaWin, text='Clear',
+                         relief=GROOVE,bg='#99ccff',command=clear)
+        clrbutton.pack(fill=BOTH,padx=2,pady=2)         
         return
         
     # --- Some cell specific actions here ---
@@ -1292,14 +1312,13 @@ class TableCanvas(Canvas):
                 print self.mode
                 #do a dialog that gets the formula into a text area
                 #then they can click on the cells they want
-                #when done the user presses ok and its entered into the cell
-                #self.handleCellFormula(row, col)                
+                #when done the user presses ok and its entered into the cell                       
                 self.cellentry.destroy()
+                #its all done here..
                 self.formula_Dialog(row, col)
                 return
                     
-            coltype = self
-            model.getColumnType(col)
+            coltype = self.model.getColumnType(col)
             if coltype == 'number':
                 sta = self.check_data_entry(e)
                 if sta == 1:                    

@@ -412,26 +412,40 @@ class TableModel(object):
         operands = ['+','-','*','/', '%']
         #print 'formula', cellformula
         ops = []
+        cells = []
         vals = []
-        print cellformula
+        #print cellformula
         
-        formula = eval(cellformula.strip('='))
-        print formula
-        #cellformula = [('1','1'), '*', ('2','1')]
-        for i in formula:
-            if i in operands:
-                ops.append(i)
+        cellformula = cellformula.strip('=')
+        
+        #cellformula = "('1','1')*('2','1')/('1','2')"
+        import re
+        p = re.compile('[*/+-]')
+        x = p.split(cellformula)
+        for i in x:
+            cells.append(eval(i))
+        ops = p.findall(cellformula)            
+        print cells, ops  
+        #get cell coords into values
+        for i in cells:
+            recname = i[0]; col= i[1]
+            if self.data.has_key(recname):
+                v = self.data[recname][col]
+                vals.append(v)
             else:
-                recname = i[0]; col= i[1]
-                if self.data.has_key(recname):
-                    v = self.data[recname][col]
-                    vals.append(v)
-                else:
-                    return ''
+                return 
         print vals, ops
-        print vals[0] + ops[0] + vals[1]
-        result = eval(vals[0] + ops[0] + vals[1])
-        
+
+        #finally create expression string to evaluate        
+        j=0
+        expr = ''
+        for v in vals:            
+            expr += v
+            if j < len(ops):
+                expr += ops[j]
+                j=j+1
+        print 'expr', expr                    
+        result = float(eval(expr)) 
         return str(result)
   
     @classmethod
