@@ -1523,11 +1523,9 @@ class TableCanvas(Canvas):
         y2=box[3]+1
         #self.tag_raise('tooltip')
         rect = self.create_rectangle(x1+1,y1+1,x2+1,y2+1,tag='tooltip',fill='black')
-        rect2 = self.create_rectangle(x1,y1,x2,y2,tag='tooltip',fill='lightyellow')
-        
-        self.lift(obj) 
-           
-        return       
+        rect2 = self.create_rectangle(x1,y1,x2,y2,tag='tooltip',fill='lightyellow')        
+        self.lift(obj)            
+        return
         
         
     def setcellbackgr(self):

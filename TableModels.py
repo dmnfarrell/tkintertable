@@ -400,8 +400,7 @@ class TableModel(object):
         """Returns the rec and col name as a tuple"""
         recname = self.getRecName(0)
         colname = self.getColumnName(0)
-        return (recname, colname)
-    
+        return (recname, colname)    
 
     def appendtoFormula(self, formula, rowIndex, colIndex):
         """Add the input cell to the formula"""

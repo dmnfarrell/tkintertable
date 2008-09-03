@@ -22,6 +22,7 @@
 import sys, os
 from Tkinter import *
 from types import *
+import re
 
 class Formula(object):
     """A class to handle formulas in the table"""
@@ -40,7 +41,6 @@ class Formula(object):
         vals = []           
         cellformula = cellformula.strip('=')  
         
-        import re
         p = re.compile('[*/+-]')
         x = p.split(cellformula)
         for i in x:            
