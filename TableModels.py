@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from types import *
+from TableFormula import Formula
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
@@ -411,45 +411,5 @@ class TableModel(object):
     
     def doFormula(self, cellformula):
         """Evaluate the formula for a cell and return the result"""        
-        operands = ['+','-','*','/', '%']
-        #print 'formula', cellformula
-        ops = []
-        cells = []
-        vals = []           
-        cellformula = cellformula.strip('=')  
-        
-        import re
-        p = re.compile('[*/+-]')
-        x = p.split(cellformula)
-        for i in x:            
-            cells.append(eval(i))
-        ops = p.findall(cellformula)            
-        print cells, ops  
-        #get cell coords into values
-        for i in cells:
-            if type(i) is TupleType:
-                recname = i[0]; col= i[1]
-                if self.data.has_key(recname):
-                    v = self.data[recname][col]
-                    vals.append(v)
-                else:
-                    return 
-            elif type(i) is IntType or type(i) is FloatType:
-                vals.append(i)
-            else:
-                return
-                
-        print vals, ops
-        #finally create expression string to evaluate        
-        j=0
-        expr = ''
-        for v in vals:            
-            expr += str(float(v))
-            if j < len(ops):
-                expr += ops[j]
-                j=j+1
-        print 'expr', expr                    
-        result = eval(expr)
-        return str(round(result,3))
-  
-
+        value = Formula.doFormula(cellformula, self.data)
+        return value
