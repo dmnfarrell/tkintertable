@@ -30,11 +30,30 @@ class Formula(object):
     def __init__(self):
         
         return
-
+        
+    @classmethod
+    def isFormula(self, rec):
+        """Evaluate the cell and return true if its a formula"""        
+        isform = False
+        if type(rec) is DictType:
+            if rec.has_key('formula'):
+                isform = True        
+        return isform
+        
+    @classmethod
+    def getFormula(self, rec):
+        if not type(rec) is DictType:
+            return None
+        string = rec['formula']
+        print string
+        return string
+        
     @classmethod
     def doFormula(cls, cellformula, data):
-        """Evaluate the formula for a cell and return the result"""        
-        operands = ['+','-','*','/', '%']
+        """Evaluate the formula for a cell and return the result
+           takes a formula dict or just the string as input"""        
+        if type(cellformula) is DictType:
+            cellformula = cellformula['formula']
         #print 'formula', cellformula
         ops = []
         cells = []
@@ -52,14 +71,17 @@ class Formula(object):
             if type(i) is TupleType:
                 recname = i[0]; col= i[1]
                 if data.has_key(recname):
-                    v = data[recname][col]
-                    vals.append(v)
+                    if data[recname].has_key(col):                        
+                        v = data[recname][col]
+                        vals.append(v)
+                    else:
+                        return ''                   
                 else:
-                    return 
+                    return ''
             elif type(i) is IntType or type(i) is FloatType:
                 vals.append(i)
             else:
-                return
+                return ''
                 
         print vals, ops
         #finally create expression string to evaluate        

@@ -20,6 +20,7 @@
 """
 
 from TableFormula import Formula
+from types import *
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
@@ -165,18 +166,17 @@ class TableModel(object):
             cell=''
          # Set the value based on the data record field
          #action = self.default_display[coltype]
-         #value = 
          colname = self.getColumnName(columnIndex)
          coltype = self.columntypes[colname]
-         if not isinstance(cell,dict):
-             if str(cell).startswith('='):
-                 value = self.doFormula(cell)      
-             elif coltype == 'text' or coltype == 'Text':  
+         if Formula.isFormula(cell) == True:  #change this to e.g. cell.isFormula() ?
+             print 'getting formula'
+             value = self.doFormula(cell)
+             return value
+         if not type(cell) is DictType:
+             if coltype == 'text' or coltype == 'Text':  
                  value = cell
              elif coltype == 'number':
-                 value = str(cell)
-             #elif coltype == 'formula':
-             #    value = self.doFormula(cell)                 
+                 value = str(cell)             
              else:
                  value = 'other'
          if value==None:        
@@ -367,6 +367,16 @@ class TableModel(object):
         else:
             self.data[name][colname] = value
         print self.data
+        return
+     
+    def setFormulaAt(self, f, rowIndex, columnIndex):
+        """Set a formula at cell given"""
+        name = self.reclist[rowIndex]
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        rec = {}
+        rec['formula'] = f
+        self.data[name][colname] = rec
         return
         
     def getColorAt(self, rowIndex, columnIndex, key='bg'):

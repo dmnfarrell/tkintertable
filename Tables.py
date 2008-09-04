@@ -21,6 +21,7 @@
 
 from Tkinter import *
 from TableModels import TableModel
+from TableFormula import Formula
 from TablePlot import pylabPlotter as plt
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
@@ -527,6 +528,8 @@ class TableCanvas(Canvas):
                         x,y = self.getCanvasPos(row, col)                         
                         self.xview('moveto', x)
                         self.yview('moveto', y)
+                        self.tableheader.xview('moveto', x)
+                        self.tableheader.yview('moveto', y)                        
                         return row, col
         if found==0:
             self.delete('searchrect')
@@ -682,6 +685,8 @@ class TableCanvas(Canvas):
         self.delete('searchrect')
         self.delete('colrect')
         self.delete('multicellrect')
+        
+        #self.delete('formulabox')
         return
 
     def gotoprevRow(self):
@@ -919,23 +924,26 @@ class TableCanvas(Canvas):
         absrow = self.get_AbsoluteRow(row)  
         self.formulaText.insert(END, str(cell))
         self.formulaText.focus_set()
-        #self.formulaWin.grab_set()
-        self.formulaWin.deiconify()        
-        
+        self.draw_selected_rect(row, col, color='red')
         return
 
-    def formula_Dialog(self, row, col):
+    def formula_Dialog(self, row, col, currformula=None):
         """Formula dialog"""
+        self.mode = 'formula'
+        print self.mode
         absrow = self.get_AbsoluteRow(row)
+        x1,y1,x2,y2 = self.getCellCoords(row,col)
+        w=300
+        h=h=self.rowheight * 3
         def close():
-            if hasattr(self,'formulaWin'):
-                self.formulaWin.destroy()
+            if hasattr(self,'formulaWin'):                
+                self.delete('formulabox')
             self.mode = 'normal'    
         def calculate():
             #get text area contents and do formula
-            f = '='+self.formulaText.get(1.0, END)
+            f = self.formulaText.get(1.0, END)
             f = f.strip('\n')
-            self.model.setValueAt(f,absrow,col)
+            self.model.setFormulaAt(f,absrow,col)
             value = self.model.doFormula(f)
             color = self.model.getColorAt(absrow,col,'fg')
             self.draw_Text(row, col, value, color)
@@ -943,21 +951,28 @@ class TableCanvas(Canvas):
             self.mode = 'normal'
             return
         def clear():
-            self.formulaText.delete(1.0, END) 
+            self.formulaText.delete(1.0, END)             
         
-        self.formulaWin = Toplevel(takefocus=True)        
-        self.formulaWin.title('Enter Formula')        
-        self.formulaText = Text(self.formulaWin, width=50, height=10, bg='white',relief=GROOVE)
+        self.formulaFrame = Frame(width=w,height=h,bd=3,relief=RIDGE)         
+        self.formulaText = Text(self.formulaFrame, width=30, height=8, bg='white',relief=GROOVE)
         self.formulaText.pack(side=LEFT,padx=2,pady=2)
-        cancelbutton=Button(self.formulaWin, text='Cancel',
+        if currformula != None:
+            self.formulaText.insert(END, Formula.getFormula(currformula))
+        cancelbutton=Button(self.formulaFrame, text='Cancel',
                             relief=GROOVE,bg='#99ccff',command=close)
         cancelbutton.pack(fill=BOTH,padx=2,pady=2)
-        donebutton=Button(self.formulaWin, text='Done',
+        donebutton=Button(self.formulaFrame, text='Done',
                           relief=GROOVE,bg='#99ccff',command=calculate)
         donebutton.pack(fill=BOTH,padx=2,pady=2)        
-        clrbutton=Button(self.formulaWin, text='Clear',
+        '''clrbutton=Button(self.formulaFrame, text='Clear',
                          relief=GROOVE,bg='#99ccff',command=clear)
-        clrbutton.pack(fill=BOTH,padx=2,pady=2)         
+        clrbutton.pack(fill=BOTH,padx=2,pady=2) '''
+        #add to canvas
+        self.formulaWin = self.create_window(x1+self.inset,y1+self.inset,
+                                width=w,height=h,
+                                window=self.formulaFrame,anchor='nw',                                
+                                tag='formulabox')  
+        self.formulaText.focus_set()
         return
         
     # --- Some cell specific actions here ---
@@ -1249,16 +1264,17 @@ class TableCanvas(Canvas):
            
         return
 
-    def draw_selected_rect(self, row, col):
+    def draw_selected_rect(self, row, col, color=None):
         """User has clicked to select a cell"""
         self.delete('currentrect')
         bg=self.selectedcolor
-
+        if color == None:
+            color = 'gray25'            
         w=3
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         rect = self.create_rectangle(x1+w/2,y1+w/2,x2-w/2,y2-w/2,
                                   fill=bg, 
-                                  outline='gray25',
+                                  outline=color,
                                   width=w,
                                   stipple='gray50',
                                   tag='currentrect')
@@ -1290,14 +1306,14 @@ class TableCanvas(Canvas):
         return
         
     def draw_cellentry(self, row, col, text=None):
-        """When the user double clicks on a text/number cell, bring up entry window"""
+        """When the user single/double clicks on a text/number cell, bring up entry window"""
         
         absrow = self.get_AbsoluteRow(row)
         h=self.rowheight  
         model=self.getModel()
         cellvalue = self.model.getCellRecord(absrow, col)
-        if cellvalue != None and cellvalue.startswith('='):
-            text = cellvalue
+        if Formula.isFormula(cellvalue):
+            self.formula_Dialog(row, col, cellvalue)
         else:    
             text = self.model.getValueAt(absrow, col)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
@@ -1308,8 +1324,7 @@ class TableCanvas(Canvas):
         def callback(e):
             value = txtvar.get()
             if value == '=':
-                self.mode = 'formula'
-                print self.mode
+
                 #do a dialog that gets the formula into a text area
                 #then they can click on the cells they want
                 #when done the user presses ok and its entered into the cell                       
@@ -1870,6 +1885,7 @@ class ColumnHeader(Canvas):
     def handle_left_click(self,event):
         """Does cell selection when mouse is clicked on canvas"""
         self.delete('rect')
+        self.table.delete('entry')
         colclicked = self.table.get_col_clicked(event)
         self.table.set_selected_col(colclicked)
         if self.atdivider == 1:            
