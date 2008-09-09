@@ -152,6 +152,8 @@ class TableModel(object):
     
     def getRecName(self, rowIndex):
         """Get record name from row number"""
+        if len(self.reclist)==0:
+            return None
         name = self.reclist[rowIndex]
         return name
 
@@ -169,7 +171,7 @@ class TableModel(object):
          colname = self.getColumnName(columnIndex)
          coltype = self.columntypes[colname]
          if Formula.isFormula(cell) == True:  #change this to e.g. cell.isFormula() ?
-             print 'getting formula'
+             #print 'getting formula'
              value = self.doFormula(cell)
              return value
          if not type(cell) is DictType:
@@ -335,6 +337,11 @@ class TableModel(object):
         """Returns the label for this column"""
         colname = self.getColumnName(columnIndex)
         return self.columnlabels[colname]
+
+    def getColumnIndex(self, columnName):
+        """Returns the column index for this column"""
+        colindex = self.columnNames.index(columnName)
+        return colindex
         
     def getRowCount(self):
          """Returns the number of rows in the table model."""
@@ -355,7 +362,7 @@ class TableModel(object):
         name = self.reclist[rowIndex]
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-        print coltype
+        #print coltype
         if coltype == 'number':
             try:
                 if value == '': #need this to allow deletion of values
@@ -366,7 +373,7 @@ class TableModel(object):
                 pass
         else:
             self.data[name][colname] = value
-        print self.data
+        #print self.data
         return
      
     def setFormulaAt(self, f, rowIndex, columnIndex):
@@ -408,10 +415,22 @@ class TableModel(object):
 
     def getRecColNames(self, rowIndex, ColIndex):
         """Returns the rec and col name as a tuple"""
-        recname = self.getRecName(0)
-        colname = self.getColumnName(0)
+        recname = self.getRecName(rowIndex)
+        colname = self.getColumnName(ColIndex)
         return (recname, colname)    
 
+    def getRecAtRow(self, recname, colname, offset=1):
+        """Get the record name at a specified offset in the
+           table from the record given, by using the current sort order"""
+        thisrow = self.getRecordIndex(recname)
+        thiscol = self.getColumnIndex(colname)
+        #table goto next row
+        noprow = thisrow + offset
+        print 'recname, colname', recname, colname
+        print 'thisrow, col', thisrow, thiscol
+        newrecname, newcolname = self.getRecColNames(noprow, thiscol)
+        return newrecname, newcolname
+        
     def appendtoFormula(self, formula, rowIndex, colIndex):
         """Add the input cell to the formula"""
         cellRec = getRecColNames(rowIndex, colIndex)
@@ -422,3 +441,39 @@ class TableModel(object):
         """Evaluate the formula for a cell and return the result"""        
         value = Formula.doFormula(cellformula, self.data)
         return value
+
+    def copyFormula(self, cellval, row, col, offset=1):
+        """Copy a formula down one row"""
+        import re
+        frmla = Formula.getFormula(cellval)
+        print 'formula', frmla
+        cells=[]
+        newcells=[]
+        p = re.compile('[*/+-]')
+        x = p.split(frmla)
+        ops = p.findall(frmla) 
+        #recname, colname = eval(frmla)
+        for i in x:            
+            cells.append(eval(i))
+        for c in cells:
+            print c
+            recname = c[0]
+            colname = c[1]
+            nc = self.getRecAtRow(recname, colname, offset) 
+            newcells.append(nc)            
+        print 'newcells', newcells
+
+        #replace new record refs in formula
+        j=0
+        newformula = ''
+        for c in newcells: 
+            newformula += str(c)
+            if j < len(ops):
+                newformula += ops[j]
+                j=j+1
+
+        print 'copied formula'
+        print 'old:', cellval
+        print 'new:', newformula
+        return newformula
+    

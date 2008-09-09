@@ -553,7 +553,7 @@ class TableCanvas(Canvas):
 
     def get_currentColName(self):
         """Get the currently selected record name"""
-        colname = self.model.getColumnName(self.currentcol)
+        colname = self.mo(self.currentcol)
         return colname 
         
     def get_currentRecordName(self):
@@ -572,14 +572,7 @@ class TableCanvas(Canvas):
         """Get the clicked rec and col names as a tuple"""
         recname = self.get_currentRecordName()
         colname = self.get_currentColName()        
-        return (recname, colname)
-
-    def get_RecCol(self, row, col):
-        """Get the rec and colnames for supplied row/col"""
-        recname = self.model.getRecName(row)
-        colname = self.model.getColumnName(col)        
-        return (recname, colname)
-    
+        return (recname, colname)    
 
     def get_row_clicked(self, event):
         """get row where event on canvas occurs"""
@@ -757,8 +750,6 @@ class TableCanvas(Canvas):
             coltype = self.model.getColumnType(colclicked)
             if coltype == 'text' or coltype == 'number':
                 self.draw_cellentry(rowclicked, colclicked)
-            elif coltype == 'formula':
-                self.enterFormula(rowclicked, colclicked)
         return
 
     def handle_left_release(self,event):
@@ -860,8 +851,16 @@ class TableCanvas(Canvas):
     def handle_double_click(self, event):
         """Do double click stuff. Selected row/cols will already have
            been set with single click binding"""
-        #print 'double click'         
-        self.draw_cellentry(self.currentrow, self.currentcol)
+        #print 'double click'
+        row = self.get_row_clicked(event)
+        col = self.get_col_clicked(event)
+        absrow = self.get_AbsoluteRow(row)        
+        model=self.getModel()
+        cellvalue = self.model.getCellRecord(absrow, col)
+        if Formula.isFormula(cellvalue):
+            self.formula_Dialog(row, col, cellvalue)
+            #self.enterFormula(rowclicked, colclicked)
+        #self.draw_cellentry(self.currentrow, self.currentcol)
         return        
         
     def handle_right_click(self, event):
@@ -919,8 +918,9 @@ class TableCanvas(Canvas):
     def handleFormulaClick(self, row, col):
         """Do a dialog for cell formula entry"""
         print row, col
-        cell = self.get_RecCol(row, col)
+        
         model = self.getModel()
+        cell = model.getRecColNames(row, col)
         absrow = self.get_AbsoluteRow(row)  
         self.formulaText.insert(END, str(cell))
         self.formulaText.focus_set()
@@ -1073,12 +1073,23 @@ class TableCanvas(Canvas):
         model = self.model
         col = self.currentcol 
         absrow  = self.get_AbsoluteRow(rowlist[0])
-        val = model.getValueAt(absrow,col)        
+        #remove first element as we don't want to overwrite it
+        rowlist.remove(rowlist[0])        
+        val = self.model.getCellRecord(absrow, col)        
+        #if this is a formula, we have to treat it specially
+        
+        f=val     #formula to copy
+        i=1
         for r in rowlist: 
-            absr=self.get_AbsoluteRow(r)
-            print r, absr
-            model.setValueAt(val, absr, col)
-            #print 'setting', val, 'at row', r 
+            absr = self.get_AbsoluteRow(r)            
+            if Formula.isFormula(f):                
+                newval = model.copyFormula(f, absr, col, offset=i)                
+                model.setFormulaAt(newval, absr, col)                
+            else:    
+                model.setValueAt(val, absr, col)
+            #print 'setting', val, 'at row', r
+            i+=1    
+            print '----------------------------'    
         self.redrawTable()    
         return
     
@@ -1117,7 +1128,7 @@ class TableCanvas(Canvas):
         return lists
     
     def plot_Selected(self):
-        """Plot the selected data if possible"""
+        """Plot the selected data - if possible"""
         plt.clear()
         plt.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
                        xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
@@ -1313,7 +1324,8 @@ class TableCanvas(Canvas):
         model=self.getModel()
         cellvalue = self.model.getCellRecord(absrow, col)
         if Formula.isFormula(cellvalue):
-            self.formula_Dialog(row, col, cellvalue)
+            
+            return
         else:    
             text = self.model.getValueAt(absrow, col)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
@@ -1346,7 +1358,7 @@ class TableCanvas(Canvas):
             if e.keysym=='Return':
                 self.delete('entry')
                 #self.draw_rect(row, col)
-                #self.gotonextCell(e)
+                #self.gotonextCell(e) 
             return
             
         self.cellentry=Entry(self.parentframe,width=20, 

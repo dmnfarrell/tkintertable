@@ -32,7 +32,7 @@ class Formula(object):
         return
         
     @classmethod
-    def isFormula(self, rec):
+    def isFormula(cls, rec):
         """Evaluate the cell and return true if its a formula"""        
         isform = False
         if type(rec) is DictType:
@@ -41,11 +41,11 @@ class Formula(object):
         return isform
         
     @classmethod
-    def getFormula(self, rec):
+    def getFormula(cls, rec):
         if not type(rec) is DictType:
             return None
         string = rec['formula']
-        print string
+        #print string
         return string
         
     @classmethod
@@ -58,14 +58,13 @@ class Formula(object):
         ops = []
         cells = []
         vals = []           
-        cellformula = cellformula.strip('=')  
         
         p = re.compile('[*/+-]')
         x = p.split(cellformula)
         for i in x:            
             cells.append(eval(i))
-        ops = p.findall(cellformula)            
-        print cells, ops  
+        ops = p.findall(cellformula)
+        #print cells, ops  
         #get cell coords into values
         for i in cells:
             if type(i) is TupleType:
@@ -73,6 +72,9 @@ class Formula(object):
                 if data.has_key(recname):
                     if data[recname].has_key(col):                        
                         v = data[recname][col]
+                        if cls.isFormula(v):
+                            #recursive
+                            v = cls.doFormula(cls.getFormula(v),data)
                         vals.append(v)
                     else:
                         return ''                   
@@ -83,16 +85,16 @@ class Formula(object):
             else:
                 return ''
                 
-        print vals, ops
+        #print vals, ops
         #finally create expression string to evaluate        
         j=0
         expr = ''
-        for v in vals:            
+        for v in vals: 
             expr += str(float(v))
             if j < len(ops):
                 expr += ops[j]
                 j=j+1
-        print 'expr', expr                    
+        #print 'expr', expr                    
         result = eval(expr)
         return str(round(result,3))
     
