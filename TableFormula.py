@@ -42,33 +42,73 @@ class Formula(object):
         
     @classmethod
     def getFormula(cls, rec):
+        """Get the formula field string"""
         if not type(rec) is DictType:
             return None
         string = rec['formula']
         #print string
         return string
+
+    @classmethod
+    def readExpression(cls, expr):
+        """Get the operands and operators into lists from a string expression"""
+        ops = []        
+        vals = []        
+        p = re.compile('[()*/+-]')
+        x = p.split(expr)        
+        ops = p.findall(expr)        
+        for i in x:
+            if i == '':
+                vals.append(i)
+            else:    
+                vals.append(eval(i))
+               
+        return vals, ops
         
+    @classmethod
+    def doExpression(cls, vals, ops, getvalues=True):
+        """Create an expression string from provided operands and operators"""
+        expr = ''
+        if getvalues == True:
+            for i in range(len(vals)):
+                if vals[i] != '':
+                    vals[i] = float(vals[i])
+        if len(ops)>len(vals):
+            while len(ops):             
+                #use lists as queues
+                expr += ops.pop(0)
+                if len(vals)!=0:
+                    v=vals.pop(0)
+                    if v == '':
+                        pass
+                    else:
+                        expr += str(v)
+        elif len(ops)<len(vals):
+            while len(vals):             
+                #use lists as queues
+                v=vals.pop(0)
+                if v == '':
+                    pass
+                else:
+                    expr += str(v)
+                if len(ops)!=0:
+                    expr += ops.pop(0)
+        return expr
+                    
     @classmethod
     def doFormula(cls, cellformula, data):
         """Evaluate the formula for a cell and return the result
            takes a formula dict or just the string as input"""        
         if type(cellformula) is DictType:
             cellformula = cellformula['formula']
-        #print 'formula', cellformula
-        ops = []
-        cells = []
-        vals = []           
+
+        vals = []        
+        cells, ops = cls.readExpression(cellformula)
         
-        p = re.compile('[*/+-]')
-        x = p.split(cellformula)
-        for i in x:            
-            cells.append(eval(i))
-        ops = p.findall(cellformula)
-        #print cells, ops  
-        #get cell coords into values
+        #get cell records into their values
         for i in cells:
-            if type(i) is TupleType:
-                recname = i[0]; col= i[1]
+            if type(i) is ListType:
+                recname, col= i
                 if data.has_key(recname):
                     if data[recname].has_key(col):                        
                         v = data[recname][col]
@@ -80,21 +120,15 @@ class Formula(object):
                         return ''                   
                 else:
                     return ''
-            elif type(i) is IntType or type(i) is FloatType:
+            elif i== '' or type(i) is IntType or type(i) is FloatType:
                 vals.append(i)
             else:
                 return ''
-                
-        #print vals, ops
-        #finally create expression string to evaluate        
-        j=0
-        expr = ''
-        for v in vals: 
-            expr += str(float(v))
-            if j < len(ops):
-                expr += ops[j]
-                j=j+1
-        #print 'expr', expr                    
+        if vals == '':
+            return ''
+        print vals, ops
+        expr = cls.doExpression(vals, ops)
+        print 'expr', expr                    
         result = eval(expr)
         return str(round(result,3))
     

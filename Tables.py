@@ -920,8 +920,8 @@ class TableCanvas(Canvas):
         print row, col
         
         model = self.getModel()
-        cell = model.getRecColNames(row, col)
-        absrow = self.get_AbsoluteRow(row)  
+        cell = list(model.getRecColNames(row, col))
+        absrow = self.get_AbsoluteRow(row) 
         self.formulaText.insert(END, str(cell))
         self.formulaText.focus_set()
         self.draw_selected_rect(row, col, color='red')

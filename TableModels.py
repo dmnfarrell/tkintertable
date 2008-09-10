@@ -83,7 +83,7 @@ class TableModel(object):
                                 'number' : 'numtostring'}
 
         #add rows and cols if they are given in the constructor
-        if newdict == None:            
+        if newdict == None: 
             if rows != None:
                 for r in range(rows):
                     self.addRow()
@@ -446,34 +446,27 @@ class TableModel(object):
         """Copy a formula down one row"""
         import re
         frmla = Formula.getFormula(cellval)
-        print 'formula', frmla
-        cells=[]
+        #print 'formula', frmla
+        
         newcells=[]
-        p = re.compile('[*/+-]')
-        x = p.split(frmla)
-        ops = p.findall(frmla) 
-        #recname, colname = eval(frmla)
-        for i in x:            
-            cells.append(eval(i))
+        cells, ops = Formula.readExpression(frmla)
+        
         for c in cells:
             print c
-            recname = c[0]
-            colname = c[1]
-            nc = self.getRecAtRow(recname, colname, offset) 
+            if type(c) is not ListType:
+                nc = c
+            else:    
+                recname = c[0]
+                colname = c[1]
+                nc = list(self.getRecAtRow(recname, colname, offset))
             newcells.append(nc)            
-        print 'newcells', newcells
+        #print 'newcells', newcells
 
         #replace new record refs in formula
-        j=0
-        newformula = ''
-        for c in newcells: 
-            newformula += str(c)
-            if j < len(ops):
-                newformula += ops[j]
-                j=j+1
+        newformula = Formula.doExpression(newcells, ops, getvalues=False)
 
-        print 'copied formula'
-        print 'old:', cellval
-        print 'new:', newformula
+        #print 'copied formula'
+        #print 'old:', cellval
+        #print 'new:', newformula
         return newformula
     
