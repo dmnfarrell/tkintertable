@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     Created August 2008
-    TablePlotter Class
+    Table Fromula Class
     Copyright (C) Damien Farrell
  
     This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ from types import *
 import re
 
 class Formula(object):
-    """A class to handle formulas in the table"""
+    """A class to handle formulas functionality in the table"""
     
     def __init__(self):
         
