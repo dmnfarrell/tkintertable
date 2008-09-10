@@ -126,9 +126,9 @@ class Formula(object):
                 return ''
         if vals == '':
             return ''
-        print vals, ops
+        #print vals, ops
         expr = cls.doExpression(vals, ops)
-        print 'expr', expr                    
+        #print 'expr', expr                    
         result = eval(expr)
         return str(round(result,3))
     

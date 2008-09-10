@@ -1089,7 +1089,7 @@ class TableCanvas(Canvas):
                 model.setValueAt(val, absr, col)
             #print 'setting', val, 'at row', r
             i+=1    
-            print '----------------------------'    
+            #print '----------------------------'    
         self.redrawTable()    
         return
     

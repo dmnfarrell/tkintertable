@@ -426,8 +426,8 @@ class TableModel(object):
         thiscol = self.getColumnIndex(colname)
         #table goto next row
         noprow = thisrow + offset
-        print 'recname, colname', recname, colname
-        print 'thisrow, col', thisrow, thiscol
+        #print 'recname, colname', recname, colname
+        #print 'thisrow, col', thisrow, thiscol
         newrecname, newcolname = self.getRecColNames(noprow, thiscol)
         return newrecname, newcolname
         
