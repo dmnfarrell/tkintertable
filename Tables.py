@@ -781,6 +781,8 @@ class TableCanvas(Canvas):
             self.cellentry.destroy()
         rowover = self.get_row_clicked(event)
         colover = self.get_col_clicked(event)
+        if colover == None or rowover == None:
+            return
         if self.check_PageView(rowover) == 1:
             return
         if rowover >= self.rows or self.startrow > self.rows:
@@ -789,15 +791,15 @@ class TableCanvas(Canvas):
         else:
             self.endrow = rowover
         #do columns    
-        if colover > self.cols or self.startcol > self.cols:
+        if colover > self.cols or self.startcol > self.cols:            
             return
         else:
-            self.endcol = colover
+            self.endcol = colover           
             if self.endcol < self.startcol:
                 self.multiplecollist=range(self.endcol, self.startcol+1)
             else:
                 self.multiplecollist=range(self.startcol, self.endcol+1)
-            #print self.multiplecollist
+            print self.multiplecollist
         #draw the selected rows    
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:                
@@ -807,8 +809,13 @@ class TableCanvas(Canvas):
                 self.multiplerowlist=range(self.startrow, self.endrow+1)
                 self.drawMultipleRows(self.multiplerowlist)
             #draw selected cells outline using row and col lists
+            print self.multiplerowlist
             self.drawMultipleCells()    
         else:
+            self.multiplerowlist = []
+            self.multiplerowlist.append(self.currentrow)
+            if len(self.multiplecollist) >= 1:
+                self.drawMultipleCells() 
             self.delete('multiplesel')
         #print self.multiplerowlist    
         return
@@ -876,9 +883,9 @@ class TableCanvas(Canvas):
         if self.check_PageView(rowclicked) == 1:
             self.rightmenu = self.popupMenu(event, outside=1)
             return
-        if len(self.multiplerowlist) > 1:
+        if len(self.multiplerowlist) >= 1:
             if rowclicked in self.multiplerowlist:
-                self.rightmenu = self.popupMenu(event, self.multiplerowlist)
+                self.rightmenu = self.popupMenu(event, rows=self.multiplerowlist, cols=self.multiplecollist)
         else:            
             if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
                 self.setSelectedRow(rowclicked)
@@ -979,6 +986,8 @@ class TableCanvas(Canvas):
     
     def setcellColor(self, row, col=None, newColor=None, key=None):
         """Set the cell color and save it in the model color"""
+        rows = self.multiplerowlist
+        cols = self.multiplecollist
         model = self.getModel()
         absrow = self.get_AbsoluteRow(row)
         if newColor == None:
@@ -995,12 +1004,13 @@ class TableCanvas(Canvas):
                 self.draw_Text(row,col, text, fgcolor=newColor)
             elif key=='bg':  
                 self.draw_rect(row,col, color=newColor)
-        # col is none, do all cols
-        if col == None:
-            for col in range(self.cols):
+        
+        #if len(cols) > 1:
+        for col in cols:
+            for row in rows:
                 setcolor(row, col)
-        else:    
-            setcolor(row, col)
+        #else:    
+        #    setcolor(row, col)
         return
         
     def setcellColors(self, rows, key):
@@ -1013,7 +1023,7 @@ class TableCanvas(Canvas):
             self.setcellColor(r, None, newColor, key)
         return
     
-    def popupMenu(self, event, rows=None, outside=None):
+    def popupMenu(self, event, rows=None, cols=None, outside=None):
         """Add left and right click behaviour for canvas, should not have to override
             this function, it will take its values from defined dicts in constructor"""
         if outside == None: 
@@ -1028,26 +1038,30 @@ class TableCanvas(Canvas):
             """Add commands to popup menu for col type"""
             #add column actions for this table type defined in self.columnactions
             functions = self.columnactions[fieldtype]
-            for f in functions.keys():  
+            for f in functions.keys():
                 func = getattr(self, functions[f])                
                 popupmenu.add_command(label=f, command= lambda : func(row,col))
             return            
 
         def add_defaultcommands():           
             """now add general actions for all cells""" 
-            order = ["Set Fill Color","Set Text Color","Fill Down","Clear Data","Select All",
+            order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data","Select All",
                     "Plot Selected","Plot Options","Show Prefs"]
             defaultactions={"Set Fill Color" : lambda : self.setcellColor(row,col,key='bg') if rows==None else self.setcellColors(rows, key='bg'),
                             "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
                             "Fill Down" : lambda : self.fill_down(rows),
+                            "Fill Right" : lambda : self.fill_across(),
                             "Clear Data" : self.delete_Cell,
                             "Select All" : self.select_All,
                             "Plot Selected" : self.plot_Selected,
                             "Plot Options" : self.plotSetup,
-                            "Show Prefs" : self.showtablePrefs}            
+                            "Show Prefs" : self.showtablePrefs}
+            
             for action in order:                
-                if action == 'Fill Down' and rows == None:
-                    pass
+                if action == 'Fill Down' and (rows == None or len(rows) <= 1):                    
+                    continue
+                if action == 'Fill Right' and (cols == None or len(cols) <= 1):
+                    continue
                 else:
                     popupmenu.add_command(label=action, command=defaultactions[action])                
             return
@@ -1094,8 +1108,16 @@ class TableCanvas(Canvas):
         return
     
     def fill_across(self):
-        """Fill across a row?"""
-        
+        """Fill across a row?"""   
+        model = self.model
+        row = self.currentrow
+        absrow  = self.get_AbsoluteRow(row)
+        cols = self.multiplecollist 
+        col = cols[0]        
+        val = self.model.getCellRecord(absrow, col)  
+        for c in cols:
+            model.setValueAt(val, absrow, c)
+        self.redrawTable() 
         return
 
     def getSelectionValues(self):
@@ -1505,18 +1527,15 @@ class TableCanvas(Canvas):
         self.delete('multicellrect')
         rows = self.multiplerowlist
         cols = self.multiplecollist
-        x1,y1,a,b = self.getCellCoords(rows[0],cols[00])
-        c,d,x2,y2 = self.getCellCoords(rows[len(rows)-1],cols[len(cols)-1])
-        
-        rect = self.create_rectangle(x1,y1,x2,y2,
-                             outline='blue',width=2,activefill='red',activestipple='gray25',
+        w=2
+        x1,y1,a,b = self.getCellCoords(rows[0],cols[0])
+        c,d,x2,y2 = self.getCellCoords(rows[len(rows)-1],cols[len(cols)-1])        
+        rect = self.create_rectangle(x1+w/2,y1+w/2,x2,y2,
+                             outline='blue',width=w,activefill='red',activestipple='gray25',
                              tag='multicellrect')
         self.getSelectionValues()
+        
         return
-    
-    #
-    # ----
-    #
        
     def draw_tooltip(self, row, col):
         """Draw a tooltip showing contents of cell"""
