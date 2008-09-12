@@ -613,6 +613,8 @@ class TableCanvas(Canvas):
     def set_selected_col(self, col):
         """Set currently selected column"""
         self.currentcol = col
+        self.multiplecollist = []
+        self.multiplecollist.append(col)        
         return 
         
     def getSelectedRow(self):
@@ -1049,8 +1051,8 @@ class TableCanvas(Canvas):
                     "Plot Selected","Plot Options","Show Prefs"]
             defaultactions={"Set Fill Color" : lambda : self.setcellColor(row,col,key='bg') if rows==None else self.setcellColors(rows, key='bg'),
                             "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
-                            "Fill Down" : lambda : self.fill_down(rows),
-                            "Fill Right" : lambda : self.fill_across(),
+                            "Fill Down" : lambda : self.fill_down(rows, cols),
+                            "Fill Right" : lambda : self.fill_across(cols, rows),
                             "Clear Data" : self.delete_Cell,
                             "Select All" : self.select_All,
                             "Plot Selected" : self.plot_Selected,
@@ -1082,41 +1084,51 @@ class TableCanvas(Canvas):
 
     # --- spreadsheet type functions ---
     
-    def fill_down(self, rowlist):
-        """Fill down a column"""
-        model = self.model
-        col = self.currentcol 
+    def fill_down(self, rowlist, collist):
+        """Fill down a column, or multiple columns"""
+        model = self.model        
         absrow  = self.get_AbsoluteRow(rowlist[0])
         #remove first element as we don't want to overwrite it
-        rowlist.remove(rowlist[0])        
-        val = self.model.getCellRecord(absrow, col)        
-        #if this is a formula, we have to treat it specially
+        rowlist.remove(rowlist[0])      
         
-        f=val     #formula to copy
-        i=1
-        for r in rowlist: 
-            absr = self.get_AbsoluteRow(r)            
-            if Formula.isFormula(f):                
-                newval = model.copyFormula(f, absr, col, offset=i)                
-                model.setFormulaAt(newval, absr, col)                
-            else:    
-                model.setValueAt(val, absr, col)
-            #print 'setting', val, 'at row', r
-            i+=1    
-            #print '----------------------------'    
+        #if this is a formula, we have to treat it specially        
+        for col in collist:
+            val = self.model.getCellRecord(absrow, col)
+            f=val #formula to copy
+            i=1
+            for r in rowlist: 
+                absr = self.get_AbsoluteRow(r)            
+                if Formula.isFormula(f):                
+                    newval = model.copyFormula(f, absr, col, offset=i)                
+                    model.setFormulaAt(newval, absr, col)                
+                else:    
+                    model.setValueAt(val, absr, col)
+                #print 'setting', val, 'at row', r
+                i+=1  
+                
         self.redrawTable()    
         return
     
-    def fill_across(self):
-        """Fill across a row?"""   
+    def fill_across(self, collist, rowlist):
+        """Fill across a row, or multiple rows"""   
         model = self.model
-        row = self.currentrow
-        absrow  = self.get_AbsoluteRow(row)
-        cols = self.multiplecollist 
-        col = cols[0]        
-        val = self.model.getCellRecord(absrow, col)  
-        for c in cols:
-            model.setValueAt(val, absrow, c)
+        #row = self.currentrow
+        #absrow  = self.get_AbsoluteRow(collist[0])
+        frstcol = collist[0]        
+        collist.remove(frstcol)
+        
+        for row in rowlist:
+            absr = self.get_AbsoluteRow(row)
+            val = self.model.getCellRecord(absr, frstcol)
+            f=val     #formula to copy
+            i=1
+            for c in collist:
+                if Formula.isFormula(f):
+                    newval = model.copyFormula(f, absr, c, offset=i, dim='x')
+                    model.setFormulaAt(newval, absr, c)
+                else:    
+                    model.setValueAt(val, absr, c)
+                i+=1    
         self.redrawTable() 
         return
 
@@ -1918,10 +1930,12 @@ class ColumnHeader(Canvas):
         self.delete('rect')
         self.table.delete('entry')
         colclicked = self.table.get_col_clicked(event)
+        self.table.multiplerowlist = range(0,self.table.rows) 
         self.table.set_selected_col(colclicked)
+        print self.table.multiplerowlist
+        print self.table.multiplecollist
         if self.atdivider == 1:            
-            return   
-        
+            return         
         self.draw_rect(self.table.currentcol)
         #also draw a copy of the rect to be dragged
         self.draggedcol=None

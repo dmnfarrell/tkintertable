@@ -419,16 +419,22 @@ class TableModel(object):
         colname = self.getColumnName(ColIndex)
         return (recname, colname)    
 
-    def getRecAtRow(self, recname, colname, offset=1):
-        """Get the record name at a specified offset in the
+    def getRecAtRow(self, recname, colname, offset=1, dim='y'):
+        """Get the record name at a specified offset in te current
            table from the record given, by using the current sort order"""
         thisrow = self.getRecordIndex(recname)
         thiscol = self.getColumnIndex(colname)
         #table goto next row
-        noprow = thisrow + offset
-        #print 'recname, colname', recname, colname
-        #print 'thisrow, col', thisrow, thiscol
-        newrecname, newcolname = self.getRecColNames(noprow, thiscol)
+        if dim == 'y':
+            nrow = thisrow + offset
+            ncol = thiscol
+        else:
+            nrow = thisrow
+            ncol = thiscol + offset
+
+        newrecname, newcolname = self.getRecColNames(nrow, ncol)      
+        print 'recname, colname', recname, colname
+        print 'thisrow, col', thisrow, thiscol            
         return newrecname, newcolname
         
     def appendtoFormula(self, formula, rowIndex, colIndex):
@@ -442,8 +448,8 @@ class TableModel(object):
         value = Formula.doFormula(cellformula, self.data)
         return value
 
-    def copyFormula(self, cellval, row, col, offset=1):
-        """Copy a formula down one row"""
+    def copyFormula(self, cellval, row, col, offset=1, dim='y'):
+        """Copy a formula down or across, using the provided offset"""
         import re
         frmla = Formula.getFormula(cellval)
         #print 'formula', frmla
@@ -458,7 +464,7 @@ class TableModel(object):
             else:    
                 recname = c[0]
                 colname = c[1]
-                nc = list(self.getRecAtRow(recname, colname, offset))
+                nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
             newcells.append(nc)            
         #print 'newcells', newcells
 
