@@ -1504,10 +1504,12 @@ class TableCanvas(Canvas):
         self.lower('fillrect')
         return
 
-    def drawSelectedCol(self):
+    def drawSelectedCol(self, col=None, delete=1):
         """Draw an outline rect fot the current column selection"""
-        self.delete('colrect')
-        col=self.currentcol
+        if delete == 1:
+            self.delete('colrect')
+        if col == None:
+            col=self.currentcol
         x1,y1,x2,y2 = self.getCellCoords(0,col)
         y2 = self.rows * self.rowheight
         rect = self.create_rectangle(x1,y1,x2,y2,
@@ -2021,8 +2023,7 @@ class ColumnHeader(Canvas):
             self.atdivider = 1
         else:
             self.atdivider = 0
-        return
-        
+        return        
 
     def handle_right_click(self, event):
         """respond to a right click"""
@@ -2036,19 +2037,21 @@ class ColumnHeader(Canvas):
 
     def handle_left_shift_click(self, event):
         """Handle shift click, for selecting multiple cols"""
+        self.table.delete('colrect')
+        self.delete('rect')
         currcol = self.table.currentcol
         colclicked = self.table.get_col_clicked(event)        
         if colclicked > currcol:
-            self.table.multiplecollist = range(currcol, colclicked)
+            self.table.multiplecollist = range(currcol, colclicked+1)
         elif colclicked < currcol:
-            self.table.multiplecollist = range(colclicked, currcol)
+            self.table.multiplecollist = range(colclicked, currcol+1)
         else:
             return
         
         print self.table.multiplecollist
         for c in self.table.multiplecollist:
-            self.draw_rect(c)
-            
+            self.draw_rect(c, delete=0)
+            self.table.drawSelectedCol(c, delete=0)
         return
     
     def popupMenu(self, event):
@@ -2103,7 +2106,7 @@ class ColumnHeader(Canvas):
         
         return
         
-    def draw_rect(self,col, tag=None, color=None, outline=None):
+    def draw_rect(self,col, tag=None, color=None, outline=None, delete=1):
         """User has clicked to select a col"""
         if tag==None:
             tag='rect'
@@ -2111,7 +2114,8 @@ class ColumnHeader(Canvas):
             color='blue'  
         if outline==None:
             outline='gray25'
-        self.delete(tag)
+        if delete == 1:
+            self.delete(tag)
         w=2
         x1,y1,x2,y2 = self.table.getCellCoords(0,col)
         rect = self.create_rectangle(x1,y1,x2,self.height,
