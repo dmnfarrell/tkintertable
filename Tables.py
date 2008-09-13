@@ -1883,6 +1883,7 @@ class ColumnHeader(Canvas):
             self.bind('<Button-3>',self.handle_right_click)
             self.bind('<B1-Motion>', self.handle_mouse_drag)   
             self.bind('<Motion>', self.handle_mouse_move)
+            self.bind('<Shift-Button-1>', self.handle_left_shift_click)
 
             
         return
@@ -2032,7 +2033,24 @@ class ColumnHeader(Canvas):
     def handle_right_release(self, event):
         self.rightmenu.destroy()
         return
+
+    def handle_left_shift_click(self, event):
+        """Handle shift click, for selecting multiple cols"""
+        currcol = self.table.currentcol
+        colclicked = self.table.get_col_clicked(event)        
+        if colclicked > currcol:
+            self.table.multiplecollist = range(currcol, colclicked)
+        elif colclicked < currcol:
+            self.table.multiplecollist = range(colclicked, currcol)
+        else:
+            return
         
+        print self.table.multiplecollist
+        for c in self.table.multiplecollist:
+            self.draw_rect(c)
+            
+        return
+    
     def popupMenu(self, event):
         """Add left and right click behaviour for column header"""
         colname = self.model.columnNames[self.table.currentcol]
