@@ -1509,10 +1509,11 @@ class TableCanvas(Canvas):
             self.delete('colrect')
         if col == None:
             col=self.currentcol
+        w=2    
         x1,y1,x2,y2 = self.getCellCoords(0,col)
         y2 = self.rows * self.rowheight
-        rect = self.create_rectangle(x1,y1,x2,y2,
-                                     outline='blue',width=2,
+        rect = self.create_rectangle(x1+w/2,y1+w/2,x2,y2+w/2,
+                                     outline='blue',width=w,
                                      tag='colrect')
         
         
@@ -1934,7 +1935,6 @@ class ColumnHeader(Canvas):
         self.table.delete('multicellrect')
         colclicked = self.table.get_col_clicked(event)
         #set all rows selected 
-        #self.table.multiplerowlist = range(0,self.table.rows)
         self.table.allrows = True
         self.table.setSelectedCol(colclicked)
         #print self.table.multiplerowlist
@@ -1953,6 +1953,7 @@ class ColumnHeader(Canvas):
         return
 
     def handle_left_release(self,event):
+        """When mouse released implement resize or col move"""
         self.delete('dragrect')
         if self.atdivider == 1:
             #col = self.table.get_col_clicked(event)
@@ -1968,10 +1969,14 @@ class ColumnHeader(Canvas):
             self.delete('resizesymbol')
             self.atdivider = 0
             return
-        self.delete('resizesymbol')    
-        if self.draggedcol!=None and self.table.currentcol != self.draggedcol:
-            self.model.moveColumn(self.table.currentcol, self.draggedcol)           
+        self.delete('resizesymbol')
+        #move column
+        if self.draggedcol != None and self.table.currentcol != self.draggedcol:
+            self.model.moveColumn(self.table.currentcol, self.draggedcol)                       
+            self.table.setSelectedCol(self.draggedcol)
             self.table.redrawTable()
+            self.table.drawSelectedCol(self.table.currentcol)
+            self.draw_rect(self.table.currentcol) 
         
         return
         
