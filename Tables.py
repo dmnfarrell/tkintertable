@@ -69,6 +69,7 @@ class TableCanvas(Canvas):
         #for multiple selections
         self.startrow = self.endrow = None
         self.startcol = self.endcol = None
+        self.allrows = False   #for selected all rows without setting multiplerowlist
         self.multiplerowlist=[]
         self.col_positions=[]       #record current column grid positions        
         self.mode = 'normal'
@@ -174,7 +175,7 @@ class TableCanvas(Canvas):
     def redrawTable(self, event=None):
         """Draw the table from scratch based on it's model data""" 
         import time
-        #print 'redrawing',time.time()  
+        print 'redrawing',time.time()  
         model = self.model
         self.rows=self.model.getRowCount()
         self.cols=self.model.getColumnCount()                      
@@ -606,11 +607,13 @@ class TableCanvas(Canvas):
         #return colc  
          
     def setSelectedRow(self, row):
-        """Set currently selected row"""   
+        """Set currently selected row and reset multiple row list"""   
         self.currentrow = row
+        self.multiplerowlist = []
+        self.multiplerowlist.append(row)          
         return
         
-    def set_selected_col(self, col):
+    def setSelectedCol(self, col):
         """Set currently selected column"""
         self.currentcol = col
         self.multiplecollist = []
@@ -722,6 +725,7 @@ class TableCanvas(Canvas):
         """Respond to a single press"""        
         #which row and column is the click inside?
         self.clearSelected()
+        self.allrows = False
         rowclicked = self.get_row_clicked(event)
         colclicked = self.get_col_clicked(event)
         if self.mode == 'formula':
@@ -746,7 +750,7 @@ class TableCanvas(Canvas):
         self.multiplerowlist.append(rowclicked)
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
-            self.set_selected_col(colclicked)
+            self.setSelectedCol(colclicked)
             self.draw_selected_rect(self.currentrow, self.currentcol)
             self.drawSelectedRow()
             coltype = self.model.getColumnType(colclicked)
@@ -874,7 +878,8 @@ class TableCanvas(Canvas):
         
     def handle_right_click(self, event):
         """respond to a right click"""
-        self.delete('tooltip')
+        self.delete('tooltip')       
+        print self.multiplerowlist
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()
         rowclicked = self.get_row_clicked(event)
@@ -885,17 +890,19 @@ class TableCanvas(Canvas):
         if self.check_PageView(rowclicked) == 1:
             self.rightmenu = self.popupMenu(event, outside=1)
             return
-        if len(self.multiplerowlist) >= 1:
-            if rowclicked in self.multiplerowlist:
-                self.rightmenu = self.popupMenu(event, rows=self.multiplerowlist, cols=self.multiplecollist)
+
+        if (rowclicked in self.multiplerowlist or self.allrows == True) and colclicked in self.multiplecollist:
+            self.rightmenu = self.popupMenu(event, rows=self.multiplerowlist, cols=self.multiplecollist)
         else:            
             if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
+                self.clearSelected()
+                self.allrows = False
                 self.setSelectedRow(rowclicked)
-                self.set_selected_col(colclicked)
+                self.setSelectedCol(colclicked)
                 self.draw_selected_rect(self.currentrow, self.currentcol)
                 self.drawSelectedRow()          
             if self.isInsideTable(event.x,event.y) == 1: 
-                self.rightmenu = self.popupMenu(event)
+                self.rightmenu = self.popupMenu(event,rows=self.multiplerowlist, cols=self.multiplecollist)
             else:                
                 self.rightmenu = self.popupMenu(event, outside=1)
         return  
@@ -986,44 +993,36 @@ class TableCanvas(Canvas):
         
     # --- Some cell specific actions here ---
     
-    def setcellColor(self, row, col=None, newColor=None, key=None):
-        """Set the cell color and save it in the model color"""
-        rows = self.multiplerowlist
-        cols = self.multiplecollist
-        model = self.getModel()
-        absrow = self.get_AbsoluteRow(row)
+    def setcellColor(self, rows, cols, newColor=None, key=None):
+        """Set the cell color for one or more cells and save it in the model color"""
+
+        model = self.getModel()        
         if newColor == None:
             import tkColorChooser
             ctuple, newColor = tkColorChooser.askcolor(title='pick a color')
             if newColor == None:
                 return
             #print ctuple, newColor
-        def setcolor(row, col):
-            model.setColorAt(absrow, col, newColor, key)
-            text = model.getValueAt(absrow,col)
+        '''def setcolor(row, col):
+            model.setColorAt(row, col, newColor, key)
+            text = model.getValueAt(row, col)
             #redraw the cell text or fill
             if key=='fg':
                 self.draw_Text(row,col, text, fgcolor=newColor)
             elif key=='bg':  
-                self.draw_rect(row,col, color=newColor)
-        
-        #if len(cols) > 1:
+                self.draw_rect(row,col, color=newColor)'''
+        if self.allrows == True:
+            #we use all rows if the whole column has been selected
+            rows = range(0,self.rows) 
+                    
         for col in cols:
             for row in rows:
-                setcolor(row, col)
-        #else:    
-        #    setcolor(row, col)
+                absrow = self.get_AbsoluteRow(row)
+                model.setColorAt(row, col, newColor, key)
+                #setcolor(absrow, col)
+        self.redrawTable() 
         return
         
-    def setcellColors(self, rows, key):
-        """Color mutliple rows"""
-        import tkColorChooser
-        ctuple, newColor = tkColorChooser.askcolor(title='pick a color')
-        if newColor == None:
-            return
-        for r in rows:
-            self.setcellColor(r, None, newColor, key)
-        return
     
     def popupMenu(self, event, rows=None, cols=None, outside=None):
         """Add left and right click behaviour for canvas, should not have to override
@@ -1049,8 +1048,8 @@ class TableCanvas(Canvas):
             """now add general actions for all cells""" 
             order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data","Select All",
                     "Plot Selected","Plot Options","Show Prefs"]
-            defaultactions={"Set Fill Color" : lambda : self.setcellColor(row,col,key='bg') if rows==None else self.setcellColors(rows, key='bg'),
-                            "Set Text Color" : lambda : self.setcellColor(row,col,key='fg') if rows==None else self.setcellColors(rows, key='fg'),
+            defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
+                            "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
                             "Fill Down" : lambda : self.fill_down(rows, cols),
                             "Fill Right" : lambda : self.fill_across(cols, rows),
                             "Clear Data" : self.delete_Cell,
@@ -1932,11 +1931,14 @@ class ColumnHeader(Canvas):
         """Does cell selection when mouse is clicked on canvas"""
         self.delete('rect')
         self.table.delete('entry')
+        self.table.delete('multicellrect')
         colclicked = self.table.get_col_clicked(event)
-        self.table.multiplerowlist = range(0,self.table.rows) 
-        self.table.set_selected_col(colclicked)
-        print self.table.multiplerowlist
-        print self.table.multiplecollist
+        #set all rows selected 
+        #self.table.multiplerowlist = range(0,self.table.rows)
+        self.table.allrows = True
+        self.table.setSelectedCol(colclicked)
+        #print self.table.multiplerowlist
+        #print self.table.multiplecollist
         if self.atdivider == 1:            
             return         
         self.draw_rect(self.table.currentcol)
@@ -2126,14 +2128,43 @@ class ColumnHeader(Canvas):
                                   tag=tag)
         self.lower(tag)
         return
-        
-             
 
+class RowHeader(Canvas):
+    """Class that displays the row headings on the table
+       takes it's size and rendering from the parent table """
+    def __init__(self, parent=None, table=None):
+        Canvas.__init__(self, parent, bg='gray75', width=50, height=20)        
+        
+        if table != None:
+            self.table = table
+            self.width = width
+            self.model = self.table.getModel()
+            self.config(height = self.table.height)            
+            self.bind('<Button-1>',self.handle_left_click)
+            self.bind("<ButtonRelease-1>", self.handle_left_release)
+            self.bind('<Button-3>',self.handle_right_click)
+            self.bind('<B1-Motion>', self.handle_mouse_drag)             
+            self.bind('<Shift-Button-1>', self.handle_left_shift_click)    
+        return    
+
+    def redraw(self): 
+       
+        self.configure(scrollregion=(0,0, self.width+self.table.x_start, self.height))
+        self.delete('gridline','text')  
+        self.delete('rect') 
+        
+        return
+ 
+    def handle_left_click(self,event): 
+        return
+ 
+    def handle_mouse_drag(self, event):
+        return
+        
 class SimpleTableDialog(tkSimpleDialog.Dialog):
     """Simple dialog to get data for new cols and rows"""
 
-    def __init__(self, parent, title=None, table=None):
-        
+    def __init__(self, parent, title=None, table=None):        
         if table != None:
             self.items = table.getModel().getDefaultTypes()
         else:
