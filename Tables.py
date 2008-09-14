@@ -52,7 +52,7 @@ class TableCanvas(Canvas):
         self.currentpage = None
         self.navFrame = None
         self.inset=2
-        self.x_start=40
+        self.x_start=0
         self.y_start=1
         self.linewidth=1.0    
         self.thefont = "Arial 12"
@@ -82,7 +82,8 @@ class TableCanvas(Canvas):
         self.cols=self.model.getColumnCount()
 
         self.tablewidth=(self.cellwidth)*self.cols            
-        self.tableheader = ColumnHeader(self.parentframe, self) 
+        self.tablecolheader = ColumnHeader(self.parentframe, self) 
+        self.tablerowheader = RowHeader(self.parentframe, self)
         self.do_bindings()
         #
         #column specific actions, define for every column type in the model
@@ -153,18 +154,20 @@ class TableCanvas(Canvas):
             self.loadPrefs()
         #Add the table and header to the frame  
         self.Yscrollbar=Scrollbar (self.parentframe,orient=VERTICAL,command=self.yview)
-        self.Yscrollbar.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
+        self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
         self.Xscrollbar=Scrollbar (self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
-        self.Xscrollbar.grid(row=2,column=0,columnspan=1,sticky='news')
+        self.Xscrollbar.grid(row=2,column=1,columnspan=1,sticky='news')
         self['xscrollcommand']=self.Xscrollbar.set
         self['yscrollcommand']=self.Yscrollbar.set
-        self.tableheader['xscrollcommand']=self.Xscrollbar.set
+        self.tablecolheader['xscrollcommand']=self.Xscrollbar.set
+        self.tablerowheader['yscrollcommand']=self.Yscrollbar.set
         self.parentframe.rowconfigure(1,weight=1)
-        self.parentframe.columnconfigure(0,weight=1)
+        self.parentframe.columnconfigure(1,weight=1)
         #self.parentframe.pack(fill=BOTH, expand=YES)        
         self.savePrefs()
-        self.tableheader.grid(row=0,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
-        self.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
+        self.tablecolheader.grid(row=0,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
+        self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
+        self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.redrawTable()
         self.parentframe.bind("<Configure>", self.resizeTable)
         #self.table.xview("moveto", 0)
@@ -218,8 +221,9 @@ class TableCanvas(Canvas):
             
         self.draw_grid() 
         self.update_idletasks() 
-        self.draw_rowheader()
-        self.tableheader.redraw()
+        #self.draw_rowheader()
+        self.tablecolheader.redraw()
+        self.tablerowheader.redraw()
         align=None
         self.delete('fillrect')
                         
@@ -281,7 +285,7 @@ class TableCanvas(Canvas):
     def set_xviews(self,*args):
         """Set the xview of table and header"""
         apply(self.xview,args)
-        apply(self.tableheader.xview,args)
+        apply(self.tablecolheader.xview,args)
         return
     
     def drawNavFrame(self):
@@ -529,8 +533,8 @@ class TableCanvas(Canvas):
                         x,y = self.getCanvasPos(row, col)                         
                         self.xview('moveto', x)
                         self.yview('moveto', y)
-                        self.tableheader.xview('moveto', x)
-                        self.tableheader.yview('moveto', y)                        
+                        self.tablecolheader.xview('moveto', x)
+                        self.tablecolheader.yview('moveto', y)                        
                         return row, col
         if found==0:
             self.delete('searchrect')
@@ -544,7 +548,8 @@ class TableCanvas(Canvas):
         colname=self.model.getColumnName(col)    
         self.model.columnwidths[colname]=width 
         self.set_colPositions()      
-        self.redrawTable()        
+        self.redrawTable()
+        self.drawSelectedCol(self.currentcol)
         return
       
     def get_currentRecord(self):
@@ -736,8 +741,8 @@ class TableCanvas(Canvas):
         #ensure popup menus are removed if present
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()        
-        if hasattr(self.tableheader, 'rightmenu'):
-            self.tableheader.rightmenu.destroy()        
+        if hasattr(self.tablecolheader, 'rightmenu'):
+            self.tablecolheader.rightmenu.destroy()        
         if self.check_PageView(rowclicked) == 1:
             return
 
@@ -1875,7 +1880,7 @@ class ColumnHeader(Canvas):
         self.thefont='Arial 14'
         if table != None:
             self.table = table
-            self.height=20
+            self.height = 20
             self.model = self.table.getModel()
             self.config(width=self.table.width)
             #self.colnames = self.model.columnNames
@@ -2118,7 +2123,7 @@ class ColumnHeader(Canvas):
         if tag==None:
             tag='rect'
         if color==None: 
-            color='blue'  
+            color='#0099CC'
         if outline==None:
             outline='gray25'
         if delete == 1:
@@ -2138,34 +2143,93 @@ class RowHeader(Canvas):
     """Class that displays the row headings on the table
        takes it's size and rendering from the parent table """
     def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray75', width=50, height=20)        
+        Canvas.__init__(self, parent, bg='gray75', width=40, height=20)        
         
         if table != None:
             self.table = table
-            self.width = width
+            self.width = 40
+            self.x_start = 40
+            self.inset = 1
+            self.config(width=self.width)
             self.model = self.table.getModel()
             self.config(height = self.table.height)            
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
             self.bind('<Button-3>',self.handle_right_click)
             self.bind('<B1-Motion>', self.handle_mouse_drag)             
-            self.bind('<Shift-Button-1>', self.handle_left_shift_click)    
+            #self.bind('<Shift-Button-1>', self.handle_left_shift_click)    
         return    
 
     def redraw(self): 
-       
-        self.configure(scrollregion=(0,0, self.width+self.table.x_start, self.height))
+        """Redraw row header"""
+        self.configure(scrollregion=(0,0, self.width+self.table.x_start, self.table.height))
         self.delete('gridline','text')  
         self.delete('rect') 
         
+        w=1
+        x_start=self.x_start
+        y_start=self.table.y_start
+        h = self.table.rowheight 
+        rowpos=0
+        for row in self.table.rowrange:            
+            x1,y1,x2,y2 = self.table.getCellCoords(rowpos,0)
+            self.create_rectangle(0,y1,x_start-w,y2,
+                                      fill='gray75', 
+                                      outline='white',
+                                      width=w,
+                                      tag='rowheader')
+            self.create_text(x_start/2,y1+h/2,
+                                      text=row+1,
+                                      fill='black',
+                                      font=self.table.thefont,
+                                      tag='text')        
+            rowpos+=1        
         return
  
-    def handle_left_click(self,event): 
+    def handle_left_click(self, event): 
+        self.delete('rect')
+        self.table.delete('entry')
+        self.table.delete('multicellrect')
+        rowclicked = self.table.get_row_clicked(event)
+        #set row selected 
+        self.table.setSelectedRow(rowclicked)
+       
+        self.draw_rect(self.table.currentrow)
+        
         return
- 
-    def handle_mouse_drag(self, event):
+
+    def handle_left_release(self,event):
+        
         return
         
+    def handle_right_click(self,event): 
+        return
+        
+    def handle_mouse_drag(self, event):
+        return
+
+    def draw_rect(self, row, tag=None, color=None, outline=None, delete=1):
+        """User has clicked to select a row"""
+        if tag==None:
+            tag='rect'
+        if color==None: 
+            color='#0099CC'  
+        if outline==None:
+            outline='gray25'
+        if delete == 1:
+            self.delete(tag)
+        w=0
+        i = self.inset
+        x1,y1,x2,y2 = self.table.getCellCoords(row, 0)
+        rect = self.create_rectangle(0+i,y1+i,self.x_start-i,y2,
+                                      fill=color,  
+                                      outline=outline,
+                                      width=w,                                      
+                                      tag=tag)
+        self.lift('text')
+        
+        return
+
 class SimpleTableDialog(tkSimpleDialog.Dialog):
     """Simple dialog to get data for new cols and rows"""
 
