@@ -26,6 +26,7 @@ from TablePlot import pylabPlotter as plt
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import math
+from types import *
 
 class TableCanvas(Canvas):    
     """A tkinter class for providing table functionality"""
@@ -783,8 +784,11 @@ class TableCanvas(Canvas):
                 self.multiplerowlist.append(rowclicked)
             else:
                 self.multiplerowlist.remove(rowclicked)
-            self.drawMultipleRows(self.multiplerowlist)    
-            #print self.multiplerowlist
+            self.drawMultipleRows(self.multiplerowlist) 
+            if colclicked not in self.multiplecollist:
+                self.multiplecollist.append(colclicked)
+            print self.multiplecollist
+            self.drawMultipleCells()
         return
     
     def handle_left_shift_click(self, event):
@@ -2148,7 +2152,9 @@ class ColumnHeader(Canvas):
 
 class RowHeader(Canvas):
     """Class that displays the row headings on the table
-       takes it's size and rendering from the parent table """
+       takes it's size and rendering from the parent table 
+       This also handles row/record selection as opposed to cell
+       selection"""
     def __init__(self, parent=None, table=None):
         Canvas.__init__(self, parent, bg='gray75', width=40, height=20)        
         
@@ -2162,6 +2168,7 @@ class RowHeader(Canvas):
             self.config(height = self.table.height)            
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
+            self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
             self.bind('<Button-3>',self.handle_right_click)
             self.bind('<B1-Motion>', self.handle_mouse_drag)             
             #self.bind('<Shift-Button-1>', self.handle_left_shift_click)    
@@ -2199,29 +2206,51 @@ class RowHeader(Canvas):
         return
  
     def handle_left_click(self, event): 
-        self.delete('rect')
-        self.table.delete('entry')
-        self.table.delete('multicellrect')
         rowclicked = self.table.get_row_clicked(event)
-        #set row selected 
-        self.table.setSelectedRow(rowclicked)
-        self.table.drawSelectedRow()
-       
-        self.draw_rect(self.table.currentrow)
+        if 0 <= rowclicked < self.table.rows:            
+            self.delete('rect')
+            self.table.delete('entry')
+            self.table.delete('multicellrect')
+           
+            #set row selected 
+            self.table.setSelectedRow(rowclicked)
+            self.table.drawSelectedRow()       
+            self.draw_rect(self.table.currentrow)
         
         return
 
     def handle_left_release(self,event):
         
         return
+
+    def handle_left_ctrl_click(self, event):
+        """Handle ctrl clicks - for multiple row selections"""
+        rowclicked = self.table.get_row_clicked(event)        
+        multirowlist = self.table.multiplerowlist
+        if 0 <= rowclicked < self.table.rows:
+            if rowclicked not in multirowlist:
+                multirowlist.append(rowclicked)
+            else:
+                multirowlist.remove(rowclicked)
+            self.table.drawMultipleRows(multirowlist)    
+            self.draw_rect(multirowlist)
+        return
         
-    def handle_right_click(self,event): 
+    def handle_right_click(self,event):
+        
         return
         
     def handle_mouse_drag(self, event):
+        """Handle mouse drag for mult row selection"""
+        rowover = self.table.get_row_clicked(event)
+        colover = self.table.get_col_clicked(event)
+        if colover == None or rowover == None:
+            return
+        if self.table.check_PageView(rowover) == 1:
+            return        
         return
 
-    def draw_rect(self, row, tag=None, color=None, outline=None, delete=1):
+    def draw_rect(self, rows=None, tag=None, color=None, outline=None, delete=1):
         """User has clicked to select a row"""
         if tag==None:
             tag='rect'
@@ -2232,14 +2261,21 @@ class RowHeader(Canvas):
         if delete == 1:
             self.delete(tag)
         w=0
-        i = self.inset
-        x1,y1,x2,y2 = self.table.getCellCoords(row, 0)
-        rect = self.create_rectangle(0+i,y1+i,self.x_start-i,y2,
-                                      fill=color,  
-                                      outline=outline,
-                                      width=w,                                      
-                                      tag=tag)
-        self.lift('text')
+        i = self.inset        
+        if type(rows) is not ListType:           
+            rowlist=[]
+            rowlist.append(rows)
+        else:         
+           rowlist = rows              
+        for r in rowlist:
+            print r
+            x1,y1,x2,y2 = self.table.getCellCoords(r, 0)
+            rect = self.create_rectangle(0+i,y1+i,self.x_start-i,y2,
+                                          fill=color,  
+                                          outline=outline,
+                                          width=w,                                      
+                                          tag=tag)
+            self.lift('text')
         
         return
 
