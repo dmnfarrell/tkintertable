@@ -153,7 +153,7 @@ class TableCanvas(Canvas):
         if self.prefs == None:
             self.loadPrefs()
         #Add the table and header to the frame  
-        self.Yscrollbar=Scrollbar (self.parentframe,orient=VERTICAL,command=self.yview)
+        self.Yscrollbar=Scrollbar (self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
         self.Xscrollbar=Scrollbar (self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
         self.Xscrollbar.grid(row=2,column=1,columnspan=1,sticky='news')
@@ -170,7 +170,8 @@ class TableCanvas(Canvas):
         self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.redrawTable()
         self.parentframe.bind("<Configure>", self.resizeTable)
-        #self.table.xview("moveto", 0)
+        self.tablecolheader.xview("moveto", 0)
+        self.xview("moveto", 0)
         #self.table.yview("moveto", 0)
               
         return
@@ -223,7 +224,7 @@ class TableCanvas(Canvas):
         self.update_idletasks() 
         #self.draw_rowheader()
         self.tablecolheader.redraw()
-        self.tablerowheader.redraw()
+        self.tablerowheader.redraw(paging=self.paging)
         align=None
         self.delete('fillrect')
                         
@@ -283,11 +284,17 @@ class TableCanvas(Canvas):
         return
     
     def set_xviews(self,*args):
-        """Set the xview of table and header"""
+        """Set the xview of table and col header"""
         apply(self.xview,args)
         apply(self.tablecolheader.xview,args)
         return
-    
+        
+    def set_yviews(self,*args):
+        """Set the xview of table and row header"""
+        apply(self.yview,args)
+        apply(self.tablerowheader.yview,args)
+        return
+        
     def drawNavFrame(self):
         """Draw the frame for selecting pages when paging is on"""
         print 'adding page frame'
@@ -1915,7 +1922,7 @@ class ColumnHeader(Canvas):
                 w=self.table.cellwidth
             x=self.table.col_positions[col]
            
-            if len(colname)>w/10:
+            if len(collabel)>w/10:
                 collabel=collabel[0:w/12]+'.'
             line = self.create_line(x, 0, x, h, tag=('gridline', 'vertline'),
                                  fill='white', width=2)
@@ -2099,7 +2106,7 @@ class ColumnHeader(Canvas):
                 
     def draw_resize_symbol(self, col):    
         """Draw a symbol to show that col can be resized when mouse here"""
-        self.delete('resizesymbol')        
+        self.delete('resizesymbol') 
         w=self.table.cellwidth       
         h=self.height        
         #if x_pos > self.tablewidth:
@@ -2130,7 +2137,7 @@ class ColumnHeader(Canvas):
             self.delete(tag)
         w=2
         x1,y1,x2,y2 = self.table.getCellCoords(0,col)
-        rect = self.create_rectangle(x1,y1,x2,self.height,
+        rect = self.create_rectangle(x1,y1-w,x2,self.height,
                                   fill=color,  
                                   outline=outline,
                                   width=w,
@@ -2160,10 +2167,15 @@ class RowHeader(Canvas):
             #self.bind('<Shift-Button-1>', self.handle_left_shift_click)    
         return    
 
-    def redraw(self): 
+    def redraw(self, paging = 0): 
         """Redraw row header"""
-        self.configure(scrollregion=(0,0, self.width+self.table.x_start, self.table.height))
-        self.delete('gridline','text')  
+        if paging == 1:             
+            self.height = self.table.rowheight * self.table.rowsperpage+10            
+        else:            
+            self.height = self.table.rowheight * self.table.rows+10            
+        self.configure(scrollregion=(0,0, self.width, self.height))
+        
+        self.delete('rowheader','text')  
         self.delete('rect') 
         
         w=1
@@ -2193,6 +2205,7 @@ class RowHeader(Canvas):
         rowclicked = self.table.get_row_clicked(event)
         #set row selected 
         self.table.setSelectedRow(rowclicked)
+        self.table.drawSelectedRow()
        
         self.draw_rect(self.table.currentrow)
         
