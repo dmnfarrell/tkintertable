@@ -59,7 +59,7 @@ class TableCanvas(Canvas):
         self.thefont = "Arial 12"
         self.cellbackgr = '#9999CC'
         self.entrybackgr = 'white'
-        self.grid_color = 'gray50'
+        self.grid_color = '#ABB1AD'
         self.selectedcolor = 'yellow'
         self.rowselectedcolor = '#CCCCFF'
         self.multipleselectioncolor = '#ECD672'
@@ -102,9 +102,11 @@ class TableCanvas(Canvas):
     def mouse_wheel(self, event):
         """Handle mouse wheel scroll for windows"""
         if event.num == 5 or event.delta == -120:
-            event.widget.yview_scroll(1, UNITS)        
+            event.widget.yview_scroll(1, UNITS) 
+            self.tablerowheader.yview_scroll(1, UNITS) 
         if event.num == 4 or event.delta == 120:
             event.widget.yview_scroll(-1, UNITS)
+            self.tablerowheader.yview_scroll(-1, UNITS) 
         return
         
     def do_bindings(self):
@@ -135,8 +137,8 @@ class TableCanvas(Canvas):
         self.parentframe.master.bind("<Tab>", self.handle_arrow_keys)
         if 'windows' in self.platform:
             self.bind("<MouseWheel>", self.mouse_wheel)            
-        self.bind('<Button-4>', lambda event: event.widget.yview_scroll(-1, UNITS))
-        self.bind('<Button-5>', lambda event: event.widget.yview_scroll(1, UNITS)) 
+        self.bind('<Button-4>', self.mouse_wheel)
+        self.bind('<Button-5>', self.mouse_wheel) 
         return
         
     def getModel(self):
@@ -826,11 +828,11 @@ class TableCanvas(Canvas):
         #draw the selected rows    
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:                
-                self.multiplerowlist=range(self.endrow, self.startrow+1)
-                self.drawMultipleRows(self.multiplerowlist)
+                self.multiplerowlist=range(self.endrow, self.startrow+1)                
             else:
                 self.multiplerowlist=range(self.startrow, self.endrow+1)
-                self.drawMultipleRows(self.multiplerowlist)
+            self.drawMultipleRows(self.multiplerowlist)
+            self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             #draw selected cells outline using row and col lists
             print self.multiplerowlist
             self.drawMultipleCells()    
@@ -2265,13 +2267,17 @@ class RowHeader(Canvas):
         #draw the selected rows    
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:                
-                rowlist=range(self.endrow, self.startrow+1)
-                self.drawSelectedRows(rowlist)
+                rowlist=range(self.endrow, self.startrow+1)                
             else:
                 rowlist=range(self.startrow, self.endrow+1)
-                self.drawSelectedRows(rowlist)            
+            self.drawSelectedRows(rowlist)            
             self.table.multiplerowlist = rowlist
-            self.table.drawMultipleRows(rowlist) 
+            self.table.drawMultipleRows(rowlist)
+        else:
+            self.table.multiplerowlist = []
+            self.table.multiplerowlist.append(rowover)
+            self.drawSelectedRows(rowover)
+            self.table.drawMultipleRows(self.table.multiplerowlist)
         return
 
     def drawSelectedRows(self, rows=None): 

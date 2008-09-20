@@ -198,11 +198,15 @@ class TableModel(object):
         sortmap=[]
         sortkey = self.getColumnName(columnIndex)
         for rec in self.data.keys():            
-            if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):
-                sortmap.append((rec, self.data[rec][sortkey]))
+            if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):               
+                if Formula.isFormula(self.data[rec][sortkey]):
+                    #print 'formula'
+                    sortmap.append((rec, float(self.doFormula(self.data[rec][sortkey]))))
+                else:    
+                    sortmap.append((rec, self.data[rec][sortkey]))
             else:
                 sortmap.append((rec, ''))
-        #print sortmap  
+        print sortmap  
         #sort the mapping by the second key
         self.sortmap = sorted(sortmap, key=operator.itemgetter(1), reverse=reverse)
         #print sortmap

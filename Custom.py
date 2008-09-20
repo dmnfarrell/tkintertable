@@ -28,7 +28,7 @@ class MyTable(TableCanvas):
          TableCanvas.__init__(self, parent, model)
          self.cellbackgr = '#FFFAF0'
          self.entrybackgr = 'white'
-         self.grid_color = 'gray50'
+         
          self.selectedcolor = 'yellow'
          self.rowselectedcolor = '#B0E0E6'
          self.multipleselectioncolor = '#ECD672'
