@@ -259,18 +259,15 @@ class TableModel(object):
         
     def addRow(self, name=None):
         """Add a row"""
-        '''index = self.getRowCount() + 1
-        if name == None:
-            name=str(index)'''
+ 
         if self.data.has_key(name) or name in self.reclist:
             print 'name already present!!'
             return
         self.data[name]={}
-        '''if name != None:
+        if name != None:
             self.data[name]['Name'] = name
         else:
-            self.data[name]['Name'] = ''   '''     
-        #self.reclist = self.data.keys()
+            self.data[name]['Name'] = ''        
         self.reclist.append(name)
         #self.reclist.sort()        
 
@@ -342,19 +339,18 @@ class TableModel(object):
         else:
             i=int(rows%25)
             j=int(round(rows/25,1))     
-        print i, j
+        #print i, j
         for x in range(numrows):
             if i >= len(alphabet):
                 i=0
                 j=j+1             
-            name = alphabet[i]+str(j)
-            print name   
+            name = alphabet[i]+str(j)            
             if name in self.reclist:
                 pass                
             else:
                 self.addRow(name) 
             i=i+1 
-            print self.reclist
+            #print self.reclist
         return
 
     def auto_AddColumns(self, numcols=None):
