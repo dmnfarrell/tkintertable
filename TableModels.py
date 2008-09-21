@@ -85,11 +85,11 @@ class TableModel(object):
         #add rows and cols if they are given in the constructor
         if newdict == None: 
             if rows != None:
-                for r in range(rows):
-                    self.addRow()
+                self.auto_AddRows(rows)
             if columns != None:
-                for c in range(columns):
-                    self.addColumn()
+                self.auto_AddColumns(columns)
+        #finally set default sort order as first col
+        #self.setSortOrder() 
         return
 
     def getDefaultTypes(self):
@@ -147,7 +147,7 @@ class TableModel(object):
         coltype = self.columntypes[colname]
         name = self.reclist[rowIndex]
         if self.data[name].has_key(colname):
-            del self.data[name][colname] 
+            del self.data[name][colname]  
         return
     
     def getRecName(self, rowIndex):
@@ -190,20 +190,26 @@ class TableModel(object):
         rowIndex = self.reclist.index(recname)
         return rowIndex
     
-    def setSortOrder(self, columnIndex, reverse=0):
+    def setSortOrder(self, columnIndex=0, reverse=0):
         """Changes the order that records are sorted in, which will
            be reflected in the table upon redrawing"""
-        import operator      
-        self.sortcolumnIndex = columnIndex  #store current column sorted on
+        import operator
+        self.sortcolumnIndex = columnIndex  #store current column sorted by
         sortmap=[]
         sortkey = self.getColumnName(columnIndex)
         for rec in self.data.keys():            
-            if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):               
-                if Formula.isFormula(self.data[rec][sortkey]):
+            if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):
+                recdata = self.data[rec][sortkey]
+                if Formula.isFormula(recdata):
                     #print 'formula'
-                    sortmap.append((rec, float(self.doFormula(self.data[rec][sortkey]))))
-                else:    
-                    sortmap.append((rec, self.data[rec][sortkey]))
+                    sortmap.append((rec, float(self.doFormula(recdata))))
+                else:
+                    try:    #try to make strings with only numbers sorted as nums
+                        recdata = float(recdata)
+                    except:
+                        pass
+                    sortmap.append((rec, recdata))
+                        
             else:
                 sortmap.append((rec, ''))
         print sortmap  
@@ -253,28 +259,30 @@ class TableModel(object):
         
     def addRow(self, name=None):
         """Add a row"""
-        index = self.getRowCount() + 1
+        '''index = self.getRowCount() + 1
         if name == None:
-            name=str(index)
-        if self.data.has_key(name):
-            name = name + '_1'
+            name=str(index)'''
+        if self.data.has_key(name) or name in self.reclist:
+            print 'name already present!!'
+            return
         self.data[name]={}
-        if name != None:
+        '''if name != None:
             self.data[name]['Name'] = name
         else:
-            self.data[name]['Name'] = ''        
-        self.reclist = self.data.keys()
-        self.reclist.sort()        
+            self.data[name]['Name'] = ''   '''     
+        #self.reclist = self.data.keys()
+        self.reclist.append(name)
+        #self.reclist.sort()        
 
         return
 
     def deleteRow(self, rowIndex):
-        """Delete a row"""
-                
+        """Delete a row"""  
         name = self.reclist[rowIndex]
         del self.data[name]
         self.reclist = self.data.keys()
         self.reclist.sort()
+   
         return
         
     def deleteRows(self, rowlist): 
@@ -289,9 +297,12 @@ class TableModel(object):
 
     def addColumn(self, colname=None, coltype=None):
         """Add a column"""
-        index = self.getColumnCount()+ 1
+        index = self.getColumnCount()+ 1        
         if colname == None:
             colname=str(index)
+        if colname in self.columnNames:
+            print 'name is present!'
+            return
         self.columnNames.append(colname)
         self.columnlabels[colname] = colname
         if coltype == None:            
@@ -300,7 +311,7 @@ class TableModel(object):
             self.columntypes[colname]=coltype
 
         return
-        
+      
     def deleteColumn(self, columnIndex):
         """delete a column"""
         colname = self.getColumnName(columnIndex)
@@ -312,10 +323,59 @@ class TableModel(object):
         for recname in self.reclist:
             if self.data[recname].has_key(colname):
                 del self.data[recname][colname]
-        
+
+        if hasattr(self, 'sortcolumnIndex') and columnIndex == self.sortcolumnIndex:           
+            self.setSortOrder()
         print 'column deleted'
         print 'new cols:', self.columnNames
         return
+    
+    def auto_AddRows(self, numrows=None):
+        """Automatically add x number of records"""
+        import string
+        alphabet = string.lowercase[:26]
+        rows = self.getRowCount()
+       
+        if rows <= 25:
+            i=rows
+            j=0
+        else:
+            i=int(rows%25)
+            j=int(round(rows/25,1))     
+        print i, j
+        for x in range(numrows):
+            if i >= len(alphabet):
+                i=0
+                j=j+1             
+            name = alphabet[i]+str(j)
+            print name   
+            if name in self.reclist:
+                pass                
+            else:
+                self.addRow(name) 
+            i=i+1 
+            print self.reclist
+        return
+
+    def auto_AddColumns(self, numcols=None):
+        """Automatically add x number of cols"""
+        import string
+        alphabet = string.lowercase[:26]
+        currcols=self.getColumnCount()
+        #find where to start
+        start = currcols + 1
+        end = currcols + numcols + 1
+        new = []
+        for n in range(start, end):
+            new.append(str(n))
+        #check if any of these colnames present        
+        common = set(new) & set(self.columnNames)
+        extra = len(common)
+        end = end + extra
+        for x in range(start, end):           
+            self.addColumn(str(x))
+        return
+
 
     def relabel_Column(self, columnIndex, newname):
         """Change the column label - can be used in a table header"""

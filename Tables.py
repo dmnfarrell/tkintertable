@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 """
     Created January 2008
     TableCanvas Class
@@ -33,7 +33,7 @@ class TableCanvas(Canvas):
     
     def __init__(self, parent=None, model=None):        
         Canvas.__init__(self, parent, bg='#9999CC',
-                         width=600, height=400,
+                         width=600, height=500,
                          relief=GROOVE,
                          scrollregion=(0,0,600,600)) 
         self.parentframe = parent
@@ -65,7 +65,7 @@ class TableCanvas(Canvas):
         self.multipleselectioncolor = '#ECD672'
         self.currentrow = 0           
         self.currentcol = 0
-        self.sortcol = None
+        #self.sortcol = None
         self.reverseorder = 0
         #for multiple selections
         self.startrow = self.endrow = None
@@ -176,7 +176,7 @@ class TableCanvas(Canvas):
         self.tablecolheader.xview("moveto", 0)
         self.xview("moveto", 0)
         #self.table.yview("moveto", 0)
-              
+                     
         return
         
     def redrawTable(self, event=None):
@@ -185,15 +185,16 @@ class TableCanvas(Canvas):
         print 'redrawing',time.time()  
         model = self.model
         self.rows=self.model.getRowCount()
-        self.cols=self.model.getColumnCount()                      
+        self.cols=self.model.getColumnCount()  
         self.tablewidth=(self.cellwidth)*self.cols
         self.configure(bg=self.cellbackgr)
         #determine col positions for first time
         self.set_colPositions()
         #set sort order
-        if self.sortcol != None:
-            self.model.setSortOrder(self.sortcol, self.reverseorder)
-
+        #if self.sortcol != None:
+        #self.model.setSortOrder(self.sortcol, self.reverseorder)
+        print self.model.reclist
+        #print self.model.sortmap
         #check if large no. of records and switch to paging view
         if self.paging == 0 and self.rows >= 1000:
             self.paging = 1
@@ -281,7 +282,8 @@ class TableCanvas(Canvas):
         
     def sortTable(self, sortcol=None, reverse=0):
         """Set up sort order dict based on currently selected field"""        
-        self.sortcol = self.currentcol
+        #self.sortcol = self.currentcol
+        self.model.setSortOrder(self.currentcol, self.reverseorder)
         self.reverseorder = reverse
         self.redrawTable() 
         return
@@ -468,45 +470,23 @@ class TableCanvas(Canvas):
     
     def autoAdd_Rows(self, numrows=None):
         """Automatically add x number of records"""
+        import string
         if numrows == None:
             numrows = tkSimpleDialog.askinteger("Auto add rows.",
                                                 "How many empty rows?",
                                                 parent=self.parentframe)
-        
-        if numrows != None:         
-            for rec in range(numrows):
-                recname = str(rec)
-                self.model.addRow()
+
+        self.model.auto_AddRows(numrows)
         self.redrawTable()         
         return
         
     def autoAdd_Columns(self, numcols=None):
-        """Automatically add x number of records"""
+        """Automatically add x number of cols"""
         if numcols == None:
             numcols = tkSimpleDialog.askinteger("Auto add rows.",
                                                 "How many empty columns?",
                                                 parent=self.parentframe)
-        import string
-        alphabet = string.lowercase[:26]
-        currcols=self.model.getColumnCount()
-        #find where to start
-        if currcols <= 25:
-            i=currcols-1
-            j=0
-        else:
-            i=int(currcols%25)
-            j=int(round(currcols/25,1))     
-        
-        for x in range(numcols):
-            if i >= len(alphabet):
-                i=0
-                j=j+1
-            name = alphabet[i]+str(j)    
-            if name in self.model.columnNames:
-                pass                
-            else:
-                self.model.addColumn(name) 
-            i=i+1    
+        self.model.auto_AddColumns(numcols)  
         self.parentframe.configure(width=self.width)
         self.redrawTable()         
         return
@@ -2159,17 +2139,17 @@ class RowHeader(Canvas):
        This also handles row/record selection as opposed to cell
        selection"""
     def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray75', width=40, height=20)        
+        Canvas.__init__(self, parent, bg='gray75', width=40, height=500 )        
         
         if table != None:
             self.table = table
             self.width = 40
             self.x_start = 40
             self.inset = 1
-            self.config(width=self.width)
+            #self.config(width=self.width)
+            #self.config(height = 500)
             self.startrow = self.endrow = None
-            self.model = self.table.getModel()
-            self.config(height = self.table.height)            
+            self.model = self.table.getModel()                    
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
             self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
