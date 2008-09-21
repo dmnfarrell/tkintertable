@@ -305,7 +305,7 @@ class TableCanvas(Canvas):
         print 'adding page frame'
         import Table_images
         self.navFrame = Frame(self.parentframe)
-        self.navFrame.grid(row=4,column=0,columnspan=1,sticky='news',padx=1,pady=1,ipady=1)        
+        self.navFrame.grid(row=4,column=0,columnspan=2,sticky='news',padx=1,pady=1,ipady=1)        
         pagingbuttons = { 'start' : self.first_Page, 'prev' : self.prev_Page, 
                           'next' : self.next_Page, 'end' : self.last_Page}
         images = { 'start' : Table_images.start(), 'prev' : Table_images.prev(), 
@@ -1588,22 +1588,31 @@ class TableCanvas(Canvas):
         
         
     def setcellbackgr(self):
-        self.cellbackgr = self.getaColor(self.cellbackgr)
+        clr = self.getaColor(self.cellbackgr)
+        print '---gettin bg color----'
+        if clr != None:
+            self.cellbackgr = clr
         return 
 
     def setgrid_color(self):
-        self.grid_color = self.getaColor(self.grid_color)
+        clr = self.getaColor(self.grid_color)
+        if clr != None:
+            self.grid_color = clr
+  
         return 
      
     def setrowselectedcolor(self):
-        self.rowselectedcolor = self.getaColor(self.rowselectedcolor)
+        clr = self.getaColor(self.rowselectedcolor)
+        if clr != None:
+            self.rowselectedcolor = clr
         return
         
-    def getaColor(self,oldcolor):   
+    def getaColor(self, oldcolor):   
         import tkColorChooser
         ctuple, newcolor = tkColorChooser.askcolor(title='pick a color', initialcolor=oldcolor,
                                                    parent=self.parentframe)
-        print ctuple, newcolor
+        if ctuple == None:
+            return None
         return str(newcolor)
 
     def removeColors(self):
@@ -1815,8 +1824,9 @@ class TableCanvas(Canvas):
     def AskForColorButton(self, frame, text, func):
         def SetColor():
             import tkColorChooser
-            ctuple, variable = tkColorChooser.askcolor(title='pick a color', initialcolor=self.cellbackgr)
-            print ctuple, variable
+            ctuple, variable = tkColorChooser.askcolor(title='pick a color',
+                                                       initialcolor=self.cellbackgr)
+            
             return
         bgcolorbutton = Button(frame, text=text,command=SetColor)           
         return  bgcolorbutton
