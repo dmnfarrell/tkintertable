@@ -47,7 +47,8 @@ class TableModel(object):
             #record column labels for use in a table header
             self.columnlabels={}  
             for colname in self.columnNames:
-                self.columnlabels[colname]=colname   
+                self.columnlabels[colname]=colname
+            self.reclist = self.data.keys()    
         else:
             self.data = copy.deepcopy(newdict)
             self.columnNames=copy.deepcopy(self.data['columnnames'])
@@ -64,10 +65,15 @@ class TableModel(object):
             if self.data.has_key('colors'):
                 self.colors = copy.deepcopy(self.data['colors'])
                 del self.data['colors']
-
-        # Store the sorted list of names
-        self.reclist = self.data.keys()
-        self.reclist.sort()        
+            #read in the record list    
+            if self.data.has_key('reclist'):
+                self.reclist = self.data['reclist']
+                del self.data['reclist']
+            else:    
+                self.reclist = self.data.keys()                
+        
+        if not self.reclist == self.data.keys():
+            print 'reclist does not match data keys'      
         
         #restore last column order
         if self.columnOrder:
@@ -102,6 +108,8 @@ class TableModel(object):
         data = copy.deepcopy(self.data)
         data['colors'] = self.colors        
         data['columnnames'] = self.columnNames
+        #we keep original record order 
+        data['reclist'] = self.reclist  
         #record current col order
         data['columnorder']={}
         i=0
@@ -278,7 +286,7 @@ class TableModel(object):
         name = self.reclist[rowIndex]
         del self.data[name]
         self.reclist = self.data.keys()
-        self.reclist.sort()
+        #self.reclist.sort()
    
         return
         
@@ -289,7 +297,7 @@ class TableModel(object):
             name = self.reclist[row]
             del self.data[name]
         self.reclist = self.data.keys()  
-        self.reclist.sort()
+        #self.reclist.sort()
         return
 
     def addColumn(self, colname=None, coltype=None):
