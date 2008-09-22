@@ -491,6 +491,15 @@ class TableCanvas(Canvas):
         self.redrawTable()         
         return
 
+    def getRecordInfo(self, row):
+        """Show the record for this row"""
+        model = self.model
+        recdata = model.getRecordAtRow(row)
+        print recdata
+        #We need a cusotm dialog for allowing field entries here
+        
+        return
+    
     def findValue(self, searchstring=None, findagain=None):
         """Return the row/col for the input value"""
         if searchstring == None:
@@ -655,7 +664,7 @@ class TableCanvas(Canvas):
         x1,y1,x2,y2 = self.getCellCoords(row,col)        
         cx=float(x1)/self.tablewidth
         cy=float(y1)/(self.rows*self.rowheight)
-        print cx,cy
+        #print cx,cy
         return cx, cy
             
     def isInsideTable(self,x,y):
@@ -770,7 +779,7 @@ class TableCanvas(Canvas):
             self.drawMultipleRows(self.multiplerowlist) 
             if colclicked not in self.multiplecollist:
                 self.multiplecollist.append(colclicked)
-            print self.multiplecollist
+            #print self.multiplecollist
             self.drawMultipleCells()
         return
     
@@ -804,7 +813,7 @@ class TableCanvas(Canvas):
                 self.multiplecollist=range(self.endcol, self.startcol+1)
             else:
                 self.multiplecollist=range(self.startcol, self.endcol+1)
-            print self.multiplecollist
+            #print self.multiplecollist
         #draw the selected rows    
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:                
@@ -814,7 +823,7 @@ class TableCanvas(Canvas):
             self.drawMultipleRows(self.multiplerowlist)
             self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             #draw selected cells outline using row and col lists
-            print self.multiplerowlist
+            #print self.multiplerowlist
             self.drawMultipleCells()    
         else:
             self.multiplerowlist = []
@@ -878,7 +887,7 @@ class TableCanvas(Canvas):
     def handle_right_click(self, event):
         """respond to a right click"""
         self.delete('tooltip')       
-        print self.multiplerowlist
+        self.tablerowheader.clearSelected()
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()
         rowclicked = self.get_row_clicked(event)
@@ -1045,12 +1054,14 @@ class TableCanvas(Canvas):
 
         def add_defaultcommands():           
             """now add general actions for all cells""" 
-            order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data","Select All",
-                    "Plot Selected","Plot Options","Show Prefs"]
+            order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
+                     "View Record", "Select All",
+                     "Plot Selected","Plot Options","Show Prefs"]
             defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
                             "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
                             "Fill Down" : lambda : self.fill_down(rows, cols),
                             "Fill Right" : lambda : self.fill_across(cols, rows),
+                            "View Record" : lambda : self.getRecordInfo(row),                             
                             "Clear Data" : self.delete_Cell,
                             "Select All" : self.select_All,
                             "Plot Selected" : self.plot_Selected,
@@ -1156,7 +1167,7 @@ class TableCanvas(Canvas):
                 x.append(val)
             lists.append(x)
                
-        print lists        
+        #print lists        
         return lists
     
     def plot_Selected(self):
@@ -1523,8 +1534,7 @@ class TableCanvas(Canvas):
         self.delete('multiplesel')
         for r in rowlist:
             if r > self.rows-1:
-                continue
-            #print r
+                continue            
             x1,y1,x2,y2 = self.getCellCoords(r,0)
             x2=self.tablewidth
             rect = self.create_rectangle(x1,y1,x2,y2,
@@ -1588,8 +1598,7 @@ class TableCanvas(Canvas):
         
         
     def setcellbackgr(self):
-        clr = self.getaColor(self.cellbackgr)
-        print '---gettin bg color----'
+        clr = self.getaColor(self.cellbackgr)        
         if clr != None:
             self.cellbackgr = clr
         return 
@@ -2064,7 +2073,7 @@ class ColumnHeader(Canvas):
         else:
             return
         
-        print self.table.multiplecollist
+        #print self.table.multiplecollist
         for c in self.table.multiplecollist:
             self.draw_rect(c, delete=0)
             self.table.drawSelectedCol(c, delete=0)
@@ -2198,7 +2207,11 @@ class RowHeader(Canvas):
                                       tag='text')        
             rowpos+=1        
         return
- 
+
+    def clearSelected(self):
+        self.delete('rect')
+        return
+    
     def handle_left_click(self, event): 
         rowclicked = self.table.get_row_clicked(event)
         self.startrow = rowclicked
@@ -2279,7 +2292,7 @@ class RowHeader(Canvas):
         else:         
            rowlist = rows              
         for r in rowlist:
-            print r
+            #print r
             self.draw_rect(r, delete=0)
         return
             

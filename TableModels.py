@@ -488,7 +488,7 @@ class TableModel(object):
         return (recname, colname)    
 
     def getRecAtRow(self, recname, colname, offset=1, dim='y'):
-        """Get the record name at a specified offset in te current
+        """Get the record name at a specified offset in the current
            table from the record given, by using the current sort order"""
         thisrow = self.getRecordIndex(recname)
         thiscol = self.getColumnIndex(colname)
