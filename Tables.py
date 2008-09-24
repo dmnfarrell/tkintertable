@@ -494,9 +494,13 @@ class TableCanvas(Canvas):
     def getRecordInfo(self, row):
         """Show the record for this row"""
         model = self.model
-        recdata = model.getRecordAtRow(row)
-        print recdata
-        #We need a cusotm dialog for allowing field entries here
+        #We need a custom dialog for allowing field entries here
+        
+        d = RecordViewDialog(title="Record Details",                                               
+                                  parent=self.parentframe, table=self, row=row)
+        
+       
+        
         
         return
     
@@ -2355,3 +2359,63 @@ class SimpleTableDialog(tkSimpleDialog.Dialog):
         self.result = first, second
         return
 
+class RecordViewDialog(tkSimpleDialog.Dialog):
+    
+    def __init__(self, parent, title=None, table=None, row=None): 
+        if table != None:
+            self.table = table
+            self.row = row
+            self.recdata = table.getModel().getRecordAtRow(row)
+        else:            
+            return      
+        tkSimpleDialog.Dialog.__init__(self, parent, title)    
+        return
+    
+    def body(self, master):
+        """Show all record fields in entry fields or labels"""
+        model = self.table.getModel()
+        cols = self.table.cols
+        self.fieldnames = {}
+        self.fieldvars = {}
+        self.fieldvars['Name'] = StringVar()
+        self.fieldvars['Name'].set(self.recdata['Name'])
+        Label(master, text='Rec Name:').grid(row=0,column=0,padx=2,pady=2,sticky='news')
+        Entry(master, textvariable=self.fieldvars['Name'],
+                relief=GROOVE,bg='yellow').grid(row=0,column=1,padx=2,pady=2,sticky='news')
+        i=1        
+        for col in range(cols):
+            colname = model.getColumnName(col)
+            label = model.getColumnLabel(col)
+            fieldtype = model.getColumnType(col) 
+            self.fieldvars[colname] = StringVar()
+            if self.recdata.has_key(colname):
+                self.fieldvars[colname].set(self.recdata[colname])
+
+            print colname
+            #self.b1 = Label(master, text=self.recdata['Name']).grid(row=0)
+            self.fieldnames[colname] = Label(master, text=label).grid(row=i,column=0,padx=2,pady=2,sticky='news')
+            Entry(master, textvariable=self.fieldvars[colname],
+                                        relief=GROOVE,bg='white').grid(row=i,column=1,padx=2,pady=2,sticky='news')
+            Label(master, text=fieldtype,fg='gray').grid(row=i,column=2,padx=2,pady=2,sticky='news')                                        
+            i+=1
+            
+        #self.columnconfigure(1,weight=1)
+        return 
+        
+    def apply(self):
+        """Update the record from the vars"""
+        cols = self.table.cols
+        model = self.table.getModel()
+        absrow = self.table.get_AbsoluteRow(self.row)
+        for col in range(cols):
+            colname = model.getColumnName(col)
+            val = self.fieldvars[colname].get()
+            print absrow, colname, val
+            if val != '' and val != None:
+                if Formula.isFormula(val):                
+                    model.setFormulaAt(val, absrow, col)  
+                else:
+                    model.setValueAt(val, absrow, col)               
+                
+        
+        return        
