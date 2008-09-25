@@ -38,7 +38,7 @@ class pylabPlotter(object):
     
     colors = ['#0000A0','#FF0000','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
     linestyles = ['p','-','--']
-    shapes = ['p','-','--',':','steps','.' ,'o','^','<','s','+','x','D','1','4','h'] 
+    shapes = ['p','-','--',':','.' ,'o','^','<','s','+','x','D','1','4','h'] 
     legend_positions = ['best', 'upper left','upper center','upper right',
                          'center left','center','center right'
                          'lower left','lower center','lower right']    
@@ -56,7 +56,7 @@ class pylabPlotter(object):
         return
 
     @classmethod
-    def plotXY(cls, x, y,title=None,xlabel=None,ylabel=None):
+    def plotXY(cls, x, y, title='',xlabel=None,ylabel=None):
         """Do xy plot of 2 lists and show correlation"""
         
         if cls.xscale == 1:
@@ -120,7 +120,7 @@ class pylabPlotter(object):
         
     @classmethod  
     def setOptions(cls, shape=None, grid=None, xscale=None, yscale=None,
-                    showlegend=None, legendloc=None ):
+                    showlegend=None, legendloc=None):
         """Set the options before plotting"""
         if shape != None:
             cls.shape = shape
@@ -133,6 +133,7 @@ class pylabPlotter(object):
         if showlegend != None:
             cls.showlegend = showlegend
         if legendloc != None:
-            cls.legendloc = cls.legend_positions[legendloc]     
+            cls.legendloc = legendloc
+            
         return
         

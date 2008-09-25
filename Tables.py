@@ -1193,7 +1193,8 @@ class TableCanvas(Canvas):
         plotlists.remove(x)
         for y in plotlists:
             print 'y:',y
-            plt.plotXY(x, y)
+            plt.plotXY(x, y, title=self.plottitle.get(),
+                       xlabel=self.plotxlabel.get(),ylabel=self.plotylabel.get())
         plt.show()
         return
 
@@ -1203,12 +1204,19 @@ class TableCanvas(Canvas):
         self.pltlegend = IntVar()
         self.pltsymbol = StringVar()
         self.pltsymbol.set('p')
-        self.legendloc = IntVar()
-        self.legendloc.set(0)
+        self.legendloc = StringVar()
+        self.legendloc.set('best')
         self.xscalevar = IntVar()
         self.yscalevar = IntVar()
         self.xscalevar.set(0)
-        self.yscalevar.set(0)        
+        self.yscalevar.set(0)
+        self.plottitle = StringVar()
+        self.plottitle.set('')
+        self.plotxlabel = StringVar()
+        self.plotxlabel.set('')
+        self.plotylabel = StringVar()
+        self.plotylabel.set('')
+        
         return
         
     def plotSetup(self):
@@ -1229,7 +1237,7 @@ class TableCanvas(Canvas):
       
         Label(frame1,text='Symbol:').grid(row=2,column=0,padx=2,pady=2)
         symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
-					                relief=RAISED,width=16)          
+					                relief=GROOVE, width=16, bg='lightblue')          
         symbol_menu = Menu(symbolbutton, tearoff=0)
         symbolbutton['menu'] = symbol_menu        
         for text in plt.shapes:
@@ -1237,14 +1245,25 @@ class TableCanvas(Canvas):
                                             variable=self.pltsymbol,
                                             value=text,
                                             indicatoron=1)  
-        symbolbutton.grid(row=2,column=1, sticky='news')
+        symbolbutton.grid(row=2,column=1, sticky='news',padx=2,pady=2)
         row=row+1
-        legendframe = LabelFrame(self.plotprefswin, text="Legend Pos") 
+        
+
+        Label(frame1,text='Legend pos:').grid(row=3,column=0,padx=2,pady=2)
+        legendposbutton = Menubutton(frame1,textvariable=self.legendloc,
+					                relief=GROOVE, width=16, bg='lightblue')          
+        legendpos_menu = Menu(legendposbutton, tearoff=0)
+        legendposbutton['menu'] = legendpos_menu 
         i=0
-        for p in plt.legend_positions: 
-            Radiobutton(legendframe,text=p,variable=self.legendloc,value=i).pack(pady=2)
-            i=i+1        
-        legendframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)        
+        for p in plt.legend_positions:
+            print p
+            legendpos_menu.add_radiobutton(label=p,
+                                        variable=self.legendloc,
+                                        value=p,
+                                        indicatoron=1)  
+            i+=1
+        legendposbutton.grid(row=3,column=1, sticky='news',padx=2,pady=2)
+          
         row=0
         scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
         scales={0:'norm',1:'log'}
@@ -1256,6 +1275,18 @@ class TableCanvas(Canvas):
         
         scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)      
         row=row+1
+
+        labelsframe = LabelFrame(self.plotprefswin,text='Labels')
+        labelsframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
+        Label(labelsframe,text='Title:').grid(row=0,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plottitle,relief=GROOVE).grid(row=0,column=1,padx=2,pady=2)
+        Label(labelsframe,text='X-axis label:').grid(row=1,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotxlabel,relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
+        Label(labelsframe,text='Y-axis label:').grid(row=2,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotylabel,relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
+    
+        row=row+1
+        
         frame=Frame(self.plotprefswin)
         frame.grid(row=row,column=0,sticky='news',padx=2,pady=2)   
         b = Button(frame, text="Plot", command=self.plot_Selected, relief=GROOVE, bg='#99ccff')
