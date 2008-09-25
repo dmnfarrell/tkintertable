@@ -165,6 +165,19 @@ class TableModel(object):
         name = self.reclist[rowIndex]
         return name
 
+    def setRecName(self, newname, rowIndex):
+        """Set the record name to another value"""
+        if len(self.reclist)==0:
+            return None
+        currname = self.getRecName(rowIndex)
+        self.reclist[rowIndex] = newname
+        import copy
+        temp = copy.deepcopy(self.data[currname])
+        self.data[newname] = temp
+        del self.data[currname]
+        print 'renamed'
+        #would also need to resolve all refs to this rec in formulas here!!
+        return 
         
     def getRecordAttributeAtColumn(self, rowIndex, columnIndex):
          """Get the attribute of the record at the specified column index.

@@ -123,7 +123,7 @@ class TableCanvas(Canvas):
         
         self.bind("<Control-x>", self.delete_Row)
         self.bind("<Control-n>", self.add_Row)
-        self.bind("<Delete>", self.delete_Cell)
+        self.bind("<Delete>", self.delete_Cells)
         
         if not hasattr(self,'parentapp'):
             self.parentapp = self.parentframe
@@ -462,9 +462,12 @@ class TableCanvas(Canvas):
             self.redrawTable() 
         return
 
-    def delete_Cell(self):
+    def delete_Cells(self, rows, cols):
         """Clear the cell contents"""
-        self.model.deleteCellRecord(self.currentrow,self.currentcol)
+        for col in cols:
+            for row in rows:
+                absrow = self.get_AbsoluteRow(row)                  
+                self.model.deleteCellRecord(row, col)
         self.redrawTable()
         return
     
@@ -1066,7 +1069,7 @@ class TableCanvas(Canvas):
                             "Fill Down" : lambda : self.fill_down(rows, cols),
                             "Fill Right" : lambda : self.fill_across(cols, rows),
                             "View Record" : lambda : self.getRecordInfo(row),                             
-                            "Clear Data" : self.delete_Cell,
+                            "Clear Data" : lambda : self.delete_Cells(rows, cols),
                             "Select All" : self.select_All,
                             "Plot Selected" : self.plot_Selected,
                             "Plot Options" : self.plotSetup,
@@ -2360,12 +2363,15 @@ class SimpleTableDialog(tkSimpleDialog.Dialog):
         return
 
 class RecordViewDialog(tkSimpleDialog.Dialog):
+    """Dialog for viewing and editing table records"""
     
     def __init__(self, parent, title=None, table=None, row=None): 
         if table != None:
             self.table = table
+            self.model = table.getModel()
             self.row = row
-            self.recdata = table.getModel().getRecordAtRow(row)
+            self.recdata = self.model.getRecordAtRow(row)
+            self.recname = self.model.getRecName(row)
         else:            
             return      
         tkSimpleDialog.Dialog.__init__(self, parent, title)    
@@ -2373,12 +2379,12 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
     
     def body(self, master):
         """Show all record fields in entry fields or labels"""
-        model = self.table.getModel()
+        model = self.model
         cols = self.table.cols
         self.fieldnames = {}
         self.fieldvars = {}
         self.fieldvars['Name'] = StringVar()
-        self.fieldvars['Name'].set(self.recdata['Name'])
+        self.fieldvars['Name'].set(self.recname)
         Label(master, text='Rec Name:').grid(row=0,column=0,padx=2,pady=2,sticky='news')
         Entry(master, textvariable=self.fieldvars['Name'],
                 relief=GROOVE,bg='yellow').grid(row=0,column=1,padx=2,pady=2,sticky='news')
@@ -2389,7 +2395,10 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
             fieldtype = model.getColumnType(col) 
             self.fieldvars[colname] = StringVar()
             if self.recdata.has_key(colname):
-                self.fieldvars[colname].set(self.recdata[colname])
+                val = self.recdata[colname]
+                #if Formula.isFormula(self.recdata[colname]):
+                #    val = Formula.getFormula(self.recdata[colname])
+                self.fieldvars[colname].set(val)
 
             print colname
             #self.b1 = Label(master, text=self.recdata['Name']).grid(row=0)
@@ -2405,17 +2414,23 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
     def apply(self):
         """Update the record from the vars"""
         cols = self.table.cols
-        model = self.table.getModel()
+        model = self.model
         absrow = self.table.get_AbsoluteRow(self.row)
+        newname = self.fieldvars['Name'].get()
+        if newname != self.recname:
+            model.setRecName(newname, absrow)
+            
         for col in range(cols):
             colname = model.getColumnName(col)
             val = self.fieldvars[colname].get()
             print absrow, colname, val
             if val != '' and val != None:
-                if Formula.isFormula(val):                
-                    model.setFormulaAt(val, absrow, col)  
-                else:
-                    model.setValueAt(val, absrow, col)               
+                try:
+                    val = eval(val)
+                except:
+                    pass
+                model.setValueAt(val, absrow, col)               
                 
-        
+        print self.model.data
+        self.table.redrawTable() #should only redraw the row!
         return        
