@@ -1,0 +1,28 @@
+ABOUT
+
+There are various libraries that extend tkinter functionality, such as Pmw, but there is currently no useful and extendable table class for tkinter.
+We have developed such a class out of the need to use one in our protein engineering (PEAT) application and it is provided here under the GPL license for general use.
+A sample application using these classes is included in the distribution. This shows a possible implementation. Pmw is required to use this application. Otherwise the classes are based purely on tkinter.
+
+HOMEPAGE
+
+http://tkintertable.sourceforge.net/
+
+SUBVERSION
+
+You can checkout the current svn version using svn co https://tkintertable.svn.sourceforge.net/svnroot/tkintertable 
+
+USAGE
+
+The class utilises the concept of table view<->model from java swing.
+The TableCanvas class is the graphical element that handles all the user interaction, GUI changes, formatting etc. This class inherits from tkinter canvas, and we should put all basic table functionality in this base class. However, in practice we really should sub-class this and add any specialist functionality to the subclass, either by overriding the required parent class methods or adding extra ones.
+Each tablecanvas has a model associated with it, this class handles all the data, updating, sorting and so on. Again, the base class is called TableModel and you sub-class this for specific uses.
+Example:
+To create a basic table, only the following 4 lines are needed. We can also create a model from some data, then use that model to initiate the table. The data, a dictionary, will be appropriate to that model of course.
+
+tframe = Frame(master)
+tframe.pack()
+table = TableCanvas(tframe)
+table.createTableFrame() 
+
+

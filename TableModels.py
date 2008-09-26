@@ -130,7 +130,27 @@ class TableModel(object):
                 recdata.append(self.getValueAt(row,col))
             records[row]=recdata
         return records
-          
+
+    def getColCells(self, colIndex):
+        """Get the viewable contents of a col into a list"""
+        collist = []        
+        for row in range(len(self.reclist)):
+            v = self.getValueAt(row, colIndex)
+            collist.append(v)
+         
+        return collist
+
+    def getlongestEntry(self, columnIndex):
+        """Get the longest cell entry in the col"""       
+        collist = self.getColCells(columnIndex)        
+        maxw=0
+        for c in collist:
+            w = len(c)
+            if w > maxw:
+                maxw = w
+        #print 'longest width', maxw        
+        return maxw
+        
     def getRecordAtRow(self, rowIndex):
         """Get the entire record at the specifed row."""
         name = self.reclist[rowIndex]

@@ -43,7 +43,8 @@ class TableCanvas(Canvas):
         print self.platform
         self.width=800
         self.height=600 
-        self.cellwidth=150                         
+        self.cellwidth=150 
+        self.maxcellwidth=400
         self.rowheight=24
         self.horizlines=1
         self.vertlines=1
@@ -76,9 +77,10 @@ class TableCanvas(Canvas):
         self.mode = 'normal'
         
         if model == None:
-            self.model = TableModel(rows=10,columns=5)
+            self.model = TableModel(rows=10,columns=5)            
         else:  
-            self.model = model        
+            self.model = model
+            
         self.rows=self.model.getRowCount()
         self.cols=self.model.getColumnCount()
 
@@ -170,7 +172,8 @@ class TableCanvas(Canvas):
         self.savePrefs()
         self.tablecolheader.grid(row=0,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
-        self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
+        self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)  
+        self.adjust_colWidths()
         self.redrawTable()
         self.parentframe.bind("<Configure>", self.resizeTable)
         self.tablecolheader.xview("moveto", 0)
@@ -262,7 +265,26 @@ class TableCanvas(Canvas):
             #print 'cellwidth', self.cellwidth  
             self.redrawTable()
         return
-
+        
+    def adjust_colWidths(self):
+        """Optimally adjust col widths at start to accomodate the longest entry"""        
+        try:
+            fontsize=self.celltextsizevar.get()
+        except:            
+            fontsize=12         
+        scale = 8.5 # +fontsize/10 
+        
+        for col in range(self.cols):
+            width = self.model.getlongestEntry(col) * scale
+            #print 'comparing', width,  self.maxcellwidth
+            if width >= self.maxcellwidth:
+                width = self.maxcellwidth
+            elif width < self.cellwidth:
+                width = self.cellwidth 
+            colname=self.model.getColumnName(col)     
+            self.model.columnwidths[colname]=width     
+        return  
+        
     def set_colPositions(self):
         """Determine current column grid positions"""
         self.col_positions=[]  
@@ -1498,8 +1520,11 @@ class TableCanvas(Canvas):
         try:
             fontsize=self.celltextsizevar.get()
         except:            
-            fontsize=12    
-        if len(celltxt)>w/fontsize*1.4 or w<30:
+            fontsize=12  
+            
+        scale = fontsize*1.4
+        #
+        if len(celltxt) > w/scale or w<28:
             celltxt=celltxt[0:int(w/fontsize*1.4)-2]+'..'
         
         if fgcolor == None or fgcolor == "None":
