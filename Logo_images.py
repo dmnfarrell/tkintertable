@@ -787,4 +787,36 @@ def save_proj():
             +'4Q6GDvUDGIKIA7EDZCSXnObTxzQildSo1Ym9bafeIxe6iQnGWU5g0QAIuqRB'
             +'Y7GIwQb0ero6GAT2VYApg4SFHBEAOw==')
      return img
- 
+     
+def plot():
+    import Tkinter as tk
+    img = tk.PhotoImage(format='gif',data=
+             'R0lGODlhGgAaAOd/AAAAACQkJEYfH74SEtIPD0FBQUBCQsMkJGNAQMInJ8Mn'
+            +'J9MkJM00NM40NNU8PNc8PKpNTqpOTqtOTqxOToSNjduCgtyDgt6Dg9+EhKen'
+            +'p6Crq7vLzMDNzeDHyOHJyePJyeXKyufKy8vf39Xw8dTx8dXx8dbx8dbx8tfx'
+            +'8dfx8tjx8dfy8tjy8djy8tjy89ny89ry8try89rz89vz89zz89zz9N3z9Nz0'
+            +'893089309N709N709d/09N/09eD09OD09d/19eD19eH19eL19eP19uP29eP2'
+            +'9uT29uX29uX29+b29ub29+f29+X39+b39ub39+f39+j39+j3+On39+n3+On4'
+            +'9+n4+Or4+Ov4+Oz4+e34+Ov5+ez5+Oz5+e75+e75+u/5+e/5+u76+u/6+vH6'
+            +'+vL6+vL6+/P6+vH7+vL7+/P7+/T7+/T7/PX7/PX8+/b8/Pf8/Pj8/fj9/fn9'
+            +'/fr9/vv9/fv9/vr+/fv+/vz+/v3+/v3+//7+/v3//v7/////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'////////////////////////////////////////////////////////////'
+            +'/////////////////////yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAIAA'
+            +'LAAAAAAaABoAAAj+AAEJHEiwoMGDCBMmBMCwocOHEAEQjEgx4kQAfzJmyLjH'
+            +'TgY4a86gEZMBCxUoDC9m/LORD545GdqkIfNFSwYrUJakHMhwZYY+deS8yTDz'
+            +'C5crGaAQQLJTIMMMUKNKnWohQoGmgHr+0ZMhzps1aTJ4yVJlCpSqBYRgZegn'
+            +'D50MX8uMybDFShQmSQgEKOBjLQA9duJkYCOXQIYrUZYgcYCgQJAefu/IcZPB'
+            +'TJgHAgh8gKKkAgTHOnL4nYphQgEDCTx0YFBAqt83ashkCKGggJQCFA4saJzB'
+            +'Bo0YfmN7yUCgAJQnGQoUGFBgRwYaMlz4JQOmy4UCHJwkyTBkQwERODKLxHjB'
+            +'wm8YLRckFHiCpEgGIT523JiRoYWKE36zgGiwHokRIRkAoUMNM8CQwQomlODX'
+            +'FcVN5aBrEvEEABUFaJABEUI89twMMbSAQgYjlKBghE4BAEUSR3AXBA86ZDDD'
+            +'Cy2kUEIGJZAw4kVNHOHeDz3YcEMGMKZgAgk0kjCCXxUlSWJWSiap0JNQRolQ'
+            +'QAA7')
+    return img

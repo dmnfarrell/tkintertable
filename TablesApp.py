@@ -511,7 +511,8 @@ class ToolBar(Frame):
         self.add_button('Delete record', self.parentapp.delete_Row, img)
         img = Logo_images.del_col()
         self.add_button('Delete col', self.parentapp.delete_Column, img)
-        self.add_button('Plot', self.parentapp.plot)
+        img = Logo_images.plot()
+        self.add_button('Plot', self.parentapp.plot, img)
     
         return
 
