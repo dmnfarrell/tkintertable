@@ -33,9 +33,9 @@ class TableCanvas(Canvas):
     
     def __init__(self, parent=None, model=None):        
         Canvas.__init__(self, parent, bg='#9999CC',
-                         width=600, height=500,
+                         width=300, height=300,
                          relief=GROOVE,
-                         scrollregion=(0,0,600,600)) 
+                         scrollregion=(0,0,600,300)) 
         self.parentframe = parent
         #get platform into a variable
         import platform
@@ -158,17 +158,17 @@ class TableCanvas(Canvas):
         if self.prefs == None:
             self.loadPrefs()
         #Add the table and header to the frame  
-        self.Yscrollbar=Scrollbar (self.parentframe,orient=VERTICAL,command=self.set_yviews)
+        self.Yscrollbar = AutoScrollbar(self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
-        self.Xscrollbar=Scrollbar (self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
+        self.Xscrollbar = AutoScrollbar(self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
         self.Xscrollbar.grid(row=2,column=1,columnspan=1,sticky='news')
-        self['xscrollcommand']=self.Xscrollbar.set
-        self['yscrollcommand']=self.Yscrollbar.set
+        self['xscrollcommand'] = self.Xscrollbar.set
+        self['yscrollcommand'] = self.Yscrollbar.set
         self.tablecolheader['xscrollcommand']=self.Xscrollbar.set
         self.tablerowheader['yscrollcommand']=self.Yscrollbar.set
         self.parentframe.rowconfigure(1,weight=1)
         self.parentframe.columnconfigure(1,weight=1)
-        #self.parentframe.pack(fill=BOTH, expand=YES)        
+            
         self.savePrefs()
         self.tablecolheader.grid(row=0,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
@@ -221,7 +221,6 @@ class TableCanvas(Canvas):
             if upper>=self.rows:
                 upper=self.rows
             self.rowrange=range(lower,upper)            
-            #print 'self.rowrange',self.rowrange
             self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rowsperpage+10))
         else:
             self.rowrange = range(0,self.rows)            
@@ -229,7 +228,7 @@ class TableCanvas(Canvas):
             
         self.draw_grid() 
         self.update_idletasks() 
-        #self.draw_rowheader()
+        
         self.tablecolheader.redraw()
         self.tablerowheader.redraw(paging=self.paging)
         align=None
@@ -2221,7 +2220,7 @@ class RowHeader(Canvas):
        This also handles row/record selection as opposed to cell
        selection"""
     def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray75', width=40, height=500 )        
+        Canvas.__init__(self, parent, bg='gray75', width=40, height=300 )        
         
         if table != None:
             self.table = table
@@ -2229,7 +2228,7 @@ class RowHeader(Canvas):
             self.x_start = 40
             self.inset = 1
             #self.config(width=self.width)
-            #self.config(height = 500)
+            self.config(height = 300)
             self.startrow = self.endrow = None
             self.model = self.table.getModel()                    
             self.bind('<Button-1>',self.handle_left_click)
@@ -2379,7 +2378,23 @@ class RowHeader(Canvas):
                                       tag=tag)
         self.lift('text')        
         return
+    
+class AutoScrollbar(Scrollbar):
+    # a scrollbar that hides itself if it's not needed.  only
+    # works if you use the grid geometry manager.
+    def set(self, lo, hi):
+        if float(lo) <= 0.0 and float(hi) >= 1.0:
+            # grid_remove is currently missing from Tkinter!
+            self.tk.call("grid", "remove", self)
+        else:
+            self.grid()
+        Scrollbar.set(self, lo, hi)
+    def pack(self, **kw):
+        raise TclError, "cannot use pack with this widget"
+    def place(self, **kw):
+        raise TclError, "cannot use place with this widget"
 
+    
 class SimpleTableDialog(tkSimpleDialog.Dialog):
     """Simple dialog to get data for new cols and rows"""
 

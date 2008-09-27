@@ -42,7 +42,7 @@ class TablesApp(Frame):
     """
     Tables app
     """ 
-    def __init__(self,parent=None,data=None):
+    def __init__(self,parent=None,data=None,datafile=None):
         "Initialize the application."
         self.parent=parent
         
@@ -64,7 +64,7 @@ class TablesApp(Frame):
         self.loadprefs()
 	self.tablesapp_win.title('Tables Application')
         self.tablesapp_win.geometry('+200+100')
-        self.x_size=1000
+        self.x_size=800
         self.y_size=500
         self.createMenuBar()
         self.apptoolBar = ToolBar(self.tablesapp_win, self)
@@ -75,6 +75,8 @@ class TablesApp(Frame):
         if data != None:
             self.data = data
             self.new_project(data)
+        elif datafile != None:
+            self.open_project(datafile)
         else:
             self.new_project()
 
@@ -227,13 +229,15 @@ class TablesApp(Frame):
         self.notebook.setnaturalsize()
         return
         
-    def open_project(self):
-        import tkFileDialog, os    
-        filename=tkFileDialog.askopenfilename(defaultextension='.table"',
-                                                  initialdir=os.getcwd(),
-                                                  filetypes=[("Pickle file","*.table"),
-                                                             ("All files","*.*")],
-                                                  parent=self.tablesapp_win)
+    def open_project(self, filename=None):
+        import os
+        if filename == None:
+            import tkFileDialog    
+            filename=tkFileDialog.askopenfilename(defaultextension='.table"',
+                                                      initialdir=os.getcwd(),
+                                                      filetypes=[("Pickle file","*.table"),
+                                                                 ("All files","*.*")],
+                                                      parent=self.tablesapp_win)
         if os.path.isfile(filename):
             fd=open(filename)
             import pickle
@@ -532,8 +536,17 @@ class ToolBar(Frame):
 # Main function, run when invoked as a stand-alone Python program.
 
 def main():
-    "Run the application."
-    app=TablesApp()
+    "Run the application"
+    import sys, os  
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-f", "--file", dest="tablefile", 
+                        help="Open a table file", metavar="FILE")    
+    opts, remainder = parser.parse_args()
+    if opts.tablefile != None:
+        app=TablesApp(datafile=opts.tablefile)
+    else:    
+        app=TablesApp()
     app.mainloop()
     return
 
