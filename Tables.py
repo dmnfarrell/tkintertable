@@ -1954,7 +1954,7 @@ class TableCanvas(Canvas):
     @classmethod
     def checkOSType(cls):
         """Check the OS we are in"""
-        import os
+        import os, string
         ostyp=''
         var_s=['OSTYPE','OS']
         for var in var_s:
