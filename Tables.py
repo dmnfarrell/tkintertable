@@ -38,6 +38,7 @@ class TableCanvas(Canvas):
                          scrollregion=(0,0,600,300)) 
         self.parentframe = parent
         #get platform into a variable
+        self.ostyp = self.checkOSType()
         import platform
         self.platform=platform.system()
         print self.platform
@@ -119,7 +120,13 @@ class TableCanvas(Canvas):
         self.bind("<Shift-Button-1>", self.handle_left_shift_click)
         
         self.bind("<ButtonRelease-1>", self.handle_left_release)
-        self.bind("<Button-3>", self.handle_right_click)
+        if self.ostyp=='mac':
+            #For mac we bind Shift, left-click to right click
+            self.bind("<Button-2>", self.handle_right_click)
+            self.bind('<Shift-Button-1>',self.handle_right_click)
+        else:
+            self.bind("<Button-3>", self.handle_right_click)
+            
         self.bind('<B1-Motion>', self.handle_mouse_drag)         
         self.bind('<Motion>', self.handle_motion) 
         
@@ -905,7 +912,7 @@ class TableCanvas(Canvas):
         col = self.get_col_clicked(event)
         absrow = self.get_AbsoluteRow(row)        
         model=self.getModel()
-        cellvalue = self.model.getCellRecord(absrow, col)
+        cellvalue = model.getCellRecord(absrow, col)
         if Formula.isFormula(cellvalue):
             self.formula_Dialog(row, col, cellvalue)
             #self.enterFormula(rowclicked, colclicked)
@@ -1071,49 +1078,49 @@ class TableCanvas(Canvas):
         def popupFocusOut(event):
             popupmenu.unpost()
 
-        def add_commands(fieldtype): 
-            """Add commands to popup menu for col type"""
-            #add column actions for this table type defined in self.columnactions
-            functions = self.columnactions[fieldtype]
-            for f in functions.keys():
-                func = getattr(self, functions[f])                
-                popupmenu.add_command(label=f, command= lambda : func(row,col))
-            return            
-
-        def add_defaultcommands():           
-            """now add general actions for all cells""" 
-            order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
-                     "View Record", "Select All",
-                     "Plot Selected","Plot Options","Show Prefs"]
-            defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
-                            "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
-                            "Fill Down" : lambda : self.fill_down(rows, cols),
-                            "Fill Right" : lambda : self.fill_across(cols, rows),
-                            "View Record" : lambda : self.getRecordInfo(row),                             
-                            "Clear Data" : lambda : self.delete_Cells(rows, cols),
-                            "Select All" : self.select_All,
-                            "Plot Selected" : self.plot_Selected,
-                            "Plot Options" : self.plotSetup,
-                            "Show Prefs" : self.showtablePrefs}
-            
-            for action in order:                
-                if action == 'Fill Down' and (rows == None or len(rows) <= 1):                    
-                    continue
-                if action == 'Fill Right' and (cols == None or len(cols) <= 1):
-                    continue
-                else:
-                    popupmenu.add_command(label=action, command=defaultactions[action])                
-            return
-                                     
-        #if outside table, just show general items    
         if outside == 1:            
-            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
-            popupmenu.add_command(label="Export Table", command= self.exportTable)
+            pass
         else:
+            def add_commands(fieldtype): 
+                """Add commands to popup menu for col type"""
+                #add column actions for this table type defined in self.columnactions
+                functions = self.columnactions[fieldtype]
+                for f in functions.keys():
+                    func = getattr(self, functions[f])                
+                    popupmenu.add_command(label=f, command= lambda : func(row,col))
+                return            
+
+            def add_defaultcommands():           
+                """now add general actions for all cells""" 
+                order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
+                         "View Record", "Select All",
+                         "Plot Selected","Plot Options"]
+                defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
+                                "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
+                                "Fill Down" : lambda : self.fill_down(rows, cols),
+                                "Fill Right" : lambda : self.fill_across(cols, rows),
+                                "View Record" : lambda : self.getRecordInfo(row),                             
+                                "Clear Data" : lambda : self.delete_Cells(rows, cols),
+                                "Select All" : self.select_All,
+                                "Plot Selected" : self.plot_Selected,
+                                "Plot Options" : self.plotSetup }
+                
+                for action in order:                
+                    if action == 'Fill Down' and (rows == None or len(rows) <= 1):                    
+                        continue
+                    if action == 'Fill Right' and (cols == None or len(cols) <= 1):
+                        continue
+                    else:
+                        popupmenu.add_command(label=action, command=defaultactions[action])                
+                return
+
             if self.columnactions.has_key(coltype):  
                 add_commands(coltype) 
             add_defaultcommands()
             
+        #if outside table, just show general items        
+        popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
+        popupmenu.add_command(label="Export Table", command= self.exportTable)            
         popupmenu.bind("<FocusOut>", popupFocusOut)  
         popupmenu.focus_set()
         popupmenu.post(event.x_root, event.y_root)  
@@ -1656,8 +1663,7 @@ class TableCanvas(Canvas):
         rect = self.create_rectangle(x1+1,y1+1,x2+1,y2+1,tag='tooltip',fill='black')
         rect2 = self.create_rectangle(x1,y1,x2,y2,tag='tooltip',fill='lightyellow')        
         self.lift(obj)            
-        return
-        
+        return        
         
     def setcellbackgr(self):
         clr = self.getaColor(self.cellbackgr)        
@@ -1943,9 +1949,37 @@ class TableCanvas(Canvas):
         from Tables_IO import TableExporter
         exporter = TableExporter()
         exporter.ExportTableData(self)
-        return
-        
-        
+        return        
+
+    @classmethod
+    def checkOSType(cls):
+        """Check the OS we are in"""
+        import os
+        ostyp=''
+        var_s=['OSTYPE','OS']
+        for var in var_s:
+            if os.environ.has_key(var):
+                ostyp=string.lower(os.environ[var])
+
+        ostyp=ostyp.lower()
+        if ostyp.find('windows')!=-1:
+            ostyp='windows'
+        elif ostyp.find('darwin')!=-1 or ostyp.find('apple')!=-1:
+            ostyp='mac'
+        elif ostyp.find('linux')!=-1:
+            ostyp='linux'
+        else:
+            ostyp='unknown'
+            try:
+                info=os.uname()
+            except:
+                pass
+            ostyp=info[0].lower()
+            if ostyp.find('darwin')!=-1:
+                ostyp='mac'
+        return ostyp
+
+    
 class ColumnHeader(Canvas):
     """Class that takes it's size and rendering from a parent table
         and column names from the table model."""
@@ -1990,8 +2024,8 @@ class ColumnHeader(Canvas):
                 w=self.table.cellwidth
             x=self.table.col_positions[col]
            
-            if len(collabel)>w/10:
-                collabel=collabel[0:w/12]+'.'
+            if len(collabel)>w/10:                
+                collabel=collabel[0:int(w)/12]+'.'
             line = self.create_line(x, 0, x, h, tag=('gridline', 'vertline'),
                                  fill='white', width=2)
             
