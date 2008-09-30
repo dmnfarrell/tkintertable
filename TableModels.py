@@ -186,7 +186,8 @@ class TableModel(object):
         return name
 
     def setRecName(self, newname, rowIndex):
-        """Set the record name to another value"""
+        """Set the record name to another value - requires re-setting in all 
+           dicts that this rec is referenced"""
         if len(self.reclist)==0:
             return None
         currname = self.getRecName(rowIndex)
@@ -194,9 +195,16 @@ class TableModel(object):
         import copy
         temp = copy.deepcopy(self.data[currname])
         self.data[newname] = temp
+        self.data[newname]['Name'] = newname
         del self.data[currname]
+        for key in ['bg', 'fg']:
+            if self.colors[key].has_key(currname):                
+                temp = copy.deepcopy(self.colors[key][currname])
+                self.colors[key][newname] = temp
+                del self.colors[key][currname]
         print 'renamed'
         #would also need to resolve all refs to this rec in formulas here!!
+        
         return 
         
     def getRecordAttributeAtColumn(self, rowIndex, columnIndex):
@@ -323,7 +331,10 @@ class TableModel(object):
    
         return
         
-    def deleteRows(self, rowlist): 
+    def deleteRows(self, rowlist=None):
+        """Delete multiple or all rows"""
+        if rowlist == None:
+            rowlist = range(len(self.reclist))
         print 'deleting' , rowlist
         print 'reclist', self.reclist
         for row in rowlist:
@@ -332,7 +343,7 @@ class TableModel(object):
         self.reclist = self.data.keys()  
         #self.reclist.sort()
         return
-
+    
     def addColumn(self, colname=None, coltype=None):
         """Add a column"""
         index = self.getColumnCount()+ 1        
@@ -367,6 +378,14 @@ class TableModel(object):
         print 'column deleted'
         print 'new cols:', self.columnNames
         return
+
+    def deleteMultipleColumns(self, cols=None):
+        """Remove all cols or list provided"""
+
+        while self.getColumnCount() > 0:
+            self.deleteColumn(0)
+        return
+    
     
     def auto_AddRows(self, numrows=None):
         """Automatically add x number of records"""
@@ -412,8 +431,7 @@ class TableModel(object):
         for x in range(start, end):           
             self.addColumn(str(x))
         return
-
-
+    
     def relabel_Column(self, columnIndex, newname):
         """Change the column label - can be used in a table header"""
         colname = self.getColumnName(columnIndex)

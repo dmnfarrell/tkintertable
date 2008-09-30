@@ -27,6 +27,9 @@ import re
 class Formula(object):
     """A class to handle formulas functionality in the table"""
     
+    #replace symbols in recnames with strings for proper parsing
+    #replace = {'+':'plus', '-':'minus', '*':'mult',  
+    
     def __init__(self):
         
         return
@@ -53,16 +56,19 @@ class Formula(object):
     def readExpression(cls, expr):
         """Get the operands and operators into lists from a string expression"""
         ops = []        
-        vals = []        
+        vals = []
         p = re.compile('[()*/+-]')
-        x = p.split(expr)        
-        ops = p.findall(expr)        
+        x = p.split(expr)         
+        ops = p.findall(expr) 
+        print expr, ops
         for i in x:
             if i == '':
                 vals.append(i)
             else:    
                 vals.append(eval(i))
-               
+        
+        
+        print ops, vals
         return vals, ops
         
     @classmethod

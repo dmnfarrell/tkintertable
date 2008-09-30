@@ -31,11 +31,11 @@ from types import *
 class TableCanvas(Canvas):    
     """A tkinter class for providing table functionality"""
     
-    def __init__(self, parent=None, model=None):        
+    def __init__(self, parent=None, model=None, width=500, height=200):        
         Canvas.__init__(self, parent, bg='#9999CC',
-                         width=300, height=300,
+                         width=width, height=height,
                          relief=GROOVE,
-                         scrollregion=(0,0,600,300)) 
+                         scrollregion=(0,0,600,200)) 
         self.parentframe = parent
         #get platform into a variable
         self.ostyp = self.checkOSType()
@@ -1646,7 +1646,7 @@ class TableCanvas(Canvas):
         import types
         if type(text) is types.FloatType or type is types.IntType:
             text=str(text)
-        if text == NoneType or text == '' or len(text)<=3:
+        if text == NoneType or text == '' or len(str(text))<=3:
             return
         import tkFont
         sfont = tkFont.Font (family='Arial', size=12,weight='bold')
@@ -2254,7 +2254,7 @@ class RowHeader(Canvas):
        This also handles row/record selection as opposed to cell
        selection"""
     def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray75', width=40, height=300 )        
+        Canvas.__init__(self, parent, bg='gray75', width=40, height=200 )        
         
         if table != None:
             self.table = table
