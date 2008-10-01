@@ -1996,12 +1996,16 @@ class ColumnHeader(Canvas):
             self.columnlabels = self.model.columnlabels
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
-            self.bind('<Button-3>',self.handle_right_click)
             self.bind('<B1-Motion>', self.handle_mouse_drag)   
             self.bind('<Motion>', self.handle_mouse_move)
             self.bind('<Shift-Button-1>', self.handle_left_shift_click)
-
-            
+            if self.table.ostyp=='mac':
+                #For mac we bind Shift, left-click to right click
+                self.bind("<Button-2>", self.handle_right_click)
+                self.bind('<Shift-Button-1>',self.handle_right_click)
+            else:
+                self.bind("<Button-3>", self.handle_right_click)
+                
         return
         
     def redraw(self):        
