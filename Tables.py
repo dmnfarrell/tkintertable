@@ -1210,13 +1210,11 @@ class TableCanvas(Canvas):
         if not hasattr(self, 'pyplot'):
             print 'creating plotter'
             self.pyplot = plt()
-
         plotdata = self.getSelectionValues()  
         if plotdata == None:
             return
         
-        self.pyplot.plotCurrent(plotdata)
- 
+        self.pyplot.plotCurrent(plotdata) 
         return
 
     def plotSetup(self):
