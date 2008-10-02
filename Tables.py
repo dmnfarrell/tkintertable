@@ -22,7 +22,7 @@
 from Tkinter import *
 from TableModels import TableModel
 from TableFormula import Formula
-from TablePlot import pylabPlotter as plt
+from PylabPlot import pylabPlotter as plt
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import math
@@ -99,7 +99,7 @@ class TableCanvas(Canvas):
         #print self.columnactions
         #print 'Initialised tablecanvas'
         self.prefs = None
-        self.setupPlotVars()
+        #self.setupPlotVars()
         return
     
     def mouse_wheel(self, event):
@@ -1206,124 +1206,29 @@ class TableCanvas(Canvas):
         return lists
     
     def plot_Selected(self):
-        """Plot the selected data - if possible"""
-        plt.clear()
-        plt.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
-                       xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
-                       showlegend = self.pltlegend.get(),
-                       legendloc = self.legendloc.get())
-        plotlists = self.getSelectionValues()
+        """Plot the selected data using pylab - if possible"""
+        if not hasattr(self, 'pyplot'):
+            print 'creating plotter'
+            self.pyplot = plt()
+
+        plotdata = self.getSelectionValues()  
+        if plotdata == None:
+            return
         
-        print 'pltlists', plotlists
-        #xlbl = 
-        #ylbl = 
-        x = plotlists[0]
-        plotlists.remove(x)
-        for y in plotlists:
-            print 'y:',y
-            plt.plotXY(x, y, title=self.plottitle.get(),
-                       xlabel=self.plotxlabel.get(),ylabel=self.plotylabel.get())
-        plt.show()
+        self.pyplot.plotCurrent(plotdata)
+ 
         return
 
-    def setupPlotVars(self):
-        """ """
-        self.pltgrid = IntVar()
-        self.pltlegend = IntVar()
-        self.pltsymbol = StringVar()
-        self.pltsymbol.set('p')
-        self.legendloc = StringVar()
-        self.legendloc.set('best')
-        self.xscalevar = IntVar()
-        self.yscalevar = IntVar()
-        self.xscalevar.set(0)
-        self.yscalevar.set(0)
-        self.plottitle = StringVar()
-        self.plottitle.set('')
-        self.plotxlabel = StringVar()
-        self.plotxlabel.set('')
-        self.plotylabel = StringVar()
-        self.plotylabel.set('')
-        
-        return
-        
     def plotSetup(self):
-        """Plot options dialog""" 
-        self.plotprefswin=Toplevel()
-        self.plotprefswin.geometry('+300+450')
-        self.plotprefswin.title('Plot Preferences')
-        row=0
-        frame1=LabelFrame(self.plotprefswin, text='General')
-        frame1.grid(row=row,column=0,sticky='news',padx=2,pady=2) 
-        def close_prefsdialog():
-            self.plotprefswin.destroy()    
-            
-        Checkbutton(frame1, text="Grid lines", variable=self.pltgrid,
-                    onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky='news')
-        Checkbutton(frame1, text="Legend", variable=self.pltlegend,
-                    onvalue=1, offvalue=0).grid(row=1,column=0, columnspan=2, sticky='news')
-      
-        Label(frame1,text='Symbol:').grid(row=2,column=0,padx=2,pady=2)
-        symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
-					                relief=GROOVE, width=16, bg='lightblue')          
-        symbol_menu = Menu(symbolbutton, tearoff=0)
-        symbolbutton['menu'] = symbol_menu        
-        for text in plt.shapes:
-            symbol_menu.add_radiobutton(label=text,
-                                            variable=self.pltsymbol,
-                                            value=text,
-                                            indicatoron=1)  
-        symbolbutton.grid(row=2,column=1, sticky='news',padx=2,pady=2)
-        row=row+1
-        
-
-        Label(frame1,text='Legend pos:').grid(row=3,column=0,padx=2,pady=2)
-        legendposbutton = Menubutton(frame1,textvariable=self.legendloc,
-					                relief=GROOVE, width=16, bg='lightblue')          
-        legendpos_menu = Menu(legendposbutton, tearoff=0)
-        legendposbutton['menu'] = legendpos_menu 
-        i=0
-        for p in plt.legend_positions:
-            print p
-            legendpos_menu.add_radiobutton(label=p,
-                                        variable=self.legendloc,
-                                        value=p,
-                                        indicatoron=1)  
-            i+=1
-        legendposbutton.grid(row=3,column=1, sticky='news',padx=2,pady=2)
-          
-        row=0
-        scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
-        scales={0:'norm',1:'log'}
-        for i in range(0,2):
-            Radiobutton(scalesframe,text='x-'+scales[i],variable=self.xscalevar,
-                            value=i).grid(row=0,column=i,pady=2)
-            Radiobutton(scalesframe,text='y-'+scales[i],variable=self.yscalevar,
-                            value=i).grid(row=1,column=i,pady=2)
-        
-        scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)      
-        row=row+1
-
-        labelsframe = LabelFrame(self.plotprefswin,text='Labels')
-        labelsframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
-        Label(labelsframe,text='Title:').grid(row=0,column=0,padx=2,pady=2)
-        Entry(labelsframe,textvariable=self.plottitle,relief=GROOVE).grid(row=0,column=1,padx=2,pady=2)
-        Label(labelsframe,text='X-axis label:').grid(row=1,column=0,padx=2,pady=2)
-        Entry(labelsframe,textvariable=self.plotxlabel,relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
-        Label(labelsframe,text='Y-axis label:').grid(row=2,column=0,padx=2,pady=2)
-        Entry(labelsframe,textvariable=self.plotylabel,relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
-    
-        row=row+1
-        
-        frame=Frame(self.plotprefswin)
-        frame.grid(row=row,column=0,sticky='news',padx=2,pady=2)   
-        b = Button(frame, text="Plot", command=self.plot_Selected, relief=GROOVE, bg='#99ccff')
-        b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
-        c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
-        c.grid(row=row,column=0,sticky='news',padx=4,pady=4) 
-        self.plotprefswin.focus_set()
-        self.plotprefswin.grab_set()
-        #self.plotprefswin.wait_window()
+        """Call pylab plot dialog setup, send data if we haven't already"""
+        if not hasattr(self, 'pyplot'):
+            self.pyplot = plt()
+        if not self.pyplot.hasData(): 
+            print 'has data'
+            plotdata = self.getSelectionValues()
+            self.pyplot.plotSetup(plotdata)
+        else:    
+            self.pyplot.plotSetup()
         
         return
         
