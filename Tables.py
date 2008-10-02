@@ -1207,23 +1207,33 @@ class TableCanvas(Canvas):
     
     def plot_Selected(self):
         """Plot the selected data using pylab - if possible"""
-        if not hasattr(self, 'pyplot'):
-            print 'creating plotter'
+        if not hasattr(self, 'pyplot'):            
             self.pyplot = plt()
         plotdata = self.getSelectionValues()  
         if plotdata == None:
             return
-        
+        pltlabels = []
+        for col in self.multiplecollist:
+            pltlabels.append(self.model.getColumnLabel(col))
+        self.pyplot.setDataSeries(pltlabels)    
         self.pyplot.plotCurrent(plotdata) 
         return
 
     def plotSetup(self):
-        """Call pylab plot dialog setup, send data if we haven't already"""
+        """Call pylab plot dialog setup, send data if we haven't already
+            plotted"""
         if not hasattr(self, 'pyplot'):
             self.pyplot = plt()
-        if not self.pyplot.hasData(): 
+        plotdata = self.getSelectionValues()
+            
+        if not self.pyplot.hasData() and plotdata != None: 
             print 'has data'
             plotdata = self.getSelectionValues()
+            pltlabels = []
+            for col in self.multiplecollist:
+                pltlabels.append(self.model.getColumnLabel(col))
+               
+            self.pyplot.setDataSeries(pltlabels)
             self.pyplot.plotSetup(plotdata)
         else:    
             self.pyplot.plotSetup()

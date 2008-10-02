@@ -62,7 +62,7 @@ class pylabPlotter(object):
         return
 
     def plotXY(self, x, y, title='', xlabel=None, ylabel=None, shape=None,
-                           legendnames=None, clr=None):
+                            clr=None):
         """Do x-y plot of 2 lists"""
         if shape == None:
             shape = self.shape
@@ -77,14 +77,7 @@ class pylabPlotter(object):
             plotfig = pylab.semilogy(x, y, shape, color=clr) 
         else:                    
             plotfig = pylab.plot(x, y, shape, color=clr)      
-
-        #create legend data
-        legendlines = []
-        legendlines.append(plotfig)
-        
-        if self.showlegend == 1:
-            pylab.legend(legendlines,legendnames,shadow=True,
-                         numpoints=1,loc=self.legendloc)        
+       
         if self.grid == 1:
             print 'self.grid',self.grid
             pylab.grid(True)
@@ -124,10 +117,11 @@ class pylabPlotter(object):
 
     def setDataSeries(self, names=None):
         """Set the series names, for use in legend"""
-        self.dataseriesvars=[]
-        for i in range(len(names)):
-           self.dataseriesvars=StringVar()
-           self.dataseriesvars[i].set(names[i])
+        self.dataseriesvars=[]        
+        for i in range(1,len(names)):
+           s=StringVar()
+           s.set(names[i])
+           self.dataseriesvars.append(s)
         return
     
     def plotCurrent(self, data=None, format=None):
@@ -149,7 +143,10 @@ class pylabPlotter(object):
         title = self.plottitle.get()
         xlabel = self.plotxlabel.get()       
         ylabel = self.plotylabel.get()  
-        
+        seriesnames = []
+        legendlines = []
+        for d in self.dataseriesvars:
+            seriesnames.append(d.get())
         if format == None:
             #do an X-Y plot, with the first list as X xals 
             if self.graphtype == 'XY':
@@ -159,9 +156,11 @@ class pylabPlotter(object):
                 pdata.remove(x)
                 i=0
                 for y in pdata:
-                    c=self.colors[i]
-                    self.plotXY(x, y, clr=c)
+                    c = self.colors[i]
+                    fig = self.plotXY(x, y, clr=c)
+                    legendlines.append(fig)
                     i+=1
+            
             elif self.graphtype == 'hist':
                 self.doHistogram(data, title=title, xlabel=xlabel, ylabel=ylabel)
         elif format == 'ekindata':
@@ -177,6 +176,13 @@ class pylabPlotter(object):
         pylab.title(title)
         pylab.xlabel(xlabel)
         pylab.ylabel(ylabel)        
+
+        #create legend data
+        
+        
+        if self.showlegend == 1:
+            pylab.legend(legendlines,seriesnames,shadow=True,
+                         numpoints=1,loc=self.legendloc)
             
         self.show()         
         return        
@@ -342,19 +348,20 @@ class pylabPlotter(object):
         
         seriesframe = LabelFrame(self.plotprefswin, text="Data Series Labels")  
         seriesframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
-        self.dataseriesvars=[]
-        for i in range(len(self.currdata)):
-            s = StringVar()
-            self.dataseriesvars.append(s)
-            Label(seriesframe,text='Series '+str(i)).grid(row=i,column=0,padx=2,pady=2)
-            Entry(seriesframe,textvariable=self.dataseriesvars[i],bg='white',
-                                      relief=GROOVE).grid(row=i,column=1,padx=2,pady=2)
-            
+        #self.dataseriesvars=[]
+        if len(self.dataseriesvars) == 0:
+            self.setDataSeries(range(len(self.currdata)))
+        c=1                       
+        for s in self.dataseriesvars:                               
+            Label(seriesframe,text='Series '+str(c)).grid(row=c,column=0,padx=2,pady=2)
+            Entry(seriesframe,textvariable=s,bg='white',
+                                      relief=GROOVE).grid(row=c,column=1,padx=2,pady=2)
+            c+=1
 
         row=row+1
         cbuttons = {}
         frame = LabelFrame(self.plotprefswin, text="Dataset Colors")        
-        for d in range(len(self.currdata)): 
+        for d in range(len(self.dataseriesvars)): 
             c = self.datacolors[d]  
             action = lambda x =(d,c): self.choosecolor(x)
             cbuttons[d]=Button(frame,text=d,bg=c,command=action)
@@ -365,11 +372,11 @@ class pylabPlotter(object):
         frame=Frame(self.plotprefswin)
         frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)   
         b = Button(frame, text="Replot", command=self.plotCurrent, relief=GROOVE, bg='#99ccff')
-        b.pack(side=LEFT,fill=BOTH,padx=2,pady=2)
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
         b = Button(frame, text="Apply", command=self.applyOptions, relief=GROOVE, bg='#99ccff')
-        b.pack(side=LEFT,fill=BOTH,padx=2,pady=2)  
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)  
         c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
-        c.pack(side=LEFT,fill=BOTH,padx=2,pady=2)
+        c.pack(side=LEFT,fill=X,padx=2,pady=2)
         
         self.plotprefswin.focus_set()
         self.plotprefswin.grab_set()        
