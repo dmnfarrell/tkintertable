@@ -448,6 +448,10 @@ class TablesApp(Frame):
         self.currenttable.plot_Selected()
         return
     
+    def plotSetup(self, event=None):
+        self.currenttable.plotSetup()
+        return
+        
     def normal_view(self,event=None):
         self.currenttable.paging_Off()
         return
@@ -463,8 +467,8 @@ class TablesApp(Frame):
         self.ab_win.geometry('+100+350')
         self.ab_win.title('About TablesApp')
 
-        import Logo_images
-        logo = Logo_images.tableapp_logo()
+        import Table_images
+        logo = Table_images.tableapp_logo()
         label = Label(self.ab_win,image=logo)  
         label.image = logo
         label.grid(row=0,column=0,sticky='news',padx=4,pady=4)
@@ -497,27 +501,29 @@ class ToolBar(Frame):
     """Uses the parent instance to provide the functions"""
     def __init__(self, parent=None, parentapp=None):
         Frame.__init__(self, parent, width=600, height=40)
-        import Logo_images
+        import Table_images
         self.parentframe = parent
         self.parentapp = parentapp        
         #add buttons
-        img = Logo_images.new_proj()
+        img = Table_images.new_proj()
         self.add_button('New Project', self.parentapp.new_project, img)
-        img = Logo_images.open_proj()
+        img = Table_images.open_proj()
         self.add_button('Open Project', self.parentapp.open_project, img)
-        img = Logo_images.save_proj()
+        img = Table_images.save_proj()
         self.add_button('Save Project', self.parentapp.save_project, img)        
-        img = Logo_images.add_row()
+        img = Table_images.add_row()
         self.add_button('Add record', self.parentapp.add_Row, img)
-        img = Logo_images.add_col()
+        img = Table_images.add_col()
         self.add_button('Add col', self.parentapp.add_Column, img)
-        img = Logo_images.del_row()
+        img = Table_images.del_row()
         self.add_button('Delete record', self.parentapp.delete_Row, img)
-        img = Logo_images.del_col()
+        img = Table_images.del_col()
         self.add_button('Delete col', self.parentapp.delete_Column, img)
-        img = Logo_images.plot()
+        img = Table_images.plot()
         self.add_button('Plot', self.parentapp.plot, img)
-    
+        img = Table_images.plotprefs()
+        self.add_button('Plot Prefs', self.parentapp.plotSetup, img)
+        
         return
 
     def add_button(self, name, callback, img=None):             
