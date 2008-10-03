@@ -595,3 +595,4 @@ class TableModel(object):
         #print 'new:', newformula
         return newformula
     
+

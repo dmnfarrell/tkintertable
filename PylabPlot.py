@@ -36,7 +36,7 @@ except:
 class pylabPlotter(object):
     """An interface to matplotlib for general plotting and stats, using tk backend"""
     
-    colors = ['#0000A0','#FF0000','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
+    colors = ['#0049B4','#C90B11','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
     linestyles = ['p','-','--']
     shapes = ['p','-','--',':','.' ,'o','^','<','s','+','x','D','1','4','h'] 
     legend_positions = ['best', 'upper left','upper center','upper right',
@@ -57,8 +57,10 @@ class pylabPlotter(object):
         self.legendnames = []
         self.graphtype = 'XY'
         self.datacolors = self.colors
-        #self.seriesnames = []
-        self.setupPlotVars()        
+       
+        self.setupPlotVars()  
+        self.currdata = None
+        self.format = None  #data format
         return
 
     def plotXY(self, x, y, title='', xlabel=None, ylabel=None, shape=None,
@@ -68,6 +70,7 @@ class pylabPlotter(object):
             shape = self.shape
         if clr == None:
             clr = 'b'
+               
         if self.xscale == 1:
             if self.yscale == 1:
                 plotfig = pylab.loglog(x, y, shape, color=clr)
@@ -76,10 +79,9 @@ class pylabPlotter(object):
         elif self.yscale == 1:
             plotfig = pylab.semilogy(x, y, shape, color=clr) 
         else:                    
-            plotfig = pylab.plot(x, y, shape, color=clr)      
+            plotfig = pylab.plot(x, y, shape, color=clr)  
        
-        if self.grid == 1:
-            print 'self.grid',self.grid
+        if self.grid == 1:            
             pylab.grid(True)
         
         return plotfig
@@ -110,25 +112,32 @@ class pylabPlotter(object):
     
     def hasData(self):
         """Is there some plot data?""" 
-        if hasattr(self, 'currdata') and len(self.currdata) > 0:
+        if self.currdata != None and len(self.currdata) > 0:
             return True
         else:    
             return False
 
-    def setDataSeries(self, names=None):
+    def setDataSeries(self, names=None, start=1):
         """Set the series names, for use in legend"""
         self.dataseriesvars=[]        
-        for i in range(1,len(names)):
+        for i in range(start,len(names)):
            s=StringVar()
            s.set(names[i])
            self.dataseriesvars.append(s)
         return
-    
+   
+    def setFormat(self, format):        
+        """Set current data format of currdata"""
+        self.format = format 
+        return
+        
     def plotCurrent(self, data=None, format=None):
         """Re-do the plot with the current options and data"""        
         self.applyOptions()
         self.clear()  
-        
+        if format != None:
+            self.setFormat(format)
+          
         if data == None:
             try:
                 data = self.currdata
@@ -136,9 +145,7 @@ class pylabPlotter(object):
                 print 'no data to plot'
                 return
         else:
-            self.setData(data)
-        
-        print 'self.currdata', self.currdata
+            self.setData(data)      
         
         title = self.plottitle.get()
         xlabel = self.plotxlabel.get()       
@@ -147,7 +154,7 @@ class pylabPlotter(object):
         legendlines = []
         for d in self.dataseriesvars:
             seriesnames.append(d.get())
-        if format == None:
+        if self.format == None:
             #do an X-Y plot, with the first list as X xals 
             if self.graphtype == 'XY':
                 import copy
@@ -163,29 +170,28 @@ class pylabPlotter(object):
             
             elif self.graphtype == 'hist':
                 self.doHistogram(data, title=title, xlabel=xlabel, ylabel=ylabel)
-        elif format == 'ekindata':
-            #we have to treat the ekin data properly..
-            
+        elif self.format == 'ekindata':
+            #we have to treat the ekin data properly.. 
+            print 'using ekin data'
             xdata, ydata, fitxdata, fitydata = data
+            i=0
             for d in xdata:                     
-                #datalines.append(plt.plot(self.xdata[d],self.ydata[d],shapes[i],color=clr))  
-                self.plotXY(xdata[d], ydata[d])
-                if fitxdata.has_key(d): 
-                    self.plotXY(fitxdata[d],fitydata[d],shape='-')
-                    
+                c = self.colors[i]
+                fig=self.plotXY(xdata[d], ydata[d], clr=c)
+                legendlines.append(fig)
+                if fitxdata.has_key(d):                     
+                    self.plotXY(fitxdata[d],fitydata[d],shape='-',clr=c)                
+                i+=1    
         pylab.title(title)
         pylab.xlabel(xlabel)
-        pylab.ylabel(ylabel)        
-
-        #create legend data
-        
-        
+        pylab.ylabel(ylabel) 
+        #create legend data         
         if self.showlegend == 1:
             pylab.legend(legendlines,seriesnames,shadow=True,
                          numpoints=1,loc=self.legendloc)
             
         self.show()         
-        return        
+        return  
     
     def clear(self):
         """clear plot"""
@@ -258,7 +264,8 @@ class pylabPlotter(object):
             
 
     def plotSetup(self, data=None):
-        """Plot options dialog""" 
+        """Plot options dialog"""
+        
         if data != None:
             self.setData(data)
         self.plotprefswin=Toplevel()
@@ -276,7 +283,7 @@ class pylabPlotter(object):
             c=x[1] 
             print 'passed', 'd',d, 'c',c
             import tkColorChooser 
-            colour,colour_string = tkColorChooser.askcolor(c,parent=self.pylabopts_win)  
+            colour,colour_string = tkColorChooser.askcolor(c,parent=self.plotprefswin)  
             if colour != None:
                 self.datacolors[d] = str(colour_string) 
                 cbuttons[d].configure(bg=colour_string)
@@ -308,8 +315,7 @@ class pylabPlotter(object):
         legendpos_menu = Menu(legendposbutton, tearoff=0)
         legendposbutton['menu'] = legendpos_menu 
         i=0
-        for p in self.legend_positions:
-            print p
+        for p in self.legend_positions:            
             legendpos_menu.add_radiobutton(label=p,
                                         variable=self.legendlocvar,
                                         value=p,
@@ -344,40 +350,45 @@ class pylabPlotter(object):
         Label(labelsframe,text='Y-axis label:').grid(row=2,column=0,padx=2,pady=2)
         Entry(labelsframe,textvariable=self.plotylabel,bg='white',relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
 
-        row=row+1
-        
-        seriesframe = LabelFrame(self.plotprefswin, text="Data Series Labels")  
-        seriesframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
-        #self.dataseriesvars=[]
-        if len(self.dataseriesvars) == 0:
-            self.setDataSeries(range(len(self.currdata)))
-        c=1                       
-        for s in self.dataseriesvars:                               
-            Label(seriesframe,text='Series '+str(c)).grid(row=c,column=0,padx=2,pady=2)
-            Entry(seriesframe,textvariable=s,bg='white',
-                                      relief=GROOVE).grid(row=c,column=1,padx=2,pady=2)
-            c+=1
+        if self.currdata != None:
+            print self.dataseriesvars
+            row=row+1        
+            seriesframe = LabelFrame(self.plotprefswin, text="Data Series Labels")  
+            seriesframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
+            #self.dataseriesvars=[]
+            if len(self.dataseriesvars) == 0:
+                self.setDataSeries(range(len(self.currdata)))
+            r=1                       
+            for s in self.dataseriesvars:                               
+                Label(seriesframe,text='Series '+str(r)).grid(row=r,column=0,padx=2,pady=2)
+                Entry(seriesframe,textvariable=s,bg='white',
+                                          relief=GROOVE).grid(row=r,column=1,padx=2,pady=2)
+                r+=1
 
-        row=row+1
-        cbuttons = {}
-        frame = LabelFrame(self.plotprefswin, text="Dataset Colors")        
-        for d in range(len(self.dataseriesvars)): 
-            c = self.datacolors[d]  
-            action = lambda x =(d,c): self.choosecolor(x)
-            cbuttons[d]=Button(frame,text=d,bg=c,command=action)
-            cbuttons[d].pack(fill=X,padx=2,pady=2)                 
-        frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
+            row=row+1
+            cbuttons = {}
+            frame = LabelFrame(self.plotprefswin, text="Dataset Colors")
+            r=1 
+            for d in range(len(self.dataseriesvars)): 
+                c = self.datacolors[d]  
+                action = lambda x =(d,c): choosecolor(x)
+                cbuttons[d]=Button(frame,text='Series '+str(r),bg=c,command=action)
+                cbuttons[d].pack(fill=X,padx=2,pady=2) 
+                r+=1                
+            frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
         
         row=row+1
         frame=Frame(self.plotprefswin)
-        frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)   
-        b = Button(frame, text="Replot", command=self.plotCurrent, relief=GROOVE, bg='#99ccff')
-        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2) 
+        replotb = Button(frame, text="Replot", command=self.plotCurrent, relief=GROOVE, bg='#99ccff')
+        replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
         b = Button(frame, text="Apply", command=self.applyOptions, relief=GROOVE, bg='#99ccff')
         b.pack(side=LEFT,fill=X,padx=2,pady=2)  
         c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
         c.pack(side=LEFT,fill=X,padx=2,pady=2)
-        
+        if self.currdata == None:
+            replotb.configure(state=DISABLED)
+            
         self.plotprefswin.focus_set()
         self.plotprefswin.grab_set()        
         

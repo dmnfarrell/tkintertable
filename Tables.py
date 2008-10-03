@@ -74,6 +74,7 @@ class TableCanvas(Canvas):
         self.startcol = self.endcol = None
         self.allrows = False   #for selected all rows without setting multiplerowlist
         self.multiplerowlist=[]
+        self.multiplecollist=[]
         self.col_positions=[]       #record current column grid positions        
         self.mode = 'normal'
         
@@ -1033,6 +1034,21 @@ class TableCanvas(Canvas):
                                 tag='formulabox')  
         self.formulaText.focus_set()
         return
+   
+    def convertFormulaetoValues(self):
+        """Convert the formulas in the cells to their result values"""        
+        if len(self.multiplerowlist) == 0 or len(self.multiplecollist) == 0:
+            return None
+        rows = self.multiplerowlist
+        cols = self.multiplecollist
+        
+        for r in rows:
+            absr==self.get_AbsoluteRow(r)
+            for c in cols:
+                res = self.model.getValueAt(absr,c)
+                self.model.setValueAr(absr,c,res)
+        return
+        
         
     # --- Some cell specific actions here ---
     
@@ -1178,6 +1194,8 @@ class TableCanvas(Canvas):
 
     def getSelectionValues(self):
         """Get values for current multiple cell selection"""
+        if len(self.multiplerowlist) == 0 or len(self.multiplecollist) == 0:
+            return None
         rows = self.multiplerowlist
         cols = self.multiplecollist
         model = self.model        
@@ -1212,9 +1230,7 @@ class TableCanvas(Canvas):
         plotdata = self.getSelectionValues()  
         if plotdata == None:
             return
-        pltlabels = []
-        for col in self.multiplecollist:
-            pltlabels.append(self.model.getColumnLabel(col))
+        pltlabels = self.getplotlabels()   
         self.pyplot.setDataSeries(pltlabels)    
         self.pyplot.plotCurrent(plotdata) 
         return
@@ -1229,16 +1245,20 @@ class TableCanvas(Canvas):
         if not self.pyplot.hasData() and plotdata != None: 
             print 'has data'
             plotdata = self.getSelectionValues()
-            pltlabels = []
-            for col in self.multiplecollist:
-                pltlabels.append(self.model.getColumnLabel(col))
-               
+            pltlabels = self.getplotlabels()               
             self.pyplot.setDataSeries(pltlabels)
             self.pyplot.plotSetup(plotdata)
         else:    
             self.pyplot.plotSetup()
         
         return
+
+    def getplotlabels(self):
+        """Get labels for plot series from col labels""" 
+        pltlabels = []
+        for col in self.multiplecollist:
+            pltlabels.append(self.model.getColumnLabel(col))        
+        return pltlabels
         
     #--- Drawing stuff ---
     
