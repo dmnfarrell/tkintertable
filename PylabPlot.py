@@ -202,12 +202,7 @@ class pylabPlotter(object):
 
     def show(self):
         pylab.show()
-        return    
-
-    def showGeneralStats(self):
-        #cc = numpy.corrcoef(numpy.array([x,y]))  
-        #print 'correlation coeff.:', cc[1,0]           
-        return        
+        return         
 
     def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
                     showlegend=None, legendloc=None, graphtype=None):
