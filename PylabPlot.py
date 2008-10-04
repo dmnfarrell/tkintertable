@@ -38,17 +38,17 @@ class pylabPlotter(object):
     """An interface to matplotlib for general plotting and stats, using tk backend"""
     
     colors = ['#0049B4','#C90B11','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
-    linestyles = ['p','-','--']
-    shapes = ['p','-','--',':','.' ,'o','^','<','s','+','x','D','1','4','h'] 
+    linestyles = ['-','--']
+    shapes = ['o','-','--',':','.' ,'p','^','<','s','+','x','D','1','4','h'] 
     legend_positions = ['best', 'upper left','upper center','upper right',
                          'center left','center','center right'
                          'lower left','lower center','lower right']    
 
-    graphtypes = ['XY', 'hist', 'bar']
+    graphtypes = ['XY', 'hist', 'bar', 'pie']
     
     def __init__(self):
         #Setup variables
-        self.shape = 'p'
+        self.shape = 'o'
         self.grid = 1 
         self.xscale = 0
         self.yscale = 0
@@ -58,14 +58,15 @@ class pylabPlotter(object):
         self.legendnames = []
         self.graphtype = 'XY'
         self.datacolors = self.colors
-       
+        self.dpi = 300
+        self.linewidth = 1.5
         self.setupPlotVars()  
         self.currdata = None
         self.format = None  #data format
         return
 
     def plotXY(self, x, y, title='', xlabel=None, ylabel=None, shape=None,
-                            clr=None):
+                            clr=None, lw=1):
         """Do x-y plot of 2 lists"""
         if shape == None:
             shape = self.shape
@@ -80,7 +81,7 @@ class pylabPlotter(object):
         elif self.yscale == 1:
             plotfig = pylab.semilogy(x, y, shape, color=clr) 
         else:                    
-            plotfig = pylab.plot(x, y, shape, color=clr)  
+            plotfig = pylab.plot(x, y, shape, color=clr, linewidth=lw)  
 
         
         return plotfig
@@ -111,7 +112,23 @@ class pylabPlotter(object):
         #xloc = range(len(x))
         for i in range(len(x)):
                 x[i] = float(x[i]);y[i] = float(y[i])
-        plotfig = pylab.bar(x, y, color=clr)
+        plotfig = pylab.bar(x, y, color=clr, alpha=0.6)
+        
+        return plotfig
+    
+    def doPieChart(self, data, clr):
+        """Do a pylab bar chart"""
+        dim=int(ceil(len(data)/2.0))
+        i=1        
+        for r in data:
+            if len(r)==0:
+                continue
+            fig = pylab.subplot(2,dim,i)
+            print r
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.pie(r)
+            i=i+1
         
         return plotfig
     
@@ -143,10 +160,11 @@ class pylabPlotter(object):
         self.format = format 
         return
         
-    def plotCurrent(self, data=None, format=None):
+    def plotCurrent(self, data=None, format=None, show=True):
         """Re-do the plot with the current options and data"""        
         self.applyOptions()
-        self.clear()  
+        self.clear()
+        currfig = pylab.figure(1)
         if format != None:
             self.setFormat(format)
           
@@ -176,7 +194,7 @@ class pylabPlotter(object):
                 i=0
                 for y in pdata:
                     c = self.colors[i]
-                    fig = self.plotXY(x, y, clr=c)
+                    fig = self.plotXY(x, y, clr=c, lw=self.linewidth)
                     legendlines.append(fig)
                     i+=1
             elif self.graphtype == 'bar':
@@ -191,6 +209,8 @@ class pylabPlotter(object):
                     i+=1
             elif self.graphtype == 'hist':
                 self.doHistogram(data, title=title, xlabel=xlabel, ylabel=ylabel)
+            elif self.graphtype == 'pie':
+                self.doPieChart(data)
                 
         elif self.format == 'ekindata':
             #we have to treat the ekin data properly.. 
@@ -214,9 +234,10 @@ class pylabPlotter(object):
        
         if self.grid == 1:            
             pylab.grid(True)            
-            
-        self.show()         
-        return  
+
+        if show == True:    
+            self.show()
+        return  currfig
     
     def clear(self):
         """clear plot"""
@@ -227,10 +248,23 @@ class pylabPlotter(object):
 
     def show(self):
         pylab.show()
-        return         
+        return  
 
+    def saveCurrent(self, filename=None):
+        import tkFileDialog, os
+        filename=tkFileDialog.asksaveasfilename(parent=self.plotprefswin,
+                                                defaultextension='.png',
+                                                filetypes=[("Png file","*.png"),
+                                                           ("All files","*.*")])
+        if not filename:
+            return
+        fig = self.plotCurrent(show=False)
+        fig.savefig(filename, dpi=self.dpi)
+        return
+    
     def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
-                    showlegend=None, legendloc=None, graphtype=None):
+                    showlegend=None, legendloc=None, linewidth=None,
+                    graphtype=None):
         """Set the options before plotting"""
         if shape != None:
             self.shape = shape
@@ -244,9 +278,11 @@ class pylabPlotter(object):
             self.showlegend = showlegend
         if legendloc != None:
             self.legendloc = legendloc
+        if linewidth != None:
+            self.linewidth = linewidth
         if self.graphtype !=None:
             self.graphtype = graphtype
-        print  'graphtype', graphtype   
+ 
         return
 
     def setupPlotVars(self):
@@ -254,15 +290,17 @@ class pylabPlotter(object):
         self.pltgrid = IntVar()
         self.pltlegend = IntVar()
         self.pltsymbol = StringVar()
-        self.pltsymbol.set('p')
+        self.pltsymbol.set(self.shape)
         self.legendlocvar = StringVar()
-        self.legendlocvar.set('best')
+        self.legendlocvar.set(self.legendloc)
         self.xscalevar = IntVar()
         self.yscalevar = IntVar()
         self.xscalevar.set(0)
         self.yscalevar.set(0)
         self.graphtypevar = StringVar()
-        self.graphtypevar.set('XY')
+        self.graphtypevar.set(self.graphtype)
+        self.linewidthvar = IntVar()
+        self.linewidthvar.set(self.linewidth)        
         #plot specific
         self.plottitle = StringVar()
         self.plottitle.set('')
@@ -280,6 +318,7 @@ class pylabPlotter(object):
                xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
                showlegend = self.pltlegend.get(),
                legendloc = self.legendlocvar.get(),
+               linewidth = self.linewidthvar.get(),         
                graphtype = self.graphtypevar.get())
         return
             
@@ -343,14 +382,19 @@ class pylabPlotter(object):
                                         indicatoron=1)  
             i+=1
         legendposbutton.grid(row=3,column=1, sticky='news',padx=2,pady=2)
-          
+
+        
+        Label(frame1,text='linewidth:').grid(row=4,column=0,padx=2,pady=2)
+        Scale(frame1,from_=1,to=10,resolution=0.5,orient='horizontal',
+                            relief=GROOVE,variable=self.linewidthvar).grid(row=4,column=1,padx=2,pady=2)     
         row=0
         scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
         scales={0:'norm',1:'log'}
         for i in range(0,2):
             Radiobutton(scalesframe,text='x-'+scales[i],variable=self.xscalevar,
                             value=i).grid(row=0,column=i,pady=2)
-        
+            Radiobutton(scalesframe,text='y-'+scales[i],variable=self.yscalevar,
+                            value=i).grid(row=1,column=i,pady=2)        
         scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)
         
         row=row+1        
@@ -403,7 +447,9 @@ class pylabPlotter(object):
         replotb = Button(frame, text="Replot", command=self.plotCurrent, relief=GROOVE, bg='#99ccff')
         replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
         b = Button(frame, text="Apply", command=self.applyOptions, relief=GROOVE, bg='#99ccff')
-        b.pack(side=LEFT,fill=X,padx=2,pady=2)  
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        b = Button(frame, text="Save", command=self.saveCurrent, relief=GROOVE, bg='#99ccff')
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)        
         c=Button(frame,text='Close', command=close_prefsdialog, relief=GROOVE, bg='#99ccff')
         c.pack(side=LEFT,fill=X,padx=2,pady=2)
         if self.currdata == None:
