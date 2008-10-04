@@ -21,6 +21,7 @@
 
 import sys, os
 from Tkinter import *
+from math import *
 try:
     import numpy
 except:
@@ -80,29 +81,40 @@ class pylabPlotter(object):
             plotfig = pylab.semilogy(x, y, shape, color=clr) 
         else:                    
             plotfig = pylab.plot(x, y, shape, color=clr)  
-       
-        if self.grid == 1:            
-            pylab.grid(True)
+
         
         return plotfig
 
        
-    def doHistogram(self, recs, bins=10, title='', xlabel=None, ylabel=None):
-        """Do a pylab histogram of a dict with 1 or more lists"""
-        dim=int(ceil(len(recs)/2.0))
+    def doHistogram(self, data, bins=10, title='', xlabel=None, ylabel=None):
+        """Do a pylab histogram of 1 or more lists"""
+        dim=int(ceil(len(data)/2.0))
         i=1
-        for r in recs:
-            if len(recs[r])==0:
+        #fig = pylab.figure()
+        for r in data:
+            if len(r)==0:
                 continue
-            pylab.subplot(2,dim,i)
+            fig = pylab.subplot(2,dim,i)
+            print r
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.hist(r,bins=bins)
             i=i+1
-            histogram = pylab.hist(recs[r],bins=bins)                         
-            pylab.title(r)
-            pylab.xlabel(xlabel)
-            pylab.ylabel(ylabel)        
-        return histogram
+            #pylab.title(r)
+            #pylab.xlabel(xlabel)
+            #pylab.ylabel(ylabel) 
+        return fig
         
+
+    def doBarChart(self, x, y, clr):
+        """Do a pylab bar chart"""
+        #xloc = range(len(x))
+        for i in range(len(x)):
+                x[i] = float(x[i]);y[i] = float(y[i])
+        plotfig = pylab.bar(x, y, color=clr)
         
+        return plotfig
+    
     def setData(self, data):
         """Set the current plot data, useful for re-plotting without re-calling 
            explicit functions from the parent"""
@@ -167,9 +179,19 @@ class pylabPlotter(object):
                     fig = self.plotXY(x, y, clr=c)
                     legendlines.append(fig)
                     i+=1
-            
+            elif self.graphtype == 'bar':
+                i=0
+                import copy
+                pdata = copy.deepcopy(data)
+                x = pdata[0]
+                pdata.remove(x)                
+                for y in pdata:
+                    c = self.colors[i]
+                    self.doBarChart(x, y, clr=c)
+                    i+=1
             elif self.graphtype == 'hist':
                 self.doHistogram(data, title=title, xlabel=xlabel, ylabel=ylabel)
+                
         elif self.format == 'ekindata':
             #we have to treat the ekin data properly.. 
             print 'using ekin data'
@@ -189,6 +211,9 @@ class pylabPlotter(object):
         if self.showlegend == 1:
             pylab.legend(legendlines,seriesnames,shadow=True,
                          numpoints=1,loc=self.legendloc)
+       
+        if self.grid == 1:            
+            pylab.grid(True)            
             
         self.show()         
         return  
@@ -221,6 +246,7 @@ class pylabPlotter(object):
             self.legendloc = legendloc
         if self.graphtype !=None:
             self.graphtype = graphtype
+        print  'graphtype', graphtype   
         return
 
     def setupPlotVars(self):
@@ -324,8 +350,6 @@ class pylabPlotter(object):
         for i in range(0,2):
             Radiobutton(scalesframe,text='x-'+scales[i],variable=self.xscalevar,
                             value=i).grid(row=0,column=i,pady=2)
-            Radiobutton(scalesframe,text='y-'+scales[i],variable=self.yscalevar,
-                            value=i).grid(row=1,column=i,pady=2)
         
         scalesframe.grid(row=row,column=1,sticky='news',padx=2,pady=2)
         
@@ -334,7 +358,8 @@ class pylabPlotter(object):
         frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2) 
         for i in range(len(self.graphtypes)):
             Radiobutton(frame,text=self.graphtypes[i],variable=self.graphtypevar,
-                            value=i).grid(row=0,column=i,pady=2)        
+                            value=self.graphtypes[i]).grid(row=0,column=i,pady=2)
+            
         row=row+1
         labelsframe = LabelFrame(self.plotprefswin,text='Labels')
         labelsframe.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
