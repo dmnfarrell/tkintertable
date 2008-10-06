@@ -299,7 +299,7 @@ class pylabPlotter(object):
         self.yscalevar.set(0)
         self.graphtypevar = StringVar()
         self.graphtypevar.set(self.graphtype)
-        self.linewidthvar = IntVar()
+        self.linewidthvar = DoubleVar()
         self.linewidthvar.set(self.linewidth)        
         #plot specific
         self.plottitle = StringVar()
