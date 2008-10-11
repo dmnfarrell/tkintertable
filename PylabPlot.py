@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     Created August 2008
-    TablePlotter Class
+    Matplotlib Plotter Class
     Copyright (C) Damien Farrell
  
     This program is free software; you can redistribute it and/or
@@ -37,7 +37,8 @@ except:
 class pylabPlotter(object):
     """An interface to matplotlib for general plotting and stats, using tk backend"""
     
-    colors = ['#0049B4','#C90B11','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A']
+    colors = ['#0049B4','#C90B11','#437C17','#AFC7C7','#E9AB17','#7F525D','#F6358A',
+              '#52D017','#FFFC17','#F76541','#F62217' ]
     linestyles = ['-','--']
     shapes = ['o','-','--',':','.' ,'p','^','<','s','+','x','D','1','4','h'] 
     legend_positions = ['best', 'upper left','upper center','upper right',
@@ -192,7 +193,9 @@ class pylabPlotter(object):
                 x = pdata[0]
                 pdata.remove(x)
                 i=0
-                for y in pdata:
+                for y in pdata: 
+                    if i >= len(self.colors):
+                        i = 0
                     c = self.colors[i]
                     fig = self.plotXY(x, y, clr=c, lw=self.linewidth)
                     legendlines.append(fig)
@@ -204,6 +207,8 @@ class pylabPlotter(object):
                 x = pdata[0]
                 pdata.remove(x)                
                 for y in pdata:
+                    if i >= len(self.colors):
+                        i = 0                    
                     c = self.colors[i]
                     self.doBarChart(x, y, clr=c)
                     i+=1
@@ -422,23 +427,37 @@ class pylabPlotter(object):
             #self.dataseriesvars=[]
             if len(self.dataseriesvars) == 0:
                 self.setDataSeries(range(len(self.currdata)))
-            r=1                       
+            r=1 
+            sr=1
+            cl=0
             for s in self.dataseriesvars:                               
-                Label(seriesframe,text='Series '+str(r)).grid(row=r,column=0,padx=2,pady=2)
+                Label(seriesframe,text='Series '+str(r)).grid(row=r,column=cl,padx=2,pady=2)
                 Entry(seriesframe,textvariable=s,bg='white',
-                                          relief=GROOVE).grid(row=r,column=1,padx=2,pady=2)
+                                          relief=GROOVE).grid(row=r,column=cl+1,padx=2,pady=2)
                 r+=1
-
+                if r > 8:
+                    r=1
+                    cl+=2
             row=row+1
             cbuttons = {}
             frame = LabelFrame(self.plotprefswin, text="Dataset Colors")
             r=1 
-            for d in range(len(self.dataseriesvars)): 
-                c = self.datacolors[d]  
+            cl=0
+            sr=1
+            ci=0
+            for d in range(len(self.dataseriesvars)):  
+                if d >= len(self.datacolors):
+                    self.datacolors.append(self.colors[ci]) 
+                    ci+=1
+                c = self.datacolors[d]                 
                 action = lambda x =(d,c): choosecolor(x)
-                cbuttons[d]=Button(frame,text='Series '+str(r),bg=c,command=action)
-                cbuttons[d].pack(fill=X,padx=2,pady=2) 
-                r+=1                
+                cbuttons[d]=Button(frame,text='Series '+str(sr),bg=c,command=action)
+                cbuttons[d].grid(row=r,column=cl,sticky='news',padx=2,pady=2) 
+                r+=1      
+                sr+=1
+                if r > 8:
+                    r=1
+                    cl+=1
             frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
         
         row=row+1
