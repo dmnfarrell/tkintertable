@@ -193,7 +193,6 @@ class TableCanvas(Canvas):
     def redrawTable(self, event=None):
         """Draw the table from scratch based on it's model data""" 
         import time
-        print 'redrawing',time.time()  
         model = self.model
         self.rows=self.model.getRowCount()
         self.cols=self.model.getColumnCount()  
@@ -204,7 +203,6 @@ class TableCanvas(Canvas):
         #set sort order
         #if self.sortcol != None:
         #self.model.setSortOrder(self.sortcol, self.reverseorder)
-        print self.model.reclist
         #print self.model.sortmap
         #check if large no. of records and switch to paging view
         if self.paging == 0 and self.rows >= 1000:
@@ -1052,28 +1050,25 @@ class TableCanvas(Canvas):
         
     # --- Some cell specific actions here ---
     
-    def setcellColor(self, rows, cols, newColor=None, key=None):
+    def setcellColor(self, rows, cols=None, newColor=None, key=None):
         """Set the cell color for one or more cells and save it in the model color"""
 
-        model = self.getModel()        
+        model = self.getModel() 
         if newColor == None:
             import tkColorChooser
             ctuple, newColor = tkColorChooser.askcolor(title='pick a color')
             if newColor == None:
                 return
-            #print ctuple, newColor
-        '''def setcolor(row, col):
-            model.setColorAt(row, col, newColor, key)
-            text = model.getValueAt(row, col)
-            #redraw the cell text or fill
-            if key=='fg':
-                self.draw_Text(row,col, text, fgcolor=newColor)
-            elif key=='bg':  
-                self.draw_rect(row,col, color=newColor)'''
+
+        if type(rows) is IntType:
+            x=rows
+            rows=[]
+            rows.append(x)
         if self.allrows == True:
             #we use all rows if the whole column has been selected
-            rows = range(0,self.rows) 
-                    
+            rows = range(0,self.rows)             
+        if cols == None:
+            cols = range(self.cols)           
         for col in cols:
             for row in rows:
                 absrow = self.get_AbsoluteRow(row)

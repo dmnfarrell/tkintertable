@@ -112,7 +112,7 @@ class pylabPlotter(object):
         """Do a pylab bar chart"""
         #xloc = range(len(x))
         for i in range(len(x)):
-                x[i] = float(x[i]);y[i] = float(y[i])
+            x[i] = float(x[i]);y[i] = float(y[i])
         plotfig = pylab.bar(x, y, color=clr, alpha=0.6)
         
         return plotfig
