@@ -457,16 +457,20 @@ class TableCanvas(Canvas):
     def delete_Row(self):
         """Delete a row"""
         if len(self.multiplerowlist)>1:
+            print 'deleting mult'
             n = tkMessageBox.askyesno("Delete",
                                       "Delete Selected Records?",
-                                      parent=self.parentframe) 
-            if n:            
+                                      parent=self.parentframe)
+            print n
+            if n: 
+                print n               
                 rows = self.multiplerowlist
                 self.model.deleteRows(rows)
                 self.setSelectedRow(0)
                 self.multiplerowlist = []
                 self.redrawTable() 
         else:     
+            print 'deleting one'
             n = tkMessageBox.askyesno("Delete",
                                       "Delete This Record?",
                                       parent=self.parentframe)

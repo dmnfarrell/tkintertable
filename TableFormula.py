@@ -60,15 +60,14 @@ class Formula(object):
         p = re.compile('[()*/+-]')
         x = p.split(expr)         
         ops = p.findall(expr) 
-        print expr, ops
+        #print expr, ops
         for i in x:
             if i == '':
                 vals.append(i)
             else:    
-                vals.append(eval(i))
+                vals.append(eval(i))        
         
-        
-        print ops, vals
+        #print ops, vals
         return vals, ops
         
     @classmethod

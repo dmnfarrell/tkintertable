@@ -65,14 +65,15 @@ class TableModel(object):
             if self.data.has_key('colors'):
                 self.colors = copy.deepcopy(self.data['colors'])
                 del self.data['colors']
-            #read in the record list    
+            #read in the record list order  
             if self.data.has_key('reclist'):
-                self.reclist = self.data['reclist']
+                temp = self.data['reclist']
                 del self.data['reclist']
+                self.reclist = temp
             else:    
                 self.reclist = self.data.keys()                
         
-        if not self.reclist == self.data.keys():
+        if not set(self.reclist) == set(self.data.keys()):
             print 'reclist does not match data keys'      
         
         #restore last column order
