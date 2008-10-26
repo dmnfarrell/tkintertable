@@ -491,6 +491,12 @@ class TableCanvas(Canvas):
 
     def delete_Cells(self, rows, cols):
         """Clear the cell contents"""
+        
+        n =  tkMessageBox.askyesno("Clear Confirm",
+                                   "Clear this data?",
+                                   parent=self.parentframe) 
+        if not n:
+            return
         for col in cols:
             for row in rows:
                 absrow = self.get_AbsoluteRow(row)                  
@@ -1466,12 +1472,14 @@ class TableCanvas(Canvas):
         if align == None:
             align = 'center'
         elif align == 'w':                    
-            x1 = x1-w/2+1
-            
+            x1 = x1-w/2+1            
+        
         #if celltxt is dict then we are drawing a hyperlink
-        if isinstance(celltxt, dict):
+        if isinstance(celltxt, dict):            
             haslink=0
             linktext=celltxt['text']
+            if len(linktext) > w/scale or w<28:
+                linktext=linktext[0:int(w/fontsize*1.4)-2]+'..'
             if celltxt['link']!=None and celltxt['link']!='':
                 linkfont = (self.thefont[0], self.thefont[1], 'underline') 
                 linkcolor='blue'
@@ -1485,15 +1493,17 @@ class TableCanvas(Canvas):
                                       font=linkfont,
                                       tag=('text','hlink','celltext'+str(row)+str(col)))
             if haslink == 1:
-                self.tag_bind(rect, '<Button-1>', self.check_hyperlink)
-        else:    
+                self.tag_bind(rect, '<Double-Button-1>', self.check_hyperlink)
+                
+        #just normal text        
+        else:            
             rect = self.create_text(x1+w/2,y1+h/2,
                                       text=celltxt,
                                       fill=fgcolor,
                                       font=self.thefont,
                                       anchor=align,
                                       tag=('text','celltext'+str(row)+str(col)))
-        #self.lift('celltext'+str(row)+str(col))
+
         return
     
     def drawSelectedRow(self):
