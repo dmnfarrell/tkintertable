@@ -1043,18 +1043,20 @@ class TableCanvas(Canvas):
         self.formulaText.focus_set()
         return
    
-    def convertFormulaetoValues(self):
+    def convertFormulae(self, rows, cols=None):
         """Convert the formulas in the cells to their result values"""        
         if len(self.multiplerowlist) == 0 or len(self.multiplecollist) == 0:
             return None
-        rows = self.multiplerowlist
-        cols = self.multiplecollist
-        
+        #rows = self.multiplerowlist
+        #cols = self.multiplecollist
+        print rows, cols
+        if cols == None:
+            cols = range(self.cols) 
         for r in rows:
-            absr==self.get_AbsoluteRow(r)
+            absr=self.get_AbsoluteRow(r)
             for c in cols:
-                res = self.model.getValueAt(absr,c)
-                self.model.setValueAr(absr,c,res)
+                val = self.model.getValueAt(absr,c)
+                self.model.setValueAt(val, absr, c)
         return
         
         
@@ -1099,8 +1101,10 @@ class TableCanvas(Canvas):
         def popupFocusOut(event):
             popupmenu.unpost()
 
-        if outside == 1:            
-            pass
+        if outside == 1:    
+            #if outside table, just show general items  
+            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
+            popupmenu.add_command(label="Export Table", command= self.exportTable)     
         else:
             def add_commands(fieldtype): 
                 """Add commands to popup menu for col type"""
@@ -1113,9 +1117,10 @@ class TableCanvas(Canvas):
 
             def add_defaultcommands():           
                 """now add general actions for all cells""" 
-                order = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
-                         "View Record", "Select All",
-                         "Plot Selected","Plot Options"]
+                main = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
+                         "Select All", "Plot Selected","Plot Options",
+                         "Show Prefs"]
+                utils = ["View Record", "Formulae->Value", "Export Table"]    
                 defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
                                 "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
                                 "Fill Down" : lambda : self.fill_down(rows, cols),
@@ -1124,24 +1129,30 @@ class TableCanvas(Canvas):
                                 "Clear Data" : lambda : self.delete_Cells(rows, cols),
                                 "Select All" : self.select_All,
                                 "Plot Selected" : self.plot_Selected,
-                                "Plot Options" : self.plotSetup }
+                                "Plot Options" : self.plotSetup,
+                                "Export Table" : self.exportTable,
+                                "Show Prefs" : self.showtablePrefs,
+                                "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
                 
-                for action in order:                
+                for action in main:                
                     if action == 'Fill Down' and (rows == None or len(rows) <= 1):                    
                         continue
                     if action == 'Fill Right' and (cols == None or len(cols) <= 1):
                         continue
                     else:
-                        popupmenu.add_command(label=action, command=defaultactions[action])                
-                return
-
+                        popupmenu.add_command(label=action, command=defaultactions[action])
+                popupmenu.add_separator()                        
+                utilsmenu = Menu(popupmenu, tearoff = 0)        
+                popupmenu.add_cascade(label="Utils",menu=utilsmenu)        
+                for action in utils:
+                    print action
+                    utilsmenu.add_command(label=action, command=defaultactions[action])
+                return                  
+                
             if self.columnactions.has_key(coltype):  
                 add_commands(coltype) 
-            add_defaultcommands()
-            
-        #if outside table, just show general items        
-        popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
-        popupmenu.add_command(label="Export Table", command= self.exportTable)            
+            add_defaultcommands()           
+       
         popupmenu.bind("<FocusOut>", popupFocusOut)  
         popupmenu.focus_set()
         popupmenu.post(event.x_root, event.y_root)  
