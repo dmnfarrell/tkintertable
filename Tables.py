@@ -1144,8 +1144,7 @@ class TableCanvas(Canvas):
                 popupmenu.add_separator()                        
                 utilsmenu = Menu(popupmenu, tearoff = 0)        
                 popupmenu.add_cascade(label="Utils",menu=utilsmenu)        
-                for action in utils:
-                    print action
+                for action in utils:                    
                     utilsmenu.add_command(label=action, command=defaultactions[action])
                 return                  
                 
@@ -1215,7 +1214,7 @@ class TableCanvas(Canvas):
         rows = self.multiplerowlist
         cols = self.multiplecollist
         model = self.model        
-        if len(rows)<2 or len(cols)<2:
+        if len(rows)<1 or len(cols)<1:
             return None
         lists = []
         def evalrow(row):
@@ -1257,7 +1256,7 @@ class TableCanvas(Canvas):
         if not hasattr(self, 'pyplot'):
             self.pyplot = plt()
         plotdata = self.getSelectionValues()
-            
+         
         if not self.pyplot.hasData() and plotdata != None: 
             print 'has data'
             plotdata = self.getSelectionValues()
@@ -1578,8 +1577,7 @@ class TableCanvas(Canvas):
         rect = self.create_rectangle(x1+w/2,y1+w/2,x2,y2,
                              outline='blue',width=w,activefill='red',activestipple='gray25',
                              tag='multicellrect')
-        self.getSelectionValues()
-        
+                
         return
        
     def draw_tooltip(self, row, col):

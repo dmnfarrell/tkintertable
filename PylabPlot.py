@@ -88,23 +88,25 @@ class pylabPlotter(object):
         return plotfig
 
        
-    def doHistogram(self, data, bins=10, title='', xlabel=None, ylabel=None):
+    def doHistogram(self, data, bins=10):
         """Do a pylab histogram of 1 or more lists"""
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
         dim=int(ceil(len(data)/2.0))
         i=1
         #fig = pylab.figure()
         for r in data:
             if len(r)==0:
                 continue
-            fig = pylab.subplot(2,dim,i)
+            fig = pylab.subplot(ydim,dim,i)
             print r
             for j in range(len(r)):
                 r[j] = float(r[j])
             pylab.hist(r,bins=bins)
             i=i+1
-            #pylab.title(r)
-            #pylab.xlabel(xlabel)
-            #pylab.ylabel(ylabel) 
+ 
         return fig
         
 
@@ -117,21 +119,25 @@ class pylabPlotter(object):
         
         return plotfig
     
-    def doPieChart(self, data, clr):
+    def doPieChart(self, data):
         """Do a pylab bar chart"""
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
         dim=int(ceil(len(data)/2.0))
-        i=1        
-        for r in data:
+        i=1 
+        for r in data:           
             if len(r)==0:
                 continue
-            fig = pylab.subplot(2,dim,i)
+            fig = pylab.subplot(ydim,dim,i)
             print r
             for j in range(len(r)):
                 r[j] = float(r[j])
             pylab.pie(r)
             i=i+1
         
-        return plotfig
+        return 
     
     def setData(self, data):
         """Set the current plot data, useful for re-plotting without re-calling 
@@ -154,6 +160,7 @@ class pylabPlotter(object):
            s=StringVar()
            s.set(names[i])
            self.dataseriesvars.append(s)
+        print self.dataseriesvars   
         return
    
     def setFormat(self, format):        
@@ -213,7 +220,7 @@ class pylabPlotter(object):
                     self.doBarChart(x, y, clr=c)
                     i+=1
             elif self.graphtype == 'hist':
-                self.doHistogram(data, title=title, xlabel=xlabel, ylabel=ylabel)
+                self.doHistogram(data)
             elif self.graphtype == 'pie':
                 self.doPieChart(data)
                 
@@ -418,7 +425,7 @@ class pylabPlotter(object):
         Entry(labelsframe,textvariable=self.plotxlabel,bg='white',relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
         Label(labelsframe,text='Y-axis label:').grid(row=2,column=0,padx=2,pady=2)
         Entry(labelsframe,textvariable=self.plotylabel,bg='white',relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
-
+        print self.currdata
         if self.currdata != None:
             print self.dataseriesvars
             row=row+1        
