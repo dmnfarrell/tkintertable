@@ -3,17 +3,17 @@
     Created January 2008
     TableModel Class
     Copyright (C) Damien Farrell
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
- 
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
- 
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -24,7 +24,7 @@ from types import *
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
-    
+
     def __init__(self, newdict=None, rows=None, columns=None):
         import copy
         self.data = None    # holds the table dict
@@ -33,8 +33,8 @@ class TableModel(object):
         self.colors['bg']={}
         #default types
         self.defaulttypes = ['text', 'number']
-        #list of editable column types                
-        self.editable={}         
+        #list of editable column types
+        self.editable={}
         self.nodisplay = []
 
         self.columnwidths={}  #used to store col widths, not held in saved data
@@ -45,16 +45,16 @@ class TableModel(object):
             self.columntypes = {'1':'text'}
             self.columnOrder = None
             #record column labels for use in a table header
-            self.columnlabels={}  
+            self.columnlabels={}
             for colname in self.columnNames:
                 self.columnlabels[colname]=colname
-            self.reclist = self.data.keys()    
+            self.reclist = self.data.keys()
         else:
             self.data = copy.deepcopy(newdict)
             self.columnNames=copy.deepcopy(self.data['columnnames'])
-            del self.data['columnnames']          
+            del self.data['columnnames']
             self.columntypes=copy.deepcopy(self.data['columntypes'])
-            del self.data['columntypes']            
+            del self.data['columntypes']
             self.columnlabels=copy.deepcopy(self.data['columnlabels'])
             del self.data['columnlabels']
             if self.data.has_key('columnorder'):
@@ -65,17 +65,17 @@ class TableModel(object):
             if self.data.has_key('colors'):
                 self.colors = copy.deepcopy(self.data['colors'])
                 del self.data['colors']
-            #read in the record list order  
+            #read in the record list order
             if self.data.has_key('reclist'):
                 temp = self.data['reclist']
                 del self.data['reclist']
                 self.reclist = temp
-            else:    
-                self.reclist = self.data.keys()                
-        
+            else:
+                self.reclist = self.data.keys()
+
         if not set(self.reclist) == set(self.data.keys()):
-            print 'reclist does not match data keys'      
-        
+            print 'reclist does not match data keys'
+
         #restore last column order
         if self.columnOrder:
             self.columnNames=[]
@@ -83,34 +83,34 @@ class TableModel(object):
                 self.columnNames.append(self.columnOrder[i] )
                 i=i+1
             #print self.columnNames
-        
+
         self.defaulttypes = ['text', 'number']
         #setup default display for column types
         self.default_display = {'text' : 'showstring',
                                 'number' : 'numtostring'}
 
         #add rows and cols if they are given in the constructor
-        if newdict == None: 
+        if newdict == None:
             if rows != None:
                 self.auto_AddRows(rows)
             if columns != None:
                 self.auto_AddColumns(columns)
         #finally set default sort order as first col
-        #self.setSortOrder() 
+        #self.setSortOrder()
         return
 
     def getDefaultTypes(self):
         """Get possible field types for this table model"""
-        return self.defaulttypes 
-        
+        return self.defaulttypes
+
     def getData(self):
         """Return the current data for saving"""
         import copy
         data = copy.deepcopy(self.data)
-        data['colors'] = self.colors        
+        data['colors'] = self.colors
         data['columnnames'] = self.columnNames
-        #we keep original record order 
-        data['reclist'] = self.reclist  
+        #we keep original record order
+        data['reclist'] = self.reclist
         #record current col order
         data['columnorder']={}
         i=0
@@ -120,38 +120,38 @@ class TableModel(object):
         data['columntypes'] = self.columntypes
         data['columnlabels'] = self.columnlabels
         return data
-   
+
     def getAllCells(self):
         """Return a dict of the form rowname: list of cell contents
           Useful for a simple table export for example"""
         records={}
         for row in range(len(self.reclist)):
             recdata=[]
-            for col in range(len(self.columnNames)):  
+            for col in range(len(self.columnNames)):
                 recdata.append(self.getValueAt(row,col))
             records[row]=recdata
         return records
 
     def getColCells(self, colIndex):
         """Get the viewable contents of a col into a list"""
-        collist = []        
+        collist = []
         for row in range(len(self.reclist)):
             v = self.getValueAt(row, colIndex)
             collist.append(v)
-         
+
         return collist
 
     def getlongestEntry(self, columnIndex):
-        """Get the longest cell entry in the col"""       
-        collist = self.getColCells(columnIndex)        
+        """Get the longest cell entry in the col"""
+        collist = self.getColCells(columnIndex)
         maxw=0
         for c in collist:
             w = len(c)
             if w > maxw:
                 maxw = w
-        #print 'longest width', maxw        
+        #print 'longest width', maxw
         return maxw
-        
+
     def getRecordAtRow(self, rowIndex):
         """Get the entire record at the specifed row."""
         name = self.reclist[rowIndex]
@@ -160,7 +160,7 @@ class TableModel(object):
 
     def getCellRecord(self, rowIndex, columnIndex):
         """Get the data held in this row and column"""
-        value = None 
+        value = None
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
         name = self.reclist[rowIndex]
@@ -176,9 +176,9 @@ class TableModel(object):
         coltype = self.columntypes[colname]
         name = self.reclist[rowIndex]
         if self.data[name].has_key(colname):
-            del self.data[name][colname]  
+            del self.data[name][colname]
         return
-    
+
     def getRecName(self, rowIndex):
         """Get record name from row number"""
         if len(self.reclist)==0:
@@ -187,7 +187,7 @@ class TableModel(object):
         return name
 
     def setRecName(self, newname, rowIndex):
-        """Set the record name to another value - requires re-setting in all 
+        """Set the record name to another value - requires re-setting in all
            dicts that this rec is referenced"""
         if len(self.reclist)==0:
             return None
@@ -199,15 +199,15 @@ class TableModel(object):
         self.data[newname]['Name'] = newname
         del self.data[currname]
         for key in ['bg', 'fg']:
-            if self.colors[key].has_key(currname):                
+            if self.colors[key].has_key(currname):
                 temp = copy.deepcopy(self.colors[key][currname])
                 self.colors[key][newname] = temp
                 del self.colors[key][currname]
         print 'renamed'
         #would also need to resolve all refs to this rec in formulas here!!
-        
-        return 
-        
+
+        return
+
     def getRecordAttributeAtColumn(self, rowIndex, columnIndex):
          """Get the attribute of the record at the specified column index.
             This determines what will be displayed in the cell"""
@@ -225,21 +225,21 @@ class TableModel(object):
              value = self.doFormula(cell)
              return value
          if not type(cell) is DictType:
-             if coltype == 'text' or coltype == 'Text':  
+             if coltype == 'text' or coltype == 'Text':
                  value = cell
              elif coltype == 'number':
-                 value = str(cell)             
+                 value = str(cell)
              else:
                  value = 'other'
-         if value==None:        
+         if value==None:
              value=''
-  
+
          return value
-      
+
     def getRecordIndex(self, recname):
         rowIndex = self.reclist.index(recname)
         return rowIndex
-    
+
     def setSortOrder(self, columnIndex=0, reverse=0):
         """Changes the order that records are sorted in, which will
            be reflected in the table upon redrawing"""
@@ -247,7 +247,7 @@ class TableModel(object):
         self.sortcolumnIndex = columnIndex  #store current column sorted by
         sortmap=[]
         sortkey = self.getColumnName(columnIndex)
-        for rec in self.data.keys():            
+        for rec in self.data.keys():
             if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):
                 recdata = self.data[rec][sortkey]
                 if Formula.isFormula(recdata):
@@ -259,32 +259,32 @@ class TableModel(object):
                     except:
                         pass
                     sortmap.append((rec, recdata))
-                        
+
             else:
                 sortmap.append((rec, ''))
-        print sortmap  
+        #print sortmap
         #sort the mapping by the second key
         self.sortmap = sorted(sortmap, key=operator.itemgetter(1), reverse=reverse)
         #print sortmap
         #now sort the main reclist by the mapping order
-        self.reclist = map(operator.itemgetter(0),self.sortmap)  
-        
+        self.reclist = map(operator.itemgetter(0),self.sortmap)
+
         return
-    
+
     def getSortIndex(self):
         """Return the current sort order index"""
         if self.sortcolumnIndex:
             return self.sortcolumnIndex
         else:
             return 0
-    
-        
+
+
     def moveColumn(self, oldcolumnIndex, newcolumnIndex):
         """Changes the order of columns"""
         self.oldnames = self.columnNames
         self.columnNames=[]
         #self.columnOrder=[]
-        
+
         print oldcolumnIndex, newcolumnIndex
         #write out a new column names list - tedious
         moved = self.oldnames[oldcolumnIndex]
@@ -297,19 +297,19 @@ class TableModel(object):
                 #self.columnOrder.append(moved)
             self.columnNames.append(c)
             #self.columnOrder.append(c)
-            i=i+1 
+            i=i+1
         #if new col is at end just append
         if moved not in self.columnNames:
             self.columnNames.append(moved)
             #self.columnOrder.append(moved)
-            
+
         print self.columnNames
         #print self.columnOrder
         return
-        
+
     def addRow(self, name=None):
         """Add a row"""
- 
+
         if self.data.has_key(name) or name in self.reclist:
             print 'name already present!!'
             return
@@ -317,21 +317,21 @@ class TableModel(object):
         if name != None:
             self.data[name]['Name'] = name
         else:
-            self.data[name]['Name'] = ''        
+            self.data[name]['Name'] = ''
         self.reclist.append(name)
-        #self.reclist.sort()        
+        #self.reclist.sort()
 
         return
 
     def deleteRow(self, rowIndex):
-        """Delete a row"""  
+        """Delete a row"""
         name = self.reclist[rowIndex]
         del self.data[name]
         self.reclist = self.data.keys()
         #self.reclist.sort()
-   
+
         return
-        
+
     def deleteRows(self, rowlist=None):
         """Delete multiple or all rows"""
         if rowlist == None:
@@ -341,13 +341,13 @@ class TableModel(object):
         for row in rowlist:
             name = self.reclist[row]
             del self.data[name]
-        self.reclist = self.data.keys()  
+        self.reclist = self.data.keys()
         #self.reclist.sort()
         return
-    
+
     def addColumn(self, colname=None, coltype=None):
         """Add a column"""
-        index = self.getColumnCount()+ 1        
+        index = self.getColumnCount()+ 1
         if colname == None:
             colname=str(index)
         if colname in self.columnNames:
@@ -355,26 +355,26 @@ class TableModel(object):
             return
         self.columnNames.append(colname)
         self.columnlabels[colname] = colname
-        if coltype == None:            
+        if coltype == None:
             self.columntypes[colname]='text'
         else:
             self.columntypes[colname]=coltype
 
         return
-      
+
     def deleteColumn(self, columnIndex):
         """delete a column"""
         colname = self.getColumnName(columnIndex)
         print colname
         self.columnNames.remove(colname)
         del self.columnlabels[colname]
-        del self.columntypes[colname]        
+        del self.columntypes[colname]
         #remove this field from every record
         for recname in self.reclist:
             if self.data[recname].has_key(colname):
                 del self.data[recname][colname]
 
-        if hasattr(self, 'sortcolumnIndex') and columnIndex == self.sortcolumnIndex:           
+        if hasattr(self, 'sortcolumnIndex') and columnIndex == self.sortcolumnIndex:
             self.setSortOrder()
         print 'column deleted'
         print 'new cols:', self.columnNames
@@ -386,31 +386,31 @@ class TableModel(object):
         while self.getColumnCount() > 0:
             self.deleteColumn(0)
         return
-    
-    
+
+
     def auto_AddRows(self, numrows=None):
         """Automatically add x number of records"""
         import string
         alphabet = string.lowercase[:26]
         rows = self.getRowCount()
-       
+
         if rows <= 25:
             i=rows
             j=0
         else:
             i=int(rows%25)
-            j=int(round(rows/25,1))     
+            j=int(round(rows/25,1))
         #print i, j
         for x in range(numrows):
             if i >= len(alphabet):
                 i=0
-                j=j+1             
-            name = alphabet[i]+str(j)            
+                j=j+1
+            name = alphabet[i]+str(j)
             if name in self.reclist:
-                pass                
+                pass
             else:
-                self.addRow(name) 
-            i=i+1 
+                self.addRow(name)
+            i=i+1
             #print self.reclist
         return
 
@@ -425,34 +425,34 @@ class TableModel(object):
         new = []
         for n in range(start, end):
             new.append(str(n))
-        #check if any of these colnames present        
+        #check if any of these colnames present
         common = set(new) & set(self.columnNames)
         extra = len(common)
         end = end + extra
-        for x in range(start, end):           
+        for x in range(start, end):
             self.addColumn(str(x))
         return
-    
+
     def relabel_Column(self, columnIndex, newname):
         """Change the column label - can be used in a table header"""
         colname = self.getColumnName(columnIndex)
         self.columnlabels[colname]=newname
         return
-        
+
     def getColumnType(self, columnIndex):
         """Get the column type"""
         colname = self.getColumnName(columnIndex)
-        coltype = self.columntypes[colname]        
+        coltype = self.columntypes[colname]
         return coltype
-        
+
     def getColumnCount(self):
          """Returns the number of columns in the data model."""
          return len(self.columnNames)
-    
+
     def getColumnName(self, columnIndex):
          """Returns the name of the given column by columnIndex."""
          return self.columnNames[columnIndex]
-    
+
     def getColumnLabel(self, columnIndex):
         """Returns the label for this column"""
         colname = self.getColumnName(columnIndex)
@@ -462,7 +462,7 @@ class TableModel(object):
         """Returns the column index for this column"""
         colindex = self.columnNames.index(columnName)
         return colindex
-        
+
     def getRowCount(self):
          """Returns the number of rows in the table model."""
          return len(self.reclist)
@@ -471,12 +471,12 @@ class TableModel(object):
          """Returns the cell value at location specified
              by columnIndex and rowIndex."""
          # Get the record object corresponding to this row.
-         #rec = self.getRecordAtRow(rowIndex)         
+         #rec = self.getRecordAtRow(rowIndex)
          # Get the address attribute corresponding to this column.
          value = self.getRecordAttributeAtColumn(rowIndex, columnIndex)
 
          return value
-         
+
     def setValueAt(self, value, rowIndex, columnIndex):
         """Changed the dictionary when cell is updated by user"""
         name = self.reclist[rowIndex]
@@ -487,7 +487,7 @@ class TableModel(object):
             try:
                 if value == '': #need this to allow deletion of values
                     self.data[name][colname] = ''
-                else:    
+                else:
                     self.data[name][colname] = float(value)
             except:
                 pass
@@ -495,7 +495,7 @@ class TableModel(object):
             self.data[name][colname] = value
         #print self.data
         return
-     
+
     def setFormulaAt(self, f, rowIndex, columnIndex):
         """Set a formula at cell given"""
         name = self.reclist[rowIndex]
@@ -505,7 +505,7 @@ class TableModel(object):
         rec['formula'] = f
         self.data[name][colname] = rec
         return
-        
+
     def getColorAt(self, rowIndex, columnIndex, key='bg'):
         """Return color of that record field for the table"""
         name = self.reclist[rowIndex]
@@ -514,7 +514,7 @@ class TableModel(object):
             return self.colors[key][name][colname]
         else:
             return None
-            
+
     def setColorAt(self, rowIndex, columnIndex, color, key='bg'):
         #print 'new color', color
         name = self.reclist[rowIndex]
@@ -524,20 +524,20 @@ class TableModel(object):
         self.colors[key][name][colname] = str(color)
         #print 'new color', self.colors[name][colname]
         #print self.colors
-        return     
-                
+        return
+
     def resetcolors(self):
         """Remove all color formatting"""
         self.colors={}
         self.colors['fg']={}
-        self.colors['bg']={}        
+        self.colors['bg']={}
         return
 
     def getRecColNames(self, rowIndex, ColIndex):
         """Returns the rec and col name as a tuple"""
         recname = self.getRecName(rowIndex)
         colname = self.getColumnName(ColIndex)
-        return (recname, colname)    
+        return (recname, colname)
 
     def getRecAtRow(self, recname, colname, offset=1, dim='y'):
         """Get the record name at a specified offset in the current
@@ -552,19 +552,19 @@ class TableModel(object):
             nrow = thisrow
             ncol = thiscol + offset
 
-        newrecname, newcolname = self.getRecColNames(nrow, ncol)      
+        newrecname, newcolname = self.getRecColNames(nrow, ncol)
         print 'recname, colname', recname, colname
-        print 'thisrow, col', thisrow, thiscol            
+        print 'thisrow, col', thisrow, thiscol
         return newrecname, newcolname
-        
+
     def appendtoFormula(self, formula, rowIndex, colIndex):
         """Add the input cell to the formula"""
         cellRec = getRecColNames(rowIndex, colIndex)
         formula.append(cellRec)
-        return 
-    
+        return
+
     def doFormula(self, cellformula):
-        """Evaluate the formula for a cell and return the result"""        
+        """Evaluate the formula for a cell and return the result"""
         value = Formula.doFormula(cellformula, self.data)
         return value
 
@@ -573,19 +573,19 @@ class TableModel(object):
         import re
         frmla = Formula.getFormula(cellval)
         #print 'formula', frmla
-        
+
         newcells=[]
         cells, ops = Formula.readExpression(frmla)
-        
+
         for c in cells:
             print c
             if type(c) is not ListType:
                 nc = c
-            else:    
+            else:
                 recname = c[0]
                 colname = c[1]
                 nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
-            newcells.append(nc)            
+            newcells.append(nc)
         #print 'newcells', newcells
 
         #replace new record refs in formula
@@ -595,5 +595,5 @@ class TableModel(object):
         #print 'old:', cellval
         #print 'new:', newformula
         return newformula
-    
+
 

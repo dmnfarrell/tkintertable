@@ -1981,6 +1981,8 @@ class ColumnHeader(Canvas):
         #x_pos=x_start
         for col in range(cols):
             colname=self.model.columnNames[col]
+            if not self.model.columnlabels.has_key(colname):
+                self.model.columnlabels[colname]=colname
             collabel = self.model.columnlabels[colname]
             if self.model.columnwidths.has_key(colname):
                 w=self.model.columnwidths[colname]
