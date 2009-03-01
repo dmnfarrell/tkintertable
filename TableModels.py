@@ -323,12 +323,12 @@ class TableModel(object):
 
         return
 
-    def deleteRow(self, rowIndex):
+    def deleteRow(self, rowIndex, update=True):
         """Delete a row"""
         name = self.reclist[rowIndex]
         del self.data[name]
-        self.reclist = self.data.keys()
-        #self.reclist.sort()
+        if update==True:
+            self.reclist = self.data.keys()
 
         return
 
@@ -339,10 +339,9 @@ class TableModel(object):
         print 'deleting' , rowlist
         print 'reclist', self.reclist
         for row in rowlist:
-            name = self.reclist[row]
-            del self.data[name]
+            self.deleteRow(row, update=False)
         self.reclist = self.data.keys()
-        #self.reclist.sort()
+
         return
 
     def addColumn(self, colname=None, coltype=None):
