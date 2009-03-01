@@ -1117,13 +1117,14 @@ class TableCanvas(Canvas):
             def add_defaultcommands():
                 """now add general actions for all cells"""
                 main = ["Set Fill Color","Set Text Color","Fill Down","Fill Right", "Clear Data",
-                         "Select All", "Plot Selected","Plot Options",
+                         "Delete Row", "Select All", "Plot Selected","Plot Options",
                          "Show Prefs"]
                 utils = ["View Record", "Formulae->Value", "Export Table"]
                 defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
                                 "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
                                 "Fill Down" : lambda : self.fill_down(rows, cols),
                                 "Fill Right" : lambda : self.fill_across(cols, rows),
+                                "Delete Row" : lambda : self.delete_Row(),
                                 "View Record" : lambda : self.getRecordInfo(row),
                                 "Clear Data" : lambda : self.delete_Cells(rows, cols),
                                 "Select All" : self.select_All,
