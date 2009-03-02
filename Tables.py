@@ -477,6 +477,7 @@ class TableCanvas(Canvas):
                 row = self.getSelectedRow()
                 self.model.deleteRow(row)
                 self.setSelectedRow(row-1)
+                self.clearSelected()
                 self.redrawTable()
         return
 
@@ -1061,7 +1062,7 @@ class TableCanvas(Canvas):
 
     # --- Some cell specific actions here ---
 
-    def setcellColor(self, rows, cols=None, newColor=None, key=None):
+    def setcellColor(self, rows, cols=None, newColor=None, key=None, redraw=True):
         """Set the cell color for one or more cells and save it in the model color"""
 
         model = self.getModel()
@@ -1085,7 +1086,8 @@ class TableCanvas(Canvas):
                 absrow = self.get_AbsoluteRow(row)
                 model.setColorAt(row, col, newColor, key)
                 #setcolor(absrow, col)
-        self.redrawTable()
+        if redraw == True:
+            self.redrawTable()
         return
 
 
