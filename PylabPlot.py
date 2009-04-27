@@ -32,7 +32,8 @@ try:
     from matplotlib.font_manager import FontProperties
     import pylab
 except:
-    print 'You need matplotlib to use this feature..'
+    pass
+    #print 'matplotlib not present..'
 
 class pylabPlotter(object):
     """An interface to matplotlib for general plotting and stats, using tk backend"""
@@ -46,6 +47,9 @@ class pylabPlotter(object):
                          'lower left','lower center','lower right']
 
     graphtypes = ['XY', 'hist', 'bar', 'pie']
+    fonts = ['serif', 'sans-serif', 'cursive', 'fantasy', 'monospace']
+
+
 
     def __init__(self):
         #Setup variables
@@ -61,13 +65,14 @@ class pylabPlotter(object):
         self.datacolors = self.colors
         self.dpi = 300
         self.linewidth = 1.5
+        self.font = 'sans-serif'
+        self.fontsize = 12
         try:
             self.setupPlotVars()
         except:
             print 'no tk running'
         self.currdata = None
         self.format = None  #data format
-
         self.plottitle = ''
         self.plotxlabel = ''
         self.plotylabel = ''
@@ -80,19 +85,16 @@ class pylabPlotter(object):
             shape = self.shape
         if clr == None:
             clr = 'b'
-
         if self.xscale == 1:
             if self.yscale == 1:
-                plotfig = pylab.loglog(x, y, shape, color=clr)
+                line = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
             else:
-                plotfig = pylab.semilogx(x, y, shape, color=clr)
+                line = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
         elif self.yscale == 1:
-            plotfig = pylab.semilogy(x, y, shape, color=clr)
+            line = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
         else:
-            plotfig = pylab.plot(x, y, shape, color=clr, linewidth=lw)
-
-
-        return plotfig
+            line = pylab.plot(x, y, shape, color=clr, linewidth=lw)
+        return line
 
 
     def doHistogram(self, data, bins=10):
@@ -107,14 +109,14 @@ class pylabPlotter(object):
         for r in data:
             if len(r)==0:
                 continue
-            fig = pylab.subplot(ydim,dim,i)
+            ax = pylab.subplot(ydim,dim,i)
             print r
             for j in range(len(r)):
                 r[j] = float(r[j])
             pylab.hist(r,bins=bins)
             i=i+1
 
-        return fig
+        return ax
 
 
     def doBarChart(self, x, y, clr):
@@ -197,8 +199,8 @@ class pylabPlotter(object):
 
         seriesnames = []
         legendlines = []
-        #for d in self.dataseriesvars:
-        #    seriesnames.append(d.get())
+        for d in self.dataseriesvars:
+            seriesnames.append(d.get())
         if self.format == None:
             #do an X-Y plot, with the first list as X xals
             if self.graphtype == 'XY':
@@ -211,8 +213,8 @@ class pylabPlotter(object):
                     if i >= len(self.colors):
                         i = 0
                     c = self.colors[i]
-                    fig = self.plotXY(x, y, clr=c, lw=self.linewidth)
-                    legendlines.append(fig)
+                    line = self.plotXY(x, y, clr=c, lw=self.linewidth)
+                    legendlines.append(line)
                     i+=1
             elif self.graphtype == 'bar':
                 i=0
@@ -241,7 +243,7 @@ class pylabPlotter(object):
                 fig=self.plotXY(xdata[d], ydata[d], clr=c)
                 legendlines.append(fig)
                 if fitxdata.has_key(d):
-                    self.plotXY(fitxdata[d],fitydata[d],shape='-',clr=c)
+                    self.plotXY(fitxdata[d],fitydata[d],shape='-',clr=c,lw=self.linewidth)
                 i+=1
 
         pylab.title(self.plottitle)
@@ -257,7 +259,7 @@ class pylabPlotter(object):
 
         if show == True:
             self.show()
-        return  currfig
+        return currfig
 
     def clear(self):
         """clear plot"""
@@ -293,7 +295,7 @@ class pylabPlotter(object):
 
     def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
                     showlegend=None, legendloc=None, linewidth=None,
-                    graphtype=None):
+                    graphtype=None, font=None, fontsize=None):
         """Set the options before plotting"""
         if shape != None:
             self.shape = shape
@@ -309,8 +311,15 @@ class pylabPlotter(object):
             self.legendloc = legendloc
         if linewidth != None:
             self.linewidth = linewidth
-        if self.graphtype !=None:
+        if graphtype !=None:
             self.graphtype = graphtype
+        if font != None:
+            self.font = font
+        if fontsize != None:
+            self.fontsize = fontsize
+        pylab.rc("font", family=self.font, size=self.fontsize)
+        #matplotlib.rcParams['font.family'] = self.font
+
         return
 
     def setupPlotVars(self):
@@ -329,6 +338,10 @@ class pylabPlotter(object):
         self.graphtypevar.set(self.graphtype)
         self.linewidthvar = DoubleVar()
         self.linewidthvar.set(self.linewidth)
+        self.fontvar = StringVar()
+        self.fontvar.set(self.font)
+        self.fontsizevar = DoubleVar()
+        self.fontsizevar.set(self.fontsize)
         #plot specific
         self.plottitlevar = StringVar()
         self.plottitlevar.set('')
@@ -347,10 +360,12 @@ class pylabPlotter(object):
                showlegend = self.pltlegend.get(),
                legendloc = self.legendlocvar.get(),
                linewidth = self.linewidthvar.get(),
-               graphtype = self.graphtypevar.get())
+               graphtype = self.graphtypevar.get(),
+               font = self.fontvar.get(),
+               fontsize = self.fontsizevar.get())
         self.setTitle(self.plottitlevar.get())
-        self.setxlabel(self.setxlabelvar.get())
-        self.setylabel(self.setylabelvar.get())
+        self.setxlabel(self.plotxlabelvar.get())
+        self.setylabel(self.plotylabelvar.get())
         return
 
 
@@ -399,7 +414,6 @@ class pylabPlotter(object):
         symbolbutton.grid(row=2,column=1, sticky='news',padx=2,pady=2)
         row=row+1
 
-
         Label(frame1,text='Legend pos:').grid(row=3,column=0,padx=2,pady=2)
         legendposbutton = Menubutton(frame1,textvariable=self.legendlocvar,
 					                relief=GROOVE, width=16, bg='lightblue')
@@ -414,10 +428,25 @@ class pylabPlotter(object):
             i+=1
         legendposbutton.grid(row=3,column=1, sticky='news',padx=2,pady=2)
 
+        Label(frame1,text='Font:').grid(row=4,column=0,padx=2,pady=2)
+        fontbutton = Menubutton(frame1,textvariable=self.fontvar,
+					                relief=GROOVE, width=16, bg='lightblue')
+        font_menu = Menu(fontbutton, tearoff=0)
+        fontbutton['menu'] = font_menu
+        for f in self.fonts:
+            font_menu.add_radiobutton(label=f,
+                                            variable=self.fontvar,
+                                            value=f,
+                                            indicatoron=1)
+        fontbutton.grid(row=4,column=1, sticky='news',padx=2,pady=2)
+        row=row+1
+        Label(frame1,text='Font size:').grid(row=5,column=0,padx=2,pady=2)
+        Scale(frame1,from_=8,to=26,resolution=0.5,orient='horizontal',
+                            relief=GROOVE,variable=self.fontsizevar).grid(row=5,column=1,padx=2,pady=2)
 
-        Label(frame1,text='linewidth:').grid(row=4,column=0,padx=2,pady=2)
+        Label(frame1,text='linewidth:').grid(row=6,column=0,padx=2,pady=2)
         Scale(frame1,from_=1,to=10,resolution=0.5,orient='horizontal',
-                            relief=GROOVE,variable=self.linewidthvar).grid(row=4,column=1,padx=2,pady=2)
+                            relief=GROOVE,variable=self.linewidthvar).grid(row=6,column=1,padx=2,pady=2)
         row=0
         scalesframe = LabelFrame(self.plotprefswin, text="Axes Scales")
         scales={0:'norm',1:'log'}

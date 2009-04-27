@@ -25,8 +25,57 @@ from types import *
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
 
-    def __init__(self, newdict=None, rows=None, columns=None):
+    keywords = {'columnnames':'columnNames', 'columntypes':'columntypes',
+               'columnlabels':'columnlabels', 'columnorder':'columnOrder',
+               'colors':'colors'}
+
+    def __init__(self, newdict=None, rows=None, columns=None, otherdict=None):
         import copy
+        self.initialiseFields()
+        if newdict != None:
+            self.data = copy.deepcopy(newdict)
+            for k in self.keywords:
+                if self.data.has_key(k):
+                    self.__dict__[self.keywords[k]] = self.data[k]
+                    del self.data[k]
+            #read in the record list order
+            if self.data.has_key('reclist'):
+                temp = self.data['reclist']
+                del self.data['reclist']
+                self.reclist = temp
+            else:
+                self.reclist = self.data.keys()
+        elif otherdict != None:
+            #try to make a model from this data
+            self.createModelfromDict(otherdict)
+        else:
+            #just make a new empty model
+            self.createEmptyModel()
+
+        if not set(self.reclist) == set(self.data.keys()):
+            print 'reclist does not match data keys'
+        #restore last column order
+        if self.columnOrder:
+            self.columnNames=[]
+            for i in self.columnOrder.keys():
+                self.columnNames.append(self.columnOrder[i] )
+                i=i+1
+        self.defaulttypes = ['text', 'number']
+        #setup default display for column types
+        self.default_display = {'text' : 'showstring',
+                                'number' : 'numtostring'}
+        #add rows and cols if they are given in the constructor
+        if newdict == None:
+            if rows != None:
+                self.auto_AddRows(rows)
+            if columns != None:
+                self.auto_AddColumns(columns)
+        #finally set default sort order as first col
+        #self.setSortOrder()
+        return
+
+    def initialiseFields(self):
+        """Create base fields, some of which are not saved"""
         self.data = None    # holds the table dict
         self.colors = {}    # holds cell colors
         self.colors['fg']={}
@@ -36,67 +85,55 @@ class TableModel(object):
         #list of editable column types
         self.editable={}
         self.nodisplay = []
-
         self.columnwidths={}  #used to store col widths, not held in saved data
-        if newdict == None:
-            self.data = {}
-            # Define the starting column names and locations in the table.
-            self.columnNames = ['1']
-            self.columntypes = {'1':'text'}
-            self.columnOrder = None
-            #record column labels for use in a table header
-            self.columnlabels={}
-            for colname in self.columnNames:
-                self.columnlabels[colname]=colname
-            self.reclist = self.data.keys()
+        return
+
+    def createEmptyModel(self):
+        """Create the basic empty model dict"""
+        self.data = {}
+        # Define the starting column names and locations in the table.
+        self.columnNames = []
+        self.columntypes = {}
+        self.columnOrder = None
+        #record column labels for use in a table header
+        self.columnlabels={}
+        for colname in self.columnNames:
+            self.columnlabels[colname]=colname
+        self.reclist = self.data.keys()
+        return
+
+    def createModelfromDict(self, newdata, inrows=True):
+        """Try to create a table model from some arbitrary dict"""
+        import types
+        self.createEmptyModel()
+        #get cols from sub data of each element in dict
+        if inrows == True:
+            colnames = newdata.keys()
+            for c in colnames:
+                self.addColumn(c)
+            n=0
+            self.addRow(n)
+            for c in colnames:
+                t = type(newdata[c])
+                if t is types.ListType:
+                    val=str(newdata[c])
+                else:
+                    val=newdata[c]
+                ci = self.getColumnIndex(c)
+                self.setValueAt(val,n,ci)
+
+            print self.__dict__
         else:
-            self.data = copy.deepcopy(newdict)
-            self.columnNames=copy.deepcopy(self.data['columnnames'])
-            del self.data['columnnames']
-            self.columntypes=copy.deepcopy(self.data['columntypes'])
-            del self.data['columntypes']
-            self.columnlabels=copy.deepcopy(self.data['columnlabels'])
-            del self.data['columnlabels']
-            if self.data.has_key('columnorder'):
-                self.columnOrder=copy.deepcopy(self.data['columnorder'])
-                del self.data['columnorder']
-            else:
-                self.columnOrder=None
-            if self.data.has_key('colors'):
-                self.colors = copy.deepcopy(self.data['colors'])
-                del self.data['colors']
-            #read in the record list order
-            if self.data.has_key('reclist'):
-                temp = self.data['reclist']
-                del self.data['reclist']
-                self.reclist = temp
-            else:
-                self.reclist = self.data.keys()
+            recnames = newdata.keys()
+            colnames=[]
+            for r in recnames:
+                if type(newdata[r]) is types.StringType:
+                    colnames.append(newdata[r])
+            for c in colnames:
+                self.addColumn(c)
+                #for r in recnames:
+                    #self.addRow(r)
 
-        if not set(self.reclist) == set(self.data.keys()):
-            print 'reclist does not match data keys'
-
-        #restore last column order
-        if self.columnOrder:
-            self.columnNames=[]
-            for i in self.columnOrder.keys():
-                self.columnNames.append(self.columnOrder[i] )
-                i=i+1
-            #print self.columnNames
-
-        self.defaulttypes = ['text', 'number']
-        #setup default display for column types
-        self.default_display = {'text' : 'showstring',
-                                'number' : 'numtostring'}
-
-        #add rows and cols if they are given in the constructor
-        if newdict == None:
-            if rows != None:
-                self.auto_AddRows(rows)
-            if columns != None:
-                self.auto_AddColumns(columns)
-        #finally set default sort order as first col
-        #self.setSortOrder()
         return
 
     def getDefaultTypes(self):
@@ -594,5 +631,4 @@ class TableModel(object):
         #print 'old:', cellval
         #print 'new:', newformula
         return newformula
-
 

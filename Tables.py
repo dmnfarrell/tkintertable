@@ -238,7 +238,8 @@ class TableCanvas(Canvas):
         self.tablerowheader.redraw(paging=self.paging)
         align=None
         self.delete('fillrect')
-
+        if self.cols == 0:
+            return
         #now draw model data in cells
         rowpos=0
         if self.model!=None:
@@ -1981,7 +1982,8 @@ class ColumnHeader(Canvas):
 
         h=self.height
         x_start=self.table.x_start
-        #x_pos=x_start
+        if cols == 0:
+            return
         for col in range(cols):
             colname=self.model.columnNames[col]
             if not self.model.columnlabels.has_key(colname):
