@@ -29,7 +29,7 @@ class TableModel(object):
                'columnlabels':'columnlabels', 'columnorder':'columnOrder',
                'colors':'colors'}
 
-    def __init__(self, newdict=None, rows=None, columns=None, otherdict=None):
+    def __init__(self, newdict=None, rows=None, columns=None):
         import copy
         self.initialiseFields()
         if newdict != None:
@@ -45,9 +45,6 @@ class TableModel(object):
                 self.reclist = temp
             else:
                 self.reclist = self.data.keys()
-        elif otherdict != None:
-            #try to make a model from this data
-            self.createModelfromDict(otherdict)
         else:
             #just make a new empty model
             self.createEmptyModel()
@@ -55,7 +52,7 @@ class TableModel(object):
         if not set(self.reclist) == set(self.data.keys()):
             print 'reclist does not match data keys'
         #restore last column order
-        if self.columnOrder:
+        if hasattr(self, 'columnOrder') and self.columnOrder != None:
             self.columnNames=[]
             for i in self.columnOrder.keys():
                 self.columnNames.append(self.columnOrder[i] )
@@ -102,37 +99,32 @@ class TableModel(object):
         self.reclist = self.data.keys()
         return
 
-    def createModelfromDict(self, newdata, inrows=True):
+    def importDict(self, newdata, namefield=None):
         """Try to create a table model from some arbitrary dict"""
         import types
-        self.createEmptyModel()
-        #get cols from sub data of each element in dict
-        if inrows == True:
-            colnames = newdata.keys()
-            for c in colnames:
-                self.addColumn(c)
-            n=0
-            self.addRow(n)
-            for c in colnames:
-                t = type(newdata[c])
-                if t is types.ListType:
-                    val=str(newdata[c])
-                else:
-                    val=newdata[c]
-                ci = self.getColumnIndex(c)
-                self.setValueAt(val,n,ci)
+        if namefield == None:
+            namefield = 'name'
+        #get cols from sub data keys
+        colnames = []
+        colnames.append(namefield)
+        for k in newdata:
+            fields = newdata[k].keys()
+            for f in fields:
+                if not f in colnames:
+                    colnames.append(f)
 
-            print self.__dict__
-        else:
-            recnames = newdata.keys()
-            colnames=[]
-            for r in recnames:
-                if type(newdata[r]) is types.StringType:
-                    colnames.append(newdata[r])
+        for c in colnames:
+            self.addColumn(c)
+
+        #add the data
+        print colnames
+        for k in newdata:
+            self.addRow(k)
             for c in colnames:
-                self.addColumn(c)
-                #for r in recnames:
-                    #self.addRow(r)
+                if c == namefield:
+                    self.data[k][namefield] = str(k)
+                else:
+                    self.data[k][c] = str(newdata[k][c])
 
         return
 

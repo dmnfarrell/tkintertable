@@ -40,7 +40,6 @@ class TableCanvas(Canvas):
         self.ostyp = self.checkOSType()
         import platform
         self.platform=platform.system()
-        print self.platform
         self.width=width
         self.height=height
         self.cellwidth=150
@@ -89,7 +88,7 @@ class TableCanvas(Canvas):
         self.tablecolheader = ColumnHeader(self.parentframe, self)
         self.tablerowheader = RowHeader(self.parentframe, self)
         self.do_bindings()
-        #
+
         #column specific actions, define for every column type in the model
         #when you add a column type you should edit this dict
 
@@ -97,9 +96,8 @@ class TableCanvas(Canvas):
                               'number' : {"Edit": 'draw_cellentry' }}
         #
         #print self.columnactions
-        #print 'Initialised tablecanvas'
         self.prefs = None
-        #self.setupPlotVars()
+
         return
 
     def mouse_wheel(self, event):
@@ -130,20 +128,21 @@ class TableCanvas(Canvas):
         self.bind('<B1-Motion>', self.handle_mouse_drag)
         self.bind('<Motion>', self.handle_motion)
 
-        self.bind("<Control-x>", self.delete_Row)
-        self.bind("<Control-n>", self.add_Row)
-        self.bind("<Delete>", self.delete_Cells)
+        self.bind_all("<Control-x>", self.delete_Row)
+        self.bind_all("<Control-n>", self.add_Row)
+        self.bind_all("<Delete>", self.delete_Cells)
+        self.bind_all("<Control-v>", self.paste)
 
-        if not hasattr(self,'parentapp'):
-            self.parentapp = self.parentframe
-        self.parentapp.master.bind("<Right>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Left>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Up>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<Down>", self.handle_arrow_keys)
-        self.parentapp.master.bind("<KP_8>", self.handle_arrow_keys)
+        #if not hasattr(self,'parentapp'):
+        #    self.parentapp = self.parentframe
 
-        self.parentframe.master.bind("<Return>", self.handle_arrow_keys)
-        self.parentframe.master.bind("<Tab>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Right>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Left>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Up>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Down>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<KP_8>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Return>", self.handle_arrow_keys)
+        self.parentframe.master.bind_all("<Tab>", self.handle_arrow_keys)
         if 'windows' in self.platform:
             self.bind("<MouseWheel>", self.mouse_wheel)
         self.bind('<Button-4>', self.mouse_wheel)
@@ -539,10 +538,6 @@ class TableCanvas(Canvas):
 
         d = RecordViewDialog(title="Record Details",
                                   parent=self.parentframe, table=self, row=row)
-
-
-
-
         return
 
     def findValue(self, searchstring=None, findagain=None):
@@ -578,7 +573,7 @@ class TableCanvas(Canvas):
                         self.xview('moveto', x)
                         self.yview('moveto', y)
                         self.tablecolheader.xview('moveto', x)
-                        self.tablecolheader.yview('moveto', y)
+                        self.tablerowheader.yview('moveto', y)
                         return row, col
         if found==0:
             self.delete('searchrect')
@@ -881,20 +876,24 @@ class TableCanvas(Canvas):
 
     def handle_arrow_keys(self, event):
         """Handle arrow keys press"""
-        print event.keysym
+        #print event.keysym
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
-        #if 0 <= row < self.rows or 0 <= col < self.cols:
-        #    return
+        x,y = self.getCanvasPos(self.currentrow, 0)
+
         if event.keysym == 'Up':
             if self.currentrow == 0:
                 return
             else:
+                #self.yview('moveto', y)
+                #self.tablerowheader.yview('moveto', y)
                 self.currentrow  = self.currentrow -1
         elif event.keysym == 'Down':
             if self.currentrow >= self.rows-1:
                 return
             else:
+                #self.yview('moveto', y)
+                #self.tablerowheader.yview('moveto', y)
                 self.currentrow  = self.currentrow +1
         elif event.keysym == 'Right' or event.keysym == 'Tab':
             if self.currentcol >= self.cols-1:
@@ -1060,6 +1059,13 @@ class TableCanvas(Canvas):
                 self.model.setValueAt(val, absr, c)
         return
 
+
+    def paste(self, event=None):
+        """Paste from clipboard"""
+        #assume 2 cols of tab separated text
+        print self.parentframe.clipboard_get()
+
+        return
 
     # --- Some cell specific actions here ---
 
