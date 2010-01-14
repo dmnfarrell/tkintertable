@@ -117,7 +117,7 @@ class TableModel(object):
             self.addColumn(c)
 
         #add the data
-        print colnames
+        #print colnames
         for k in newdata:
             self.addRow(k)
             for c in colnames:
@@ -175,7 +175,7 @@ class TableModel(object):
         collist = self.getColCells(columnIndex)
         maxw=0
         for c in collist:
-            w = len(c)
+            w = len(str(c))
             if w > maxw:
                 maxw = w
         #print 'longest width', maxw

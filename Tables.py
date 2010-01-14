@@ -30,8 +30,8 @@ from types import *
 class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
-    def __init__(self, parent=None, model=None, width=None, height=None):
-        Canvas.__init__(self, parent, bg='#9999CC',
+    def __init__(self, parent=None, model=None, width=None, height=None, **kwargs):
+        Canvas.__init__(self, parent, bg='white',
                          width=width, height=height,
                          relief=GROOVE,
                          scrollregion=(0,0,300,200))
@@ -42,27 +42,11 @@ class TableCanvas(Canvas):
         self.platform=platform.system()
         self.width=width
         self.height=height
-        self.cellwidth=150
-        self.maxcellwidth=400
-        self.rowheight=24
-        self.horizlines=1
-        self.vertlines=1
-        self.autoresizecols = 0
-        self.paging = 0
-        self.rowsperpage = 10
+
+        self.set_defaults()
+
         self.currentpage = None
         self.navFrame = None
-        self.inset=2
-        self.x_start=0
-        self.y_start=1
-        self.linewidth=1.0
-        self.thefont = "Arial 12"
-        self.cellbackgr = '#9999CC'
-        self.entrybackgr = 'white'
-        self.grid_color = '#ABB1AD'
-        self.selectedcolor = 'yellow'
-        self.rowselectedcolor = '#CCCCFF'
-        self.multipleselectioncolor = '#ECD672'
         self.currentrow = 0
         self.currentcol = 0
         #self.sortcol = None
@@ -94,10 +78,34 @@ class TableCanvas(Canvas):
 
         self.columnactions = {'text' : {"Edit":  'draw_cellentry' },
                               'number' : {"Edit": 'draw_cellentry' }}
-        #
-        #print self.columnactions
-        self.prefs = None
 
+
+        self.loadPrefs()
+        #set any options passed in kwargs to overwrite defaults/prefs
+        for key in kwargs:
+            self.__dict__[key] = kwargs[key]
+        return
+
+    def set_defaults(self):
+        self.cellwidth=150
+        self.maxcellwidth=400
+        self.rowheight=24
+        self.horizlines=1
+        self.vertlines=1
+        self.autoresizecols = 0
+        self.paging = 0
+        self.rowsperpage = 50
+        self.inset=2
+        self.x_start=0
+        self.y_start=1
+        self.linewidth=1.0
+        self.thefont = "Arial 12"
+        self.cellbackgr = 'white'
+        self.entrybackgr = 'white'
+        self.grid_color = '#ABB1AD'
+        self.selectedcolor = 'yellow'
+        self.rowselectedcolor = '#CCCCFF'
+        self.multipleselectioncolor = '#ECD672'
         return
 
     def mouse_wheel(self, event):
@@ -161,8 +169,7 @@ class TableCanvas(Canvas):
         """Adds column header and scrollbars and combines them with
            the current table adding all to the master frame provided in constructor.
            Table is then redrawn."""
-        if self.prefs == None:
-            self.loadPrefs()
+
         #Add the table and header to the frame
         self.Yscrollbar = AutoScrollbar(self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
@@ -175,7 +182,7 @@ class TableCanvas(Canvas):
         self.parentframe.rowconfigure(1,weight=1)
         self.parentframe.columnconfigure(1,weight=1)
 
-        self.savePrefs()
+        #self.savePrefs()
         self.tablecolheader.grid(row=0,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
         self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
@@ -328,7 +335,7 @@ class TableCanvas(Canvas):
 
     def drawNavFrame(self):
         """Draw the frame for selecting pages when paging is on"""
-        print 'adding page frame'
+        #print 'adding page frame'
         import Table_images
         self.navFrame = Frame(self.parentframe)
         self.navFrame.grid(row=4,column=0,columnspan=2,sticky='news',padx=1,pady=1,ipady=1)
@@ -358,7 +365,9 @@ class TableCanvas(Canvas):
         self.rows=self.model.getRowCount()
         if self.rows >= 1000:
             tkMessageBox.showwarning("Warning",
-                                     "This table has over 1000 rows.\n You should stay in page view.",
+                                     'This table has over 1000 rows.'
+                                     'You should stay in page view.'
+                                     'You can increase the rows per page in settings.',
                                      parent=self.parentframe)
         else:
             self.paging = 0
@@ -1787,7 +1796,9 @@ class TableCanvas(Canvas):
         if prefs==None:
             prefs=Preferences('Table',{'check_for_update':1})
         self.prefs = prefs
-        defaultprefs = {'horizlines':1, 'vertlines':1, 'rowheight':20, 'cellwidth':120,
+        defaultprefs = {'horizlines':self.horizlines, 'vertlines':self.vertlines,
+                        'rowheight':self.rowheight,
+                        'cellwidth':120,
                         'autoresizecols': 0,
                         'paging': 0, 'rowsperpage' : 50,
                         'celltextsize':12, 'celltextfont':'Arial',
