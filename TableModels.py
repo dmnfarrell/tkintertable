@@ -175,7 +175,10 @@ class TableModel(object):
         collist = self.getColCells(columnIndex)
         maxw=0
         for c in collist:
-            w = len(str(c))
+            try:
+                w = len(str(c))
+            except UnicodeEncodeError:
+                pass
             if w > maxw:
                 maxw = w
         #print 'longest width', maxw
@@ -237,20 +240,22 @@ class TableModel(object):
 
         return
 
-    def getRecordAttributeAtColumn(self, rowIndex, columnIndex):
+    def getRecordAttributeAtColumn(self, rowIndex=None, columnIndex=None,
+                                        recName=None, columnName=None):
          """Get the attribute of the record at the specified column index.
             This determines what will be displayed in the cell"""
 
-         value = None   # Holds the value we are going to return
-         cell = self.getCellRecord(rowIndex, columnIndex)
+         value = None
+         if columnName != None and recName != None:
+             cell = self.data[recName][columnName]
+         else:
+             cell = self.getCellRecord(rowIndex, columnIndex)
+             columnName = self.getColumnName(columnIndex)
          if cell == None:
-            cell=''
+             cell=''
          # Set the value based on the data record field
-         #action = self.default_display[coltype]
-         colname = self.getColumnName(columnIndex)
-         coltype = self.columntypes[colname]
+         coltype = self.columntypes[columnName]
          if Formula.isFormula(cell) == True:  #change this to e.g. cell.isFormula() ?
-             #print 'getting formula'
              value = self.doFormula(cell)
              return value
          if not type(cell) is DictType:
@@ -277,27 +282,13 @@ class TableModel(object):
         sortmap=[]
         sortkey = self.getColumnName(columnIndex)
         for rec in self.data.keys():
-            if isinstance(self.data[rec], dict) and self.data[rec].has_key(sortkey):
-                recdata = self.data[rec][sortkey]
-                if Formula.isFormula(recdata):
-                    #print 'formula'
-                    sortmap.append((rec, float(self.doFormula(recdata))))
-                else:
-                    try:    #try to make strings with only numbers sorted as nums
-                        recdata = float(recdata)
-                    except:
-                        pass
-                    sortmap.append((rec, recdata))
+            recdata = self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey)
+            sortmap.append((rec, recdata))
 
-            else:
-                sortmap.append((rec, ''))
-        #print sortmap
         #sort the mapping by the second key
         self.sortmap = sorted(sortmap, key=operator.itemgetter(1), reverse=reverse)
-        #print sortmap
         #now sort the main reclist by the mapping order
         self.reclist = map(operator.itemgetter(0),self.sortmap)
-
         return
 
     def getSortIndex(self):
@@ -491,6 +482,16 @@ class TableModel(object):
         colindex = self.columnNames.index(columnName)
         return colindex
 
+    def getColumnData(self, columnIndex=None, columnName=None,
+                      filterby=None, keyword=None):
+        """Return the data in a list for this col, allows to filter by rec attribute"""
+        if columnIndex != None:
+            columnName = self.getColumnName(columnIndex)
+        coldata = []
+        for r in self.reclist:
+            coldata.append(self.data[r][columnName])          
+        return coldata
+    
     def getRowCount(self):
          """Returns the number of rows in the table model."""
          return len(self.reclist)
@@ -544,7 +545,7 @@ class TableModel(object):
             return None
 
     def setColorAt(self, rowIndex, columnIndex, color, key='bg'):
-        #print 'new color', color
+
         name = self.reclist[rowIndex]
         colname = self.getColumnName(columnIndex)
         if not self.colors[key].has_key(name):
