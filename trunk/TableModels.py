@@ -1,26 +1,33 @@
 #!/usr/bin/env python
-"""
-    Created January 2008
-    TableModel Class
-    Copyright (C) Damien Farrell
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-"""
+#
+# Protein Engineering Analysis Tool DataBase (PEATDB)
+# Copyright (C) 2010 Damien Farrell & Jens Erik Nielsen
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Contact information:
+# Email: Jens.Nielsen_at_gmail.com 
+# Normal mail:
+# Jens Nielsen
+# SBBS, Conway Institute
+# University College Dublin
+# Dublin 4, Ireland
+# 
 
 from TableFormula import Formula
 from types import *
+import copy
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
@@ -30,8 +37,15 @@ class TableModel(object):
                'colors':'colors'}
 
     def __init__(self, newdict=None, rows=None, columns=None):
-        import copy
+        """Constructor"""
         self.initialiseFields()
+        self.setupModel(newdict, rows, columns)
+        #finally set default sort order as first col
+        #self.setSortOrder()
+        return
+
+    def setupModel(self, newdict, rows=None, columns=None):
+        """Create table model"""
         if newdict != None:
             self.data = copy.deepcopy(newdict)
             for k in self.keywords:
@@ -48,14 +62,14 @@ class TableModel(object):
         else:
             #just make a new empty model
             self.createEmptyModel()
-
+       
         if not set(self.reclist) == set(self.data.keys()):
             print 'reclist does not match data keys'
         #restore last column order
         if hasattr(self, 'columnOrder') and self.columnOrder != None:
             self.columnNames=[]
             for i in self.columnOrder.keys():
-                self.columnNames.append(self.columnOrder[i] )
+                self.columnNames.append(self.columnOrder[i])
                 i=i+1
         self.defaulttypes = ['text', 'number']
         #setup default display for column types
@@ -67,10 +81,9 @@ class TableModel(object):
                 self.auto_AddRows(rows)
             if columns != None:
                 self.auto_AddColumns(columns)
-        #finally set default sort order as first col
-        #self.setSortOrder()
+        self.filteredrecs = None          
         return
-
+        
     def initialiseFields(self):
         """Create base fields, some of which are not saved"""
         self.data = None    # holds the table dict
@@ -107,6 +120,7 @@ class TableModel(object):
         #get cols from sub data keys
         colnames = []
         colnames.append(namefield)
+        
         for k in newdata:
             fields = newdata[k].keys()
             for f in fields:
@@ -127,7 +141,7 @@ class TableModel(object):
                     self.data[k][c] = str(newdata[k][c])
 
         return
-
+    
     def getDefaultTypes(self):
         """Get possible field types for this table model"""
         return self.defaulttypes
@@ -164,18 +178,20 @@ class TableModel(object):
     def getColCells(self, colIndex):
         """Get the viewable contents of a col into a list"""
         collist = []
-        for row in range(len(self.reclist)):
-            v = self.getValueAt(row, colIndex)
-            collist.append(v)
-
+        if self.getColumnType(colIndex) == 'Link':
+            return ['xxxxxx']
+        else:        
+            for row in range(len(self.reclist)):
+                v = self.getValueAt(row, colIndex)
+                collist.append(v)
         return collist
 
     def getlongestEntry(self, columnIndex):
         """Get the longest cell entry in the col"""
-        collist = self.getColCells(columnIndex)
-        maxw=0
+        collist = self.getColCells(columnIndex)        
+        maxw=5
         for c in collist:
-            try:
+            try:                
                 w = len(str(c))
             except UnicodeEncodeError:
                 pass
@@ -186,7 +202,7 @@ class TableModel(object):
 
     def getRecordAtRow(self, rowIndex):
         """Get the entire record at the specifed row."""
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         record = self.data[name]
         return record
 
@@ -195,7 +211,7 @@ class TableModel(object):
         value = None
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)    
         if self.data[name].has_key(colname):
             celldata=self.data[name][colname]
         else:
@@ -206,7 +222,7 @@ class TableModel(object):
         """Remove the cell data at this row/column"""
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         if self.data[name].has_key(colname):
             del self.data[name][colname]
         return
@@ -215,7 +231,10 @@ class TableModel(object):
         """Get record name from row number"""
         if len(self.reclist)==0:
             return None
-        name = self.reclist[rowIndex]
+        if self.filteredrecs != None:
+            name = self.filteredrecs[rowIndex]
+        else:
+            name = self.reclist[rowIndex]
         return name
 
     def setRecName(self, newname, rowIndex):
@@ -236,7 +255,7 @@ class TableModel(object):
                 self.colors[key][newname] = temp
                 del self.colors[key][currname]
         print 'renamed'
-        #would also need to resolve all refs to this rec in formulas here!!
+        #would also need to resolve all refs to this rec in formulas here!
 
         return
 
@@ -245,8 +264,10 @@ class TableModel(object):
          """Get the attribute of the record at the specified column index.
             This determines what will be displayed in the cell"""
 
-         value = None
+         value = None         
          if columnName != None and recName != None:
+             if not self.data[recName].has_key(columnName):
+                 return ''
              cell = self.data[recName][columnName]
          else:
              cell = self.getCellRecord(rowIndex, columnIndex)
@@ -255,10 +276,11 @@ class TableModel(object):
              cell=''
          # Set the value based on the data record field
          coltype = self.columntypes[columnName]
-         if Formula.isFormula(cell) == True:  #change this to e.g. cell.isFormula() ?
+         if Formula.isFormula(cell) == True:
              value = self.doFormula(cell)
              return value
-         if not type(cell) is DictType:
+           
+         if not type(cell) is DictType:             
              if coltype == 'text' or coltype == 'Text':
                  value = cell
              elif coltype == 'number':
@@ -277,27 +299,49 @@ class TableModel(object):
     def setSortOrder(self, columnIndex=0, reverse=0):
         """Changes the order that records are sorted in, which will
            be reflected in the table upon redrawing"""
-        import operator
-        self.sortcolumnIndex = columnIndex  #store current column sorted by
-        sortmap=[]
+        
+        self.sortcolumnIndex = columnIndex    
         sortkey = self.getColumnName(columnIndex)
-        for rec in self.data.keys():
-            recdata = self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey)
-            sortmap.append((rec, recdata))
-
-        #sort the mapping by the second key
-        self.sortmap = sorted(sortmap, key=operator.itemgetter(1), reverse=reverse)
-        #now sort the main reclist by the mapping order
-        self.reclist = map(operator.itemgetter(0),self.sortmap)
+        recnames = self.reclist
+        
+        self.reclist = self.createSortMap(self.reclist, sortkey, reverse)
+        if self.filteredrecs != None:
+            self.filteredrecs = self.createSortMap(self.filteredrecs, sortkey, reverse)
         return
 
+    def createSortMap(self, names, sortkey, reverse=0):
+        """Create a sort mapping for given list"""
+        import operator
+        recdata = []
+        for rec in names:            
+            recdata.append(self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey))
+        #try create list of floats if col has numbers only
+        try:            
+            recdata = self.toFloats(recdata)
+        except:
+            pass
+        smap = zip(names, recdata)
+        #sort the mapping by the second key
+        smap = sorted(smap, key=operator.itemgetter(1), reverse=reverse)        
+        #now sort the main reclist by the mapping order
+        sortmap = map(operator.itemgetter(0), smap)
+        return sortmap
+    
+    def toFloats(self, l):
+        x=[]
+        for i in l:
+            if i == '':
+                x.append(0.0)
+            else:    
+                x.append(float(i))
+        return x
+    
     def getSortIndex(self):
         """Return the current sort order index"""
         if self.sortcolumnIndex:
             return self.sortcolumnIndex
         else:
             return 0
-
 
     def moveColumn(self, oldcolumnIndex, newcolumnIndex):
         """Changes the order of columns"""
@@ -324,12 +368,11 @@ class TableModel(object):
             #self.columnOrder.append(moved)
 
         print self.columnNames
-        #print self.columnOrder
+  
         return
 
-    def addRow(self, name=None):
+    def addRow(self, name=None, **kwargs):
         """Add a row"""
-
         if self.data.has_key(name) or name in self.reclist:
             print 'name already present!!'
             return
@@ -338,14 +381,13 @@ class TableModel(object):
             self.data[name]['Name'] = name
         else:
             self.data[name]['Name'] = ''
-        self.reclist.append(name)
-        #self.reclist.sort()
+        self.reclist.append(name)       
 
         return
 
     def deleteRow(self, rowIndex, update=True):
         """Delete a row"""
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         del self.data[name]
         if update==True:
             self.reclist = self.data.keys()
@@ -356,8 +398,8 @@ class TableModel(object):
         """Delete multiple or all rows"""
         if rowlist == None:
             rowlist = range(len(self.reclist))
-        print 'deleting' , rowlist
-        print 'reclist', self.reclist
+        #print 'deleting' , rowlist
+        #print 'reclist', self.reclist
         for row in rowlist:
             self.deleteRow(row, update=False)
         self.reclist = self.data.keys()
@@ -370,7 +412,7 @@ class TableModel(object):
         if colname == None:
             colname=str(index)
         if colname in self.columnNames:
-            print 'name is present!'
+            #print 'name is present!'
             return
         self.columnNames.append(colname)
         self.columnlabels[colname] = colname
@@ -405,7 +447,6 @@ class TableModel(object):
         while self.getColumnCount() > 0:
             self.deleteColumn(0)
         return
-
 
     def auto_AddRows(self, numrows=None):
         """Automatically add x number of records"""
@@ -469,7 +510,7 @@ class TableModel(object):
          return len(self.columnNames)
 
     def getColumnName(self, columnIndex):
-         """Returns the name of the given column by columnIndex."""
+         """Returns the name of the given column by columnIndex."""        
          return self.columnNames[columnIndex]
 
     def getColumnLabel(self, columnIndex):
@@ -483,35 +524,133 @@ class TableModel(object):
         return colindex
 
     def getColumnData(self, columnIndex=None, columnName=None,
-                      filterby=None, keyword=None):
-        """Return the data in a list for this col, allows to filter by rec attribute"""
+                      filterby=None):
+        """Return the data in a list for this col,
+            filterby is a tuple of key, value that allows to filter by rec attribute
+        """
+        import types
         if columnIndex != None:
             columnName = self.getColumnName(columnIndex)
         coldata = []
-        for r in self.reclist:
-            coldata.append(self.data[r][columnName])          
+        if filterby != None and filterby[0] in self.columnNames:
+            f, vals = filterby
+            if type(vals) is not types.ListType:
+                vals = [vals]
+            for r in self.reclist:
+                if self.data[r].has_key(f) and self.data[r][f] in vals:
+                    if not self.data[r].has_key(columnName):
+                        coldata.append('')
+                    else:
+                        coldata.append(self.data[r][columnName])
+        else:
+            for r in self.reclist:                                  
+                if not self.data[r].has_key(columnName):
+                    coldata.append('')
+                else:
+                    coldata.append(self.data[r][columnName])
         return coldata
-    
+        
+    def getColumns(self, colnames, filterby=None, allowempty=True):
+        """Get column data for multiple cols, with given filter options,
+            filterby: a tuple of key value that allows filtering
+            allowempty: boolean if false means rows with empty vals for any
+            required fields are not returned
+            returns: lists of column data"""
+        def evaluate(l):
+            for i in l:
+                if i == '' or i == None:
+                    return False
+            return True        
+          
+        coldata=[]       
+        for c in colnames:
+            vals = self.getColumnData(columnName=c, filterby=filterby)            
+            coldata.append(vals)          
+        if allowempty == False:  
+            result = [i for i in zip(*coldata) if evaluate(i) == True]               
+            coldata = zip(*result)        
+        return coldata
+        
+    def getDict(self, colnames, filterby=None):  
+        """Get the model data as a dict for given columns with filter options"""
+        data={}
+        names, = self.getColumns(['name'], filterby)        
+        cols = self.getColumns(colnames, filterby)
+        coldata = zip(*cols)   
+        for name,cdata in zip(names, coldata):           
+            data[name] = dict(zip(colnames,cdata))
+        return data
+        
+    def filterBy(self, filtercol, value, op='contains', userecnames=False,
+                     progresscallback=None):
+        """Filter recs according to one column"""
+        
+        from Filtering import Operators        
+        funcs = {'contains':Operators.contains,'=':Operators.equals,
+                   '>':Operators.greaterthan,'<':Operators.lessthan,
+                   'starts with':Operators.startswith,
+                   'ends with':Operators.endswith,
+                   'has length':Operators.haslength}
+        floatops = ['=','>','<']                   
+        func = funcs[op]
+        data = self.data
+        #coltype = self.columntypes[filtercol]
+        names=[]
+        for rec in self.reclist:
+            if data[rec].has_key(filtercol):  
+                #try to do float comparisons if required
+                if op in floatops:
+                    try:
+                        item = float(data[rec][filtercol])
+                        v=float(value)
+                        if func(v, item) == True:                    
+                            names.append(rec)
+                        continue 
+                    except:
+                        pass
+                if filtercol == 'name' and userecnames == True:
+                    item = rec
+                else:
+                    item = str(data[rec][filtercol])                
+                if func(value, item):                    
+                    names.append(rec)               
+            
+        return names        
+        
+    def filterByExpr(self, expr):
+        """Filter recs using simple expression"""
+        import shlex
+        criteria=[]
+        if filterby != None:
+            lexer = shlex.shlex(filterby)
+            expr = list(lexer)
+            print expr
+            i=0
+            for e in range(0,len(expr),3):
+                print e
+                try:
+                    criteria.append((expr[e],expr[e+2]))
+                except:
+                    pass
+
+            print criteria
+
     def getRowCount(self):
          """Returns the number of rows in the table model."""
          return len(self.reclist)
 
     def getValueAt(self, rowIndex, columnIndex):
          """Returns the cell value at location specified
-             by columnIndex and rowIndex."""
-         # Get the record object corresponding to this row.
-         #rec = self.getRecordAtRow(rowIndex)
-         # Get the address attribute corresponding to this column.
+             by columnIndex and rowIndex."""        
          value = self.getRecordAttributeAtColumn(rowIndex, columnIndex)
-
          return value
 
     def setValueAt(self, value, rowIndex, columnIndex):
         """Changed the dictionary when cell is updated by user"""
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-        #print coltype
+      
         if coltype == 'number':
             try:
                 if value == '': #need this to allow deletion of values
@@ -521,13 +660,12 @@ class TableModel(object):
             except:
                 pass
         else:
-            self.data[name][colname] = value
-        #print self.data
+            self.data[name][colname] = value       
         return
 
     def setFormulaAt(self, f, rowIndex, columnIndex):
         """Set a formula at cell given"""
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
         rec = {}
@@ -537,7 +675,7 @@ class TableModel(object):
 
     def getColorAt(self, rowIndex, columnIndex, key='bg'):
         """Return color of that record field for the table"""
-        name = self.reclist[rowIndex]
+        name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         if self.colors[key].has_key(name) and self.colors[key][name].has_key(colname):
             return self.colors[key][name][colname]
@@ -545,14 +683,12 @@ class TableModel(object):
             return None
 
     def setColorAt(self, rowIndex, columnIndex, color, key='bg'):
-
-        name = self.reclist[rowIndex]
+        """Set color"""
+        name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         if not self.colors[key].has_key(name):
             self.colors[key][name] = {}
-        self.colors[key][name][colname] = str(color)
-        #print 'new color', self.colors[name][colname]
-        #print self.colors
+        self.colors[key][name][colname] = str(color)        
         return
 
     def resetcolors(self):
@@ -615,13 +751,63 @@ class TableModel(object):
                 colname = c[1]
                 nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
             newcells.append(nc)
-        #print 'newcells', newcells
-
-        #replace new record refs in formula
         newformula = Formula.doExpression(newcells, ops, getvalues=False)
-
-        #print 'copied formula'
-        #print 'old:', cellval
-        #print 'new:', newformula
         return newformula
 
+    def merge(self, model, key='name', fields=None):
+        """Merge another table model with this one based on a key field, 
+           we only add nrecords from the new model where the key is present
+           in both models"""
+        if fields == None: fields = model.columnNames
+        for rec in self.reclist:
+            if not self.data[rec].has_key(key):
+                continue
+            for new in model.reclist:
+                if not model.data[new].has_key(key):
+                    continue
+                if self.data[rec][key] == model.data[new][key]:
+                #if new == rec:                                   
+                    for f in fields:
+                        if not model.data[rec].has_key(f):
+                            continue
+                        if not f in self.columnNames:
+                            self.addColumn(f)                        
+                        self.data[rec][f] = model.data[rec][f]       
+        return
+        
+    def addRecord(self, name, **kwargs):
+        """Add new rec with all fields in kwargs dict"""
+        #name = kwargs[kwargs.keys()[0]]
+        self.addRow(name) 
+        self.addColumn('name')
+        self.data[name]['name'] = name          
+        for k in kwargs:            
+            if not k in self.columnNames:
+                self.addColumn(k)
+            self.data[name][k] = str(kwargs[k])
+        return
+
+    def save(self, filename=None):
+        """Save model to file"""
+        if filename == None:
+            return
+        data = self.getData()
+        fd=open(filename,'w')
+        import pickle
+        pickle.dump(data,fd)
+        fd.close()
+        return
+
+    def load(self):
+        """Load model from pickle file"""        
+        return
+
+    def copy(self):
+        """Return a copy of this model"""
+        M=TableModel()
+        data = self.getData()
+        M.setupModel(data)
+        return M
+    
+    def __repr__(self):
+        return 'Table Model with %s rows' %len(self.reclist)

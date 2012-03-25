@@ -26,14 +26,12 @@ try:
     import numpy
 except:
     print 'you need numpy to do statistics'
-try:
-    import matplotlib
-    matplotlib.use('TkAgg')
-    from matplotlib.font_manager import FontProperties
-    import pylab
-except:
-    pass
-    #print 'matplotlib not present..'
+
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.font_manager import FontProperties
+import pylab
+
 
 class pylabPlotter(object):
     """An interface to matplotlib for general plotting and stats, using tk backend"""
@@ -50,11 +48,10 @@ class pylabPlotter(object):
     fonts = ['serif', 'sans-serif', 'cursive', 'fantasy', 'monospace']
 
 
-
     def __init__(self):
         #Setup variables
         self.shape = 'o'
-        self.grid = 1
+        self.grid = 0
         self.xscale = 0
         self.yscale = 0
         self.showlegend = 0
@@ -92,7 +89,7 @@ class pylabPlotter(object):
                 line = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
         elif self.yscale == 1:
             line = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
-        else:
+        else:            
             line = pylab.plot(x, y, shape, color=clr, linewidth=lw)
         return line
 
@@ -169,7 +166,7 @@ class pylabPlotter(object):
            s=StringVar()
            s.set(names[i])
            self.dataseriesvars.append(s)
-        print self.dataseriesvars
+        #print self.dataseriesvars
         return
 
     def setFormat(self, format):
@@ -201,9 +198,28 @@ class pylabPlotter(object):
         legendlines = []
         for d in self.dataseriesvars:
             seriesnames.append(d.get())
+        
         if self.format == None:
             #do an X-Y plot, with the first list as X xals
-            if self.graphtype == 'XY':
+            if self.graphtype == 'bar' or len(data) == 1:
+                i=0
+                import copy
+                pdata = copy.deepcopy(data)
+                if len(pdata)>1:
+                    x = pdata[0]
+                    pdata.remove(x)
+                    for y in pdata:
+                        if i >= len(self.colors):
+                            i = 0
+                        c = self.colors[i]
+                        self.doBarChart(x, y, clr=c)
+                        i+=1
+                else:
+                    y = pdata[0]
+                    x = range(len(y))
+                    self.doBarChart(x, y, clr='b')
+                    
+            elif self.graphtype == 'XY':
                 import copy
                 pdata = copy.deepcopy(data)
                 x = pdata[0]
@@ -212,22 +228,11 @@ class pylabPlotter(object):
                 for y in pdata:
                     if i >= len(self.colors):
                         i = 0
-                    c = self.colors[i]
+                    c = self.colors[i]                   
                     line = self.plotXY(x, y, clr=c, lw=self.linewidth)
                     legendlines.append(line)
                     i+=1
-            elif self.graphtype == 'bar':
-                i=0
-                import copy
-                pdata = copy.deepcopy(data)
-                x = pdata[0]
-                pdata.remove(x)
-                for y in pdata:
-                    if i >= len(self.colors):
-                        i = 0
-                    c = self.colors[i]
-                    self.doBarChart(x, y, clr=c)
-                    i+=1
+
             elif self.graphtype == 'hist':
                 self.doHistogram(data)
             elif self.graphtype == 'pie':
