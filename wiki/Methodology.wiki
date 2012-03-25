@@ -1,0 +1,45 @@
+#labels Phase-Implementation
+=Concept=
+
+The class utilises the concept of table view->model such as that used in java Swing. The TableCanvas class is the graphical element that handles all the user interaction, GUI changes, formatting etc. This class inherits from tkinter canvas, and we should put all basic table functionality in this base class. However, in practice we really should sub-class this and add any specialist functionality to the subclass, either by overriding the required parent class methods or adding extra ones. Each TableCanvas has a TableModel associated with it, this class handles all the data, updating, sorting and so on. Again, the base class is called TableModel and you sub-class this for specific uses.
+
+Example: To create a basic table, only the following 4 lines are needed. We can also create a model from some data, then use that model to initiate the table. The data, a dictionary, will be appropriate to that model of course.
+
+{{{
+tframe = Frame(master)
+tframe.pack()
+table = TableCanvas(tframe)
+table.createTableFrame()
+
+}}}
+
+That's it... You can also set preferences from an external file:
+{{{
+table.loadPrefs(self.preferences)
+}}}
+
+Sub-classing is useful for extending the table fuctionality eg. to add cells with new data types. Here is an example from the TablesApp application:
+
+{{{
+from Tables import TableCanvas ColumnHeader
+class MyTable(TableCanvas):
+"""Sub-class of Tablecanvas, with some changes in behaviour to make
+a customised table - just an example"""
+def __init__(self, parent=None, model=None):
+   TableCanvas.__init__(self, parent, model)
+   self.cellbackgr = '#FFFAF0'
+   self.entrybackgr = 'white'
+   self.grid_color = 'gray50'
+   self.selectedcolor = 'yellow'
+   self.rowselectedcolor = '#B0E0E6'
+   self.multipleselectioncolor = '#ECD672'
+   return
+}}}
+
+=Classes=
+
+TableCanvas
+Handles all the user interface and graphical aspects of the table. Inherited from tkinter Canvas. TableCanvas requires a TableModel to be created. If one is not specified, a default Model will be created. 
+
+TableModel
+Handles all the data storage, updating and sorting functionality.
