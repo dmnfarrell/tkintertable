@@ -63,9 +63,9 @@ class TablesApp(Frame):
         self.preferences=Preferences('TablesApp',{'check_for_update':1})
         self.loadprefs()
 	self.tablesapp_win.title('Tables Application')
-        self.tablesapp_win.geometry('+200+100')
+        self.tablesapp_win.geometry('+200+200')
         self.x_size=800
-        self.y_size=500
+        self.y_size=600
         self.createMenuBar()
         self.apptoolBar = ToolBar(self.tablesapp_win, self)
         self.apptoolBar.pack(fill=BOTH, expand=NO)
@@ -535,7 +535,7 @@ class ToolBar(Frame):
                              relief=GROOVE,
                              image=img)
         b.image = img        
-        b.pack(side=LEFT, padx=2, pady=2)
+        b.pack(side=LEFT, padx=2, pady=2, ipadx=3, ipady=3)
         
         return 
         
