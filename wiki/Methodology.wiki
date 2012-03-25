@@ -1,4 +1,4 @@
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 =Concept=
 
 The class utilises the concept of table view->model such as that used in java Swing. The TableCanvas class is the graphical element that handles all the user interaction, GUI changes, formatting etc. This class inherits from tkinter canvas, and we should put all basic table functionality in this base class. However, in practice we really should sub-class this and add any specialist functionality to the subclass, either by overriding the required parent class methods or adding extra ones. Each TableCanvas has a TableModel associated with it, this class handles all the data, updating, sorting and so on. Again, the base class is called TableModel and you sub-class this for specific uses.
