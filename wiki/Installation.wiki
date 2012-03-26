@@ -1,0 +1,4 @@
+#labels Featured
+Using setuptools:
+
+sudo python easy_install tkintertable
