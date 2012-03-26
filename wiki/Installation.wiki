@@ -1,4 +1,8 @@
 #labels Featured
+This project is registered on pyPI and can be installed using pip or setuptools.
+
 Using setuptools:
 
 sudo python easy_install tkintertable
+
+see http://pypi.python.org/pypi/tkintertable
