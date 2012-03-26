@@ -6,11 +6,21 @@ A sample application using these classes is included in the distribution. This s
 
 HOMEPAGE
 
-http://tkintertable.sourceforge.net/
+http://code.google.com/p/tkintertable/
+
+INSTALLATION
+
+Download packages at http://code.google.com/p/tkintertable/downloads/list
+
+Can also be installed using setuptools:
+
+sudo easy_install tkintertable
 
 SUBVERSION
 
-You can checkout the current svn version using svn co https://tkintertable.svn.sourceforge.net/svnroot/tkintertable 
+You can checkout the current svn version using 
+
+svn co http://tkintertable.googlecode.com/svn/trunk/ tkintertable
 
 USAGE
 
