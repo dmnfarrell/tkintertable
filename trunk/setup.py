@@ -5,7 +5,7 @@ pythonpath=os.path.join(home,'python')
 
 setup(
     name = 'tkintertable',
-    version = '1.00',
+    version = '1.0.0',
     description = 'Extendable table class for Tkinter',
     url='http://code.google.com/p/tkintertable/',
     license='GPL v3',
