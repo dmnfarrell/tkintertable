@@ -1,7 +1,7 @@
 #labels Featured
 = Introduction =
 
-This page shows examples of table API usage.
+This page shows example code for altering the table or data properties programmatically.
 
 ==Create tables==
 
@@ -18,7 +18,7 @@ table.createTableFrame()
 
 Preferences for the table can be set on the constructor method, for example:
 {{{
-TableCanvas(self.changelogframe, newdict=self.ulogs, namefield='rev',
+TableCanvas(frame, namefield='name',
                cellwidth=50, cellbackgr='#E3F6CE',
                thefont="Arial 10",rowheight=16,editable=False,
                rowselectedcolor='yellow',reverseorder=1)
@@ -37,16 +37,21 @@ table.add_Row(rowname)
 table.add_Column(colname)
 }}}
 
+==Update the table==
+This may need to be called to update the display after programmatically changing the table contents:
+{{{
+table.redrawTable()
+}}}
+
 ==Put data in cells==
 Currently the method is to get a handle on the table model and populate the data attribute directly then redraw the table. This is somewhat clumsy and a method to do it directly from the table will be added.
-
 {{{
 table.model.data[row][col] = value
 table.redrawTable()
 }}}
 
-==Update the table==
-This may need to be called to update the display after programmatically changing the table contents:
+==Change column labels==
+Column labels can be changed programmatically by accessing the *columnlabels* attribute of the table model:
 {{{
-table.redrawTable()
+table.model.columnlabels[colname] = newlabel
 }}}
