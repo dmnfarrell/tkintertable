@@ -495,7 +495,7 @@ class TableCanvas(Canvas):
                                          "Name already exists!",
                                          parent=self.parentframe)
             else:
-                self.model.addColumn(newname, coltype)
+                self.model.addColumn(newname)
                 self.parentframe.configure(width=self.width)
                 self.redrawTable()
         return
