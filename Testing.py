@@ -5,6 +5,8 @@ from Tkinter import *
 from Tables import TableCanvas
 from TableModels import TableModel
 
+"""Testing general functionality of tables"""
+
 class App:
     def __init__(self, master):
         self.main = Frame(master)
@@ -42,9 +44,11 @@ def testGUI(master):
                         rowselectedcolor='yellow')
     table.createTableFrame()
     
-    table.add_Row('new')    
+    table.add_Row(1)    
     table.add_Column('col6')    
-    tmodel.data['new']['col6']='TEST'
+    tmodel.data[1]['col6']='TEST'
+    
+    table.model.columnlabels['col6'] = 'new label'
     table.redrawTable()
     return
 
