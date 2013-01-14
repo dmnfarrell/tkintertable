@@ -96,7 +96,7 @@ class TableCanvas(Canvas):
         self.alternaterows=0
         self.autoresizecols = 0
         self.paging = 0
-        self.rowsperpage = 50
+        self.rowsperpage = 100
         self.inset=2
         self.x_start=0
         self.y_start=1
