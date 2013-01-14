@@ -22,6 +22,7 @@
 from TableFormula import Formula
 from types import *
 import copy
+import pickle
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
@@ -397,7 +398,6 @@ class TableModel(object):
         for row in rowlist:
             self.deleteRow(row, update=False)
         self.reclist = self.data.keys()
-
         return
 
     def addColumn(self, colname=None, coltype=None):
@@ -414,13 +414,11 @@ class TableModel(object):
             self.columntypes[colname]='text'
         else:
             self.columntypes[colname]=coltype
-
         return
 
     def deleteColumn(self, columnIndex):
         """delete a column"""
-        colname = self.getColumnName(columnIndex)
-        print colname
+        colname = self.getColumnName(columnIndex)   
         self.columnNames.remove(colname)
         del self.columnlabels[colname]
         del self.columntypes[colname]
@@ -431,15 +429,18 @@ class TableModel(object):
 
         if hasattr(self, 'sortcolumnIndex') and columnIndex == self.sortcolumnIndex:
             self.setSortOrder()
-        print 'column deleted'
-        print 'new cols:', self.columnNames
+        #print 'column deleted'
+        #print 'new cols:', self.columnNames
         return
 
-    def deleteMultipleColumns(self, cols=None):
+    def deleteColumns(self, cols=None):
         """Remove all cols or list provided"""
-
-        while self.getColumnCount() > 0:
-            self.deleteColumn(0)
+        if cols == None:
+            cols = self.columnNames
+        if self.getColumnCount() == 0:
+            return
+        for col in cols:
+            self.deleteColumn(col)
         return
 
     def auto_AddRows(self, numrows=None):
@@ -787,13 +788,16 @@ class TableModel(object):
             return
         data = self.getData()
         fd=open(filename,'w')
-        import pickle
+        
         pickle.dump(data,fd)
         fd.close()
         return
 
-    def load(self):
-        """Load model from pickle file"""        
+    def load(self, filename):
+        """Load model from pickle file"""
+        
+        fd=open(filename,'r')
+        self.data = pickle.load(fd)        
         return
 
     def copy(self):
