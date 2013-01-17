@@ -1,0 +1,15 @@
+=======
+CHANGES
+=======
+
+------
+1.0.1
+------
+
+* add_Column method fixed
+* Added ability to align cells left right or center
+* Fixed problem of sort order lost when deleting rows
+* Sort in descending order works correctly
+* Fixes to plotting, but needs reworking or removal
+* Added setSelectedCells method so a block of cells can be selected
+
