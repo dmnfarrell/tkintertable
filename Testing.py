@@ -24,7 +24,7 @@ def createData():
     """Creare random dict for test data"""
 
     data = {}
-    names = createRandomStrings(250,8)
+    names = createRandomStrings(20,12)
     cols = 5
     colnames = createRandomStrings(cols,5)
     for n in names:
@@ -51,7 +51,7 @@ def GUITest(root):
     model.importDict(data)
     table = TableCanvas(master, model, namefield='name',
                         cellwidth=70, cellbackgr='#E3F6CE',
-                        thefont="Arial 10",rowheight=16, rowsperpage=100,
+                        thefont="Arial 12",rowheight=18, rowsperpage=100,
                         rowselectedcolor='yellow', editable=False)
     table.createTableFrame()
     #remove cols
@@ -70,7 +70,7 @@ def GUITest(root):
     table.setSelectedCol(1)
     table.setSelectedCells(1,80,2,4)
     #print table.getSelectionValues()
-    table.plot_Selected(graphtype='XY')
+    #table.plot_Selected(graphtype='XY')
     #save data
     model.save('test.table')
     #load new data
