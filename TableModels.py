@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     Created Oct 2008
-    TablePlotter Class
+    TableModel Class
     Copyright (C) Damien Farrell
  
     This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 
 from TableFormula import Formula
 from types import *
+import operator
 import copy
 import pickle
 
@@ -206,7 +207,8 @@ class TableModel(object):
         value = None
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-        name = self.getRecName(rowIndex)    
+        name = self.getRecName(rowIndex)
+        #print self.data[name]
         if self.data[name].has_key(colname):
             celldata=self.data[name][colname]
         else:
@@ -297,8 +299,7 @@ class TableModel(object):
         
         self.sortcolumnIndex = columnIndex    
         sortkey = self.getColumnName(columnIndex)
-        recnames = self.reclist
-        
+        recnames = self.reclist        
         self.reclist = self.createSortMap(self.reclist, sortkey, reverse)
         if self.filteredrecs != None:
             self.filteredrecs = self.createSortMap(self.filteredrecs, sortkey, reverse)
@@ -306,7 +307,7 @@ class TableModel(object):
 
     def createSortMap(self, names, sortkey, reverse=0):
         """Create a sort mapping for given list"""
-        import operator
+        
         recdata = []
         for rec in names:            
             recdata.append(self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey))
@@ -386,7 +387,8 @@ class TableModel(object):
         del self.data[name]
         if update==True:
             self.reclist = self.data.keys()
-
+        if hasattr(self, 'sortcolumnIndex'):
+            self.setSortOrder(self.sortcolumnIndex)
         return
 
     def deleteRows(self, rowlist=None):
@@ -398,6 +400,8 @@ class TableModel(object):
         for row in rowlist:
             self.deleteRow(row, update=False)
         self.reclist = self.data.keys()
+        if hasattr(self, 'sortcolumnIndex'):
+            self.setSortOrder(self.sortcolumnIndex)
         return
 
     def addColumn(self, colname=None, coltype=None):

@@ -20,6 +20,7 @@
 """
 
 import sys, os
+import copy
 from Tkinter import *
 from math import *
 try:
@@ -69,7 +70,7 @@ class pylabPlotter(object):
         except:
             print 'no tk running'
         self.currdata = None
-        self.format = None  #data format
+        #self.format = None  #data format
         self.plottitle = ''
         self.plotxlabel = ''
         self.plotylabel = ''
@@ -84,15 +85,14 @@ class pylabPlotter(object):
             clr = 'b'
         if self.xscale == 1:
             if self.yscale == 1:
-                line = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
+                line, = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
             else:
-                line = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
+                line, = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
         elif self.yscale == 1:
-            line = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
-        else:            
-            line = pylab.plot(x, y, shape, color=clr, linewidth=lw)
+            line, = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
+        else:
+            line, = pylab.plot(x, y, shape, color=clr, linewidth=lw)
         return line
-
 
     def doHistogram(self, data, bins=10):
         """Do a pylab histogram of 1 or more lists"""
@@ -112,9 +112,7 @@ class pylabPlotter(object):
                 r[j] = float(r[j])
             pylab.hist(r,bins=bins)
             i=i+1
-
         return ax
-
 
     def doBarChart(self, x, y, clr):
         """Do a pylab bar chart"""
@@ -174,7 +172,7 @@ class pylabPlotter(object):
         self.format = format
         return
 
-    def plotCurrent(self, data=None, format=None, show=True, guiopts=False,title=None):
+    def plotCurrent(self, data=None, graphtype='bar', show=True, guiopts=False,title=None):
         """Re-do the plot with the current options and data"""
         if guiopts == True:
             self.applyOptions()
@@ -182,8 +180,6 @@ class pylabPlotter(object):
             self.settitle(title)
         self.clear()
         currfig = pylab.figure(1)
-        if format != None:
-            self.setFormat(format)
 
         if data == None:
             try:
@@ -198,67 +194,52 @@ class pylabPlotter(object):
         legendlines = []
         for d in self.dataseriesvars:
             seriesnames.append(d.get())
-        
-        if self.format == None:
-            #do an X-Y plot, with the first list as X xals
-            if self.graphtype == 'bar' or len(data) == 1:
-                i=0
-                import copy
-                pdata = copy.deepcopy(data)
-                if len(pdata)>1:
-                    x = pdata[0]
-                    pdata.remove(x)
-                    for y in pdata:
-                        if i >= len(self.colors):
-                            i = 0
-                        c = self.colors[i]
-                        self.doBarChart(x, y, clr=c)
-                        i+=1
-                else:
-                    y = pdata[0]
-                    x = range(len(y))
-                    self.doBarChart(x, y, clr='b')
-                    
-            elif self.graphtype == 'XY':
-                import copy
-                pdata = copy.deepcopy(data)
+
+        self.graphtype = graphtype
+        #do an X-Y plot, with the first list as X xals
+        if self.graphtype == 'bar' or len(data) == 1:
+            i=0
+            pdata = copy.deepcopy(data)
+            if len(pdata)>1:
                 x = pdata[0]
                 pdata.remove(x)
-                i=0
                 for y in pdata:
                     if i >= len(self.colors):
                         i = 0
-                    c = self.colors[i]                   
-                    line = self.plotXY(x, y, clr=c, lw=self.linewidth)
-                    legendlines.append(line)
+                    c = self.colors[i]
+                    self.doBarChart(x, y, clr=c)
                     i+=1
+            else:
+                y = pdata[0]
+                x = range(len(y))
+                self.doBarChart(x, y, clr='b')
 
-            elif self.graphtype == 'hist':
-                self.doHistogram(data)
-            elif self.graphtype == 'pie':
-                self.doPieChart(data)
-
-        elif self.format == 'ekindata':
-            #we have to treat the ekin data properly..
-            print 'using ekin data'
-            xdata, ydata, fitxdata, fitydata = data
+        elif self.graphtype == 'XY':
+            pdata = copy.deepcopy(data)
+            x = pdata[0]
+            pdata.remove(x)
             i=0
-            for d in xdata:
+            for y in pdata:
+                if i >= len(self.colors):
+                    i = 0
                 c = self.colors[i]
-                fig=self.plotXY(xdata[d], ydata[d], clr=c)
-                legendlines.append(fig)
-                if fitxdata.has_key(d):
-                    self.plotXY(fitxdata[d],fitydata[d],shape='-',clr=c,lw=self.linewidth)
+                line = self.plotXY(x, y, clr=c, lw=self.linewidth)
+                legendlines.append(line)
                 i+=1
+
+        elif self.graphtype == 'hist':
+            self.doHistogram(data)
+        elif self.graphtype == 'pie':
+            self.doPieChart(data)
 
         pylab.title(self.plottitle)
         pylab.xlabel(self.plotxlabel)
         pylab.ylabel(self.plotylabel)
         #create legend data
         if self.showlegend == 1:
-            pylab.legend(legendlines,seriesnames,shadow=True,
-                         numpoints=1,loc=self.legendloc)
-
+            print legendlines
+            pylab.legend(legendlines,seriesnames,
+                         loc=self.legendloc)
         if self.grid == 1:
             pylab.grid(True)
 
@@ -323,8 +304,6 @@ class pylabPlotter(object):
         if fontsize != None:
             self.fontsize = fontsize
         pylab.rc("font", family=self.font, size=self.fontsize)
-        #matplotlib.rcParams['font.family'] = self.font
-
         return
 
     def setupPlotVars(self):
@@ -372,7 +351,6 @@ class pylabPlotter(object):
         self.setxlabel(self.plotxlabelvar.get())
         self.setylabel(self.plotylabelvar.get())
         return
-
 
     def plotSetup(self, data=None):
         """Plot options dialog"""
@@ -523,7 +501,9 @@ class pylabPlotter(object):
         row=row+1
         frame=Frame(self.plotprefswin)
         frame.grid(row=row,column=0,columnspan=2,sticky='news',padx=2,pady=2)
-        replotb = Button(frame, text="Replot", command=lambda:self.plotCurrent(guiopts=True), relief=GROOVE, bg='#99ccff')
+        replotb = Button(frame, text="Replot",
+                command=lambda:self.plotCurrent(graphtype=self.graphtype,guiopts=True),
+                relief=GROOVE, bg='#99ccff')
         replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
         b = Button(frame, text="Apply", command=self.applyOptions, relief=GROOVE, bg='#99ccff')
         b.pack(side=LEFT,fill=X,padx=2,pady=2)
