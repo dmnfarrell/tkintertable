@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 """
     Created Oct 2008
-    TablePlotter Class
+    Table Class
     Copyright (C) Damien Farrell
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
- 
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
- 
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -61,7 +61,7 @@ class TableCanvas(Canvas):
         self.editable = True
         self.filtered = False
 
-        self.loadPrefs()        
+        self.loadPrefs()
         #set any options passed in kwargs to overwrite defaults/prefs
         for key in kwargs:
             self.__dict__[key] = kwargs[key]
@@ -84,7 +84,7 @@ class TableCanvas(Canvas):
         #when you add a column type you should edit this dict
         self.columnactions = {'text' : {"Edit":  'draw_cellentry' },
                               'number' : {"Edit": 'draw_cellentry' }}
-        #self.savePrefs()    
+        #self.savePrefs()
         return
 
     def set_defaults(self):
@@ -218,19 +218,18 @@ class TableCanvas(Canvas):
         self.configure(bg=self.cellbackgr)
         #determine col positions for first time
         self.set_colPositions()
-        
+
         #are we drawing a filtered subset of the recs?
-        if self.filtered == True and self.model.filteredrecs != None:            
+        if self.filtered == True and self.model.filteredrecs != None:
             self.rows = len(self.model.filteredrecs)
             self.delete('colrect')
-            
+
         #check if large no. of records and switch to paging view
-        if self.paging == 0 and self.rows >= 500:
+        if self.paging == 0 and self.rows >= 1000:
             self.paging = 1
         #if using paging, we only want to display the current page..
         if self.paging == 1:
             self.numpages = int(math.ceil(float(self.rows)/self.rowsperpage))
-          
             if self.currentpage == None:
                 self.currentpage = 0
             self.drawNavFrame()
@@ -251,14 +250,14 @@ class TableCanvas(Canvas):
         else:
             self.rowrange = range(0,self.rows)
             self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rows+10))
-            
+
         self.draw_grid()
         self.update_idletasks()
         self.tablecolheader.redraw()
         self.tablerowheader.redraw(paging=self.paging)
-        align=None
+        align=self.align
         self.delete('fillrect')
-     
+
         if self.cols == 0 or self.rows == 0:
             self.delete('entry')
             self.delete('rowrect')
@@ -270,13 +269,14 @@ class TableCanvas(Canvas):
         if self.model!=None:
             for row in self.rowrange:
                 if callback != None:
-                    callback()                   
+                    callback()
                 for col in range(self.cols):
                     colname = model.getColumnName(col)
-                    if colname == 'name' or colname == 'Name':
+                    '''if colname == 'name' or colname == 'Name':
                         align='w'
                     else:
-                        align=None
+                        align='w'
+                    '''
                     bgcolor = self.model.getColorAt(row,col, 'bg')
                     fgcolor = self.model.getColorAt(row,col, 'fg')
                     text = self.model.getValueAt(row,col)
@@ -284,7 +284,7 @@ class TableCanvas(Canvas):
                     if bgcolor != None:
                         self.draw_rect(rowpos,col, color=bgcolor)
                 rowpos+=1
-        self.setSelectedRow(0)
+        self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
         if len(self.multiplerowlist)>1:
@@ -297,16 +297,16 @@ class TableCanvas(Canvas):
         if row == None and recname != None:
             row = self.model.getRecordIndex(recname)
         if col == None and colname != None:
-            col = self.model.getColumnIndex(colname)       
+            col = self.model.getColumnIndex(colname)
         bgcolor = self.model.getColorAt(row,col, 'bg')
         fgcolor = self.model.getColorAt(row,col, 'fg')
         text = self.model.getValueAt(row,col)
         self.draw_Text(row, col, text, fgcolor)
         if bgcolor != None:
             self.draw_rect(row,col, color=bgcolor)
-                        
+
         return
-        
+
     def resizeTable(self, event):
         """Respond to a resize event - redraws table"""
         if self.autoresizecols == 1 and event != None:
@@ -348,14 +348,12 @@ class TableCanvas(Canvas):
                 x_pos=x_pos+w
             self.col_positions.append(x_pos)
         self.tablewidth = self.col_positions[len(self.col_positions)-1]
-
         return
 
-    def sortTable(self, sortcol=None, reverse=0):
+    def sortTable(self, sortcol, reverse=0):
         """Set up sort order dict based on currently selected field"""
-        #self.sortcol = self.currentcol
-        self.model.setSortOrder(self.currentcol, self.reverseorder)
-        self.reverseorder = reverse
+        self.sortcol = sortcol
+        self.model.setSortOrder(sortcol, reverse)
         self.redrawTable()
         return
 
@@ -488,7 +486,7 @@ class TableCanvas(Canvas):
             else:
                 coltype = d.result[0]
                 newname = d.result[1]
-                
+
         if newname != None:
             if newname in self.getModel().columnNames:
                 tkMessageBox.showwarning("Name exists",
@@ -503,18 +501,16 @@ class TableCanvas(Canvas):
     def delete_Row(self):
         """Delete a row"""
         if len(self.multiplerowlist)>1:
-            print 'deleting mult'
             n = tkMessageBox.askyesno("Delete",
                                       "Delete Selected Records?",
                                       parent=self.parentframe)
-            print str(n)
             if n == True:
                 rows = self.multiplerowlist
                 self.model.deleteRows(rows)
                 self.setSelectedRow(0)
                 self.multiplerowlist = []
                 self.redrawTable()
-        else:            
+        else:
             n = tkMessageBox.askyesno("Delete",
                                       "Delete This Record?",
                                       parent=self.parentframe)
@@ -548,7 +544,7 @@ class TableCanvas(Canvas):
         for col in cols:
             for row in rows:
                 absrow = self.get_AbsoluteRow(row)
-                self.model.deleteCellRecord(row, col)       
+                self.model.deleteCellRecord(row, col)
         self.redrawCell(row,col)
         return
 
@@ -629,25 +625,25 @@ class TableCanvas(Canvas):
         self.filterframe = None
         self.showAll()
         return
-    
+
     def showAll(self):
         self.model.filteredrecs = None
         self.filtered = False
         self.redrawTable()
         return
-    
+
     def doFilter(self, event=None):
         """Filter the table display by some column values.
-        We simply pass the model search function to the the filtering 
+        We simply pass the model search function to the the filtering
         class and that handles everything else.
         See filtering frame class for how searching is done.
         """
         if self.model==None:
             return
-        from Filtering import FilterFrame   
+        from Filtering import FilterFrame
         names = self.filterframe.doFiltering(searchfunc=self.model.filterBy)
         #create a list of filtered recs
-        self.model.filteredrecs = names 
+        self.model.filteredrecs = names
         self.filtered = True
         if self.paging == 1:
             self.currentpage = 0
@@ -657,10 +653,10 @@ class TableCanvas(Canvas):
     def createFilteringBar(self, parent=None, fields=None):
         """Add a filter frame"""
         if parent == None:
-            parent = Toplevel()            
+            parent = Toplevel()
         if fields == None:
             fields = self.model.columnNames
-        from Filtering import FilterFrame    
+        from Filtering import FilterFrame
         self.filterframe = FilterFrame(parent, fields,
                                        self.doFilter, self.closeFilterFrame)
         return self.filterframe
@@ -669,7 +665,7 @@ class TableCanvas(Canvas):
         frame = self.createFilteringBar()
         frame.pack()
         return
-    
+
     def resize_Column(self, col, width):
         """Resize a column by dragging"""
         #print 'resizing column', col
@@ -754,6 +750,20 @@ class TableCanvas(Canvas):
         self.multiplecollist.append(col)
         return
 
+    def setSelectedCells(self, startrow, endrow, startcol, endcol):
+        """Set a block of cells selected"""
+        self.currentrow = startrow
+        self.currentcol = startcol
+        if startrow < 0 or startcol < 0:
+            return
+        if endrow > self.rows or endcol > self.cols:
+            return
+        for r in range(startrow, endrow):
+            self.multiplerowlist.append(r)
+        for c in range(startcol, endcol):
+            self.multiplecollist.append(c)
+        return
+
     def getSelectedRow(self):
         """Get currently selected row"""
         return self.currentrow
@@ -771,7 +781,7 @@ class TableCanvas(Canvas):
         return
 
     def getCellCoords(self, row, col):
-        """Get x-y coordinates to drawing a cell in a given row/col"""        
+        """Get x-y coordinates to drawing a cell in a given row/col"""
         colname=self.model.getColumnName(col)
         if self.model.columnwidths.has_key(colname):
             w=self.model.columnwidths[colname]
@@ -795,7 +805,7 @@ class TableCanvas(Canvas):
             return None, None
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         cx=float(x1)/self.tablewidth
-        cy=float(y1)/(self.rows*self.rowheight)        
+        cy=float(y1)/(self.rows*self.rowheight)
         return cx, cy
 
     def isInsideTable(self,x,y):
@@ -890,7 +900,7 @@ class TableCanvas(Canvas):
             self.drawSelectedRow()
             self.tablerowheader.drawSelectedRows(rowclicked)
             coltype = self.model.getColumnType(colclicked)
-            if coltype == 'text' or coltype == 'number':                
+            if coltype == 'text' or coltype == 'number':
                 self.draw_cellentry(rowclicked, colclicked)
         return
 
@@ -1079,17 +1089,17 @@ class TableCanvas(Canvas):
 
     def movetoSelectedRow(self, row=None, recname=None):
         """Move to selected row, updating table"""
-        row=self.model.getRecordIndex(recname)        
-        self.setSelectedRow(row)                
-        self.drawSelectedRow()  
-        x,y = self.getCanvasPos(row, 0)     
+        row=self.model.getRecordIndex(recname)
+        self.setSelectedRow(row)
+        self.drawSelectedRow()
+        x,y = self.getCanvasPos(row, 0)
         self.yview('moveto', y-0.01)
-        self.tablecolheader.yview('moveto', y)        
-        return        
-    
+        self.tablecolheader.yview('moveto', y)
+        return
+
     def handleFormulaClick(self, row, col):
         """Do a dialog for cell formula entry"""
-    
+
         model = self.getModel()
         cell = list(model.getRecColNames(row, col))
         absrow = self.get_AbsoluteRow(row)
@@ -1150,7 +1160,7 @@ class TableCanvas(Canvas):
         """Convert the formulas in the cells to their result values"""
         if len(self.multiplerowlist) == 0 or len(self.multiplecollist) == 0:
             return None
-      
+
         print rows, cols
         if cols == None:
             cols = range(self.cols)
@@ -1189,24 +1199,24 @@ class TableCanvas(Canvas):
         coldata = {}
         for col in self.multiplecollist:
             name = M.columnNames[col]
-            coldata[name] = M.getColumnData(columnName=name)       
+            coldata[name] = M.getColumnData(columnName=name)
         return coldata
-        
+
     def pasteColumns(self, coldata):
         """Paste new cols, overwrites existing names"""
-        M = self.model        
-        for name in coldata:            
+        M = self.model
+        for name in coldata:
             if name not in M.columnNames:
-                M.addColumn(name)            
+                M.addColumn(name)
             for r in range(len(coldata[name])):
                 val = coldata[name][r]
-                col = M.columnNames.index(name)                
+                col = M.columnNames.index(name)
                 if r >= self.rows:
-                    break                 
-                M.setValueAt(val, r, col)            
+                    break
+                M.setValueAt(val, r, col)
         self.redrawTable()
-        return coldata       
-        
+        return coldata
+
     # --- Some cell specific actions here ---
 
     def setcellColor(self, rows, cols=None, newColor=None, key=None, redraw=True):
@@ -1250,7 +1260,7 @@ class TableCanvas(Canvas):
             popupmenu.unpost()
 
         if outside == 1:
-            #if outside table, just show general items            
+            #if outside table, just show general items
             popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
             popupmenu.add_command(label="Export Table", command= self.exportTable)
             popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
@@ -1385,7 +1395,7 @@ class TableCanvas(Canvas):
 
         return lists
 
-    def plot_Selected(self):
+    def plot_Selected(self, graphtype='XY'):
         """Plot the selected data using pylab - if possible"""
         from PylabPlot import pylabPlotter
         if not hasattr(self, 'pyplot'):
@@ -1393,22 +1403,21 @@ class TableCanvas(Canvas):
         plotdata = []
         for p in self.getSelectionValues():
             x = []
+            fail = False
             for d in p:
                 try:
                     x.append(float(d))
                 except:
-                    pass
-            plotdata.append(x)
+                    fail = True
+                    continue
+            if fail == False:
+                plotdata.append(x)
 
         pltlabels = self.getplotlabels()
-        #print pltlabels, plotdata
         if len(pltlabels) > 2:
             self.pyplot.setDataSeries(pltlabels)
             self.pyplot.showlegend = 1
-        else:
-            self.pyplot.setxlabel(pltlabels[0])
-            self.pyplot.setylabel(pltlabels[1])
-        self.pyplot.plotCurrent(data=plotdata)
+        self.pyplot.plotCurrent(data=plotdata, graphtype=graphtype)
         return
 
     def plotSetup(self):
@@ -1418,7 +1427,6 @@ class TableCanvas(Canvas):
         if not hasattr(self, 'pyplot'):
             self.pyplot = pylabPlotter()
         plotdata = self.getSelectionValues()
-
         if not self.pyplot.hasData() and plotdata != None:
             print 'has data'
             plotdata = self.getSelectionValues()
@@ -1427,7 +1435,6 @@ class TableCanvas(Canvas):
             self.pyplot.plotSetup(plotdata)
         else:
             self.pyplot.plotSetup()
-
         return
 
     def getplotlabels(self):
@@ -1582,7 +1589,7 @@ class TableCanvas(Canvas):
                 #self.draw_rect(row, col)
                 #self.gotonextCell(e)
             return
-        
+
         self.cellentry=Entry(self.parentframe,width=20,
                         textvariable=txtvar,
                         bg=self.entrybackgr,
@@ -1639,11 +1646,11 @@ class TableCanvas(Canvas):
         fontsize = self.fontsize
         scale = fontsize*1.2
         total = len(celltxt)
-        
-        if len(celltxt) > w/scale:           
+
+        if len(celltxt) > w/scale:
             celltxt=celltxt[0:int(w/fontsize*1.2)-3]
         if len(celltxt) < total:
-            celltxt=celltxt+'..'            
+            celltxt=celltxt+'..'
         if w < 25:
             celltxt = ''
         if fgcolor == None or fgcolor == "None":
@@ -1652,15 +1659,16 @@ class TableCanvas(Canvas):
             align = 'center'
         elif align == 'w':
             x1 = x1-w/2+1
+        elif align == 'e':
+            x1 = x1+w/2-1
 
-        #if celltxt is dict then we are drawing a hyperlink 
-        if self.isLink(celltxt) == True:            
+        #if celltxt is dict then we are drawing a hyperlink
+        if self.isLink(celltxt) == True:
             haslink=0
             linktext=celltxt['text']
             if len(linktext) > w/scale or w<28:
                 linktext=linktext[0:int(w/fontsize*1.2)-2]+'..'
             if celltxt['link']!=None and celltxt['link']!='':
-                #f,s = self.thefont.split(' ')
                 f,s = self.thefont
                 linkfont = (f, s, 'underline')
                 linkcolor='blue'
@@ -1677,13 +1685,13 @@ class TableCanvas(Canvas):
             if haslink == 1:
                 self.tag_bind(rect, '<Double-Button-1>', self.check_hyperlink)
 
-        #just normal text        
-        else:           
+        #just normal text
+        else:
             rect = self.create_text(x1+w/2,y1+h/2,
                                       text=celltxt,
                                       fill=fgcolor,
                                       font=self.thefont,
-                                      anchor=align,                                      
+                                      anchor=align,
                                       tag=('text','celltext'+str(col)+'_'+str(row)))
         return
 
@@ -1848,7 +1856,7 @@ class TableCanvas(Canvas):
         row=row+1
         Checkbutton(frame1, text="Alternate Row Color", variable=self.alternaterowsvar,
                     onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
-        row=row+1        
+        row=row+1
         lblrowheight=Label(frame1,text='Row Height:')
         lblrowheight.grid(row=row,column=0,padx=3,pady=2)
         rowheightentry=Scale(frame1,from_=12,to=50,resolution=1,orient='horizontal',
@@ -1877,15 +1885,16 @@ class TableCanvas(Canvas):
         Label(frame1, text='Rows/page:').grid(row=row,column=0, sticky='news')
         Entry(frame1, textvariable=self.rowsperpagevar,bg='white',width=12,relief='groove').grid(row=row,column=1, pady=2,sticky='ns')
         row=row+1
+
+        #fonts
         lblfont=Label(frame2,text='Cell Font:')
         lblfont.grid(row=row,column=0,padx=3,pady=2)
         fontentry_button=Menubutton(frame2,textvariable=self.celltextfontvar,
 					relief=RAISED,width=16)
         fontentry_menu=Menu(fontentry_button,tearoff=0)
         fontentry_button['menu']=fontentry_menu
-        #
+
         # Other fonts available
-        #
         fts=['Arial','Courier','Verdana','Fixed','Times']
         for text in fts:
             fontentry_menu.add_radiobutton(label=text,
@@ -1901,8 +1910,24 @@ class TableCanvas(Canvas):
 
         fontsizeentry.grid(row=row,column=1, sticky='wens',padx=3,pady=2)
         row=row+1
-        #colors
 
+        #cell alignment
+        lbl=Label(frame2,text='Alignment:')
+        lbl.grid(row=row,column=0,padx=3,pady=2)
+        alignentry_button=Menubutton(frame2,textvariable=self.cellalignvar,
+					relief=RAISED,width=16)
+        alignentry_menu=Menu(alignentry_button,tearoff=0)
+        alignentry_button['menu'] = alignentry_menu
+        alignments=['center','w','e']
+        for text in alignments:
+            alignentry_menu.add_radiobutton(label=text,
+                                            variable=self.cellalignvar,
+                                            value=text,
+                                            indicatoron=1)
+        alignentry_button.grid(row=row,column=1, sticky='nes', padx=3,pady=2)
+        row=row+1
+
+        #colors
         cellbackgrbutton = Button(frame2, text='table background', bg=self.cellbackgr,
                                 relief='groove', command=self.setcellbackgr)
         cellbackgrbutton.grid(row=row,column=0,columnspan=2, sticky='news',padx=3,pady=2)
@@ -1952,6 +1977,7 @@ class TableCanvas(Canvas):
                         'cellwidth':120,
                         'autoresizecols': 0,
                         'paging': 0, 'rowsperpage' : 50,
+                        'align': 'center',
                         'celltextsize':11, 'celltextfont':'Arial',
                         'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
                         'linewidth' : self.linewidth,
@@ -1969,6 +1995,9 @@ class TableCanvas(Canvas):
         self.cellwidthvar = IntVar()
         self.cellwidthvar.set(self.prefs.get('cellwidth'))
         self.cellwidth = self.cellwidthvar.get()
+        self.cellalignvar = StringVar()
+        self.cellalignvar.set(self.prefs.get('align'))
+        self.align = self.cellalignvar.get()
         self.linewidthvar = IntVar()
         self.linewidthvar.set(self.prefs.get('linewidth'))
         self.autoresizecolsvar = IntVar()
@@ -1990,7 +2019,7 @@ class TableCanvas(Canvas):
         self.celltextfontvar.set(self.prefs.get('celltextfont'))
         self.cellbackgr = self.prefs.get('cellbackgr')
         self.grid_color = self.prefs.get('grid_color')
-        self.rowselectedcolor = self.prefs.get('rowselectedcolor')        
+        self.rowselectedcolor = self.prefs.get('rowselectedcolor')
         self.fontsize = self.celltextsizevar.get()
         self.thefont = (self.celltextfontvar.get(), self.celltextsizevar.get())
         return
@@ -2003,11 +2032,13 @@ class TableCanvas(Canvas):
             self.prefs.set('vertlines', self.vertlinesvar.get())
             self.vertlines = self.vertlinesvar.get()
             self.prefs.set('alternaterows', self.alternaterowsvar.get())
-            self.alternaterows = self.alternaterowsvar.get()            
+            self.alternaterows = self.alternaterowsvar.get()
             self.prefs.set('rowheight', self.rowheightvar.get())
             self.rowheight = self.rowheightvar.get()
             self.prefs.set('cellwidth', self.cellwidthvar.get())
             self.cellwidth = self.cellwidthvar.get()
+            self.prefs.set('align', self.cellalignvar.get())
+            self.align = self.cellalignvar.get()
             self.prefs.set('linewidth', self.linewidthvar.get())
             self.linewidth = self.linewidthvar.get()
             self.prefs.set('autoresizecols', self.autoresizecolsvar.get())
@@ -2021,7 +2052,7 @@ class TableCanvas(Canvas):
             self.prefs.set('cellbackgr', self.cellbackgr)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
-            self.thefont = (self.celltextfontvar.get(), self.celltextsizevar.get())          
+            self.thefont = (self.celltextfontvar.get(), self.celltextsizevar.get())
             self.fontsize = self.celltextsizevar.get()
         except ValueError:
             pass
@@ -2195,7 +2226,7 @@ class ColumnHeader(Canvas):
         #set all rows selected
         self.table.allrows = True
         self.table.setSelectedCol(colclicked)
-        
+
         if self.atdivider == 1:
             return
         self.draw_rect(self.table.currentcol)
@@ -2321,12 +2352,13 @@ class ColumnHeader(Canvas):
         """Add left and right click behaviour for column header"""
         colname = self.model.columnNames[self.table.currentcol]
         collabel = self.model.columnlabels[colname]
+        currcol = self.table.currentcol
         popupmenu = Menu(self, tearoff = 0)
         def popupFocusOut(event):
             popupmenu.unpost()
         popupmenu.add_command(label="Rename Column", command=self.relabel_Column)
-        popupmenu.add_command(label="Sort by "+ collabel, command=self.table.sortTable)
-        popupmenu.add_command(label="Sort by "+ collabel +' (descending)', command=lambda : self.table.sortTable(reverse=1))
+        popupmenu.add_command(label="Sort by "+ collabel, command=lambda : self.table.sortTable(currcol))
+        popupmenu.add_command(label="Sort by "+ collabel +' (descending)', command=lambda : self.table.sortTable(currcol,reverse=1))
         popupmenu.add_command(label="Delete This Column", command=self.table.delete_Column)
         popupmenu.add_command(label="Add New Column", command=self.table.add_Column)
 
@@ -2421,7 +2453,7 @@ class RowHeader(Canvas):
             self.height = self.table.rowheight * self.table.rowsperpage+10
         else:
             self.height = self.table.rowheight * self.table.rows+10
-     
+
         self.configure(scrollregion=(0,0, self.width, self.height))
         self.delete('rowheader','text')
         self.delete('rect')
@@ -2626,7 +2658,7 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
 
     def body(self, master):
         """Show all record fields in entry fields or labels"""
-        model = self.model        
+        model = self.model
         cols = self.recdata.keys()
         self.editable = []
         self.fieldnames = {}
@@ -2662,16 +2694,16 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
         newname = self.fieldvars['Name'].get()
         if newname != self.recname:
             model.setRecName(newname, absrow)
-       
+
         for col in range(cols):
             colname = model.getColumnName(col)
             if not colname in self.editable:
-                continue          
+                continue
             if not self.fieldvars.has_key(colname):
                 continue
-            val = self.fieldvars[colname].get()            
+            val = self.fieldvars[colname].get()
             model.setValueAt(val, absrow, col)
             #print 'changed field', colname
-        
+
         self.table.redrawTable()
         return

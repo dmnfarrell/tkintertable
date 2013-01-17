@@ -22,55 +22,68 @@ def createRandomStrings(l,n):
 
 def createData():
     """Creare random dict for test data"""
-    
+
     data = {}
-    names = createRandomStrings(1000,8)
-    cols = 12
-    colnames = createRandomStrings(cols,4)    
-    for n in names:        
-        data[n]={}        
-        for c in range(0,cols):
-            colname=colnames[c]
-            data[n][colname] = round(random.normalvariate(100,100),2)
+    names = createRandomStrings(250,8)
+    cols = 5
+    colnames = createRandomStrings(cols,5)
+    for n in names:
+        data[n]={}
+        data[n]['label'] = n
+    for c in range(0,cols):
+        colname=colnames[c]
+        vals = [round(random.normalvariate(100,50),2) for i in range(0,len(names))]
+        vals = sorted(vals)
+        i=0
+        for n in names:
+            data[n][colname] = vals[i]
+            i+=1
     return data
 
 def GUITest(root):
     """Setup a table and populate it with data"""
-    
-    app = App(root) 
+
+    app = App(root)
     master = app.main
     model = TableModel()
     data = createData()
+    #import after model created
     model.importDict(data)
     table = TableCanvas(master, model, namefield='name',
                         cellwidth=70, cellbackgr='#E3F6CE',
                         thefont="Arial 10",rowheight=16, rowsperpage=100,
                         rowselectedcolor='yellow', editable=False)
-    table.createTableFrame()    
+    table.createTableFrame()
     #remove cols
-    model.deleteColumns([0,2,3])
-    model.deleteRows(range(0,40))
+    model.deleteColumns([0,2])
+    model.deleteRows(range(0,2))
     table.redrawTable()
     #add rows and cols
-    table.add_Row(1)    
-    table.add_Column('col6')    
+    table.add_Row(1)
+    table.add_Column('col6')
     model.data[1]['col6']='TEST'
     table.redrawTable()
     #change col labels
-    model.columnlabels['col6'] = 'new label'    
+    model.columnlabels['col6'] = 'new label'
+    #set and get selections
+    table.setSelectedRow(2)
+    table.setSelectedCol(1)
+    table.setSelectedCells(1,80,2,4)
+    print table.getSelectionValues()
+    table.plot_Selected(graphtype='XY')
     #save data
     model.save('test.table')
     #load new data
-    model.load('test.table')
+    #model.load('test.table')
     table.redrawTable()
     print 'GUI tests done'
-    root.after(2000, root.quit)
+    #root.after(2000, root.quit)
     return
 
 
 def main():
-    root = Tk()       
-    GUITest(root)    
+    root = Tk()
+    GUITest(root)
     root.mainloop()
     #loadSaveTest()
 
