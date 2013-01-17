@@ -69,7 +69,7 @@ def GUITest(root):
     table.setSelectedRow(2)
     table.setSelectedCol(1)
     table.setSelectedCells(1,80,2,4)
-    print table.getSelectionValues()
+    #print table.getSelectionValues()
     table.plot_Selected(graphtype='XY')
     #save data
     model.save('test.table')
