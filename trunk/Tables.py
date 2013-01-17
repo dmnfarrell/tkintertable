@@ -25,8 +25,8 @@ from TableFormula import Formula
 from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import tkFont
-import math
-from types import *
+import math, time
+import types
 
 class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
@@ -89,7 +89,7 @@ class TableCanvas(Canvas):
 
     def set_defaults(self):
         self.cellwidth=150
-        self.maxcellwidth=400
+        self.maxcellwidth=200
         self.rowheight=20
         self.horizlines=1
         self.vertlines=1
@@ -199,18 +199,16 @@ class TableCanvas(Canvas):
         self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
         self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         if self.model.getRowCount()<500:
-            self.adjust_colWidths()
+            self.adjustColumnWidths()
         self.redrawTable(callback=callback)
-        self.parentframe.bind("<Configure>", self.resizeTable)
+        #self.parentframe.bind("<Configure>", self.resizeTable)
         self.tablecolheader.xview("moveto", 0)
         self.xview("moveto", 0)
-        #self.table.yview("moveto", 0)
-
         return
 
     def redrawTable(self, event=None, callback=None):
         """Draw the table from scratch based on it's model data"""
-        import time
+
         model = self.model
         self.rows=self.model.getRowCount()
         self.cols=self.model.getColumnCount()
@@ -304,34 +302,34 @@ class TableCanvas(Canvas):
         self.draw_Text(row, col, text, fgcolor)
         if bgcolor != None:
             self.draw_rect(row,col, color=bgcolor)
-
         return
 
-    def resizeTable(self, event):
+    '''def resizeTable(self, event):
         """Respond to a resize event - redraws table"""
         if self.autoresizecols == 1 and event != None:
             self.cellwidth = (event.width - self.x_start - 24) / self.cols
             #print 'cellwidth', self.cellwidth
             self.redrawTable()
-        return
+        return'''
 
-    def adjust_colWidths(self):
-        """Optimally adjust col widths at start to accomodate the longest entry"""
+    def adjustColumnWidths(self):
+        """Optimally adjust col widths to accomodate the longest entry
+            in each column - usually only called  on first redraw"""
         try:
             fontsize=self.celltextsizevar.get()
         except:
-            fontsize=11
-        scale = 8.5 # +fontsize/10
-
+            fontsize=12
+        scale = 8.5 * fontsize/12
         for col in range(self.cols):
-            width = self.model.getlongestEntry(col) * scale
-            #print 'comparing', width,  self.maxcellwidth
-            if width >= self.maxcellwidth:
-                width = self.maxcellwidth
-            elif width < self.cellwidth:
-                width = self.cellwidth
+            maxlen = self.model.getlongestEntry(col)
+            size = maxlen * scale +2
+            if size < self.cellwidth:
+                continue
+            print size, self.cellwidth
+            if size >= self.maxcellwidth:
+                size = self.maxcellwidth
             colname=self.model.getColumnName(col)
-            self.model.columnwidths[colname]=width
+            self.model.columnwidths[colname] = size
         return
 
     def set_colPositions(self):
@@ -508,7 +506,8 @@ class TableCanvas(Canvas):
                 rows = self.multiplerowlist
                 self.model.deleteRows(rows)
                 self.setSelectedRow(0)
-                self.multiplerowlist = []
+                #self.multiplerowlist = []
+                self.clearSelected()
                 self.redrawTable()
         else:
             n = tkMessageBox.askyesno("Delete",
@@ -1624,10 +1623,6 @@ class TableCanvas(Canvas):
             return 1
         return 1
 
-    def enterFormula(self, row, col):
-
-        return
-
     def draw_Text(self, row, col, celltxt, fgcolor=None, align=None):
         """Draw the text inside a cell area"""
         self.delete('celltext'+str(col)+'_'+str(row))
@@ -1635,32 +1630,36 @@ class TableCanvas(Canvas):
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         wrap = False
+        length = len(celltxt)
         # If celltxt is a number then we make it a string
-        import types
         if type(celltxt) is types.FloatType or type(celltxt) is types.IntType:
             celltxt=str(celltxt)
-        #if cell width is less than x, print nothing
-        if w<=15:
+        if length == 0:
             return
+        #if cell width is less than x, print nothing
+        if w<=5:
+            return
+        if w < 15:
+            celltxt = '.'
+        else:
+            fontsize = self.fontsize
+            colname = self.model.getColumnName(col)
+            #scaling between canvas and text normalised to about font 14
+            scale = 7.5 * fontsize/12
+            size = length * scale
+            #print colname, celltxt, len(celltxt), w, size, scale
+            if size > w:
+                newlength = w / scale
+                celltxt = celltxt[0:int(math.floor(newlength))]
 
-        fontsize = self.fontsize
-        scale = fontsize*1.2
-        total = len(celltxt)
-
-        if len(celltxt) > w/scale:
-            celltxt=celltxt[0:int(w/fontsize*1.2)-3]
-        if len(celltxt) < total:
-            celltxt=celltxt+'..'
-        if w < 25:
-            celltxt = ''
-        if fgcolor == None or fgcolor == "None":
-            fgcolor = 'black'
-        if align == None:
-            align = 'center'
-        elif align == 'w':
-            x1 = x1-w/2+1
-        elif align == 'e':
-            x1 = x1+w/2-1
+            if fgcolor == None or fgcolor == "None":
+                fgcolor = 'black'
+            if align == None:
+                align = 'center'
+            elif align == 'w':
+                x1 = x1-w/2+1
+            elif align == 'e':
+                x1 = x1+w/2-1
 
         #if celltxt is dict then we are drawing a hyperlink
         if self.isLink(celltxt) == True:
@@ -2677,7 +2676,7 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
             self.fieldnames[col] = Label(master, text=col).grid(row=i,column=0,padx=2,pady=2,sticky='news')
             ent = Entry(master, textvariable=self.fieldvars[col], relief=GROOVE,bg='white')
             ent.grid(row=i,column=1,padx=2,pady=2,sticky='news')
-            if not type(self.recdata[col]) is StringType:
+            if not type(self.recdata[col]) is types.StringType:
                 ent.config(state=DISABLED)
             else:
                 self.editable.append(col)
