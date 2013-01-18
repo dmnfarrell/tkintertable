@@ -16,7 +16,7 @@ def createRandomStrings(l,n):
     """create list of l random strings, each of length n"""
     names = []
     for i in range(l):
-        val = ''.join(random.choice(string.ascii_uppercase) for x in range(n))
+        val = ''.join(random.choice(string.ascii_lowercase) for x in range(n))
         names.append(val)
     return names
 
@@ -50,17 +50,18 @@ def GUITest(root):
     #import after model created
     model.importDict(data)
     table = TableCanvas(master, model, namefield='name',
-                        cellwidth=70, cellbackgr='#E3F6CE',
-                        thefont="Arial 12",rowheight=18, rowsperpage=100,
+                        cellwidth=60, cellbackgr='#E3F6CE',
+                        thefont=('Arial',12),rowheight=18, rowsperpage=100,
                         rowselectedcolor='yellow', editable=False)
     table.createTableFrame()
     #remove cols
-    model.deleteColumns([0,2])
+    model.deleteColumns([0])
     model.deleteRows(range(0,2))
     table.redrawTable()
     #add rows and cols
     table.add_Row(1)
     table.add_Column('col6')
+    model.data[1]['label']='XHJHJSAHSHJ'
     model.data[1]['col6']='TEST'
     table.redrawTable()
     #change col labels
