@@ -387,8 +387,8 @@ class TableModel(object):
         del self.data[name]
         if update==True:
             self.reclist = self.data.keys()
-        if hasattr(self, 'sortcolumnIndex'):
-            self.setSortOrder(self.sortcolumnIndex)
+            if hasattr(self, 'sortcolumnIndex'):
+                self.setSortOrder(self.sortcolumnIndex)
         return
 
     def deleteRows(self, rowlist=None):
