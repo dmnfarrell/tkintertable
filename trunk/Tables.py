@@ -27,6 +27,7 @@ import tkFileDialog, tkMessageBox, tkSimpleDialog
 import tkFont
 import math, time
 import types
+import platform
 
 class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
@@ -39,11 +40,10 @@ class TableCanvas(Canvas):
         self.parentframe = parent
         #get platform into a variable
         self.ostyp = self.checkOSType()
-        import platform
+
         self.platform=platform.system()
         self.width=width
         self.height=height
-
         self.set_defaults()
         self.currentpage = None
         self.navFrame = None
@@ -62,7 +62,7 @@ class TableCanvas(Canvas):
         self.filtered = False
 
         self.loadPrefs()
-        #set any options passed in kwargs to overwrite defaults/prefs
+        #set any options passed in kwargs to overwrite defaults and prefs
         for key in kwargs:
             self.__dict__[key] = kwargs[key]
 
@@ -84,7 +84,7 @@ class TableCanvas(Canvas):
         #when you add a column type you should edit this dict
         self.columnactions = {'text' : {"Edit":  'draw_cellentry' },
                               'number' : {"Edit": 'draw_cellentry' }}
-        #self.savePrefs()
+        self.setFontSize()
         return
 
     def set_defaults(self):
@@ -101,13 +101,20 @@ class TableCanvas(Canvas):
         self.x_start=0
         self.y_start=1
         self.linewidth=1.0
-        self.thefont = "Arial 11"
+        self.thefont = ('Arial',12)
         self.cellbackgr = '#F7F7FA'
         self.entrybackgr = 'white'
         self.grid_color = '#ABB1AD'
         self.selectedcolor = 'yellow'
         self.rowselectedcolor = '#CCCCFF'
         self.multipleselectioncolor = '#ECD672'
+        return
+
+    def setFontSize(self):
+        """Set font size to match font, we need to get rid of fontsize as
+            a separate variable?"""
+        if hasattr(self, 'thefont') and type(self.thefont) is types.TupleType:
+            self.fontsize = self.thefont[1]
         return
 
     def mouse_wheel(self, event):
@@ -244,10 +251,12 @@ class TableCanvas(Canvas):
             if upper>=self.rows:
                 upper=self.rows
             self.rowrange=range(lower,upper)
-            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rowsperpage+10))
+            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
+                    self.rowheight*self.rowsperpage+10))
         else:
             self.rowrange = range(0,self.rows)
-            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start, self.rowheight*self.rows+10))
+            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
+                    self.rowheight*self.rows+10))
 
         self.draw_grid()
         self.update_idletasks()
@@ -316,20 +325,26 @@ class TableCanvas(Canvas):
         """Optimally adjust col widths to accomodate the longest entry
             in each column - usually only called  on first redraw"""
         try:
-            fontsize=self.celltextsizevar.get()
+            fontsize = self.thefont[1]
         except:
-            fontsize=12
-        scale = 8.5 * fontsize/12
+            fontsize = self.fontsize
+        scale = 8.5 * float(fontsize)/12
         for col in range(self.cols):
             maxlen = self.model.getlongestEntry(col)
-            size = maxlen * scale +2
+            size = maxlen * scale
             if size < self.cellwidth:
                 continue
-            print size, self.cellwidth
+            #print size, self.cellwidth
             if size >= self.maxcellwidth:
                 size = self.maxcellwidth
             colname=self.model.getColumnName(col)
-            self.model.columnwidths[colname] = size
+            self.model.columnwidths[colname] = size + float(fontsize)/12*5
+        return
+
+    def autoResizeColumns(self):
+        """Automatically set nice column widths and draw"""
+        self.adjustColumnWidths()
+        self.redrawTable()
         return
 
     def set_colPositions(self):
@@ -1276,7 +1291,7 @@ class TableCanvas(Canvas):
             def add_defaultcommands():
                 """now add general actions for all cells"""
                 main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right", "Clear Data",
-                         "Delete Row", "Select All", "Plot Selected","Plot Options",
+                         "Delete Row", "Select All", "Resize Columns", "Plot Selected","Plot Options",
                          "Show Prefs"]
                 utils = ["View Record", "Formulae->Value", "Export Table"]
                 defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
@@ -1289,6 +1304,7 @@ class TableCanvas(Canvas):
                                 "View Record" : lambda : self.getRecordInfo(row),
                                 "Clear Data" : lambda : self.delete_Cells(rows, cols),
                                 "Select All" : self.select_All,
+                                "Resize Columns" : self.autoResizeColumns,
                                 "Plot Selected" : self.plot_Selected,
                                 "Plot Options" : self.plotSetup,
                                 "Export Table" : self.exportTable,
@@ -1637,29 +1653,30 @@ class TableCanvas(Canvas):
         if length == 0:
             return
         #if cell width is less than x, print nothing
-        if w<=5:
+        if w<=10:
             return
+
+        if fgcolor == None or fgcolor == "None":
+            fgcolor = 'black'
+        if align == None:
+            align = 'center'
+        elif align == 'w':
+            x1 = x1-w/2+1
+        elif align == 'e':
+            x1 = x1+w/2-1
+
         if w < 15:
             celltxt = '.'
         else:
             fontsize = self.fontsize
             colname = self.model.getColumnName(col)
             #scaling between canvas and text normalised to about font 14
-            scale = 7.5 * fontsize/12
+            scale = 8.5 * float(fontsize)/12
             size = length * scale
-            #print colname, celltxt, len(celltxt), w, size, scale
             if size > w:
                 newlength = w / scale
+                #print w, size, length, newlength
                 celltxt = celltxt[0:int(math.floor(newlength))]
-
-            if fgcolor == None or fgcolor == "None":
-                fgcolor = 'black'
-            if align == None:
-                align = 'center'
-            elif align == 'w':
-                x1 = x1-w/2+1
-            elif align == 'e':
-                x1 = x1+w/2-1
 
         #if celltxt is dict then we are drawing a hyperlink
         if self.isLink(celltxt) == True:
@@ -1948,14 +1965,12 @@ class TableCanvas(Canvas):
 
         frame=Frame(self.prefswindow)
         frame.pack()
-        #
+
         # Apply Button
-        #
         b = Button(frame, text="Apply Settings", command=self.applyPrefs)
         b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
-        #
+
         # Close button
-        #
         c=Button(frame,text='Close', command=close_prefsdialog)
         c.grid(row=row,column=0,sticky='news',padx=4,pady=4)
         self.prefswindow.focus_set()
