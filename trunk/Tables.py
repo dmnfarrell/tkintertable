@@ -521,7 +521,6 @@ class TableCanvas(Canvas):
                 rows = self.multiplerowlist
                 self.model.deleteRows(rows)
                 self.setSelectedRow(0)
-                #self.multiplerowlist = []
                 self.clearSelected()
                 self.redrawTable()
         else:

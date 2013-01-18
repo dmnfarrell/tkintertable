@@ -12,4 +12,6 @@ CHANGES
 * Sort in descending order works correctly
 * Fixes to plotting, but needs reworking or removal
 * Added setSelectedCells method so a block of cells can be selected
+* Improved text fitting in cells
+* Automatic resizing of columns improved
 
