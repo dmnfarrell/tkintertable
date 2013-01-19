@@ -336,7 +336,7 @@ class TableCanvas(Canvas):
             #print col, size, self.cellwidth
             if size >= self.maxcellwidth:
                 size = self.maxcellwidth
-            self.model.columnwidths[colname] = size + float(fontsize)/12*5
+            self.model.columnwidths[colname] = size + float(fontsize)/12*6
         return
 
     def autoResizeColumns(self):
@@ -1287,7 +1287,7 @@ class TableCanvas(Canvas):
             popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
             popupmenu.add_command(label="Save Table", command= self.saveTable)
             popupmenu.add_command(label="Export Table", command= self.exportTable)
-            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
+            popupmenu.add_command(label="Preferences", command= self.showtablePrefs)
         else:
             def add_commands(fieldtype):
                 """Add commands to popup menu for col type"""
@@ -1302,7 +1302,7 @@ class TableCanvas(Canvas):
                 """now add general actions for all cells"""
                 main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right", "Clear Data",
                          "Add Row" , "Delete Row", "Select All", "Resize Columns", "Plot Selected",
-                         "Plot Options", "Show Prefs"]
+                         "Plot Options", "Preferences"]
                 utils = ["View Record", "Formulae->Value", "Export Table"]
                 defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
                                 "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
@@ -1319,7 +1319,7 @@ class TableCanvas(Canvas):
                                 "Plot Selected" : self.plot_Selected,
                                 "Plot Options" : self.plotSetup,
                                 "Export Table" : self.exportTable,
-                                "Show Prefs" : self.showtablePrefs,
+                                "Preferences" : self.showtablePrefs,
                                 "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
 
                 for action in main:
@@ -1805,9 +1805,9 @@ class TableCanvas(Canvas):
             text=str(text)
         if text == NoneType or text == '' or len(str(text))<=3:
             return
-        import tkFont
+
         sfont = tkFont.Font (family='Arial', size=12,weight='bold')
-        obj=self.create_text(x1+w/1.5,y2,text=text,
+        obj = self.create_text(x1+w/1.5,y2,text=text,
                                 anchor='w',
                                 font=sfont,tag='tooltip')
 
@@ -1911,20 +1911,26 @@ class TableCanvas(Canvas):
         row=row+1
 
         #fonts
+        #fts=['Arial','Courier','Monospace','Times','Verdana']
+        fts = self.getFonts()
         lblfont=Label(frame2,text='Cell Font:')
         lblfont.grid(row=row,column=0,padx=3,pady=2)
         fontentry_button=Menubutton(frame2,textvariable=self.celltextfontvar,
 					relief=RAISED,width=16)
         fontentry_menu=Menu(fontentry_button,tearoff=0)
         fontentry_button['menu']=fontentry_menu
-
-        # Other fonts available
-        fts=['Arial','Courier','Monospace','Times','Verdana']
+        p=0
         for text in fts:
+            if p%30==0 and p!=0:
+                colbreak=1
+            else:
+                colbreak=0
             fontentry_menu.add_radiobutton(label=text,
                                             variable=self.celltextfontvar,
                                             value=text,
+                                            columnbreak=colbreak,
                                             indicatoron=1)
+            p+=1
         fontentry_button.grid(row=row,column=1, sticky='nes', padx=3,pady=2)
         row=row+1
         lblfontsize=Label(frame2,text='Text Size:')
@@ -1985,6 +1991,11 @@ class TableCanvas(Canvas):
         self.prefswindow.grab_set()
         self.prefswindow.wait_window()
         return self.prefswindow
+
+    def getFonts(self):
+        fonts = set(list(tkFont.families()))
+        fonts = sorted(list(fonts))
+        return fonts
 
     def loadPrefs(self, prefs=None):
         """Load table specific prefs from the prefs instance used
