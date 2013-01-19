@@ -798,14 +798,14 @@ class TableModel(object):
 
     def load(self, filename):
         """Load model from pickle file"""
-
         fd=open(filename,'r')
-        self.data = pickle.load(fd)
+        data = pickle.load(fd)
+        self.setupModel(data)
         return
 
     def copy(self):
         """Return a copy of this model"""
-        M=TableModel()
+        M = TableModel()
         data = self.getData()
         M.setupModel(data)
         return M

@@ -24,7 +24,7 @@ def createData():
     """Creare random dict for test data"""
 
     data = {}
-    names = createRandomStrings(20,12)
+    names = createRandomStrings(20,16)
     cols = 5
     colnames = createRandomStrings(cols,5)
     for n in names:
@@ -75,7 +75,7 @@ def GUITest(root):
     #save data
     model.save('test.table')
     #load new data
-    #model.load('test.table')
+    model.load('test.table')
     table.redrawTable()
     print 'GUI tests done'
     #root.after(2000, root.quit)

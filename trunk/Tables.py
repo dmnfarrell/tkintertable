@@ -279,11 +279,6 @@ class TableCanvas(Canvas):
                     callback()
                 for col in range(self.cols):
                     colname = model.getColumnName(col)
-                    '''if colname == 'name' or colname == 'Name':
-                        align='w'
-                    else:
-                        align='w'
-                    '''
                     bgcolor = self.model.getColorAt(row,col, 'bg')
                     fgcolor = self.model.getColorAt(row,col, 'fg')
                     text = self.model.getValueAt(row,col)
@@ -296,7 +291,6 @@ class TableCanvas(Canvas):
         self.draw_selected_rect(self.currentrow, self.currentcol)
         if len(self.multiplerowlist)>1:
             self.drawMultipleRows(self.multiplerowlist)
-
         return
 
     def redrawCell(self, row=None, col=None, recname=None, colname=None):
@@ -330,14 +324,18 @@ class TableCanvas(Canvas):
             fontsize = self.fontsize
         scale = 8.5 * float(fontsize)/12
         for col in range(self.cols):
+            colname = self.model.getColumnName(col)
+            if self.model.columnwidths.has_key(colname):
+                w = self.model.columnwidths[colname]
+            else:
+                w = self.cellwidth
             maxlen = self.model.getlongestEntry(col)
             size = maxlen * scale
-            if size < self.cellwidth:
+            if size < w:
                 continue
-            #print size, self.cellwidth
+            #print col, size, self.cellwidth
             if size >= self.maxcellwidth:
                 size = self.maxcellwidth
-            colname=self.model.getColumnName(col)
             self.model.columnwidths[colname] = size + float(fontsize)/12*5
         return
 
@@ -558,7 +556,7 @@ class TableCanvas(Canvas):
             for row in rows:
                 absrow = self.get_AbsoluteRow(row)
                 self.model.deleteCellRecord(row, col)
-        self.redrawCell(row,col)
+                self.redrawCell(row,col)
         return
 
     def autoAdd_Rows(self, numrows=None):
@@ -1275,8 +1273,9 @@ class TableCanvas(Canvas):
         if outside == 1:
             #if outside table, just show general items
             popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
-            popupmenu.add_command(label="Export Table", command= self.exportTable)
+            popupmenu.add_command(label="Resize Columns", command= self.autoResizeColumns)
             popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
+            popupmenu.add_command(label="Export Table", command= self.exportTable)
         else:
             def add_commands(fieldtype):
                 """Add commands to popup menu for col type"""
@@ -1744,8 +1743,6 @@ class TableCanvas(Canvas):
         rect = self.create_rectangle(x1+w/2,y1+w/2,x2,y2+w/2,
                                      outline='blue',width=w,
                                      tag='colrect')
-
-
         return
 
     def drawMultipleRows(self, rowlist):
@@ -1791,7 +1788,6 @@ class TableCanvas(Canvas):
 
 
         # If text is a number we make it a string
-        import types
         if type(text) is types.FloatType or type is types.IntType:
             text=str(text)
         if text == NoneType or text == '' or len(str(text))<=3:
@@ -1910,7 +1906,7 @@ class TableCanvas(Canvas):
         fontentry_button['menu']=fontentry_menu
 
         # Other fonts available
-        fts=['Arial','Courier','Verdana','Fixed','Times']
+        fts=['Arial','Courier','Monospace','Times','Verdana']
         for text in fts:
             fontentry_menu.add_radiobutton(label=text,
                                             variable=self.celltextfontvar,
