@@ -3,6 +3,16 @@ CHANGES
 =======
 
 ------
+1.0.2
+------
+
+* restored Filtering.py, filtering works ok
+* more improvement to auto resize cols, now checks currrent col sizes
+* fixed model.save() method
+* added ability to save table, add rows to popup menu
+* fixed delete cells button binding
+
+------
 1.0.1
 ------
 
@@ -14,4 +24,5 @@ CHANGES
 * Added setSelectedCells method so a block of cells can be selected
 * Improved text fitting in cells
 * Automatic resizing of columns improved
+
 
