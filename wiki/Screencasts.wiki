@@ -1,4 +1,4 @@
 #labels Featured,Phase-Support
 = Screencast showing basic table usage =
 
-<wiki:video url="http://www.youtube.com/watch?v=XOuv6iik35w"/>
+<wiki:video url="http://www.youtube.com/watch?v=XOuv6iik35w" width=800 height=500/>
