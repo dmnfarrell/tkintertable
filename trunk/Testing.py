@@ -69,7 +69,7 @@ def GUITest(root):
     #import after model created
     model.importDict(data)
     table = TableCanvas(master, model, namefield='name',
-                        cellwidth=60, cellbackgr='#E3F6CE',
+                        cellwidth=60, cellbackgr='#e3f698',
                         thefont=('Arial',12),rowheight=18, rowsperpage=100,
                         rowselectedcolor='yellow', editable=False)
     table.createTableFrame()
