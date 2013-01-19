@@ -26,7 +26,7 @@ from Prefs import Preferences
 import tkFileDialog, tkMessageBox, tkSimpleDialog
 import tkFont
 import math, time
-import types
+import os, types
 import platform
 
 class TableCanvas(Canvas):
@@ -147,7 +147,7 @@ class TableCanvas(Canvas):
 
         self.bind_all("<Control-x>", self.delete_Row)
         self.bind_all("<Control-n>", self.add_Row)
-        self.bind_all("<Delete>", self.delete_Cells)
+        self.bind_all("<Delete>", self.clearData)
         self.bind_all("<Control-v>", self.paste)
 
         #if not hasattr(self,'parentapp'):
@@ -559,6 +559,13 @@ class TableCanvas(Canvas):
                 self.redrawCell(row,col)
         return
 
+    def clearData(self, evt=None):
+        """Delete cells from gui event"""
+        rows = self.multiplerowlist
+        cols = self.multiplecollist
+        self.delete_Cells(rows, cols)
+        return
+
     def autoAdd_Rows(self, numrows=None):
         """Automatically add x number of records"""
         import string
@@ -784,11 +791,15 @@ class TableCanvas(Canvas):
         return self.currentcol
 
     def select_All(self):
-        """Select all rows"""
+        """Select all rows and cells"""
         self.startrow = 0
         self.endrow = self.rows
         self.multiplerowlist = range(self.startrow,self.endrow)
         self.drawMultipleRows(self.multiplerowlist)
+        self.startcol = 0
+        self.endcol = self.cols
+        self.multiplecollist = range(self.startcol, self.endcol)
+        self.drawMultipleCells()
         return
 
     def getCellCoords(self, row, col):
@@ -1272,10 +1283,11 @@ class TableCanvas(Canvas):
 
         if outside == 1:
             #if outside table, just show general items
-            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
             popupmenu.add_command(label="Resize Columns", command= self.autoResizeColumns)
             popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
+            popupmenu.add_command(label="Save Table", command= self.saveTable)
             popupmenu.add_command(label="Export Table", command= self.exportTable)
+            popupmenu.add_command(label="Show Prefs", command= self.showtablePrefs)
         else:
             def add_commands(fieldtype):
                 """Add commands to popup menu for col type"""
@@ -1289,8 +1301,8 @@ class TableCanvas(Canvas):
             def add_defaultcommands():
                 """now add general actions for all cells"""
                 main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right", "Clear Data",
-                         "Delete Row", "Select All", "Resize Columns", "Plot Selected","Plot Options",
-                         "Show Prefs"]
+                         "Add Row" , "Delete Row", "Select All", "Resize Columns", "Plot Selected",
+                         "Plot Options", "Show Prefs"]
                 utils = ["View Record", "Formulae->Value", "Export Table"]
                 defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
                                 "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
@@ -1298,6 +1310,7 @@ class TableCanvas(Canvas):
                                 "Paste" : lambda : self.pasteCell(rows, cols),
                                 "Fill Down" : lambda : self.fill_down(rows, cols),
                                 "Fill Right" : lambda : self.fill_across(cols, rows),
+                                "Add Row" : lambda : self.add_Row(),
                                 "Delete Row" : lambda : self.delete_Row(),
                                 "View Record" : lambda : self.getRecordInfo(row),
                                 "Clear Data" : lambda : self.delete_Cells(rows, cols),
@@ -2085,7 +2098,6 @@ class TableCanvas(Canvas):
         bgcolorbutton = Button(frame, text=text,command=SetColor)
         return  bgcolorbutton
 
-
     def check_hyperlink(self,event=None):
         """Check if a hyperlink was clicked"""
         row = self.get_row_clicked(event)
@@ -2120,6 +2132,18 @@ class TableCanvas(Canvas):
         self.bar.frame.grid(row=1,column=1,columnspan=2,padx=2,pady=4)
 
         return progress_win
+
+    def saveTable(self, filename=None):
+        """Save model to pickle file"""
+        if filename == None:
+            filename = tkFileDialog.asksaveasfilename(parent=self.master,
+                                                        defaultextension='.table',
+                                                        initialdir=os.getcwd(),
+                                                        filetypes=[("pickle","*.table"),
+                                                          ("All files","*.*")])
+        if filename:
+            self.model.save(filename)
+        return
 
     def exportTable(self, filename=None):
         """Do a simple export of the cell contents to csv"""

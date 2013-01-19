@@ -224,10 +224,9 @@ class TablesApp(Frame):
 
     def open_project(self, filename=None):
         if filename == None:
-            import tkFileDialog
-            filename=tkFileDialog.askopenfilename(defaultextension='.table"',
+            filename=tkFileDialog.askopenfilename(defaultextension='.tbleprj"',
                                                       initialdir=os.getcwd(),
-                                                      filetypes=[("Pickle file","*.table"),
+                                                      filetypes=[("Pickle file","*.tbleprj"),
                                                                  ("All files","*.*")],
                                                       parent=self.tablesapp_win)
         if os.path.isfile(filename):
@@ -250,11 +249,10 @@ class TablesApp(Frame):
 
     def save_as_project(self):
         """Save as a new filename"""
-        import tkFileDialog
         filename=tkFileDialog.asksaveasfilename(parent=self.tablesapp_win,
-                                                defaultextension='.table',
+                                                defaultextension='.tblprj',
                                                 initialdir=self.defaultsavedir,
-                                                filetypes=[("TableApp project","*.table"),
+                                                filetypes=[("TableApp project","*.tblprj"),
                                                            ("All files","*.*")])
         if not filename:
             print 'Returning'
