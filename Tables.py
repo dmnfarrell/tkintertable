@@ -1849,11 +1849,6 @@ class TableCanvas(Canvas):
             return None
         return str(newcolor)
 
-    def removeColors(self):
-        """Remove all color formatting"""
-        self.model.resetcolors()
-        return
-
     #--- Preferences stuff ---
 
     def showtablePrefs(self, prefs=None):
@@ -1899,9 +1894,6 @@ class TableCanvas(Canvas):
         linewidthentry=Scale(frame1,from_=0,to=10,resolution=1,orient='horizontal',
                             relief='ridge',variable=self.linewidthvar)
         linewidthentry.grid(row=row,column=1,padx=3,pady=2)
-        row=row+1
-        Checkbutton(frame1, text="Auto resize columns", variable=self.autoresizecolsvar,
-                    onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
         row=row+1
         Checkbutton(frame1, text="Use paging", variable=self.usepagingvar,
                     onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
@@ -1973,13 +1965,8 @@ class TableCanvas(Canvas):
         rowselectedcolorbutton.grid(row=row,column=0,columnspan=2,  sticky='news',padx=3,pady=2)
         row=row+1
 
-        # Data specific settings
-        b = Button(frame2, text="Reset Colors", command=self.removeColors)
-        b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
-
         frame=Frame(self.prefswindow)
         frame.pack()
-
         # Apply Button
         b = Button(frame, text="Apply Settings", command=self.applyPrefs)
         b.grid(row=row,column=1,columnspan=2,sticky='news',padx=4,pady=4)
@@ -2021,6 +2008,8 @@ class TableCanvas(Canvas):
                 self.prefs.get(prop);
             except:
                 self.prefs.set(prop, defaultprefs[prop])
+        self.defaultprefs = defaultprefs
+
         #Create tkvars for dialog
         self.rowheightvar = IntVar()
         self.rowheightvar.set(self.prefs.get('rowheight'))
@@ -2033,8 +2022,6 @@ class TableCanvas(Canvas):
         self.align = self.cellalignvar.get()
         self.linewidthvar = IntVar()
         self.linewidthvar.set(self.prefs.get('linewidth'))
-        self.autoresizecolsvar = IntVar()
-        self.autoresizecolsvar.set(self.prefs.get('autoresizecols'))
         self.horizlinesvar = IntVar()
         self.horizlinesvar.set(self.prefs.get('horizlines'))
         self.vertlinesvar = IntVar()
@@ -2074,8 +2061,6 @@ class TableCanvas(Canvas):
             self.align = self.cellalignvar.get()
             self.prefs.set('linewidth', self.linewidthvar.get())
             self.linewidth = self.linewidthvar.get()
-            self.prefs.set('autoresizecols', self.autoresizecolsvar.get())
-            self.autoresizecols = self.autoresizecolsvar.get()
             self.paging = self.usepagingvar.get()
             self.prefs.set('paging', self.usepagingvar.get())
             self.rowsperpage = int(self.rowsperpagevar.get())
@@ -2090,7 +2075,6 @@ class TableCanvas(Canvas):
         except ValueError:
             pass
         self.prefs.save_prefs()
-
         return
 
     def applyPrefs(self):

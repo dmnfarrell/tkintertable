@@ -11,6 +11,7 @@ CHANGES
 * fixed model.save() method
 * added ability to save table, add rows to popup menu
 * fixed delete cells button binding
+* cell font preferences now uses available fonts from os
 
 ------
 1.0.1
