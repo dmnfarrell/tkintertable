@@ -22,7 +22,7 @@
 from TableFormula import Formula
 from types import *
 import operator
-import copy
+import string, types, copy
 import pickle
 
 class TableModel(object):
@@ -110,7 +110,6 @@ class TableModel(object):
 
     def importDict(self, newdata, namefield=None):
         """Try to create a table model from some arbitrary dict"""
-        import types
         if namefield == None:
             namefield = 'name'
         #get cols from sub data keys
@@ -144,7 +143,6 @@ class TableModel(object):
 
     def getData(self):
         """Return the current data for saving"""
-        import copy
         data = copy.deepcopy(self.data)
         data['colors'] = self.colors
         data['columnnames'] = self.columnNames
@@ -241,7 +239,6 @@ class TableModel(object):
             return None
         currname = self.getRecName(rowIndex)
         self.reclist[rowIndex] = newname
-        import copy
         temp = copy.deepcopy(self.data[currname])
         self.data[newname] = temp
         self.data[newname]['Name'] = newname
@@ -449,7 +446,6 @@ class TableModel(object):
 
     def auto_AddRows(self, numrows=None):
         """Automatically add x number of records"""
-        import string
         alphabet = string.lowercase[:26]
         rows = self.getRowCount()
 
@@ -475,7 +471,7 @@ class TableModel(object):
 
     def auto_AddColumns(self, numcols=None):
         """Automatically add x number of cols"""
-        import string
+
         alphabet = string.lowercase[:26]
         currcols=self.getColumnCount()
         #find where to start
@@ -527,7 +523,7 @@ class TableModel(object):
         """Return the data in a list for this col,
             filterby is a tuple of key, value that allows to filter by rec attribute
         """
-        import types
+
         if columnIndex != None:
             columnName = self.getColumnName(columnIndex)
         coldata = []

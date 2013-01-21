@@ -67,11 +67,12 @@ def GUITest(root):
     model = TableModel()
     data = createData()
     #import after model created
+    #print data
     model.importDict(data)
     table = TableCanvas(master, model, namefield='name',
                         cellwidth=60, cellbackgr='#e3f698',
                         thefont=('Arial',12),rowheight=18, rowsperpage=100,
-                        rowselectedcolor='yellow', editable=False)
+                        rowselectedcolor='yellow', editable=True)
     table.createTableFrame()
     #remove cols
     model.deleteColumns([0])
@@ -94,8 +95,8 @@ def GUITest(root):
     #save data
     model.save('test.table')
     #load new data
-    model.load('test.table')
-    table.redrawTable()
+    table.load('test.table')
+
     print 'GUI tests done'
     #root.after(2000, root.quit)
     return
