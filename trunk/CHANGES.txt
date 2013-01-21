@@ -12,6 +12,7 @@ CHANGES
 * fix to update selected col when redrawing
 * added Dialog.py module
 * removed simpletabledialog
+* tidied up popupmenu
 
 ------
 1.0.2
