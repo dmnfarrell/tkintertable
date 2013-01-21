@@ -27,6 +27,7 @@ import tkFileDialog, tkMessageBox, tkSimpleDialog
 import tkFont
 import math, time
 import os, types
+import string, copy
 import platform
 
 class TableCanvas(Canvas):
@@ -40,17 +41,16 @@ class TableCanvas(Canvas):
         self.parentframe = parent
         #get platform into a variable
         self.ostyp = self.checkOSType()
-
-        self.platform=platform.system()
-        self.width=width
-        self.height=height
+        self.platform = platform.system()
+        self.width = width
+        self.height = height
         self.set_defaults()
+
         self.currentpage = None
         self.navFrame = None
         self.currentrow = 0
         self.currentcol = 0
         self.reverseorder = 0
-        #for multiple selections
         self.startrow = self.endrow = None
         self.startcol = self.endcol = None
         self.allrows = False   #for selected all rows without setting multiplerowlist
@@ -73,9 +73,9 @@ class TableCanvas(Canvas):
         if newdict != None:
             self.createfromDict(newdict)
 
-        self.rows=self.model.getRowCount()
-        self.cols=self.model.getColumnCount()
-        self.tablewidth=(self.cellwidth)*self.cols
+        self.rows = self.model.getRowCount()
+        self.cols = self.model.getColumnCount()
+        self.tablewidth = (self.cellwidth)*self.cols
         self.tablecolheader = ColumnHeader(self.parentframe, self)
         self.tablerowheader = RowHeader(self.parentframe, self)
         self.do_bindings()
@@ -88,6 +88,7 @@ class TableCanvas(Canvas):
         return
 
     def set_defaults(self):
+        """Set default settings"""
         self.cellwidth=150
         self.maxcellwidth=200
         self.rowheight=20
@@ -170,7 +171,8 @@ class TableCanvas(Canvas):
         """Get the current table model"""
         return self.model
 
-    def setModel(self,model):
+    def setModel(self, model):
+        """Set a new model - requires redraw to reflect changes"""
         self.model = model
         return
 
@@ -197,8 +199,8 @@ class TableCanvas(Canvas):
         self.Xscrollbar.grid(row=2,column=1,columnspan=1,sticky='news')
         self['xscrollcommand'] = self.Xscrollbar.set
         self['yscrollcommand'] = self.Yscrollbar.set
-        self.tablecolheader['xscrollcommand']=self.Xscrollbar.set
-        self.tablerowheader['yscrollcommand']=self.Yscrollbar.set
+        self.tablecolheader['xscrollcommand'] = self.Xscrollbar.set
+        self.tablerowheader['yscrollcommand'] = self.Yscrollbar.set
         self.parentframe.rowconfigure(1,weight=1)
         self.parentframe.columnconfigure(1,weight=1)
 
@@ -217,9 +219,9 @@ class TableCanvas(Canvas):
         """Draw the table from scratch based on it's model data"""
 
         model = self.model
-        self.rows=self.model.getRowCount()
-        self.cols=self.model.getColumnCount()
-        self.tablewidth=(self.cellwidth)*self.cols
+        self.rows = self.model.getRowCount()
+        self.cols = self.model.getColumnCount()
+        self.tablewidth = (self.cellwidth)*self.cols
         self.configure(bg=self.cellbackgr)
         #determine col positions for first time
         self.set_colPositions()
@@ -262,7 +264,7 @@ class TableCanvas(Canvas):
         self.update_idletasks()
         self.tablecolheader.redraw()
         self.tablerowheader.redraw(paging=self.paging)
-        align=self.align
+        align = self.align
         self.delete('fillrect')
 
         if self.cols == 0 or self.rows == 0:
@@ -307,17 +309,10 @@ class TableCanvas(Canvas):
             self.draw_rect(row,col, color=bgcolor)
         return
 
-    '''def resizeTable(self, event):
-        """Respond to a resize event - redraws table"""
-        if self.autoresizecols == 1 and event != None:
-            self.cellwidth = (event.width - self.x_start - 24) / self.cols
-            #print 'cellwidth', self.cellwidth
-            self.redrawTable()
-        return'''
-
     def adjustColumnWidths(self):
         """Optimally adjust col widths to accomodate the longest entry
             in each column - usually only called  on first redraw"""
+        #self.cols = self.model.getColumnCount()
         try:
             fontsize = self.thefont[1]
         except:
@@ -568,7 +563,6 @@ class TableCanvas(Canvas):
 
     def autoAdd_Rows(self, numrows=None):
         """Automatically add x number of records"""
-        import string
         if numrows == None:
             numrows = tkSimpleDialog.askinteger("Auto add rows.",
                                                 "How many empty rows?",
@@ -1202,7 +1196,6 @@ class TableCanvas(Canvas):
         """Copy cell contents to a temp internal clipboard"""
         row = rows[0]; col = cols[0]
         absrow = self.get_AbsoluteRow(row)
-        import copy
         self.clipboard = copy.deepcopy(self.model.getCellRecord(absrow, col))
         return
 
@@ -1269,7 +1262,6 @@ class TableCanvas(Canvas):
             self.redrawTable()
         return
 
-
     def popupMenu(self, event, rows=None, cols=None, outside=None):
         """Add left and right click behaviour for canvas, should not have to override
             this function, it will take its values from defined dicts in constructor"""
@@ -1285,7 +1277,10 @@ class TableCanvas(Canvas):
             #if outside table, just show general items
             popupmenu.add_command(label="Resize Columns", command= self.autoResizeColumns)
             popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
-            popupmenu.add_command(label="Save Table", command= self.saveTable)
+            popupmenu.add_command(label="New", command= self.new)
+            popupmenu.add_command(label="Load", command= self.load)
+            popupmenu.add_command(label="Save", command= self.save)
+            popupmenu.add_command(label="Import Table", command= self.importTable)
             popupmenu.add_command(label="Export Table", command= self.exportTable)
             popupmenu.add_command(label="Preferences", command= self.showtablePrefs)
         else:
@@ -1591,7 +1586,6 @@ class TableCanvas(Canvas):
         def callback(e):
             value = txtvar.get()
             if value == '=':
-
                 #do a dialog that gets the formula into a text area
                 #then they can click on the cells they want
                 #when done the user presses ok and its entered into the cell
@@ -1609,7 +1603,7 @@ class TableCanvas(Canvas):
                 model.setValueAt(value,absrow,col)
 
             color = self.model.getColorAt(absrow,col,'fg')
-            self.draw_Text(row, col, value, color)
+            self.draw_Text(row, col, value, color, align=self.align)
             if e.keysym=='Return':
                 self.delete('entry')
                 #self.draw_rect(row, col)
@@ -2128,7 +2122,37 @@ class TableCanvas(Canvas):
 
         return progress_win
 
-    def saveTable(self, filename=None):
+    def updateModel(self, model):
+        """Call this method to update the table model"""
+        self.model = model
+        self.rows = self.model.getRowCount()
+        self.cols = self.model.getColumnCount()
+        self.tablewidth = (self.cellwidth)*self.cols
+        self.tablecolheader = ColumnHeader(self.parentframe, self)
+        self.tablerowheader = RowHeader(self.parentframe, self)
+        self.createTableFrame()
+        return
+
+    def new(self):
+        """Clears all the data and makes a new table"""
+        model = TableModel(rows=10,columns=4)
+        self.updateModel(model)
+        return
+
+    def load(self, filename=None):
+        """load from a file"""
+        if filename == None:
+            filename = tkFileDialog.askopenfilename(parent=self.master,
+                                                      defaultextension='.table',
+                                                      initialdir=os.getcwd(),
+                                                      filetypes=[("pickle","*.table"),
+                                                        ("All files","*.*")])
+        if filename:
+            self.model.load(filename)
+            self.redrawTable()
+        return
+
+    def save(self, filename=None):
         """Save model to pickle file"""
         if filename == None:
             filename = tkFileDialog.asksaveasfilename(parent=self.master,
@@ -2138,6 +2162,17 @@ class TableCanvas(Canvas):
                                                           ("All files","*.*")])
         if filename:
             self.model.save(filename)
+        return
+
+    def importTable(self):
+        """Import from csv file"""
+        from Tables_IO import TableImporter
+        importer = TableImporter()
+        importdialog = importer.import_Dialog(self.master)
+        self.master.wait_window(importdialog)
+        model = TableModel()
+        model.importDict(importer.data)
+        self.updateModel(model)
         return
 
     def exportTable(self, filename=None):
@@ -2150,7 +2185,6 @@ class TableCanvas(Canvas):
     @classmethod
     def checkOSType(cls):
         """Check the OS we are in"""
-        import os, string
         ostyp=''
         var_s=['OSTYPE','OS']
         for var in var_s:
@@ -2205,7 +2239,7 @@ class ColumnHeader(Canvas):
         return
 
     def redraw(self):
-        cols=self.model.getColumnCount()
+        cols = self.model.getColumnCount()
         self.tablewidth=self.table.tablewidth
         self.configure(scrollregion=(0,0, self.table.tablewidth+self.table.x_start, self.height))
         self.delete('gridline','text')
@@ -2251,6 +2285,8 @@ class ColumnHeader(Canvas):
         self.table.delete('entry')
         self.table.delete('multicellrect')
         colclicked = self.table.get_col_clicked(event)
+        if colclicked == None:
+            return
         #set all rows selected
         self.table.allrows = True
         self.table.setSelectedCol(colclicked)
@@ -2259,7 +2295,7 @@ class ColumnHeader(Canvas):
             return
         self.draw_rect(self.table.currentcol)
         #also draw a copy of the rect to be dragged
-        self.draggedcol=None
+        self.draggedcol = None
         self.draw_rect(self.table.currentcol, tag='dragrect',
                         color='red', outline='white')
         if hasattr(self, 'rightmenu'):
@@ -2323,7 +2359,6 @@ class ColumnHeader(Canvas):
         for v in l:
             if abs(val-v) <= d:
                 return 1
-
         return 0
 
     def handle_mouse_move(self, event):
@@ -2425,8 +2460,6 @@ class ColumnHeader(Canvas):
             fill='white', outline='gray', width=wdth)
         self.create_polygon(x2+2,h/4, x2+10,h/2, x2+2,h*3/4, tag='resizesymbol',
             fill='white', outline='gray', width=wdth)
-
-
         return
 
     def draw_rect(self,col, tag=None, color=None, outline=None, delete=1):

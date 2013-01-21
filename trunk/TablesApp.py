@@ -287,10 +287,10 @@ class TablesApp(Frame):
         #just use the dialog to load and import the file
         importdialog = importer.import_Dialog(self.tablesapp_win)
         self.tablesapp_win.wait_window(importdialog)
-        modeldata = importer.modeldata
-        #modeldata = importer.ImportTableModel(datafile)
-        sheetdata={}
-        sheetdata['sheet1']=modeldata
+        model = TableModel()
+        model.importDict(importer.data)
+        sheetdata = {}
+        sheetdata['sheet1'] = model.getData()
         self.new_project(sheetdata)
         return
 

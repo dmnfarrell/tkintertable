@@ -2,13 +2,15 @@
 # This file is part Protein Engineering Analysis Tool (PEAT)
 # (C) Copyright Jens Erik Nielsen, University College Dublin 2003-
 # All rights reserved
-#  
+#
 #
 # Written by D Farrell, April 2008
 #
 
 from Tkinter import *
-import csv
+import Pmw
+import os, csv
+import tkFileDialog
 
 class TableImporter:
     """Provides import utility methods for the Table and Table Model classes"""
@@ -23,7 +25,6 @@ class TableImporter:
 
     def import_Dialog(self, parent):
         """Allows user to set some import options"""
-        import Pmw
         self.parent=parent
         self.master=Toplevel()
         self.master.title("Import Data")
@@ -41,7 +42,7 @@ class TableImporter:
             initialitem = ',',
             menubutton_width = 4,
             command= self.update_display)
-        
+
         self.sep_choice.grid(row=0,column=0,sticky='nw',padx=2,pady=2)
         #place for text preview frame
 
@@ -55,13 +56,13 @@ class TableImporter:
         self.previewarea.pack(fill=BOTH, expand=1)
         #buttons
         self.openButton = Button(self.master, text = 'Open File',
-                command = self.do_openFile )        
+                command = self.do_openFile )
         self.openButton.grid(row=3,column=0,sticky='news',padx=2,pady=2)
         self.importButton = Button(self.master, text = 'Do Import',
-                command = self.do_ModelImport )        
+                command = self.do_ModelImport )
         self.importButton.grid(row=3,column=1,sticky='news',padx=2,pady=2)
         self.CancelButton = Button(self.master, text = 'Cancel',
-                command = self.close )        
+                command = self.close )
         self.CancelButton.grid(row=3,column=2,sticky='news',padx=2,pady=2)
         self.master.columnconfigure(0,weight=1)
         self.master.rowconfigure(1,weight=1)
@@ -71,10 +72,10 @@ class TableImporter:
         self.datafile = self.open_File(self.parent)
         self.update_display()
         return
-    
+
     def open_File(self, parent):
-        import tkFileDialog,os         
-        savedir = os.getcwd()                
+
+        savedir = os.getcwd()
         filename=tkFileDialog.askopenfile(defaultextension='.csv',
                                                 initialdir=savedir,
                                                 initialfile='',
@@ -90,94 +91,64 @@ class TableImporter:
         """Preview loaded file"""
         sep = self.var_sep.get()
         self.previewarea.delete(1.0, END)
-        print 'sep',sep
         reader = csv.reader(open(self.datafile, "rb"), delimiter=sep)
         for row in reader:
             self.previewarea.insert(END,row)
             self.previewarea.insert(END,'\n')
         return
-    
+
     def do_ModelImport(self):
         """imports and places the result in self.modeldata"""
-        self.modeldata = self.ImportTableModel(self.datafile)
+        self.data = self.ImportTableModel(self.datafile)
         self.close()
         return
 
-    
     def ImportTableModel(self,filename):
         """Import table data from a comma separated file and create data for a model
            This is reusable outside the GUI dialog also."""
-            
-        import os
+
         if not os.path.isfile(filename):
             return None
         try:
             sep = self.var_sep.get()
         except:
             sep = ','
-            
         #takes first row as field names
         dictreader = csv.DictReader(open(filename, "rb"), delimiter=sep)
         dictdata = {}
         count=0
-        for rec in dictreader:            
+        for rec in dictreader:
             dictdata[count]=rec
             count=count+1
-        print dictdata 
-        
-        modeldata={} 
-        modeldata['columnnames']=[]
-        modeldata['columntypes']={}
-        modeldata['columnlabels']={}
-        count=0
-        modeldata['columnnames'] = dictdata[0].keys()
-        
-        #check for col types, text or num?
-        for col in modeldata['columnnames']:
-            '''coltype='text'
-            for row in dictdata.keys():
-                if 
-            modeldata['columntypes'][col]=coltype'''
-            modeldata['columntypes'][col] = 'text'
-            
-        for colname in modeldata['columnnames']:
-            modeldata['columnlabels'][colname]=colname          
-        
-        #now add the data
-        for row in dictdata.keys():
-            modeldata[row]=dictdata[row]                
-            
-        print '-------MODELDATA------\n',modeldata          
-
-        return modeldata
+        return dictdata
 
     def close(self):
         self.master.destroy()
         return
-        
+
 class TableExporter:
     def __init__(self):
         """Provides export utility methods for the Table and Table Model classes"""
-        
-        return        
-   
+
+        return
+
     def ExportTableData(self, table, sep=None):
         """Export table data to a comma separated file"""
-                        
-        parent=table.parentframe                        
+
+        parent=table.parentframe
         import tkFileDialog
-        filename = tkFileDialog.asksaveasfilename(parent=parent,defaultextension='.csv',                                                  
+        filename = tkFileDialog.asksaveasfilename(parent=parent,defaultextension='.csv',
                                                   filetypes=[("CSV files","*.csv")]
                                                   )
-        if not filename:                                                 
+        if not filename:
             return
         if sep == None:
-            sep = ','                
+            sep = ','
         writer = csv.writer(file(filename, "w"), delimiter=sep)
         #writer = csv.writer(sys.stdout, delimiter=sep)
         model=table.getModel()
-        recs = model.getAllCells()          
-        #take column labels as field names            
+        recs = model.getAllCells()
+        #take column labels as field names
         colnames = model.columnNames
         collabels = model.columnlabels
         row=[]
@@ -185,8 +156,8 @@ class TableExporter:
             row.append(collabels[c])
         writer.writerow(row)
 
-        for row in recs.keys():            
+        for row in recs.keys():
             writer.writerow(recs[row])
-        
-        return 
-   
+
+        return
+
