@@ -1271,58 +1271,63 @@ class TableCanvas(Canvas):
     def popupMenu(self, event, rows=None, cols=None, outside=None):
         """Add left and right click behaviour for canvas, should not have to override
             this function, it will take its values from defined dicts in constructor"""
-        if outside == None:
-            row = self.get_row_clicked(event)
-            col = self.get_col_clicked(event)
-            coltype = self.model.getColumnType(col)
+
+        defaultactions = {"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
+                        "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
+                        "Copy" : lambda : self.copyCell(rows, cols),
+                        "Paste" : lambda : self.pasteCell(rows, cols),
+                        "Fill Down" : lambda : self.fill_down(rows, cols),
+                        "Fill Right" : lambda : self.fill_across(cols, rows),
+                        "Add Row" : lambda : self.add_Row(),
+                        "Delete Row" : lambda : self.delete_Row(),
+                        "View Record" : lambda : self.getRecordInfo(row),
+                        "Clear Data" : lambda : self.delete_Cells(rows, cols),
+                        "Select All" : self.select_All,
+                        "Resize Columns" : self.autoResizeColumns,
+                        "New": self.new,
+                        "Load": self.load,
+                        "Save": self.save,
+                        "Import text":self.importTable,
+                        "Export csv": self.exportTable,
+                        "Plot Selected" : self.plot_Selected,
+                        "Plot Options" : self.plotSetup,
+                        "Export Table" : self.exportTable,
+                        "Preferences" : self.showtablePrefs,
+                        "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
+
+        main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right",
+                "Clear Data", "Add Row" , "Delete Row"]
+        general = ["Select All", "Resize Columns", "Preferences"]
+        filecommands = ['New','Load','Save','Import text','Export csv']
+        plotcommands = ['Plot Selected','Plot Options']
+        utilcommands = ["View Record", "Formulae->Value"]
+
+        def createSubMenu(parent, label, commands):
+            menu = Menu(parent, tearoff = 0)
+            popupmenu.add_cascade(label=label,menu=menu)
+            for action in commands:
+                menu.add_command(label=action, command=defaultactions[action])
+            return menu
+
+        def add_commands(fieldtype):
+            """Add commands to popup menu for column type and specific cell"""
+            functions = self.columnactions[fieldtype]
+            for f in functions.keys():
+                func = getattr(self, functions[f])
+                popupmenu.add_command(label=f, command= lambda : func(row,col))
+            return
+
         popupmenu = Menu(self, tearoff = 0)
         def popupFocusOut(event):
             popupmenu.unpost()
 
-        if outside == 1:
+        if outside == None:
             #if outside table, just show general items
-            popupmenu.add_command(label="Resize Columns", command= self.autoResizeColumns)
-            popupmenu.add_command(label="Filter Recs", command= self.showFilteringBar)
-            popupmenu.add_command(label="New", command= self.new)
-            popupmenu.add_command(label="Load", command= self.load)
-            popupmenu.add_command(label="Save", command= self.save)
-            popupmenu.add_command(label="Import Table", command= self.importTable)
-            popupmenu.add_command(label="Export Table", command= self.exportTable)
-            popupmenu.add_command(label="Preferences", command= self.showtablePrefs)
-        else:
-            def add_commands(fieldtype):
-                """Add commands to popup menu for col type"""
-                #add column actions for this table type defined in self.columnactions
-                functions = self.columnactions[fieldtype]
-                for f in functions.keys():
-                    func = getattr(self, functions[f])
-                    popupmenu.add_command(label=f, command= lambda : func(row,col))
-                return
-
+            row = self.get_row_clicked(event)
+            col = self.get_col_clicked(event)
+            coltype = self.model.getColumnType(col)
             def add_defaultcommands():
                 """now add general actions for all cells"""
-                main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right", "Clear Data",
-                         "Add Row" , "Delete Row", "Select All", "Resize Columns", "Plot Selected",
-                         "Plot Options", "Preferences"]
-                utils = ["View Record", "Formulae->Value", "Export Table"]
-                defaultactions={"Set Fill Color" : lambda : self.setcellColor(rows,cols,key='bg'),
-                                "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
-                                "Copy" : lambda : self.copyCell(rows, cols),
-                                "Paste" : lambda : self.pasteCell(rows, cols),
-                                "Fill Down" : lambda : self.fill_down(rows, cols),
-                                "Fill Right" : lambda : self.fill_across(cols, rows),
-                                "Add Row" : lambda : self.add_Row(),
-                                "Delete Row" : lambda : self.delete_Row(),
-                                "View Record" : lambda : self.getRecordInfo(row),
-                                "Clear Data" : lambda : self.delete_Cells(rows, cols),
-                                "Select All" : self.select_All,
-                                "Resize Columns" : self.autoResizeColumns,
-                                "Plot Selected" : self.plot_Selected,
-                                "Plot Options" : self.plotSetup,
-                                "Export Table" : self.exportTable,
-                                "Preferences" : self.showtablePrefs,
-                                "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
-
                 for action in main:
                     if action == 'Fill Down' and (rows == None or len(rows) <= 1):
                         continue
@@ -1330,17 +1335,20 @@ class TableCanvas(Canvas):
                         continue
                     else:
                         popupmenu.add_command(label=action, command=defaultactions[action])
-                popupmenu.add_separator()
-                utilsmenu = Menu(popupmenu, tearoff = 0)
-                popupmenu.add_cascade(label="Utils",menu=utilsmenu)
-                for action in utils:
-                    utilsmenu.add_command(label=action, command=defaultactions[action])
                 return
 
             if self.columnactions.has_key(coltype):
                 add_commands(coltype)
             add_defaultcommands()
 
+        for action in general:
+            popupmenu.add_command(label=action, command=defaultactions[action])
+
+        popupmenu.add_separator()
+        createSubMenu(popupmenu, 'File', filecommands)
+        createSubMenu(popupmenu, 'Plot', plotcommands)
+        if outside == None:
+            createSubMenu(popupmenu, 'Utils', utilcommands)
         popupmenu.bind("<FocusOut>", popupFocusOut)
         popupmenu.focus_set()
         popupmenu.post(event.x_root, event.y_root)
