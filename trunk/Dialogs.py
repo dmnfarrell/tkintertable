@@ -20,6 +20,7 @@
 """
 
 from Tkinter import *
+import types
 import tkSimpleDialog, tkFileDialog, tkMessageBox
 
 class RecordViewDialog(tkSimpleDialog.Dialog):
