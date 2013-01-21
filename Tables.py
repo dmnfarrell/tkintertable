@@ -291,7 +291,7 @@ class TableCanvas(Canvas):
         self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
-        self.drawSelectedCol()
+        self.delete('colrect')
         if len(self.multiplerowlist)>1:
             self.drawMultipleRows(self.multiplerowlist)
         return
