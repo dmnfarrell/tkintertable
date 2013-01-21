@@ -1,11 +1,22 @@
 #labels Featured
-= Introduction =
+*tkintertable usage*
 
 This page shows example code for altering the table or data properties programmatically.
 
+<wiki:toc max_depth="2" />
+
+==Import the class==
+
+The core classes are `TableCanvas` and `TableModel`. You will likely want to access the `TableModel` class to alter the data programmatically, otherwise the `TableCanvas` class is all that's required to add to the GUI. To import:
+
+{{{
+from tkintertable.Tables import TableCanvas
+from tkintertable.TableModels import TableModel
+}}}
+
 ==Create tables==
 
-To create a basic table, only the following 4 lines are needed. We can also create a model from some data, then use that model to initiate the table. The data, a dictionary, will be appropriate to that model of course.
+To create a table, you typically create a frame in your applications GUI and provide this to the table constructor. Note that the createTableFrame method is used to add the table to the parent frame, so avoid using the pack or grid methods.
 
 {{{
 tframe = Frame(master)
@@ -13,6 +24,36 @@ tframe.pack()
 table = TableCanvas(tframe)
 table.createTableFrame()
 }}}
+
+We can also create a model from some data, then use that model to initiate the table:
+
+{{{
+model = TableModel()
+table = TableCanvas(frame, model=model)
+}}}
+
+==Get data into the table==
+
+This class is primarily designed to provide an empty table for users to utilise like a spreadsheet, this data can then be saved and re-loaded. However it is possible to populate the tables by importing data from a csv file or python dictionary.
+
+To import from a dictionary we get a handle on the model:
+{{{
+model = table.model
+model.importDict(data) #can import from a dictionary to populate model
+table.redrawTable()
+}}}
+
+where data is a dictionary of the form
+{{{
+{{'rec1': {'col1': 99.88, 'col2': 108.79, 'label': 'rec1'},
+{'rec2': {'col1': 99.88, 'col2': 108.79, 'label': 'rec2'},
+..
+}
+}}}
+
+One record corresponds to a row in the dictionary. Columns will be created for each child key found in each record.
+
+Importing from a text file can be down interactively from the GUI by right clicking on the table and choosing 'Import Table' from the popup menu.
 
 ==Set preferences==
 
@@ -54,4 +95,11 @@ table.redrawTable()
 Column labels can be changed programmatically by accessing the *columnlabels* attribute of the table model:
 {{{
 table.model.columnlabels[colname] = newlabel
+}}}
+
+==Save and load from a file==
+
+{{{
+table.save('test.table')
+table.load('test.table')
 }}}
