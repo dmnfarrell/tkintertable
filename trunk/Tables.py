@@ -291,6 +291,7 @@ class TableCanvas(Canvas):
         self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedCol()
         if len(self.multiplerowlist)>1:
             self.drawMultipleRows(self.multiplerowlist)
         return
@@ -484,14 +485,18 @@ class TableCanvas(Canvas):
     def add_Column(self, newname=None):
         """Add a new column"""
         if newname == None:
-            d = SimpleTableDialog(title="New Column",
-                                  parent=self.parentframe, table=self)
-
+            from Dialogs import MultipleValDialog
+            coltypes = self.getModel().getDefaultTypes()
+            d = MultipleValDialog(title='New Column',
+                                    initialvalues=(coltypes, ''),
+                                    labels=('Column Type','Name'),
+                                    types=('list','string'),
+                                    parent=self.parentframe)
             if d.result == None:
                 return
             else:
-                coltype = d.result[0]
-                newname = d.result[1]
+                coltype = d.results[0]
+                newname = d.results[1]
 
         if newname != None:
             if newname in self.getModel().columnNames:
@@ -588,6 +593,7 @@ class TableCanvas(Canvas):
         model = self.model
         #We need a custom dialog for allowing field entries here
         absrow = self.get_AbsoluteRow(row)
+        from Dialogs import RecordViewDialog
         d = RecordViewDialog(title="Record Details",
                                   parent=self.parentframe, table=self, row=absrow)
         return
@@ -1921,7 +1927,7 @@ class TableCanvas(Canvas):
         row=row+1
         lblfontsize=Label(frame2,text='Text Size:')
         lblfontsize.grid(row=row,column=0,padx=3,pady=2)
-        fontsizeentry=Scale(frame2,from_=8,to=30,resolution=1,orient='horizontal',
+        fontsizeentry=Scale(frame2,from_=6,to=50,resolution=1,orient='horizontal',
                             relief='ridge',variable=self.celltextsizevar)
 
         fontsizeentry.grid(row=row,column=1, sticky='wens',padx=3,pady=2)
@@ -2135,8 +2141,18 @@ class TableCanvas(Canvas):
 
     def new(self):
         """Clears all the data and makes a new table"""
-        model = TableModel(rows=10,columns=4)
-        self.updateModel(model)
+        from Dialogs import MultipleValDialog
+        mpDlg = MultipleValDialog(title='Create new table',
+                                    initialvalues=(10, 4),
+                                    labels=('rows','columns'),
+                                    types=('int','int'),
+                                    parent=self.parentframe)
+
+        if mpDlg.result == True:
+            rows = mpDlg.results[0]
+            cols = mpDlg.results[1]
+            model = TableModel(rows=rows,columns=cols)
+            self.updateModel(model)
         return
 
     def load(self, filename=None):
@@ -2664,107 +2680,3 @@ class AutoScrollbar(Scrollbar):
         raise TclError, "cannot use place with this widget"
 
 
-class SimpleTableDialog(tkSimpleDialog.Dialog):
-    """Simple dialog to get data for new cols and rows"""
-
-    def __init__(self, parent, title=None, table=None):
-        if table != None:
-            self.items = table.getModel().getDefaultTypes()
-        else:
-            self.items=['text','number']
-        tkSimpleDialog.Dialog.__init__(self, parent, title)
-
-
-    def body(self, master):
-
-        Label(master, text="Column Type:").grid(row=0)
-        Label(master, text="Name:").grid(row=1)
-        self.v1=StringVar()
-        self.v1.set('text')
-        self.b1 = Menubutton(master,textvariable=self.v1,relief=RAISED)
-        self.menu=Menu(self.b1,tearoff=0)
-        self.b1['menu']=self.menu
-
-        for option in self.items:
-            self.menu.add_radiobutton(label=option,
-                                          variable=self.v1,
-                                          value=option,
-                                          indicatoron=1)
-        self.e2 = Entry(master)
-
-        self.b1.grid(row=0, column=1,padx=2,pady=2,sticky='news')
-        self.e2.grid(row=1, column=1,padx=2,pady=2,sticky='news')
-        return self.b1 # initial focus
-
-    def apply(self):
-        first = self.v1.get()
-        second = self.e2.get()
-        self.result = first, second
-        return
-
-class RecordViewDialog(tkSimpleDialog.Dialog):
-    """Dialog for viewing and editing table records"""
-
-    def __init__(self, parent, title=None, table=None, row=None):
-        if table != None:
-            self.table = table
-            self.model = table.getModel()
-            self.row = row
-            self.recdata = self.model.getRecordAtRow(row)
-            self.recname = self.model.getRecName(row)
-        else:
-            return
-        tkSimpleDialog.Dialog.__init__(self, parent, title)
-        return
-
-    def body(self, master):
-        """Show all record fields in entry fields or labels"""
-        model = self.model
-        cols = self.recdata.keys()
-        self.editable = []
-        self.fieldnames = {}
-        self.fieldvars = {}
-        self.fieldvars['Name'] = StringVar()
-        self.fieldvars['Name'].set(self.recname)
-        Label(master, text='Rec Name:').grid(row=0,column=0,padx=2,pady=2,sticky='news')
-        Entry(master, textvariable=self.fieldvars['Name'],
-                relief=GROOVE,bg='yellow').grid(row=0,column=1,padx=2,pady=2,sticky='news')
-        i=1
-        for col in cols:
-            self.fieldvars[col] = StringVar()
-            if self.recdata.has_key(col):
-                val = self.recdata[col]
-                self.fieldvars[col].set(val)
-            self.fieldnames[col] = Label(master, text=col).grid(row=i,column=0,padx=2,pady=2,sticky='news')
-            ent = Entry(master, textvariable=self.fieldvars[col], relief=GROOVE,bg='white')
-            ent.grid(row=i,column=1,padx=2,pady=2,sticky='news')
-            if not type(self.recdata[col]) is types.StringType:
-                ent.config(state=DISABLED)
-            else:
-                self.editable.append(col)
-            i+=1
-        top=self.winfo_toplevel()
-        top.columnconfigure(1,weight=1)
-        return
-
-    def apply(self):
-        """apply"""
-        cols = self.table.cols
-        model = self.model
-        absrow = self.table.get_AbsoluteRow(self.row)
-        newname = self.fieldvars['Name'].get()
-        if newname != self.recname:
-            model.setRecName(newname, absrow)
-
-        for col in range(cols):
-            colname = model.getColumnName(col)
-            if not colname in self.editable:
-                continue
-            if not self.fieldvars.has_key(colname):
-                continue
-            val = self.fieldvars[colname].get()
-            model.setValueAt(val, absrow, col)
-            #print 'changed field', colname
-
-        self.table.redrawTable()
-        return
