@@ -9,6 +9,9 @@ CHANGES
 * added new, load and save methods to table directly
 * added ImportTable method to table for interactive use
 * fixed clicking outside column header bug
+* fix to update selected col when redrawing
+* added Dialog.py module
+* removed simpletabledialog
 
 ------
 1.0.2
