@@ -32,6 +32,12 @@ model = TableModel()
 table = TableCanvas(frame, model=model)
 }}}
 
+==Update the table==
+This may need to be called to update the display after programmatically changing the table contents:
+{{{
+table.redrawTable()
+}}}
+
 ==Get data into the table==
 
 This class is primarily designed to provide an empty table for users to utilise like a spreadsheet, this data can then be saved and re-loaded. However it is possible to populate the tables by importing data from a csv file or python dictionary.
@@ -76,12 +82,6 @@ If row or column names are not given in the argument then a dialog will pop up i
 {{{
 table.add_Row(rowname)
 table.add_Column(colname)
-}}}
-
-==Update the table==
-This may need to be called to update the display after programmatically changing the table contents:
-{{{
-table.redrawTable()
 }}}
 
 ==Put data in cells==
