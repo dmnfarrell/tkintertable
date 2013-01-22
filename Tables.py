@@ -1283,7 +1283,7 @@ class TableCanvas(Canvas):
                         "View Record" : lambda : self.getRecordInfo(row),
                         "Clear Data" : lambda : self.delete_Cells(rows, cols),
                         "Select All" : self.select_All,
-                        "Resize Columns" : self.autoResizeColumns,
+                        "Auto Fit Columns" : self.autoResizeColumns,
                         "New": self.new,
                         "Load": self.load,
                         "Save": self.save,
@@ -1297,7 +1297,7 @@ class TableCanvas(Canvas):
 
         main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right",
                 "Clear Data", "Add Row" , "Delete Row"]
-        general = ["Select All", "Resize Columns", "Preferences"]
+        general = ["Select All", "Auto Fit Columns", "Preferences"]
         filecommands = ['New','Load','Save','Import text','Export csv']
         plotcommands = ['Plot Selected','Plot Options']
         utilcommands = ["View Record", "Formulae->Value"]
