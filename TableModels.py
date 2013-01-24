@@ -342,11 +342,10 @@ class TableModel(object):
         self.columnNames=[]
         #self.columnOrder=[]
 
-        print oldcolumnIndex, newcolumnIndex
         #write out a new column names list - tedious
         moved = self.oldnames[oldcolumnIndex]
         del self.oldnames[oldcolumnIndex]
-        print self.oldnames
+        #print self.oldnames
         i=0
         for c in self.oldnames:
             if i==newcolumnIndex:
@@ -360,8 +359,7 @@ class TableModel(object):
             self.columnNames.append(moved)
             #self.columnOrder.append(moved)
 
-        print self.columnNames
-
+        #print self.columnNames
         return
 
     def addRow(self, name=None, **kwargs):

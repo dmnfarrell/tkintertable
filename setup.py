@@ -14,5 +14,5 @@ setup(
     dependency_links = [
           "http://download.sourceforge.net/pmw/Pmw.1.3.tar.gz"],
     entry_points = { 'gui_scripts': [
-                     'tablesapp = tkintertable.Tablesapp:main']}
+                     'tablesapp = tkintertable.TablesApp:main']}
 )
