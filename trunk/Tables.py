@@ -33,7 +33,8 @@ import platform
 class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
-    def __init__(self, parent=None, model=None, newdict=None, width=None, height=None, **kwargs):
+    def __init__(self, parent=None, model=None, width=None, height=None,
+                    rows=10, cols=5, **kwargs):
         Canvas.__init__(self, parent, bg='white',
                          width=width, height=height,
                          relief=GROOVE,
@@ -67,11 +68,9 @@ class TableCanvas(Canvas):
             self.__dict__[key] = kwargs[key]
 
         if model == None:
-            self.model = TableModel(rows=10,columns=5)
+            self.model = TableModel(rows=rows,columns=cols)
         else:
             self.model = model
-        if newdict != None:
-            self.createfromDict(newdict)
 
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
@@ -1284,6 +1283,7 @@ class TableCanvas(Canvas):
                         "Clear Data" : lambda : self.delete_Cells(rows, cols),
                         "Select All" : self.select_All,
                         "Auto Fit Columns" : self.autoResizeColumns,
+                        "Filter Records" : self.showFilteringBar,
                         "New": self.new,
                         "Load": self.load,
                         "Save": self.save,
@@ -1297,7 +1297,7 @@ class TableCanvas(Canvas):
 
         main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right",
                 "Clear Data", "Add Row" , "Delete Row"]
-        general = ["Select All", "Auto Fit Columns", "Preferences"]
+        general = ["Select All", "Auto Fit Columns", "Filter Records", "Preferences"]
         filecommands = ['New','Load','Save','Import text','Export csv']
         plotcommands = ['Plot Selected','Plot Options']
         utilcommands = ["View Record", "Formulae->Value"]
@@ -2673,8 +2673,8 @@ class RowHeader(Canvas):
         return
 
 class AutoScrollbar(Scrollbar):
-    # a scrollbar that hides itself if it's not needed.  only
-    # works if you use the grid geometry manager.
+    """a scrollbar that hides itself if it's not needed.  only
+       works if you use the grid geometry manager."""
     def set(self, lo, hi):
         if float(lo) <= 0.0 and float(hi) >= 1.0:
             # grid_remove is currently missing from Tkinter!

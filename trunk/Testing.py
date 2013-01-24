@@ -30,6 +30,7 @@ class App:
     def __init__(self, master):
         self.main = Frame(master)
         self.main.pack(fill=BOTH,expand=1)
+        master.geometry('600x400+200+100')
 
 def createRandomStrings(l,n):
     """create list of l random strings, each of length n"""
