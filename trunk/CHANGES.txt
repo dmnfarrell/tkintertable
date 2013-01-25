@@ -3,6 +3,14 @@ CHANGES
 =======
 
 ------
+1.1
+------
+
+* table now renders large amounts of data by only drawing visible frame
+* fixes to filtering bar
+* removed paged view
+
+------
 1.0.3
 ------
 
