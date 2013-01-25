@@ -119,7 +119,7 @@ class TableCanvas(Canvas):
 
     def mouse_wheel(self, event):
         """Handle mouse wheel scroll for windows"""
-        print event
+
         if event.num == 5 or event.delta == -120:
             event.widget.yview_scroll(1, UNITS)
             self.tablerowheader.yview_scroll(1, UNITS)
@@ -639,12 +639,6 @@ class TableCanvas(Canvas):
             print 'nothing found'
             return None
 
-    def closeFilterFrame(self):
-        """Callback for closing filter frame"""
-        self.filterframe = None
-        self.showAll()
-        return
-
     def showAll(self):
         self.model.filteredrecs = None
         self.filtered = False
@@ -673,16 +667,30 @@ class TableCanvas(Canvas):
         """Add a filter frame"""
         if parent == None:
             parent = Toplevel()
+            parent.title('Filter Records')
+            x,y,w,h = self.getGeometry(self.master)
+            parent.geometry('+%s+%s' %(x,y+h))
         if fields == None:
             fields = self.model.columnNames
         from Filtering import FilterFrame
         self.filterframe = FilterFrame(parent, fields,
                                        self.doFilter, self.closeFilterFrame)
-        return self.filterframe
+        self.filterframe.pack()
+        return parent
 
     def showFilteringBar(self):
-        frame = self.createFilteringBar()
-        frame.pack()
+        if not hasattr(self, 'filterwin') or self.filterwin == None:
+            self.filterwin = self.createFilteringBar()
+            self.filterwin.protocol("WM_DELETE_WINDOW", self.closeFilterFrame)
+        else:
+            self.filterwin.lift()
+        return
+
+    def closeFilterFrame(self):
+        """Callback for closing filter frame"""
+        self.filterwin.destroy()
+        self.filterwin = None
+        self.showAll()
         return
 
     def resize_Column(self, col, width):
@@ -1430,7 +1438,6 @@ class TableCanvas(Canvas):
                     continue
                 x.append(val)
             lists.append(x)
-
         return lists
 
     def plot_Selected(self, graphtype='XY'):
@@ -1744,15 +1751,16 @@ class TableCanvas(Canvas):
     def drawSelectedRow(self):
         """Draw the highlight rect for the currently selected row"""
         self.delete('rowrect')
-        row=self.currentrow
+        row = self.currentrow
         x1,y1,x2,y2 = self.getCellCoords(row,0)
-        x2=self.tablewidth
+        x2 = self.tablewidth
         rect = self.create_rectangle(x1,y1,x2,y2,
                                   fill=self.rowselectedcolor,
                                   outline=self.rowselectedcolor,
                                   tag='rowrect')
         self.lower('rowrect')
         self.lower('fillrect')
+        self.tablerowheader.drawSelectedRows(self.currentrow)
         return
 
     def drawSelectedCol(self, col=None, delete=1):
@@ -2236,6 +2244,9 @@ class TableCanvas(Canvas):
                 ostyp='mac'
         return ostyp
 
+    def getGeometry(self, frame):
+        """Get frame geometry"""
+        return frame.winfo_rootx(), frame.winfo_rooty(), frame.winfo_width(), frame.winfo_height()
 
 class ColumnHeader(Canvas):
     """Class that takes it's size and rendering from a parent table
@@ -2604,14 +2615,12 @@ class RowHeader(Canvas):
 
         return
 
-    def handle_mouse_drag(self, event):
+    '''def handle_mouse_drag(self, event):
         """Handle mouse drag for mult row selection"""
         rowover = self.table.get_row_clicked(event)
         colover = self.table.get_col_clicked(event)
         if colover == None or rowover == None:
-            return
-        if self.table.check_PageView(rowover) == 1:
-            return
+            return'''
 
     def handle_mouse_drag(self, event):
         """Handle mouse moved with button held down, multiple selections"""

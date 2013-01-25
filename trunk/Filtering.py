@@ -59,6 +59,7 @@ class FilterFrame(Frame):
         """Close frame and do stuff in parent app if needed"""
         self.closecallback()
         self.destroy()
+        return
 
     def doFiltering(self, searchfunc, filters=None):
         """Filter recs by several filters using user provided search function.

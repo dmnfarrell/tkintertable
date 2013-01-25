@@ -55,6 +55,8 @@ class LargeTable(TableCanvas):
     def getVisibleRegion(self):
         x1, y1 = self.canvasx(0), self.canvasy(0)
         w, h = self.winfo_width(), self.winfo_height()
+        if w <= 1.0 or h <= 1.0:
+            w, h = self.master.winfo_width(), self.master.winfo_height()
         x2, y2 = self.canvasx(w), self.canvasy(h)
         return x1, y1, x2, y2
 
@@ -110,6 +112,12 @@ class LargeTable(TableCanvas):
         self.tablewidth = (self.cellwidth) * self.cols
         self.configure(bg=self.cellbackgr)
         self.set_colPositions()
+
+        #are we drawing a filtered subset of the recs?
+        if self.filtered == True and self.model.filteredrecs != None:
+            self.rows = len(self.model.filteredrecs)
+            self.delete('colrect')
+
         self.rowrange = range(0,self.rows)
         self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
                 self.rowheight*self.rows+10))
@@ -120,7 +128,6 @@ class LargeTable(TableCanvas):
         self.visiblerows = range(startvisiblerow, endvisiblerow)
         startvisiblecol, endvisiblecol = self.getVisibleCols(x1, x2)
         self.visiblecols = range(startvisiblecol, endvisiblecol)
-        #print self.visiblerows
 
         self.drawGrid(startvisiblerow, endvisiblerow)
         align = self.align
@@ -137,14 +144,18 @@ class LargeTable(TableCanvas):
                 if bgcolor != None:
                     self.draw_rect(row,col, color=bgcolor)
 
+        self.delete('colrect')
         self.tablecolheader.redraw()
-        self.tablerowheader.redraw(paging=self.paging)
-        self.setSelectedRow(self.currentrow)
+        self.tablerowheader.redraw()
+        #self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
-        self.delete('colrect')
+        #print self.multiplerowlist
+
         if len(self.multiplerowlist)>1:
+            self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             self.drawMultipleRows(self.multiplerowlist)
+            self.drawMultipleCells()
         return
 
     def drawGrid(self, startrow, endrow):
@@ -258,13 +269,10 @@ class LargeRowHeader(RowHeader):
     def __init__(self, parent=None, table=None):
         RowHeader.__init__(self, parent, table)
 
-    def redraw(self, paging = 0):
+    def redraw(self):
         """Redraw row header"""
-        if paging == 1:
-            self.height = self.table.rowheight * self.table.rowsperpage+10
-        else:
-            self.height = self.table.rowheight * self.table.rows+10
 
+        self.height = self.table.rowheight * self.table.rows+10
         self.configure(scrollregion=(0,0, self.width, self.height))
         self.delete('rowheader','text')
         self.delete('rect')
@@ -287,13 +295,13 @@ class LargeRowHeader(RowHeader):
         return
 
 def test(root):
-    data = Testing.createData(10000,40)
+    data = Testing.createData(2000,20)
     model = TableModel()
     model.importDict(data)
     app = App(root)
     master = app.main
     table = LargeTable(master, model)
-    table.save('large.table')
+    #table.load('large.table')
     table.createTableFrame()
 
 def main():
