@@ -119,6 +119,7 @@ class TableCanvas(Canvas):
 
     def mouse_wheel(self, event):
         """Handle mouse wheel scroll for windows"""
+        print event
         if event.num == 5 or event.delta == -120:
             event.widget.yview_scroll(1, UNITS)
             self.tablerowheader.yview_scroll(1, UNITS)
@@ -160,10 +161,11 @@ class TableCanvas(Canvas):
         self.parentframe.master.bind_all("<KP_8>", self.handle_arrow_keys)
         self.parentframe.master.bind_all("<Return>", self.handle_arrow_keys)
         self.parentframe.master.bind_all("<Tab>", self.handle_arrow_keys)
-        if 'windows' in self.platform:
-            self.bind("<MouseWheel>", self.mouse_wheel)
+        #if 'windows' in self.platform:
+        self.bind("<MouseWheel>", self.mouse_wheel)
         self.bind('<Button-4>', self.mouse_wheel)
         self.bind('<Button-5>', self.mouse_wheel)
+        self.focus_set()
         return
 
     def getModel(self):
@@ -894,6 +896,7 @@ class TableCanvas(Canvas):
         self.allrows = False
         rowclicked = self.get_row_clicked(event)
         colclicked = self.get_col_clicked(event)
+        self.focus_set()
         if self.mode == 'formula':
             self.handleFormulaClick(rowclicked, colclicked)
             return

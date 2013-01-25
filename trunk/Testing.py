@@ -40,12 +40,11 @@ def createRandomStrings(l,n):
         names.append(val)
     return names
 
-def createData():
+def createData(rows=20, cols=5):
     """Creare random dict for test data"""
 
     data = {}
-    names = createRandomStrings(20,16)
-    cols = 5
+    names = createRandomStrings(rows,16)    
     colnames = createRandomStrings(cols,5)
     for n in names:
         data[n]={}
