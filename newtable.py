@@ -101,6 +101,9 @@ class LargeTable(TableCanvas):
     def redrawVisible(self, event=None, callback=None):
         """Redraw the visible portion of the canvas"""
 
+        #if event != None:
+        #    print event.type
+        print 'redraw'
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
@@ -144,7 +147,7 @@ class LargeTable(TableCanvas):
                 if bgcolor != None:
                     self.draw_rect(row,col, color=bgcolor)
 
-        self.delete('colrect')
+        #self.drawSelectedCol()
         self.tablecolheader.redraw()
         self.tablerowheader.redraw()
         #self.setSelectedRow(self.currentrow)
