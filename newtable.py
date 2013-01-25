@@ -4,6 +4,8 @@ from Tkinter import *
 from Tables import TableCanvas, RowHeader, ColumnHeader
 from TableModels import TableModel
 from Tables import AutoScrollbar
+import Testing
+
 import math
 
 class App:
@@ -285,10 +287,13 @@ class LargeRowHeader(RowHeader):
         return
 
 def test(root):
+    data = Testing.createData(10000,40)
+    model = TableModel()
+    model.importDict(data)
     app = App(root)
     master = app.main
-    table = LargeTable(master)
-    table.load('large.table')
+    table = LargeTable(master, model)
+    table.save('large.table')
     table.createTableFrame()
 
 def main():
