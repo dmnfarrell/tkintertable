@@ -1876,8 +1876,10 @@ class TableCanvas(Canvas):
         if self.prefs == None:
             self.loadPrefs()
         self.prefswindow=Toplevel()
-        self.prefswindow.geometry('+300+450')
+        x,y,w,h = self.getGeometry(self.master)
+        self.prefswindow.geometry('+%s+%s' %(x+w/2,y+h/2))
         self.prefswindow.title('Preferences')
+        self.prefswindow.resizable(width=FALSE, height=FALSE)
 
         frame1=Frame(self.prefswindow)
         frame1.pack(side=LEFT)
@@ -1914,36 +1916,28 @@ class TableCanvas(Canvas):
                             relief='ridge',variable=self.linewidthvar)
         linewidthentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
-        Checkbutton(frame1, text="Use paging", variable=self.usepagingvar,
-                    onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
-        row=row+1
-        Label(frame1, text='Rows/page:').grid(row=row,column=0, sticky='news')
-        Entry(frame1, textvariable=self.rowsperpagevar,bg='white',width=12,relief='groove').grid(row=row,column=1, pady=2,sticky='ns')
-        row=row+1
 
         #fonts
-        #fts=['Arial','Courier','Monospace','Times','Verdana']
         fts = self.getFonts()
-        lblfont=Label(frame2,text='Cell Font:')
-        lblfont.grid(row=row,column=0,padx=3,pady=2)
-        fontentry_button=Menubutton(frame2,textvariable=self.celltextfontvar,
-					relief=RAISED,width=16)
-        fontentry_menu=Menu(fontentry_button,tearoff=0)
-        fontentry_button['menu']=fontentry_menu
-        p=0
-        for text in fts:
-            if p%30==0 and p!=0:
-                colbreak=1
-            else:
-                colbreak=0
-            fontentry_menu.add_radiobutton(label=text,
-                                            variable=self.celltextfontvar,
-                                            value=text,
-                                            columnbreak=colbreak,
-                                            indicatoron=1)
-            p+=1
-        fontentry_button.grid(row=row,column=1, sticky='nes', padx=3,pady=2)
+
+        def setFont():
+            self.thefont = self.fontbox.getcurselection()
+            return
+
+        import Pmw
+        self.fontbox = Pmw.ScrolledListBox(frame2,
+                        items=(fts),
+                        labelpos='w',
+                        label_text='Font:',
+                        listbox_height = 6,
+                        selectioncommand = setFont,
+                        usehullsize = 1,
+                        hull_width = 200,
+                        hull_height = 80)
+        self.fontbox.setvalue(self.prefs.get('celltextfont'))
+        self.fontbox.grid(row=row,column=0, columnspan=2, sticky='nes', padx=3,pady=2)
         row=row+1
+
         lblfontsize=Label(frame2,text='Text Size:')
         lblfontsize.grid(row=row,column=0,padx=3,pady=2)
         fontsizeentry=Scale(frame2,from_=6,to=50,resolution=1,orient='horizontal',
@@ -2015,7 +2009,7 @@ class TableCanvas(Canvas):
                         'rowheight':self.rowheight,
                         'cellwidth':120,
                         'autoresizecols': 0,
-                        'paging': 0, 'rowsperpage' : 50,
+                        'rowsperpage' : 50,
                         'align': 'center',
                         'celltextsize':11, 'celltextfont':'Arial',
                         'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
@@ -2047,20 +2041,13 @@ class TableCanvas(Canvas):
         self.vertlinesvar.set(self.prefs.get('vertlines'))
         self.alternaterowsvar = IntVar()
         self.alternaterowsvar.set(self.prefs.get('alternaterows'))
-        self.usepagingvar = IntVar()
-        self.usepagingvar.set(self.prefs.get('paging'))
-        self.paging = self.usepagingvar.get()
-        self.rowsperpagevar = StringVar()
-        self.rowsperpagevar.set(self.prefs.get('rowsperpage'))
         self.celltextsizevar = IntVar()
         self.celltextsizevar.set(self.prefs.get('celltextsize'))
-        self.celltextfontvar = StringVar()
-        self.celltextfontvar.set(self.prefs.get('celltextfont'))
         self.cellbackgr = self.prefs.get('cellbackgr')
         self.grid_color = self.prefs.get('grid_color')
         self.rowselectedcolor = self.prefs.get('rowselectedcolor')
         self.fontsize = self.celltextsizevar.get()
-        self.thefont = (self.celltextfontvar.get(), self.celltextsizevar.get())
+        self.thefont = (self.prefs.get('celltextfont'), self.prefs.get('celltextsize'))
         return
 
     def savePrefs(self):
@@ -2080,17 +2067,13 @@ class TableCanvas(Canvas):
             self.align = self.cellalignvar.get()
             self.prefs.set('linewidth', self.linewidthvar.get())
             self.linewidth = self.linewidthvar.get()
-            self.paging = self.usepagingvar.get()
-            self.prefs.set('paging', self.usepagingvar.get())
-            self.rowsperpage = int(self.rowsperpagevar.get())
-            self.prefs.set('rowsperpage', self.rowsperpagevar.get())
             self.prefs.set('celltextsize', self.celltextsizevar.get())
-            self.prefs.set('celltextfont', self.celltextfontvar.get())
+            self.prefs.set('celltextfont', self.fontbox.getcurselection())
             self.prefs.set('cellbackgr', self.cellbackgr)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
-            self.thefont = (self.celltextfontvar.get(), self.celltextsizevar.get())
-            self.fontsize = self.celltextsizevar.get()
+            self.thefont = (self.prefs.get('celltextfont'), self.prefs.get('celltextsize'))
+            self.fontsize = self.prefs.get('celltextsize')
         except ValueError:
             pass
         self.prefs.save_prefs()
