@@ -101,9 +101,7 @@ class LargeTable(TableCanvas):
     def redrawVisible(self, event=None, callback=None):
         """Redraw the visible portion of the canvas"""
 
-        #if event != None:
-        #    print event.type
-        print 'redraw'
+        #print 'redraw'
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()

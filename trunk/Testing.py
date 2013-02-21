@@ -44,7 +44,7 @@ def createData(rows=20, cols=5):
     """Creare random dict for test data"""
 
     data = {}
-    names = createRandomStrings(rows,16)    
+    names = createRandomStrings(rows,16)
     colnames = createRandomStrings(cols,5)
     for n in names:
         data[n]={}
@@ -65,11 +65,12 @@ def GUITest(root):
     app = App(root)
     master = app.main
     model = TableModel()
-    data = createData()
+    data = createData(40)
     #import after model created
     #print data
     model.importDict(data)
-    table = TableCanvas(master, model, namefield='name',
+    from newtable import LargeTable
+    table = TableCanvas(master, model,
                         cellwidth=60, cellbackgr='#e3f698',
                         thefont=('Arial',12),rowheight=18, rowsperpage=100,
                         rowselectedcolor='yellow', editable=True)
@@ -79,7 +80,8 @@ def GUITest(root):
     model.deleteRows(range(0,2))
     table.redrawTable()
     #add rows and cols
-    table.add_Row(1)
+    table.add_Row(1,label='aaa')
+    table.add_Row()
     table.add_Column('col6')
     model.data[1]['label']='XHJHJSAHSHJ'
     model.data[1]['col6']='TEST'
@@ -98,6 +100,7 @@ def GUITest(root):
     table.load('test.table')
 
     print 'GUI tests done'
+
     #root.after(2000, root.quit)
     return
 
