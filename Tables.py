@@ -54,7 +54,7 @@ class TableCanvas(Canvas):
         self.reverseorder = 0
         self.startrow = self.endrow = None
         self.startcol = self.endcol = None
-        self.allrows = False   #for selected all rows without setting multiplerowlist
+        self.allrows = False       #for selected all rows without setting multiplerowlist
         self.multiplerowlist=[]
         self.multiplecollist=[]
         self.col_positions=[]       #record current column grid positions
@@ -75,8 +75,8 @@ class TableCanvas(Canvas):
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
         self.tablewidth = (self.cellwidth)*self.cols
-        self.tablecolheader = ColumnHeader(self.parentframe, self)
-        self.tablerowheader = RowHeader(self.parentframe, self)
+        #self.tablecolheader = ColumnHeader(self.parentframe, self)
+        #self.tablerowheader = RowHeader(self.parentframe, self)
         self.do_bindings()
 
         #column specific actions, define for every column type in the model
@@ -124,8 +124,11 @@ class TableCanvas(Canvas):
             event.widget.yview_scroll(1, UNITS)
             self.tablerowheader.yview_scroll(1, UNITS)
         if event.num == 4 or event.delta == 120:
+            if self.canvasy(0) < 0:
+                return
             event.widget.yview_scroll(-1, UNITS)
             self.tablerowheader.yview_scroll(-1, UNITS)
+        self.redrawVisible()
         return
 
     def do_bindings(self):
@@ -194,6 +197,8 @@ class TableCanvas(Canvas):
            Table is then redrawn."""
 
         #Add the table and header to the frame
+        self.tablerowheader = RowHeader(self.parentframe, self)
+        self.tablecolheader = ColumnHeader(self.parentframe, self)
         self.Yscrollbar = AutoScrollbar(self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
         self.Xscrollbar = AutoScrollbar(self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
@@ -208,23 +213,74 @@ class TableCanvas(Canvas):
         self.tablecolheader.grid(row=0,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
         self.tablerowheader.grid(row=1,column=0,rowspan=1,sticky='news',pady=0,ipady=0)
         self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
-        if self.model.getRowCount()<500:
-            self.adjustColumnWidths()
+
+        self.adjustColumnWidths()
         self.redrawTable(callback=callback)
-        #self.parentframe.bind("<Configure>", self.resizeTable)
+        self.parentframe.bind("<Configure>", self.redrawVisible)
         self.tablecolheader.xview("moveto", 0)
         self.xview("moveto", 0)
         return
 
-    def redrawTable(self, event=None, callback=None):
-        """Draw the table from scratch based on it's model data"""
+    def getVisibleRegion(self):
+        x1, y1 = self.canvasx(0), self.canvasy(0)
+        w, h = self.winfo_width(), self.winfo_height()
+        if w <= 1.0 or h <= 1.0:
+            w, h = self.master.winfo_width(), self.master.winfo_height()
+        x2, y2 = self.canvasx(w), self.canvasy(h)
+        return x1, y1, x2, y2
 
+    def getRowPosition(self, y):
+        h = self.rowheight
+        y_start = self.y_start
+        row = (int(y)-y_start)/h
+        if row < 0:
+            return 0
+        if row > self.rows:
+            row = self.rows
+        return row
+
+    def getColPosition(self, x):
+        x_start = self.x_start
+        w = self.cellwidth
+        i=0
+        col=0
+        for c in self.col_positions:
+            col = i
+            if c+w>=x:
+                break
+            i+=1
+        return col
+
+    def getVisibleRows(self, y1, y2):
+        """Get the visible row range"""
+        start = self.getRowPosition(y1)
+        end = self.getRowPosition(y2)+1
+        if end > self.rows:
+            end = self.rows
+        return start, end
+
+    def getVisibleCols(self, x1, x2):
+        """Get the visible column range"""
+        start = self.getColPosition(x1)
+        end = self.getColPosition(x2)+1
+        if end > self.cols:
+            end = self.cols
+        return start, end
+
+    def redrawVisible(self, event=None, callback=None):
+        """Redraw the visible portion of the canvas"""
+
+        #print 'redraw'
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
-        self.tablewidth = (self.cellwidth)*self.cols
+        if self.cols == 0 or self.rows == 0:
+            self.delete('entry')
+            self.delete('rowrect')
+            self.delete('currentrect')
+            return
+        self.tablewidth = (self.cellwidth) * self.cols
         self.configure(bg=self.cellbackgr)
-        #determine col positions for first time
         self.set_colPositions()
 
         #are we drawing a filtered subset of the recs?
@@ -232,69 +288,48 @@ class TableCanvas(Canvas):
             self.rows = len(self.model.filteredrecs)
             self.delete('colrect')
 
-        #check if large no. of records and switch to paging view
-        if self.paging == 0 and self.rows >= 1000:
-            self.paging = 1
-        #if using paging, we only want to display the current page..
-        if self.paging == 1:
-            self.numpages = int(math.ceil(float(self.rows)/self.rowsperpage))
-            if self.currentpage == None:
-                self.currentpage = 0
-            self.drawNavFrame()
-        else:
-            try:
-                self.navFrame.destroy()
-                self.navFrame.forget()
-            except:
-                pass
-        #determine current range of rows to draw if paging
-        if self.paging == 1 and self.rows>self.rowsperpage:
-            lower=self.currentpage*self.rowsperpage
-            upper=lower+self.rowsperpage
-            if upper>=self.rows:
-                upper=self.rows
-            self.rowrange=range(lower,upper)
-            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
-                    self.rowheight*self.rowsperpage+10))
-        else:
-            self.rowrange = range(0,self.rows)
-            self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
-                    self.rowheight*self.rows+10))
+        self.rowrange = range(0,self.rows)
+        self.configure(scrollregion=(0,0, self.tablewidth+self.x_start,
+                self.rowheight*self.rows+10))
 
-        self.draw_grid()
-        self.update_idletasks()
-        self.tablecolheader.redraw()
-        self.tablerowheader.redraw(paging=self.paging)
+        x1, y1, x2, y2 = self.getVisibleRegion()
+        #print x1, y1, x2, y2
+        startvisiblerow, endvisiblerow = self.getVisibleRows(y1, y2)
+        self.visiblerows = range(startvisiblerow, endvisiblerow)
+        startvisiblecol, endvisiblecol = self.getVisibleCols(x1, x2)
+        self.visiblecols = range(startvisiblecol, endvisiblecol)
+
+        self.drawGrid(startvisiblerow, endvisiblerow)
         align = self.align
         self.delete('fillrect')
+        for row in self.visiblerows:
+            if callback != None:
+                callback()
+            for col in self.visiblecols:
+                colname = model.getColumnName(col)
+                bgcolor = model.getColorAt(row,col, 'bg')
+                fgcolor = model.getColorAt(row,col, 'fg')
+                text = model.getValueAt(row,col)
+                self.draw_Text(row, col, text, fgcolor, align)
+                if bgcolor != None:
+                    self.draw_rect(row,col, color=bgcolor)
 
-        if self.cols == 0 or self.rows == 0:
-            self.delete('entry')
-            self.delete('rowrect')
-            self.delete('currentrect')
-            return
-
-        #now draw model data in cells
-        rowpos=0
-        if self.model!=None:
-            for row in self.rowrange:
-                if callback != None:
-                    callback()
-                for col in range(self.cols):
-                    colname = model.getColumnName(col)
-                    bgcolor = self.model.getColorAt(row,col, 'bg')
-                    fgcolor = self.model.getColorAt(row,col, 'fg')
-                    text = self.model.getValueAt(row,col)
-                    self.draw_Text(rowpos, col, text, fgcolor, align)
-                    if bgcolor != None:
-                        self.draw_rect(rowpos,col, color=bgcolor)
-                rowpos+=1
-        self.setSelectedRow(self.currentrow)
+        #self.drawSelectedCol()
+        self.tablecolheader.redraw()
+        self.tablerowheader.redraw()
+        #self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
-        self.delete('colrect')
+        #print self.multiplerowlist
+
         if len(self.multiplerowlist)>1:
+            self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             self.drawMultipleRows(self.multiplerowlist)
+            self.drawMultipleCells()
+        return
+
+    def redrawTable(self, event=None, callback=None):
+        self.redrawVisible(event, callback)
         return
 
     def redrawCell(self, row=None, col=None, recname=None, colname=None):
@@ -369,12 +404,14 @@ class TableCanvas(Canvas):
         """Set the xview of table and col header"""
         apply(self.xview,args)
         apply(self.tablecolheader.xview,args)
+        self.redrawVisible()
         return
 
     def set_yviews(self,*args):
         """Set the xview of table and row header"""
         apply(self.yview,args)
         apply(self.tablerowheader.yview,args)
+        self.redrawVisible()
         return
 
     def drawNavFrame(self):
@@ -1483,28 +1520,24 @@ class TableCanvas(Canvas):
 
     #--- Drawing stuff ---
 
-    def draw_grid(self):
+    def drawGrid(self, startrow, endrow):
         """Draw the table grid lines"""
         self.delete('gridline','text')
         rows=len(self.rowrange)
         cols=self.cols
-        w=self.cellwidth
-        h=self.rowheight
+        w = self.cellwidth
+        h = self.rowheight
         x_start=self.x_start
         y_start=self.y_start
-
-        self.data={}
         x_pos=x_start
 
         if self.vertlines==1:
             for col in range(cols+1):
-                #print x_pos
                 x=self.col_positions[col]
                 self.create_line(x,y_start,x,y_start+rows*h, tag='gridline',
                                      fill=self.grid_color, width=self.linewidth)
-
         if self.horizlines==1:
-            for row in range(rows+1):
+            for row in range(startrow, endrow+1):
                 y_pos=y_start+row*h
                 self.create_line(x_start,y_pos,self.tablewidth,y_pos, tag='gridline',
                                     fill=self.grid_color, width=self.linewidth)
@@ -2263,15 +2296,15 @@ class ColumnHeader(Canvas):
         x_start=self.table.x_start
         if cols == 0:
             return
-        for col in range(cols):
+        for col in self.table.visiblecols:
             colname=self.model.columnNames[col]
             if not self.model.columnlabels.has_key(colname):
                 self.model.columnlabels[colname]=colname
             collabel = self.model.columnlabels[colname]
             if self.model.columnwidths.has_key(colname):
-                w=self.model.columnwidths[colname]
+                w = self.model.columnwidths[colname]
             else:
-                w=self.table.cellwidth
+                w = self.table.cellwidth
             x=self.table.col_positions[col]
 
             if len(collabel)>w/10:
@@ -2521,24 +2554,19 @@ class RowHeader(Canvas):
             #self.bind('<Shift-Button-1>', self.handle_left_shift_click)
         return
 
-    def redraw(self, paging = 0):
+    def redraw(self):
         """Redraw row header"""
-        if paging == 1:
-            self.height = self.table.rowheight * self.table.rowsperpage+10
-        else:
-            self.height = self.table.rowheight * self.table.rows+10
 
+        self.height = self.table.rowheight * self.table.rows+10
         self.configure(scrollregion=(0,0, self.width, self.height))
         self.delete('rowheader','text')
         self.delete('rect')
-
         w=1
-        x_start=self.x_start
-        y_start=self.table.y_start
+        x_start = self.x_start
         h = self.table.rowheight
-        rowpos=0
-        for row in self.table.rowrange:
-            x1,y1,x2,y2 = self.table.getCellCoords(rowpos,0)
+
+        for row in self.table.visiblerows:
+            x1,y1,x2,y2 = self.table.getCellCoords(row,0)
             self.create_rectangle(0,y1,x_start-w,y2,
                                       fill='gray75',
                                       outline='white',
@@ -2549,7 +2577,6 @@ class RowHeader(Canvas):
                                       fill='black',
                                       font=self.table.thefont,
                                       tag='text')
-            rowpos+=1
         return
 
     def clearSelected(self):

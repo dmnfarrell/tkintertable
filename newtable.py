@@ -45,8 +45,7 @@ class LargeTable(TableCanvas):
         self.grid(row=1,column=1,rowspan=1,sticky='news',pady=0,ipady=0)
 
         self.adjustColumnWidths()
-        #self.redrawTable(callback=callback)
-        self.redrawVisible()
+        self.redrawTable(callback=callback)
         self.parentframe.bind("<Configure>", self.redrawVisible)
         self.tablecolheader.xview("moveto", 0)
         self.xview("moveto", 0)
