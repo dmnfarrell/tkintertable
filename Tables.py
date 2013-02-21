@@ -461,26 +461,18 @@ class TableCanvas(Canvas):
                 return 1
         return 0
 
-    def add_Row(self, rowname=None):
+    def add_Row(self, key=None, **kwargs):
         """Add a new row"""
-        if rowname == None:
-            rowname = tkSimpleDialog.askstring("New row name?",
+        '''if key == None:
+            key = tkSimpleDialog.askstring("New row name?",
                                                "Enter row name:",
-                                               parent=self.parentframe)
-        if rowname != None:
-            if rowname == '':
-                tkMessageBox.showwarning("Whoops",
-                                         "Name should not be blank.",
-                                         parent=self.parentframe)
-                return
-            if self.getModel().data.has_key(rowname):
-                 tkMessageBox.showwarning("Name exists",
-                                          "Record already exists!",
-                                          parent=self.parentframe)
-            else:
-                self.model.addRow(rowname)
-                self.setSelectedRow(self.model.getRecordIndex(rowname))
-                self.redrawTable()
+                                               parent=self.parentframe)'''
+
+        key = self.model.addRow(key, **kwargs)
+        if hasattr(self, 'sortcol'):
+            self.model.setSortOrder(self.sortcol)
+        self.redrawTable()
+        self.setSelectedRow(self.model.getRecordIndex(key))
         return
 
     def add_Column(self, newname=None):

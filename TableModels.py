@@ -108,32 +108,29 @@ class TableModel(object):
         self.reclist = self.data.keys()
         return
 
-    def importDict(self, newdata, namefield=None):
-        """Try to create a table model from some arbitrary dict"""
-        if namefield == None:
-            namefield = 'name'
+    def importDict(self, newdata):
+        """Try to create a table model from a dict of the form
+           {{'rec1': {'col1': 3, 'col2': 2}, ..}"""
+
+        #if namefield == None:
+        #    namefield = newdata.keys()[0][0]
         #get cols from sub data keys
         colnames = []
-        colnames.append(namefield)
-
+        #colnames.append(namefield)
         for k in newdata:
             fields = newdata[k].keys()
             for f in fields:
                 if not f in colnames:
                     colnames.append(f)
-
         for c in colnames:
             self.addColumn(c)
-
         #add the data
-        #print colnames
         for k in newdata:
             self.addRow(k)
             for c in colnames:
-                if c == namefield:
-                    self.data[k][namefield] = str(k)
-                else:
-                    self.data[k][c] = str(newdata[k][c])
+                #if c == namefield:
+                #    self.data[k][namefield] = str(k)
+                self.data[k][c] = str(newdata[k][c])
 
         return
 
@@ -241,7 +238,7 @@ class TableModel(object):
         self.reclist[rowIndex] = newname
         temp = copy.deepcopy(self.data[currname])
         self.data[newname] = temp
-        self.data[newname]['Name'] = newname
+        #self.data[newname]['Name'] = newname
         del self.data[currname]
         for key in ['bg', 'fg']:
             if self.colors[key].has_key(currname):
@@ -362,19 +359,27 @@ class TableModel(object):
         #print self.columnNames
         return
 
-    def addRow(self, name=None, **kwargs):
+    def getNextKey(self):
+        """Return the next numeric key in the dict"""
+        num = len(self.reclist)+1
+        return num
+
+    def addRow(self, key=None, **kwargs):
         """Add a row"""
-        if self.data.has_key(name) or name in self.reclist:
+        if key == '':
+            return
+        if key==None:
+            key = self.getNextKey()
+        if self.data.has_key(key) or key in self.reclist:
             print 'name already present!!'
             return
-        self.data[name]={}
-        if name != None:
-            self.data[name]['Name'] = name
-        else:
-            self.data[name]['Name'] = ''
-        self.reclist.append(name)
-
-        return
+        self.data[key]={}
+        self.reclist = self.data.keys()
+        for k in kwargs:
+            if not k in self.columnNames:
+                self.addColumn(k)
+            self.data[key][k] = str(kwargs[k])
+        return key
 
     def deleteRow(self, rowIndex, update=True):
         """Delete a row"""
@@ -549,6 +554,7 @@ class TableModel(object):
             allowempty: boolean if false means rows with empty vals for any
             required fields are not returned
             returns: lists of column data"""
+
         def evaluate(l):
             for i in l:
                 if i == '' or i == None:
@@ -749,7 +755,7 @@ class TableModel(object):
 
     def merge(self, model, key='name', fields=None):
         """Merge another table model with this one based on a key field,
-           we only add nrecords from the new model where the key is present
+           we only add records from the new model where the key is present
            in both models"""
         if fields == None: fields = model.columnNames
         for rec in self.reclist:
@@ -768,7 +774,7 @@ class TableModel(object):
                         self.data[rec][f] = model.data[rec][f]
         return
 
-    def addRecord(self, name, **kwargs):
+    '''def addRecord(self, name, **kwargs):
         """Add new rec with all fields in kwargs dict"""
         #name = kwargs[kwargs.keys()[0]]
         self.addRow(name)
@@ -778,7 +784,7 @@ class TableModel(object):
             if not k in self.columnNames:
                 self.addColumn(k)
             self.data[name][k] = str(kwargs[k])
-        return
+        return'''
 
     def save(self, filename=None):
         """Save model to file"""
