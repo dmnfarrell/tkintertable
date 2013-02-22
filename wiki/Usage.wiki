@@ -78,10 +78,15 @@ table.loadPrefs(preferences)
 }}}
 
 ==Add new rows and columns==
-If row or column names are not given in the argument then a dialog will pop up in the GUI asking for the name which will likely not be what you want.
+If column names are not given in the argument then a dialog will pop up in the GUI asking for the name which will likely not be what you want.
 {{{
-table.add_Row(rowname)
-table.add_Column(colname)
+#add with automatic key
+table.addRow()
+#add with named key, other keyword arguments are interpreted as column values
+table.addRow(keyname, label='abc')
+#same as above with dict as column data
+table.addRow(keyname, **{'label'='abc'})
+table.addColumn(colname)
 }}}
 
 ==Put data in cells==
