@@ -79,8 +79,8 @@ class TableCanvas(Canvas):
 
         #column specific actions, define for every column type in the model
         #when you add a column type you should edit this dict
-        self.columnactions = {'text' : {"Edit":  'draw_cellentry' },
-                              'number' : {"Edit": 'draw_cellentry' }}
+        self.columnactions = {'text' : {"Edit":  'drawCellEntry' },
+                              'number' : {"Edit": 'drawCellEntry' }}
         self.setFontSize()
         return
 
@@ -98,6 +98,7 @@ class TableCanvas(Canvas):
         self.y_start=1
         self.linewidth=1.0
         self.rowheaderwidth=40
+        self.showkeynamesinheader=False
         self.thefont = ('Arial',12)
         self.cellbackgr = '#F7F7FA'
         self.entrybackgr = 'white'
@@ -305,16 +306,16 @@ class TableCanvas(Canvas):
                 bgcolor = model.getColorAt(row,col, 'bg')
                 fgcolor = model.getColorAt(row,col, 'fg')
                 text = model.getValueAt(row,col)
-                self.draw_Text(row, col, text, fgcolor, align)
+                self.drawText(row, col, text, fgcolor, align)
                 if bgcolor != None:
-                    self.draw_rect(row,col, color=bgcolor)
+                    self.drawRect(row,col, color=bgcolor)
 
         #self.drawSelectedCol()
         self.tablecolheader.redraw()
-        self.tablerowheader.redraw(align=self.align)
+        self.tablerowheader.redraw(align=self.align, showkeys=self.showkeynamesinheader)
         #self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
-        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRect(self.currentrow, self.currentcol)
         #print self.multiplerowlist
 
         if len(self.multiplerowlist)>1:
@@ -336,9 +337,9 @@ class TableCanvas(Canvas):
         bgcolor = self.model.getColorAt(row,col, 'bg')
         fgcolor = self.model.getColorAt(row,col, 'fg')
         text = self.model.getValueAt(row,col)
-        self.draw_Text(row, col, text, fgcolor)
+        self.drawText(row, col, text, fgcolor)
         if bgcolor != None:
-            self.draw_rect(row,col, color=bgcolor)
+            self.drawRect(row,col, color=bgcolor)
         return
 
     def adjustColumnWidths(self):
@@ -558,7 +559,7 @@ class TableCanvas(Canvas):
                         found=1
                         #highlight cell
                         self.delete('searchrect')
-                        self.draw_rect(row, col, color='red', tag='searchrect', delete=0)
+                        self.drawRect(row, col, color='red', tag='searchrect', delete=0)
                         self.lift('searchrect')
                         self.lift('celltext'+str(col)+'_'+str(row))
                         #add row/col to foundlist
@@ -807,11 +808,11 @@ class TableCanvas(Canvas):
         #reset multiple selection list
         self.multiplerowlist=[]
         self.multiplerowlist.append(self.currentrow)
-        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRect(self.currentrow, self.currentcol)
         self.drawSelectedRow()
         coltype = self.model.getColumnType(self.currentcol)
         if coltype == 'text' or coltype == 'number':
-            self.draw_cellentry(self.currentrow, self.currentcol)
+            self.drawCellEntry(self.currentrow, self.currentcol)
         return
 
     def gotonextRow(self):
@@ -824,11 +825,11 @@ class TableCanvas(Canvas):
         #reset multiple selection list
         self.multiplerowlist=[]
         self.multiplerowlist.append(self.currentrow)
-        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRect(self.currentrow, self.currentcol)
         self.drawSelectedRow()
         coltype = self.model.getColumnType(self.currentcol)
         if coltype == 'text' or coltype == 'number':
-            self.draw_cellentry(self.currentrow, self.currentcol)
+            self.drawCellEntry(self.currentrow, self.currentcol)
         return
 
     def handle_left_click(self, event):
@@ -860,12 +861,12 @@ class TableCanvas(Canvas):
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
             self.setSelectedCol(colclicked)
-            self.draw_selected_rect(self.currentrow, self.currentcol)
+            self.drawSelectedRect(self.currentrow, self.currentcol)
             self.drawSelectedRow()
             self.tablerowheader.drawSelectedRows(rowclicked)
             coltype = self.model.getColumnType(colclicked)
             if coltype == 'text' or coltype == 'number':
-                self.draw_cellentry(rowclicked, colclicked)
+                self.drawCellEntry(rowclicked, colclicked)
         return
 
     def handle_left_release(self,event):
@@ -973,11 +974,11 @@ class TableCanvas(Canvas):
                 self.currentcol  = self.currentcol +1
         elif event.keysym == 'Left':
             self.currentcol  = self.currentcol -1
-        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRect(self.currentrow, self.currentcol)
         coltype = self.model.getColumnType(self.currentcol)
         if coltype == 'text' or coltype == 'number':
             self.delete('entry')
-            self.draw_cellentry(self.currentrow, self.currentcol)
+            self.drawCellEntry(self.currentrow, self.currentcol)
         return
 
     def handle_double_click(self, event):
@@ -992,7 +993,7 @@ class TableCanvas(Canvas):
         if Formula.isFormula(cellvalue):
             self.formula_Dialog(row, col, cellvalue)
             #self.enterFormula(rowclicked, colclicked)
-        #self.draw_cellentry(self.currentrow, self.currentcol)
+        #self.drawCellEntry(self.currentrow, self.currentcol)
         return
 
     def handle_right_click(self, event):
@@ -1015,7 +1016,7 @@ class TableCanvas(Canvas):
                 self.allrows = False
                 self.setSelectedRow(rowclicked)
                 self.setSelectedCol(colclicked)
-                self.draw_selected_rect(self.currentrow, self.currentcol)
+                self.drawSelectedRect(self.currentrow, self.currentcol)
                 self.drawSelectedRow()
             if self.isInsideTable(event.x,event.y) == 1:
                 self.rightmenu = self.popupMenu(event,rows=self.multiplerowlist, cols=self.multiplecollist)
@@ -1042,7 +1043,7 @@ class TableCanvas(Canvas):
         if self.currentcol >= self.cols-1:
             self.currentrow  = self.currentrow +1
             self.currentcol = self.currentcol+1
-        self.draw_selected_rect(self.currentrow, self.currentcol)
+        self.drawSelectedRect(self.currentrow, self.currentcol)
         return
 
     def movetoSelectedRow(self, row=None, recname=None):
@@ -1063,7 +1064,7 @@ class TableCanvas(Canvas):
         #absrow = self.get_AbsoluteRow(row)
         self.formulaText.insert(END, str(cell))
         self.formulaText.focus_set()
-        self.draw_selected_rect(row, col, color='red')
+        self.drawSelectedRect(row, col, color='red')
         return
 
     def formula_Dialog(self, row, col, currformula=None):
@@ -1085,7 +1086,7 @@ class TableCanvas(Canvas):
             self.model.setFormulaAt(f,absrow,col)
             value = self.model.doFormula(f)
             color = self.model.getColorAt(absrow,col,'fg')
-            self.draw_Text(row, col, value, color)
+            self.drawText(row, col, value, color)
             close()
             self.mode = 'normal'
             return
@@ -1440,7 +1441,7 @@ class TableCanvas(Canvas):
                                     fill=self.grid_color, width=self.linewidth)
         return
 
-    def draw_rowheader(self):
+    def drawRowHeader(self):
         """User has clicked to select a cell"""
         self.delete('rowheader')
         x_start=self.x_start
@@ -1462,18 +1463,12 @@ class TableCanvas(Canvas):
             rowpos+=1
         return
 
-    def draw_new_row(self):
-        """For performance reasons, we can just draw new rows at the end of
-           the table, without doing a redraw."""
-
-        return
-
-    def draw_selected_rect(self, row, col, color=None):
+    def drawSelectedRect(self, row, col, color=None):
         """User has clicked to select a cell"""
         if col >= self.cols:
             return
         self.delete('currentrect')
-        bg=self.selectedcolor
+        bg = self.selectedcolor
         if color == None:
             color = 'gray25'
         w=3
@@ -1489,7 +1484,7 @@ class TableCanvas(Canvas):
         self.lift('celltext'+str(col)+'_'+str(row))
         return
 
-    def draw_rect(self, row, col, color=None, tag=None, delete=1):
+    def drawRect(self, row, col, color=None, tag=None, delete=1):
         """Cell is colored"""
         if delete==1:
             self.delete('cellbg'+str(row)+str(col))
@@ -1511,7 +1506,7 @@ class TableCanvas(Canvas):
         self.lower(recttag)
         return
 
-    def draw_cellentry(self, row, col, text=None):
+    def drawCellEntry(self, row, col, text=None):
         """When the user single/double clicks on a text/number cell, bring up entry window"""
 
         if self.editable == False:
@@ -1542,17 +1537,17 @@ class TableCanvas(Canvas):
 
             coltype = self.model.getColumnType(col)
             if coltype == 'number':
-                sta = self.check_data_entry(e)
+                sta = self.checkDataEntry(e)
                 if sta == 1:
-                    model.setValueAt(value,absrow,col)
+                    model.setValueAt(value,row,col)
             elif coltype == 'text':
-                model.setValueAt(value,absrow,col)
+                model.setValueAt(value,row,col)
 
-            color = self.model.getColorAt(absrow,col,'fg')
-            self.draw_Text(row, col, value, color, align=self.align)
+            color = self.model.getColorAt(row,col,'fg')
+            self.drawText(row, col, value, color, align=self.align)
             if e.keysym=='Return':
                 self.delete('entry')
-                #self.draw_rect(row, col)
+                #self.drawRect(row, col)
                 #self.gotonextCell(e)
             return
 
@@ -1573,7 +1568,7 @@ class TableCanvas(Canvas):
 
         return
 
-    def check_data_entry(self,event=None):
+    def checkDataEntry(self,event=None):
         """do validation checks on data entry in a widget"""
         #if user enters commas, change to points
         import re
@@ -1590,7 +1585,7 @@ class TableCanvas(Canvas):
             return 1
         return 1
 
-    def draw_Text(self, row, col, celltxt, fgcolor=None, align=None):
+    def drawText(self, row, col, celltxt, fgcolor=None, align=None):
         """Draw the text inside a cell area"""
         self.delete('celltext'+str(col)+'_'+str(row))
         h=self.rowheight
@@ -2249,10 +2244,10 @@ class ColumnHeader(Canvas):
 
         if self.atdivider == 1:
             return
-        self.draw_rect(self.table.currentcol)
+        self.drawRect(self.table.currentcol)
         #also draw a copy of the rect to be dragged
         self.draggedcol = None
-        self.draw_rect(self.table.currentcol, tag='dragrect',
+        self.drawRect(self.table.currentcol, tag='dragrect',
                         color='red', outline='white')
         if hasattr(self, 'rightmenu'):
             self.rightmenu.destroy()
@@ -2284,7 +2279,7 @@ class ColumnHeader(Canvas):
             self.table.setSelectedCol(self.draggedcol)
             self.table.redrawTable()
             self.table.drawSelectedCol(self.table.currentcol)
-            self.draw_rect(self.table.currentcol)
+            self.drawRect(self.table.currentcol)
         return
 
     def handle_mouse_drag(self, event):
@@ -2362,7 +2357,7 @@ class ColumnHeader(Canvas):
 
         #print self.table.multiplecollist
         for c in self.table.multiplecollist:
-            self.draw_rect(c, delete=0)
+            self.drawRect(c, delete=0)
             self.table.drawSelectedCol(c, delete=0)
         return
 
@@ -2417,7 +2412,7 @@ class ColumnHeader(Canvas):
             fill='white', outline='gray', width=wdth)
         return
 
-    def draw_rect(self,col, tag=None, color=None, outline=None, delete=1):
+    def drawRect(self,col, tag=None, color=None, outline=None, delete=1):
         """User has clicked to select a col"""
         if tag==None:
             tag='rect'
@@ -2462,7 +2457,7 @@ class RowHeader(Canvas):
             #self.bind('<Shift-Button-1>', self.handle_left_shift_click)
         return
 
-    def redraw(self, align='center'):
+    def redraw(self, align='center', showkeys=False):
         """Redraw row header"""
 
         self.height = self.table.rowheight * self.table.rows+10
@@ -2477,6 +2472,10 @@ class RowHeader(Canvas):
         elif align == 'e':
             x = x+w/2-3
         for row in self.table.visiblerows:
+            if showkeys == True:
+                text = self.model.getRecName(row)
+            else:
+                text = row+1
             x1,y1,x2,y2 = self.table.getCellCoords(row,0)
             self.create_rectangle(0,y1,w-1,y2,
                                       fill='gray75',
@@ -2484,7 +2483,7 @@ class RowHeader(Canvas):
                                       width=1,
                                       tag='rowheader')
             self.create_text(x,y1+h/2,
-                                      text=row+1,
+                                      text=text,
                                       fill='black',
                                       font=self.table.thefont,
                                       tag='text', anchor=align)
@@ -2579,10 +2578,10 @@ class RowHeader(Canvas):
            rowlist = rows
         for r in rowlist:
             #print r
-            self.draw_rect(r, delete=0)
+            self.drawRect(r, delete=0)
         return
 
-    def draw_rect(self, row=None, tag=None, color=None, outline=None, delete=1):
+    def drawRect(self, row=None, tag=None, color=None, outline=None, delete=1):
         """Draw a rect representing row selection"""
         if tag==None:
             tag='rect'
@@ -2595,7 +2594,7 @@ class RowHeader(Canvas):
         w=0
         i = self.inset
         x1,y1,x2,y2 = self.table.getCellCoords(row, 0)
-        rect = self.create_rectangle(0+i,y1+i,self.x_start-i,y2,
+        rect = self.create_rectangle(0+i,y1+i,self.width-i,y2,
                                       fill=color,
                                       outline=outline,
                                       width=w,

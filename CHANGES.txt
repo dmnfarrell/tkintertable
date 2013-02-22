@@ -9,6 +9,12 @@ CHANGES
 * table now renders large amounts of data by only drawing visible frame
 * fixes to filtering bar
 * removed paged view
+* removed 'name' as a special field
+* adding rows from GUI no longer requires rec names
+* can now set row header width
+* can now show record keys in row header instead of numbers
+* row header drawn with same alignment as cells
+* renamed most remaining Table.py methods to camel case
 
 ------
 1.0.3
