@@ -34,7 +34,7 @@ class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
     def __init__(self, parent=None, model=None, width=None, height=None,
-                    rows=10, cols=5, **kwargs):
+                     rows=10, cols=5, **kwargs):
         Canvas.__init__(self, parent, bg='white',
                          width=width, height=height,
                          relief=GROOVE,
@@ -75,8 +75,6 @@ class TableCanvas(Canvas):
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
         self.tablewidth = (self.cellwidth)*self.cols
-        #self.tablecolheader = ColumnHeader(self.parentframe, self)
-        #self.tablerowheader = RowHeader(self.parentframe, self)
         self.do_bindings()
 
         #column specific actions, define for every column type in the model
@@ -95,12 +93,11 @@ class TableCanvas(Canvas):
         self.vertlines=1
         self.alternaterows=0
         self.autoresizecols = 0
-        self.paging = 0
-        self.rowsperpage = 100
         self.inset=2
         self.x_start=0
         self.y_start=1
         self.linewidth=1.0
+        self.rowheaderwidth=40
         self.thefont = ('Arial',12)
         self.cellbackgr = '#F7F7FA'
         self.entrybackgr = 'white'
@@ -197,7 +194,7 @@ class TableCanvas(Canvas):
            Table is then redrawn."""
 
         #Add the table and header to the frame
-        self.tablerowheader = RowHeader(self.parentframe, self)
+        self.tablerowheader = RowHeader(self.parentframe, self, width=self.rowheaderwidth)
         self.tablecolheader = ColumnHeader(self.parentframe, self)
         self.Yscrollbar = AutoScrollbar(self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
@@ -270,7 +267,6 @@ class TableCanvas(Canvas):
     def redrawVisible(self, event=None, callback=None):
         """Redraw the visible portion of the canvas"""
 
-        #print 'redraw'
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
@@ -293,7 +289,6 @@ class TableCanvas(Canvas):
                 self.rowheight*self.rows+10))
 
         x1, y1, x2, y2 = self.getVisibleRegion()
-        #print x1, y1, x2, y2
         startvisiblerow, endvisiblerow = self.getVisibleRows(y1, y2)
         self.visiblerows = range(startvisiblerow, endvisiblerow)
         startvisiblecol, endvisiblecol = self.getVisibleCols(x1, x2)
@@ -316,7 +311,7 @@ class TableCanvas(Canvas):
 
         #self.drawSelectedCol()
         self.tablecolheader.redraw()
-        self.tablerowheader.redraw()
+        self.tablerowheader.redraw(align=self.align)
         #self.setSelectedRow(self.currentrow)
         self.drawSelectedRow()
         self.draw_selected_rect(self.currentrow, self.currentcol)
@@ -414,90 +409,6 @@ class TableCanvas(Canvas):
         self.redrawVisible()
         return
 
-    def drawNavFrame(self):
-        """Draw the frame for selecting pages when paging is on"""
-        #print 'adding page frame'
-        import Table_images
-        self.navFrame = Frame(self.parentframe)
-        self.navFrame.grid(row=4,column=0,columnspan=2,sticky='news',padx=1,pady=1,ipady=1)
-        pagingbuttons = { 'start' : self.first_Page, 'prev' : self.prev_Page,
-                          'next' : self.next_Page, 'end' : self.last_Page}
-        images = { 'start' : Table_images.start(), 'prev' : Table_images.prev(),
-                   'next' : Table_images.next(), 'end' : Table_images.end()}
-        skeys=['start', 'prev', 'next', 'end']
-        for i in skeys:
-            b = Button(self.navFrame, text=i, command=pagingbuttons[i],
-                        relief=GROOVE,
-                        image=images[i])
-            b.image = images[i]
-            b.pack(side=LEFT, ipadx=1, ipady=1)
-        Label(self.navFrame,text='Page '+str(self.currentpage+1)+' of '+ str(self.numpages),fg='white',
-                  bg='#3366CC',relief=SUNKEN).pack(side=LEFT,ipadx=2,ipady=2,padx=4)
-        #Label(self.navFrame,text='Goto Record:').pack(side=LEFT,padx=3)
-        #self.gotorecordvar = StringVar()
-        #Entry(self.navFrame,textvariable=self.gotorecordvar,
-        #          width=8,bg='white').pack(side=LEFT,ipady=3,padx=2)
-        Label(self.navFrame,text=str(self.rows)+' records').pack(side=LEFT,padx=3)
-        Button(self.navFrame,text='Normal View',command=self.paging_Off,
-                   bg='#99CCCC',relief=GROOVE).pack(side=LEFT,padx=3)
-        return
-
-    def paging_Off(self):
-        self.rows=self.model.getRowCount()
-        if self.rows >= 1000:
-            tkMessageBox.showwarning("Warning",
-                                     'This table has over 1000 rows.'
-                                     'You should stay in page view.'
-                                     'You can increase the rows per page in settings.',
-                                     parent=self.parentframe)
-        else:
-            self.paging = 0
-            self.usepagingvar.set(0)
-            self.redrawTable()
-        return
-
-    def first_Page(self):
-        """Go to next page"""
-        self.currentpage = 0
-        self.redrawTable()
-        return
-
-    def last_Page(self):
-        """Go to next page"""
-        self.currentpage = self.numpages-1
-        self.redrawTable()
-        return
-
-    def prev_Page(self):
-        """Go to next page"""
-        if self.currentpage > 0:
-            self.currentpage -= 1
-            self.redrawTable()
-        return
-
-    def next_Page(self):
-        """Go to next page"""
-        if self.currentpage < self.numpages-1:
-            self.currentpage += 1
-            self.redrawTable()
-        return
-
-    def get_AbsoluteRow(self, row):
-        """This function always returns the corrected absolute row number,
-           whether if paging is on or not"""
-        if self.paging == 0:
-            return row
-        absrow = row+self.currentpage*self.rowsperpage
-        return absrow
-
-    def check_PageView(self, row):
-        """Check if row clickable for page view"""
-        if self.paging == 1:
-            absrow = self.get_AbsoluteRow(row)
-            if absrow >= self.rows or row > self.rowsperpage:
-                return 1
-        return 0
-
     def addRow(self, key=None, **kwargs):
         """Add new row"""
         key = self.model.addRow(key, **kwargs)
@@ -591,7 +502,7 @@ class TableCanvas(Canvas):
             return
         for col in cols:
             for row in rows:
-                absrow = self.get_AbsoluteRow(row)
+                #absrow = self.get_AbsoluteRow(row)
                 self.model.deleteCellRecord(row, col)
                 self.redrawCell(row,col)
         return
@@ -618,10 +529,10 @@ class TableCanvas(Canvas):
         """Show the record for this row"""
         model = self.model
         #We need a custom dialog for allowing field entries here
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         from Dialogs import RecordViewDialog
         d = RecordViewDialog(title="Record Details",
-                                  parent=self.parentframe, table=self, row=absrow)
+                                  parent=self.parentframe, table=self, row=row)
         return
 
     def findValue(self, searchstring=None, findagain=None):
@@ -683,8 +594,6 @@ class TableCanvas(Canvas):
         #create a list of filtered recs
         self.model.filteredrecs = names
         self.filtered = True
-        if self.paging == 1:
-            self.currentpage = 0
         self.redrawTable()
         return
 
@@ -940,8 +849,6 @@ class TableCanvas(Canvas):
             self.rightmenu.destroy()
         if hasattr(self.tablecolheader, 'rightmenu'):
             self.tablecolheader.rightmenu.destroy()
-        if self.check_PageView(rowclicked) == 1:
-            return
 
         self.startrow = rowclicked
         self.endrow = rowclicked
@@ -995,8 +902,7 @@ class TableCanvas(Canvas):
         colover = self.get_col_clicked(event)
         if colover == None or rowover == None:
             return
-        if self.check_PageView(rowover) == 1:
-            return
+
         if rowover >= self.rows or self.startrow > self.rows:
             #print rowover
             return
@@ -1080,9 +986,9 @@ class TableCanvas(Canvas):
         #print 'double click'
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         model=self.getModel()
-        cellvalue = model.getCellRecord(absrow, col)
+        cellvalue = model.getCellRecord(row, col)
         if Formula.isFormula(cellvalue):
             self.formula_Dialog(row, col, cellvalue)
             #self.enterFormula(rowclicked, colclicked)
@@ -1098,9 +1004,6 @@ class TableCanvas(Canvas):
         rowclicked = self.get_row_clicked(event)
         colclicked = self.get_col_clicked(event)
         if colclicked == None:
-            self.rightmenu = self.popupMenu(event, outside=1)
-            return
-        if self.check_PageView(rowclicked) == 1:
             self.rightmenu = self.popupMenu(event, outside=1)
             return
 
@@ -1125,8 +1028,6 @@ class TableCanvas(Canvas):
         self.delete('tooltip')
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
-        if self.check_PageView(row) == 1:
-            return
         if 0 <= row < self.rows and 0 <= col < self.cols:
             self.draw_tooltip(row, col)
 
@@ -1159,7 +1060,7 @@ class TableCanvas(Canvas):
 
         model = self.getModel()
         cell = list(model.getRecColNames(row, col))
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         self.formulaText.insert(END, str(cell))
         self.formulaText.focus_set()
         self.draw_selected_rect(row, col, color='red')
@@ -1169,7 +1070,7 @@ class TableCanvas(Canvas):
         """Formula dialog"""
         self.mode = 'formula'
         print self.mode
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=300
         h=h=self.rowheight * 3
@@ -1222,10 +1123,10 @@ class TableCanvas(Canvas):
         if cols == None:
             cols = range(self.cols)
         for r in rows:
-            absr=self.get_AbsoluteRow(r)
+            #absr=self.get_AbsoluteRow(r)
             for c in cols:
-                val = self.model.getValueAt(absr,c)
-                self.model.setValueAt(val, absr, c)
+                val = self.model.getValueAt(r,c)
+                self.model.setValueAt(val, r, c)
         return
 
     def paste(self, event=None):
@@ -1236,16 +1137,16 @@ class TableCanvas(Canvas):
     def copyCell(self, rows, cols=None):
         """Copy cell contents to a temp internal clipboard"""
         row = rows[0]; col = cols[0]
-        absrow = self.get_AbsoluteRow(row)
-        self.clipboard = copy.deepcopy(self.model.getCellRecord(absrow, col))
+        #absrow = self.get_AbsoluteRow(row)
+        self.clipboard = copy.deepcopy(self.model.getCellRecord(row, col))
         return
 
     def pasteCell(self, rows, cols=None):
         """Paste cell from internal clipboard"""
         row = rows[0]; col = cols[0]
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         val = self.clipboard
-        self.model.setValueAt(val, absrow, col)
+        self.model.setValueAt(val, row, col)
         self.redrawTable()
         return
 
@@ -1296,8 +1197,8 @@ class TableCanvas(Canvas):
             cols = range(self.cols)
         for col in cols:
             for row in rows:
-                absrow = self.get_AbsoluteRow(row)
-                model.setColorAt(absrow, col, color=newColor, key=key)
+                #absrow = self.get_AbsoluteRow(row)
+                model.setColorAt(row, col, color=newColor, key=key)
                 #setcolor(absrow, col)
         if redraw == True:
             self.redrawTable()
@@ -1395,22 +1296,22 @@ class TableCanvas(Canvas):
     def fill_down(self, rowlist, collist):
         """Fill down a column, or multiple columns"""
         model = self.model
-        absrow  = self.get_AbsoluteRow(rowlist[0])
+        #absrow  = self.get_AbsoluteRow(rowlist[0])
         #remove first element as we don't want to overwrite it
         rowlist.remove(rowlist[0])
 
         #if this is a formula, we have to treat it specially
         for col in collist:
-            val = self.model.getCellRecord(absrow, col)
+            val = self.model.getCellRecord(row, col)
             f=val #formula to copy
             i=1
             for r in rowlist:
-                absr = self.get_AbsoluteRow(r)
+                #absr = self.get_AbsoluteRow(r)
                 if Formula.isFormula(f):
-                    newval = model.copyFormula(f, absr, col, offset=i)
-                    model.setFormulaAt(newval, absr, col)
+                    newval = model.copyFormula(f, r, col, offset=i)
+                    model.setFormulaAt(newval, r, col)
                 else:
-                    model.setValueAt(val, absr, col)
+                    model.setValueAt(val, r, col)
                 #print 'setting', val, 'at row', r
                 i+=1
 
@@ -1426,16 +1327,16 @@ class TableCanvas(Canvas):
         collist.remove(frstcol)
 
         for row in rowlist:
-            absr = self.get_AbsoluteRow(row)
+            #absr = self.get_AbsoluteRow(row)
             val = self.model.getCellRecord(absr, frstcol)
             f=val     #formula to copy
             i=1
             for c in collist:
                 if Formula.isFormula(f):
-                    newval = model.copyFormula(f, absr, c, offset=i, dim='x')
-                    model.setFormulaAt(newval, absr, c)
+                    newval = model.copyFormula(f, r, c, offset=i, dim='x')
+                    model.setFormulaAt(newval, r, c)
                 else:
-                    model.setValueAt(val, absr, c)
+                    model.setValueAt(val, r, c)
                 i+=1
         self.redrawTable()
         return
@@ -1457,8 +1358,8 @@ class TableCanvas(Canvas):
         for c in cols:
             x=[]
             for r in rows:
-                absr = self.get_AbsoluteRow(r)
-                val = model.getValueAt(absr,c)
+                #absr = self.get_AbsoluteRow(r)
+                val = model.getValueAt(r,c)
                 if val == None or val == '':
                     continue
                 x.append(val)
@@ -1615,14 +1516,14 @@ class TableCanvas(Canvas):
 
         if self.editable == False:
             return
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         h=self.rowheight
         model=self.getModel()
-        cellvalue = self.model.getCellRecord(absrow, col)
+        cellvalue = self.model.getCellRecord(row, col)
         if Formula.isFormula(cellvalue):
             return
         else:
-            text = self.model.getValueAt(absrow, col)
+            text = self.model.getValueAt(row, col)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         #Draw an entry window
@@ -1831,10 +1732,10 @@ class TableCanvas(Canvas):
     def draw_tooltip(self, row, col):
         """Draw a tooltip showing contents of cell"""
 
-        absrow = self.get_AbsoluteRow(row)
+        #absrow = self.get_AbsoluteRow(row)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
-        text = self.model.getValueAt(absrow,col)
+        text = self.model.getValueAt(row,col)
         if isinstance(text, dict):
             if text.has_key('link'):
                 text = text['link']
@@ -1938,6 +1839,13 @@ class TableCanvas(Canvas):
         linewidthentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
 
+        rowhdrwidth=Label(frame1,text='Row Header Width:')
+        rowhdrwidth.grid(row=row,column=0,padx=3,pady=2)
+        rowhdrentry=Scale(frame1,from_=0,to=300,resolution=10,orient='horizontal',
+                            relief='ridge',variable=self.rowheaderwidthvar)
+        rowhdrentry.grid(row=row,column=1,padx=3,pady=2)
+        row=row+1
+
         #fonts
         fts = self.getFonts()
 
@@ -2030,12 +1938,12 @@ class TableCanvas(Canvas):
                         'rowheight':self.rowheight,
                         'cellwidth':120,
                         'autoresizecols': 0,
-                        'rowsperpage' : 50,
                         'align': 'center',
                         'celltextsize':11, 'celltextfont':'Arial',
                         'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
                         'linewidth' : self.linewidth,
-                        'rowselectedcolor': self.rowselectedcolor}
+                        'rowselectedcolor': self.rowselectedcolor,
+                        'rowheaderwidth': self.rowheaderwidth}
 
         for prop in defaultprefs.keys():
             try:
@@ -2069,6 +1977,9 @@ class TableCanvas(Canvas):
         self.rowselectedcolor = self.prefs.get('rowselectedcolor')
         self.fontsize = self.celltextsizevar.get()
         self.thefont = (self.prefs.get('celltextfont'), self.prefs.get('celltextsize'))
+        self.rowheaderwidthvar = IntVar()
+        self.rowheaderwidthvar.set(self.prefs.get('rowheaderwidth'))
+        self.rowheaderwidth = self.rowheaderwidthvar.get()
         return
 
     def savePrefs(self):
@@ -2093,8 +2004,11 @@ class TableCanvas(Canvas):
             self.prefs.set('cellbackgr', self.cellbackgr)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
+            self.prefs.set('rowheaderwidth', self.rowheaderwidth)
+            self.rowheaderwidth = self.rowheaderwidthvar.get()
             self.thefont = (self.prefs.get('celltextfont'), self.prefs.get('celltextsize'))
             self.fontsize = self.prefs.get('celltextsize')
+
         except ValueError:
             pass
         self.prefs.save_prefs()
@@ -2120,8 +2034,8 @@ class TableCanvas(Canvas):
         """Check if a hyperlink was clicked"""
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
-        absrow = self.get_AbsoluteRow(row)
-        recdata = self.model.getValueAt(absrow, col)
+        #absrow = self.get_AbsoluteRow(row)
+        recdata = self.model.getValueAt(row, col)
         try:
             link = recdata['link']
             import webbrowser
@@ -2371,7 +2285,6 @@ class ColumnHeader(Canvas):
             self.table.redrawTable()
             self.table.drawSelectedCol(self.table.currentcol)
             self.draw_rect(self.table.currentcol)
-
         return
 
     def handle_mouse_drag(self, event):
@@ -2530,15 +2443,14 @@ class RowHeader(Canvas):
        takes it's size and rendering from the parent table
        This also handles row/record selection as opposed to cell
        selection"""
-    def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray75', width=40, height=None )
+    def __init__(self, parent=None, table=None, width=40):
+        Canvas.__init__(self, parent, bg='gray75', width=width, height=None)
 
         if table != None:
             self.table = table
-            self.width = 40
-            self.x_start = 40
+            self.width = width
+            self.x_start = 0
             self.inset = 1
-            #self.config(width=self.width)
             self.config(height = self.table.height)
             self.startrow = self.endrow = None
             self.model = self.table.getModel()
@@ -2550,29 +2462,38 @@ class RowHeader(Canvas):
             #self.bind('<Shift-Button-1>', self.handle_left_shift_click)
         return
 
-    def redraw(self):
+    def redraw(self, align='center'):
         """Redraw row header"""
 
         self.height = self.table.rowheight * self.table.rows+10
         self.configure(scrollregion=(0,0, self.width, self.height))
         self.delete('rowheader','text')
         self.delete('rect')
-        w=1
-        x_start = self.x_start
+        w = float(self.width)
         h = self.table.rowheight
-
+        x = self.x_start+w/2
+        if align == 'w':
+            x = x-w/2+3
+        elif align == 'e':
+            x = x+w/2-3
         for row in self.table.visiblerows:
             x1,y1,x2,y2 = self.table.getCellCoords(row,0)
-            self.create_rectangle(0,y1,x_start-w,y2,
+            self.create_rectangle(0,y1,w-1,y2,
                                       fill='gray75',
                                       outline='white',
-                                      width=w,
+                                      width=1,
                                       tag='rowheader')
-            self.create_text(x_start/2,y1+h/2,
+            self.create_text(x,y1+h/2,
                                       text=row+1,
                                       fill='black',
                                       font=self.table.thefont,
-                                      tag='text')
+                                      tag='text', anchor=align)
+        return
+
+    def setWidth(self, w):
+        """Set width"""
+        self.width = w
+        self.redraw()
         return
 
     def clearSelected(self):
@@ -2626,7 +2547,7 @@ class RowHeader(Canvas):
             self.cellentry.destroy()
         rowover = self.table.get_row_clicked(event)
         colover = self.table.get_col_clicked(event)
-        if rowover == None or self.table.check_PageView(rowover) == 1:
+        if rowover == None:
             return
         if rowover >= self.table.rows or self.startrow > self.table.rows:
             return
