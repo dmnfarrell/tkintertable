@@ -72,7 +72,7 @@ def GUITest(root):
     from newtable import LargeTable
     table = TableCanvas(master, model,
                         cellwidth=60, cellbackgr='#e3f698',
-                        thefont=('Arial',12),rowheight=18, rowheaderwidth=40,
+                        thefont=('Arial',12),rowheight=18, rowheaderwidth=50,
                         rowselectedcolor='yellow', editable=True)
     table.createTableFrame()
     #remove cols
@@ -80,10 +80,10 @@ def GUITest(root):
     model.deleteRows(range(0,2))
     table.redrawTable()
     #add rows and cols
-    table.addRow(1,label='aaa')
-    table.addRow()
+    table.addRow(1,label='aaazzz')
+    table.addRow(label='bbb')
+    table.addRow(**{'label':'www'})
     table.addColumn('col6')
-    model.data[1]['label']='XHJHJSAHSHJ'
     model.data[1]['col6']='TEST'
     table.redrawTable()
     #change col labels
@@ -98,12 +98,9 @@ def GUITest(root):
     model.save('test.table')
     #load new data
     table.load('test.table')
-
     print 'GUI tests done'
-
     #root.after(2000, root.quit)
     return
-
 
 def main():
     root = Tk()
