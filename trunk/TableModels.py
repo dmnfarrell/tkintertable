@@ -450,8 +450,9 @@ class TableModel(object):
     def autoAddRows(self, numrows=None):
         """Automatically add x number of records"""
         rows = self.getRowCount()
-        keys = range(rows,rows+numrows)
-
+        ints = [i for i in self.reclist if isinstance(i, int)]
+        start = max(ints)+1
+        keys = range(start,start+numrows)
         for k in keys:
             self.addRow(k)
         return keys
