@@ -74,7 +74,7 @@ class TableModel(object):
         #add rows and cols if they are given in the constructor
         if newdict == None:
             if rows != None:
-                self.auto_AddRows(rows)
+                self.autoAddRows(rows)
             if columns != None:
                 self.auto_AddColumns(columns)
         self.filteredrecs = None
@@ -447,30 +447,14 @@ class TableModel(object):
             self.deleteColumn(col)
         return
 
-    def auto_AddRows(self, numrows=None):
+    def autoAddRows(self, numrows=None):
         """Automatically add x number of records"""
-        alphabet = string.lowercase[:26]
         rows = self.getRowCount()
+        keys = range(rows,rows+numrows)
 
-        if rows <= 25:
-            i=rows
-            j=0
-        else:
-            i=int(rows%25)
-            j=int(round(rows/25,1))
-        #print i, j
-        for x in range(numrows):
-            if i >= len(alphabet):
-                i=0
-                j=j+1
-            name = alphabet[i]+str(j)
-            if name in self.reclist:
-                pass
-            else:
-                self.addRow(name)
-            i=i+1
-            #print self.reclist
-        return
+        for k in keys:
+            self.addRow(k)
+        return keys
 
     def auto_AddColumns(self, numcols=None):
         """Automatically add x number of cols"""

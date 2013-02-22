@@ -80,9 +80,9 @@ def GUITest(root):
     model.deleteRows(range(0,2))
     table.redrawTable()
     #add rows and cols
-    table.add_Row(1,label='aaa')
-    table.add_Row()
-    table.add_Column('col6')
+    table.addRow(1,label='aaa')
+    table.addRow()
+    table.addColumn('col6')
     model.data[1]['label']='XHJHJSAHSHJ'
     model.data[1]['col6']='TEST'
     table.redrawTable()
