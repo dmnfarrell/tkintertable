@@ -72,7 +72,7 @@ def GUITest(root):
     from newtable import LargeTable
     table = TableCanvas(master, model,
                         cellwidth=60, cellbackgr='#e3f698',
-                        thefont=('Arial',12),rowheight=18, rowsperpage=100,
+                        thefont=('Arial',12),rowheight=18, rowheaderwidth=40,
                         rowselectedcolor='yellow', editable=True)
     table.createTableFrame()
     #remove cols
