@@ -150,7 +150,7 @@ class TableCanvas(Canvas):
         self.bind('<Motion>', self.handle_motion)
 
         self.bind_all("<Control-x>", self.delete_Row)
-        self.bind_all("<Control-n>", self.add_Row)
+        self.bind_all("<Control-n>", self.addRow)
         self.bind_all("<Delete>", self.clearData)
         self.bind_all("<Control-v>", self.paste)
 
@@ -498,21 +498,28 @@ class TableCanvas(Canvas):
                 return 1
         return 0
 
-    def add_Row(self, key=None, **kwargs):
-        """Add a new row"""
-        '''if key == None:
-            key = tkSimpleDialog.askstring("New row name?",
-                                               "Enter row name:",
-                                               parent=self.parentframe)'''
-
+    def addRow(self, key=None, **kwargs):
+        """Add new row"""
         key = self.model.addRow(key, **kwargs)
-        if hasattr(self, 'sortcol'):
-            self.model.setSortOrder(self.sortcol)
         self.redrawTable()
         self.setSelectedRow(self.model.getRecordIndex(key))
         return
 
-    def add_Column(self, newname=None):
+    def addRows(self, key=None):
+        """Add new rows"""
+        num = tkSimpleDialog.askinteger("Now many rows?",
+                                        "Number of rows:",initialvalue=1,
+                                         parent=self.parentframe)
+        if not num:
+            return
+        keys = self.model.autoAddRows(num)
+        if hasattr(self, 'sortcol'):
+            self.model.setSortOrder(self.sortcol)
+        self.redrawTable()
+        self.setSelectedRow(self.model.getRecordIndex(keys[0]))
+        return
+
+    def addColumn(self, newname=None):
         """Add a new column"""
         if newname == None:
             from Dialogs import MultipleValDialog
@@ -596,18 +603,7 @@ class TableCanvas(Canvas):
         self.delete_Cells(rows, cols)
         return
 
-    def autoAdd_Rows(self, numrows=None):
-        """Automatically add x number of records"""
-        if numrows == None:
-            numrows = tkSimpleDialog.askinteger("Auto add rows.",
-                                                "How many empty rows?",
-                                                parent=self.parentframe)
-
-        self.model.auto_AddRows(numrows)
-        self.redrawTable()
-        return
-
-    def autoAdd_Columns(self, numcols=None):
+    def autoAddColumns(self, numcols=None):
         """Automatically add x number of cols"""
         if numcols == None:
             numcols = tkSimpleDialog.askinteger("Auto add rows.",
@@ -1317,8 +1313,8 @@ class TableCanvas(Canvas):
                         "Paste" : lambda : self.pasteCell(rows, cols),
                         "Fill Down" : lambda : self.fill_down(rows, cols),
                         "Fill Right" : lambda : self.fill_across(cols, rows),
-                        "Add Row" : lambda : self.add_Row(),
-                        "Delete Row" : lambda : self.delete_Row(),
+                        "Add Row(s)" : lambda : self.addRows(),
+                        "Delete Row(s)" : lambda : self.delete_Row(),
                         "View Record" : lambda : self.getRecordInfo(row),
                         "Clear Data" : lambda : self.delete_Cells(rows, cols),
                         "Select All" : self.select_All,
@@ -1336,7 +1332,7 @@ class TableCanvas(Canvas):
                         "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
 
         main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right",
-                "Clear Data", "Add Row" , "Delete Row"]
+                "Clear Data", "Add Row(s)" , "Delete Row(s)"]
         general = ["Select All", "Auto Fit Columns", "Filter Records", "Preferences"]
         filecommands = ['New','Load','Save','Import text','Export csv']
         plotcommands = ['Plot Selected','Plot Options']
@@ -2469,7 +2465,7 @@ class ColumnHeader(Canvas):
         popupmenu.add_command(label="Sort by "+ collabel, command=lambda : self.table.sortTable(currcol))
         popupmenu.add_command(label="Sort by "+ collabel +' (descending)', command=lambda : self.table.sortTable(currcol,reverse=1))
         popupmenu.add_command(label="Delete This Column", command=self.table.delete_Column)
-        popupmenu.add_command(label="Add New Column", command=self.table.add_Column)
+        popupmenu.add_command(label="Add New Column", command=self.table.addColumn)
 
         popupmenu.bind("<FocusOut>", popupFocusOut)
         #self.bind("<Button-3>", popupFocusOut)
