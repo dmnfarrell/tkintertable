@@ -67,7 +67,6 @@ class FilterFrame(Frame):
         F=[]
         for f in self.filters:
             F.append(f.getFilter())
-        #print F
         sets = []
         for f in F:
             col, val, op, boolean = f
