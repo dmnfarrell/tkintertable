@@ -107,14 +107,14 @@ def test2():
     app = App(t)
     master = app.main
     c=0; r=1
-    for i in range(8):
+    for i in range(12):
         model = TableModel()
         data = createData(50)
         model.importDict(data)
         fr = Frame(master)
-        if c%2==0: c=0; r+=1
+        if c%3==0: c=0; r+=1
         fr.grid(row=r,column=c,sticky='nws')
-        table = TableCanvas(fr, model, height=150,rowheaderwidth=30)
+        table = TableCanvas(fr, model, width=250,height=150,rowheaderwidth=0)
         table.createTableFrame()
         c+=1
     return
@@ -127,16 +127,28 @@ def test3():
     model = TableModel()
     data = createData(100000)
     model.importDict(data)
-    table = TableCanvas(master, model, height=150,rowheaderwidth=50)
+    table = TableCanvas(master, model,rowheaderwidth=50)
     table.createTableFrame()
+    return
+
+def test4():
+    """Filtering/searching"""
+    model = TableModel()
+    data = createData(1000)
+    model.importDict(data)
+    searchterm = ('label','a')
+    vals = model.getColumnData(columnName='label',
+                      filterby=searchterm)
+    print '%s found' %len(vals)
     return
 
 def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    test2()
-    test3()
+    #test2()
+    #test3()
+    test4()
     return root
 
 def main():

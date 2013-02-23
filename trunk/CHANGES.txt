@@ -8,6 +8,7 @@ CHANGES
 
 * changed importdict method to make more efficient for large amounts of data
 * added more tests
+* fix to autoaddrows
 
 ------
 1.1
