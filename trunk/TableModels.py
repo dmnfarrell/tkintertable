@@ -112,11 +112,8 @@ class TableModel(object):
         """Try to create a table model from a dict of the form
            {{'rec1': {'col1': 3, 'col2': 2}, ..}"""
 
-        #if namefield == None:
-        #    namefield = newdata.keys()[0][0]
         #get cols from sub data keys
         colnames = []
-        #colnames.append(namefield)
         for k in newdata:
             fields = newdata[k].keys()
             for f in fields:
@@ -125,13 +122,8 @@ class TableModel(object):
         for c in colnames:
             self.addColumn(c)
         #add the data
-        for k in newdata:
-            self.addRow(k)
-            for c in colnames:
-                #if c == namefield:
-                #    self.data[k][namefield] = str(k)
-                self.data[k][c] = str(newdata[k][c])
-
+        self.data.update(newdata)
+        self.reclist = self.data.keys()
         return
 
     def getDefaultTypes(self):
@@ -451,7 +443,10 @@ class TableModel(object):
         """Automatically add x number of records"""
         rows = self.getRowCount()
         ints = [i for i in self.reclist if isinstance(i, int)]
-        start = max(ints)+1
+        if len(ints)>0:
+            start = max(ints)+1
+        else:
+            start = 0
         keys = range(start,start+numrows)
         for k in keys:
             self.addRow(k)

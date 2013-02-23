@@ -3,6 +3,13 @@ CHANGES
 =======
 
 ------
+1.1.1
+------
+
+* changed importdict method to make more efficient for large amounts of data
+* added more tests
+
+------
 1.1
 ------
 
