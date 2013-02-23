@@ -1,8 +1,8 @@
 ABOUT
 
-There are various libraries that extend tkinter functionality, such as Pmw, but there is currently no useful and extendable table class for tkinter.
-We have developed such a class out of the need to use one in our protein engineering (PEAT) application and it is provided here under the GPL license for general use.
-A sample application using these classes is included in the distribution. This shows a possible implementation. Pmw is required to use this application. Otherwise the classes are based purely on tkinter.
+Python uses a GUI library called Tkinter as default. This set of classes allows interactive spreadsheet-style tables to be added into an application.
+Tkinter is the standard GUI toolkit for python. It is old but still quite popular. There are various libraries that extend Tkinter functionality, such as Pmw, but there is currently no extendable table class for Tkinter.
+A sample application using these classes is included in the distribution.
 
 HOMEPAGE
 
@@ -10,29 +10,72 @@ http://code.google.com/p/tkintertable/
 
 INSTALLATION
 
+easy_install tkintertable
+or
 Download packages at http://code.google.com/p/tkintertable/downloads/list
-
-Can also be installed using setuptools:
-
-sudo easy_install tkintertable
 
 SUBVERSION
 
-You can checkout the current svn version using 
+You can checkout the current svn version using
 
 svn co http://tkintertable.googlecode.com/svn/trunk/ tkintertable
 
 USAGE
 
-The class utilises the concept of table view<->model from java swing.
-The TableCanvas class is the graphical element that handles all the user interaction, GUI changes, formatting etc. This class inherits from tkinter canvas, and we should put all basic table functionality in this base class. However, in practice we really should sub-class this and add any specialist functionality to the subclass, either by overriding the required parent class methods or adding extra ones.
-Each tablecanvas has a model associated with it, this class handles all the data, updating, sorting and so on. Again, the base class is called TableModel and you sub-class this for specific uses.
-Example:
-To create a basic table, only the following 4 lines are needed. We can also create a model from some data, then use that model to initiate the table. The data, a dictionary, will be appropriate to that model of course.
+see http://code.google.com/p/tkintertable/wiki/Usage
 
-tframe = Frame(master)
-tframe.pack()
-table = TableCanvas(tframe)
-table.createTableFrame() 
+CHANGES
+
+------
+1.1
+------
+
+* table now renders large amounts of data by only drawing visible frame
+* fixes to filtering bar
+* removed paged view
+* removed 'name' as a special field
+* adding rows from GUI no longer requires rec names
+* can now set row header width
+* can now show record keys in row header instead of numbers
+* row header drawn with same alignment as cells
+* renamed most remaining Table.py methods to camel case
+
+------
+1.0.3
+------
+
+* added new, load and save methods to table directly
+* added ImportTable method to table for interactive use
+* fixed clicking outside column header bug
+* fix to update selected col when redrawing
+* added Dialog.py module
+* removed simpletabledialog
+* tidied up popupmenu
+
+------
+1.0.2
+------
+
+* restored Filtering.py, filtering works ok
+* more improvement to auto resize cols, now checks currrent col sizes
+* fixed model.save() method
+* added ability to save table, add rows to popup menu
+* fixed delete cells button binding
+* cell font preferences now uses available fonts from os
+* removed unused prefs from dialog
+
+------
+1.0.1
+------
+
+* add_Column method fixed
+* Added ability to align cells left right or center
+* Fixed problem of sort order lost when deleting rows
+* Sort in descending order works correctly
+* Fixes to plotting, but needs reworking or removal
+* Added setSelectedCells method so a block of cells can be selected
+* Improved text fitting in cells
+* Automatic resizing of columns improved
+
 
 

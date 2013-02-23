@@ -147,7 +147,7 @@ class TableCanvas(Canvas):
         self.bind('<B1-Motion>', self.handle_mouse_drag)
         self.bind('<Motion>', self.handle_motion)
 
-        self.bind_all("<Control-x>", self.delete_Row)
+        self.bind_all("<Control-x>", self.deleteRow)
         self.bind_all("<Control-n>", self.addRow)
         self.bind_all("<Delete>", self.clearData)
         self.bind_all("<Control-v>", self.paste)
@@ -278,7 +278,7 @@ class TableCanvas(Canvas):
             return
         self.tablewidth = (self.cellwidth) * self.cols
         self.configure(bg=self.cellbackgr)
-        self.set_colPositions()
+        self.setColPositions()
 
         #are we drawing a filtered subset of the recs?
         if self.filtered == True and self.model.filteredrecs != None:
@@ -373,7 +373,7 @@ class TableCanvas(Canvas):
         self.redrawTable()
         return
 
-    def set_colPositions(self):
+    def setColPositions(self):
         """Determine current column grid positions"""
         self.col_positions=[]
         w=self.cellwidth
@@ -458,7 +458,7 @@ class TableCanvas(Canvas):
                 self.redrawTable()
         return
 
-    def delete_Row(self):
+    def deleteRow(self):
         """Delete a row"""
         if len(self.multiplerowlist)>1:
             n = tkMessageBox.askyesno("Delete",
@@ -482,7 +482,7 @@ class TableCanvas(Canvas):
                 self.redrawTable()
         return
 
-    def delete_Column(self):
+    def deleteColumn(self):
         """Delete currently selected column"""
         n =  tkMessageBox.askyesno("Delete",
                                    "Delete This Column?",
@@ -494,7 +494,7 @@ class TableCanvas(Canvas):
             self.redrawTable()
         return
 
-    def delete_Cells(self, rows, cols):
+    def deleteCells(self, rows, cols):
         """Clear the cell contents"""
         n =  tkMessageBox.askyesno("Clear Confirm",
                                    "Clear this data?",
@@ -512,7 +512,7 @@ class TableCanvas(Canvas):
         """Delete cells from gui event"""
         rows = self.multiplerowlist
         cols = self.multiplecollist
-        self.delete_Cells(rows, cols)
+        self.deleteCells(rows, cols)
         return
 
     def autoAddColumns(self, numcols=None):
@@ -634,7 +634,7 @@ class TableCanvas(Canvas):
         #recalculate all col positions..
         colname=self.model.getColumnName(col)
         self.model.columnwidths[colname]=width
-        self.set_colPositions()
+        self.setColPositions()
         self.redrawTable()
         self.drawSelectedCol(self.currentcol)
         return
@@ -1030,7 +1030,7 @@ class TableCanvas(Canvas):
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
         if 0 <= row < self.rows and 0 <= col < self.cols:
-            self.draw_tooltip(row, col)
+            self.drawTooltip(row, col)
 
         return
 
@@ -1213,12 +1213,12 @@ class TableCanvas(Canvas):
                         "Set Text Color" : lambda : self.setcellColor(rows,cols,key='fg'),
                         "Copy" : lambda : self.copyCell(rows, cols),
                         "Paste" : lambda : self.pasteCell(rows, cols),
-                        "Fill Down" : lambda : self.fill_down(rows, cols),
-                        "Fill Right" : lambda : self.fill_across(cols, rows),
+                        "Fill Down" : lambda : self.fillDown(rows, cols),
+                        "Fill Right" : lambda : self.fillAcross(cols, rows),
                         "Add Row(s)" : lambda : self.addRows(),
-                        "Delete Row(s)" : lambda : self.delete_Row(),
+                        "Delete Row(s)" : lambda : self.deleteRow(),
                         "View Record" : lambda : self.getRecordInfo(row),
-                        "Clear Data" : lambda : self.delete_Cells(rows, cols),
+                        "Clear Data" : lambda : self.deleteCells(rows, cols),
                         "Select All" : self.select_All,
                         "Auto Fit Columns" : self.autoResizeColumns,
                         "Filter Records" : self.showFilteringBar,
@@ -1227,7 +1227,7 @@ class TableCanvas(Canvas):
                         "Save": self.save,
                         "Import text":self.importTable,
                         "Export csv": self.exportTable,
-                        "Plot Selected" : self.plot_Selected,
+                        "Plot Selected" : self.plotSelected,
                         "Plot Options" : self.plotSetup,
                         "Export Table" : self.exportTable,
                         "Preferences" : self.showtablePrefs,
@@ -1294,7 +1294,7 @@ class TableCanvas(Canvas):
 
     # --- spreadsheet type functions ---
 
-    def fill_down(self, rowlist, collist):
+    def fillDown(self, rowlist, collist):
         """Fill down a column, or multiple columns"""
         model = self.model
         #absrow  = self.get_AbsoluteRow(rowlist[0])
@@ -1319,7 +1319,7 @@ class TableCanvas(Canvas):
         self.redrawTable()
         return
 
-    def fill_across(self, collist, rowlist):
+    def fillAcross(self, collist, rowlist):
         """Fill across a row, or multiple rows"""
         model = self.model
         #row = self.currentrow
@@ -1367,7 +1367,7 @@ class TableCanvas(Canvas):
             lists.append(x)
         return lists
 
-    def plot_Selected(self, graphtype='XY'):
+    def plotSelected(self, graphtype='XY'):
         """Plot the selected data using pylab - if possible"""
         from PylabPlot import pylabPlotter
         if not hasattr(self, 'pyplot'):
@@ -1592,10 +1592,10 @@ class TableCanvas(Canvas):
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         wrap = False
-        length = len(celltxt)
         # If celltxt is a number then we make it a string
         if type(celltxt) is types.FloatType or type(celltxt) is types.IntType:
             celltxt=str(celltxt)
+        length = len(celltxt)
         if length == 0:
             return
         #if cell width is less than x, print nothing
@@ -1724,7 +1724,7 @@ class TableCanvas(Canvas):
 
         return
 
-    def draw_tooltip(self, row, col):
+    def drawTooltip(self, row, col):
         """Draw a tooltip showing contents of cell"""
 
         #absrow = self.get_AbsoluteRow(row)
@@ -2095,6 +2095,9 @@ class TableCanvas(Canvas):
                                                       initialdir=os.getcwd(),
                                                       filetypes=[("pickle","*.table"),
                                                         ("All files","*.*")])
+        if not os.path.exists(filename):
+            print 'file does not exist'
+            return
         if filename:
             self.model.load(filename)
             self.redrawTable()
@@ -2372,7 +2375,7 @@ class ColumnHeader(Canvas):
         popupmenu.add_command(label="Rename Column", command=self.relabel_Column)
         popupmenu.add_command(label="Sort by "+ collabel, command=lambda : self.table.sortTable(currcol))
         popupmenu.add_command(label="Sort by "+ collabel +' (descending)', command=lambda : self.table.sortTable(currcol,reverse=1))
-        popupmenu.add_command(label="Delete This Column", command=self.table.delete_Column)
+        popupmenu.add_command(label="Delete This Column", command=self.table.deleteColumn)
         popupmenu.add_command(label="Add New Column", command=self.table.addColumn)
 
         popupmenu.bind("<FocusOut>", popupFocusOut)

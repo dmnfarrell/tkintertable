@@ -59,9 +59,8 @@ def createData(rows=20, cols=5):
             i+=1
     return data
 
-def GUITest(root):
+def test1(root):
     """Setup a table and populate it with data"""
-
     app = App(root)
     master = app.main
     model = TableModel()
@@ -72,7 +71,7 @@ def GUITest(root):
     from newtable import LargeTable
     table = TableCanvas(master, model,
                         cellwidth=60, cellbackgr='#e3f698',
-                        thefont=('Arial',12),rowheight=18, rowheaderwidth=50,
+                        thefont=('Arial',12),rowheight=18, rowheaderwidth=30,
                         rowselectedcolor='yellow', editable=True)
     table.createTableFrame()
     #remove cols
@@ -93,7 +92,7 @@ def GUITest(root):
     table.setSelectedCol(1)
     table.setSelectedCells(1,80,2,4)
     #print table.getSelectionValues()
-    #table.plot_Selected(graphtype='XY')
+    #table.plotSelected(graphtype='XY')
     #save data
     model.save('test.table')
     #load new data
@@ -102,9 +101,46 @@ def GUITest(root):
     #root.after(2000, root.quit)
     return
 
-def main():
+def test2():
+    """Multuple tables in one window"""
+    t=Toplevel()
+    app = App(t)
+    master = app.main
+    c=0; r=1
+    for i in range(8):
+        model = TableModel()
+        data = createData(50)
+        model.importDict(data)
+        fr = Frame(master)
+        if c%2==0: c=0; r+=1
+        fr.grid(row=r,column=c,sticky='nws')
+        table = TableCanvas(fr, model, height=150,rowheaderwidth=30)
+        table.createTableFrame()
+        c+=1
+    return
+
+def test3():
+    """Drawing large tables"""
+    t=Toplevel()
+    app = App(t)
+    master = app.main
+    model = TableModel()
+    data = createData(100000)
+    model.importDict(data)
+    table = TableCanvas(master, model, height=150,rowheaderwidth=50)
+    table.createTableFrame()
+    return
+
+def GUITests():
+    """Run standard tests"""
     root = Tk()
-    GUITest(root)
+    test1(root)
+    test2()
+    test3()
+    return root
+
+def main():
+    root = GUITests()
     root.mainloop()
     #loadSaveTest()
 
