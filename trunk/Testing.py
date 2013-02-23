@@ -97,7 +97,6 @@ def test1(root):
     model.save('test.table')
     #load new data
     table.load('test.table')
-    print 'GUI tests done'
     #root.after(2000, root.quit)
     return
 
@@ -136,9 +135,9 @@ def test4():
     model = TableModel()
     data = createData(1000)
     model.importDict(data)
-    searchterm = ('label','a')
+    #searchterm = ('label','a')
     vals = model.getColumnData(columnName='label',
-                      filterby=searchterm)
+                      filterby=None)
     print '%s found' %len(vals)
     return
 
@@ -146,9 +145,10 @@ def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    #test2()
-    #test3()
-    test4()
+    test2()
+    test3()
+    #test4()
+    print 'GUI tests done'
     return root
 
 def main():

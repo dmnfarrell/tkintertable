@@ -27,6 +27,14 @@ see http://code.google.com/p/tkintertable/wiki/Usage
 CHANGES
 
 ------
+1.1.1
+------
+
+* changed importdict method to make more efficient for large amounts of data
+* added more tests
+* fix to autoaddrows
+
+------
 1.1
 ------
 

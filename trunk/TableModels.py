@@ -76,7 +76,7 @@ class TableModel(object):
             if rows != None:
                 self.autoAddRows(rows)
             if columns != None:
-                self.(columns)
+                self.autoAddColumns(columns)
         self.filteredrecs = None
         return
 
@@ -329,6 +329,8 @@ class TableModel(object):
         """Changes the order of columns"""
         self.oldnames = self.columnNames
         self.columnNames=[]
+        #self.columnOrder=[]
+
         #write out a new column names list - tedious
         moved = self.oldnames[oldcolumnIndex]
         del self.oldnames[oldcolumnIndex]
@@ -445,7 +447,7 @@ class TableModel(object):
             self.addRow(k)
         return keys
 
-    def (self, numcols=None):
+    def autoAddColumns(self, numcols=None):
         """Automatically add x number of cols"""
 
         alphabet = string.lowercase[:26]
