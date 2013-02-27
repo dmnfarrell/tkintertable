@@ -9,6 +9,7 @@ CHANGES
 * changed importdict method to make more efficient for large amounts of data
 * added more tests
 * fix to autoaddrows
+* changes to sort behaviour so that current order is kept when adding/deleting rows
 
 ------
 1.1
