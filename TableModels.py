@@ -285,7 +285,6 @@ class TableModel(object):
         """Changes the order that records are sorted in, which will
            be reflected in the table upon redrawing"""
 
-        print 'sort'
         if columnName != None and columnName in self.columnNames:
             self.sortkey = columnName
         elif columnIndex != None:

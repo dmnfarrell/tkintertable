@@ -145,9 +145,9 @@ def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    #test2()
-    #test3()
-    #test4()
+    test2()
+    test3()
+    test4()
     print 'GUI tests done'
     return root
 

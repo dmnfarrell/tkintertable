@@ -10,6 +10,7 @@ CHANGES
 * added more tests
 * fix to autoaddrows
 * changes to sort behaviour so that current order is kept when adding/deleting rows
+* fix to draw visible multiple row selection only
 
 ------
 1.1
