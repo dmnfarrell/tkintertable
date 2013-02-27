@@ -1,0 +1,15 @@
+*Filtering/searching the table*
+
+Filtering the table simply means searching for a subset of records(rows) with the required field properties. This can be done programmatically or via the widget.
+
+==Interactive filtering==
+
+Right clicking on the table and choosing Filter Records from the popup menu will display the filtering bar in a separate window. This is a simple interface for adding multiple search conditions that are chained together by boolean operators (AND, OR, NOT). Any number of filters can be added for one search. The - button on the right of each filter is used to remove it. When you have entered the required search terms press go and the table will be updated to display just the found rows. Closing the filtering bar restores the whole table.
+
+Filtering bar:
+
+http://tkintertable.googlecode.com/svn/wiki/images/tkintertablesfiltering.png
+
+==Programmatically==
+
+
