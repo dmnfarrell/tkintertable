@@ -76,6 +76,8 @@ class TableCanvas(Canvas):
         self.cols = self.model.getColumnCount()
         self.tablewidth = (self.cellwidth)*self.cols
         self.do_bindings()
+        #initial sort order
+        self.model.setSortOrder()
 
         #column specific actions, define for every column type in the model
         #when you add a column type you should edit this dict
@@ -389,10 +391,11 @@ class TableCanvas(Canvas):
         self.tablewidth = self.col_positions[len(self.col_positions)-1]
         return
 
-    def sortTable(self, sortcol, reverse=0):
+    def sortTable(self, columnIndex=0, columnName=None, reverse=0):
         """Set up sort order dict based on currently selected field"""
-        self.sortcol = sortcol
-        self.model.setSortOrder(sortcol, reverse)
+        #if columnName != None:
+        #    columnIndex = self.model.getColumnIndex(columnName)
+        self.model.setSortOrder(columnIndex, columnName, reverse)
         self.redrawTable()
         return
 
@@ -425,8 +428,6 @@ class TableCanvas(Canvas):
         if not num:
             return
         keys = self.model.autoAddRows(num)
-        if hasattr(self, 'sortcol'):
-            self.model.setSortOrder(self.sortcol)
         self.redrawTable()
         self.setSelectedRow(self.model.getRecordIndex(keys[0]))
         return

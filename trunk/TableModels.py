@@ -36,8 +36,6 @@ class TableModel(object):
         """Constructor"""
         self.initialiseFields()
         self.setupModel(newdict, rows, columns)
-        #finally set default sort order as first col
-        #self.setSortOrder()
         return
 
     def setupModel(self, newdict, rows=None, columns=None):
@@ -71,6 +69,11 @@ class TableModel(object):
         #setup default display for column types
         self.default_display = {'text' : 'showstring',
                                 'number' : 'numtostring'}
+        #set default sort order as first col
+        if len(self.columnNames)>0:
+            self.sortkey = self.columnNames[0]
+        else:
+            self.sortkey = None
         #add rows and cols if they are given in the constructor
         if newdict == None:
             if rows != None:
@@ -272,23 +275,26 @@ class TableModel(object):
                  value = 'other'
          if value==None:
              value=''
-
          return value
 
     def getRecordIndex(self, recname):
         rowIndex = self.reclist.index(recname)
         return rowIndex
 
-    def setSortOrder(self, columnIndex=0, reverse=0):
+    def setSortOrder(self, columnIndex=None, columnName=None, reverse=0):
         """Changes the order that records are sorted in, which will
            be reflected in the table upon redrawing"""
 
-        self.sortcolumnIndex = columnIndex
-        sortkey = self.getColumnName(columnIndex)
-        recnames = self.reclist
-        self.reclist = self.createSortMap(self.reclist, sortkey, reverse)
+        print 'sort'
+        if columnName != None and columnName in self.columnNames:
+            self.sortkey = columnName
+        elif columnIndex != None:
+            self.sortkey = self.getColumnName(columnIndex)
+        else:
+            return
+        self.reclist = self.createSortMap(self.reclist, self.sortkey, reverse)
         if self.filteredrecs != None:
-            self.filteredrecs = self.createSortMap(self.filteredrecs, sortkey, reverse)
+            self.filteredrecs = self.createSortMap(self.filteredrecs, self.sortkey, reverse)
         return
 
     def createSortMap(self, names, sortkey, reverse=0):
@@ -318,18 +324,17 @@ class TableModel(object):
                 x.append(float(i))
         return x
 
-    def getSortIndex(self):
+    '''def getSortIndex(self):
         """Return the current sort order index"""
         if self.sortcolumnIndex:
             return self.sortcolumnIndex
         else:
-            return 0
+            return 0'''
 
     def moveColumn(self, oldcolumnIndex, newcolumnIndex):
         """Changes the order of columns"""
         self.oldnames = self.columnNames
         self.columnNames=[]
-        #self.columnOrder=[]
 
         #write out a new column names list - tedious
         moved = self.oldnames[oldcolumnIndex]
@@ -361,34 +366,29 @@ class TableModel(object):
             print 'name already present!!'
             return
         self.data[key]={}
-        self.reclist = self.data.keys()
         for k in kwargs:
             if not k in self.columnNames:
                 self.addColumn(k)
             self.data[key][k] = str(kwargs[k])
+        self.reclist.append(key)
         return key
 
-    def deleteRow(self, rowIndex, update=True):
+    def deleteRow(self, rowIndex=None, key=None, update=True):
         """Delete a row"""
-        name = self.getRecName(rowIndex)
-        del self.data[name]
+        if key == None or not key in self.reclist:
+            key = self.getRecName(rowIndex)
+        del self.data[key]
         if update==True:
-            self.reclist = self.data.keys()
-            if hasattr(self, 'sortcolumnIndex'):
-                self.setSortOrder(self.sortcolumnIndex)
+            self.reclist.remove(key)
         return
 
     def deleteRows(self, rowlist=None):
         """Delete multiple or all rows"""
         if rowlist == None:
             rowlist = range(len(self.reclist))
-        #print 'deleting' , rowlist
-        #print 'reclist', self.reclist
-        for row in rowlist:
-            self.deleteRow(row, update=False)
-        self.reclist = self.data.keys()
-        if hasattr(self, 'sortcolumnIndex'):
-            self.setSortOrder(self.sortcolumnIndex)
+        names = [self.getRecName(i) for i in rowlist]
+        for name in names:
+            self.deleteRow(key=name, update=True)
         return
 
     def addColumn(self, colname=None, coltype=None):
@@ -417,9 +417,10 @@ class TableModel(object):
         for recname in self.reclist:
             if self.data[recname].has_key(colname):
                 del self.data[recname][colname]
-
-        if hasattr(self, 'sortcolumnIndex') and columnIndex == self.sortcolumnIndex:
-            self.setSortOrder()
+        if self.sortkey != None:
+            currIndex = self.getColumnIndex(self.sortkey)
+            if columnIndex == currIndex:
+                self.setSortOrder(0)
         #print 'column deleted'
         #print 'new cols:', self.columnNames
         return

@@ -68,23 +68,23 @@ def test1(root):
     #import after model created
     #print data
     model.importDict(data)
-    from newtable import LargeTable
     table = TableCanvas(master, model,
                         cellwidth=60, cellbackgr='#e3f698',
                         thefont=('Arial',12),rowheight=18, rowheaderwidth=30,
                         rowselectedcolor='yellow', editable=True)
     table.createTableFrame()
+    #table.sortTable(columnName='label')
     #remove cols
     model.deleteColumns([0])
     model.deleteRows(range(0,2))
-    table.redrawTable()
+    #table.redrawTable()
     #add rows and cols
     table.addRow(1,label='aaazzz')
     table.addRow(label='bbb')
     table.addRow(**{'label':'www'})
     table.addColumn('col6')
     model.data[1]['col6']='TEST'
-    table.redrawTable()
+    #table.redrawTable()
     #change col labels
     model.columnlabels['col6'] = 'new label'
     #set and get selections
@@ -145,8 +145,8 @@ def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    test2()
-    test3()
+    #test2()
+    #test3()
     #test4()
     print 'GUI tests done'
     return root
