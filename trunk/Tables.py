@@ -629,7 +629,7 @@ class TableCanvas(Canvas):
         self.showAll()
         return
 
-    def resize_Column(self, col, width):
+    def resizeColumn(self, col, width):
         """Resize a column by dragging"""
         #print 'resizing column', col
         #recalculate all col positions..
@@ -906,7 +906,6 @@ class TableCanvas(Canvas):
             return
 
         if rowover >= self.rows or self.startrow > self.rows:
-            #print rowover
             return
         else:
             self.endrow = rowover
@@ -1699,10 +1698,10 @@ class TableCanvas(Canvas):
         """Draw more than one row selection"""
         self.delete('multiplesel')
         for r in rowlist:
-            if r > self.rows-1:
+            if r not in self.visiblerows or r > self.rows-1:
                 continue
             x1,y1,x2,y2 = self.getCellCoords(r,0)
-            x2=self.tablewidth
+            x2 = self.tablewidth
             rect = self.create_rectangle(x1,y1,x2,y2,
                                       fill=self.multipleselectioncolor,
                                       outline=self.rowselectedcolor,
@@ -2270,7 +2269,7 @@ class ColumnHeader(Canvas):
             newwidth=x - x1
             if newwidth < 5:
                 newwidth=5
-            self.table.resize_Column(col, newwidth)
+            self.table.resizeColumn(col, newwidth)
             self.table.delete('resizeline')
             self.delete('resizeline')
             self.delete('resizesymbol')
@@ -2581,7 +2580,8 @@ class RowHeader(Canvas):
         else:
            rowlist = rows
         for r in rowlist:
-            #print r
+            if r not in self.table.visiblerows:
+                continue
             self.drawRect(r, delete=0)
         return
 
