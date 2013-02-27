@@ -1,3 +1,4 @@
+#labels Featured
 *Filtering/searching the table*
 
 Filtering the table simply means searching for a subset of records(rows) with the required field properties. This can be done programmatically or via the widget.
@@ -11,5 +12,3 @@ Filtering bar:
 http://tkintertable.googlecode.com/svn/wiki/images/tkintertablesfiltering.png
 
 ==Programmatically==
-
-
