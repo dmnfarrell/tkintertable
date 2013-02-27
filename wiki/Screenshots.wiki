@@ -1,4 +1,14 @@
 #labels Featured
 Screenshot of the sample tables application included with the distribution running on windows:
 
-http://tkintertable.googlecode.com/files/tkintertablescr1.png
+Sample application:
+
+http://tkintertable.googlecode.com/svn/wiki/images/tkintertablescr1.png 
+
+Multiple tables in one frame:
+
+http://tkintertable.googlecode.com/svn/wiki/images/tkintertablescr2.png 
+
+Fancy formatting:
+
+http://tkintertable.googlecode.com/svn/wiki/images/tkintertablescr3.png 
