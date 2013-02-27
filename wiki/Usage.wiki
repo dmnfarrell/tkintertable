@@ -42,7 +42,7 @@ table.redrawTable()
 
 This class is primarily designed to provide an empty table for users to utilise like a spreadsheet, this data can then be saved and re-loaded. However it is possible to populate the tables by importing data from a csv file or python dictionary.
 
-To import from a dictionary we get a handle on the model:
+To import from a dictionary we get a handle on the model (or we can create the model first and supply it as an argument to the table constructor):
 {{{
 model = table.model
 model.importDict(data) #can import from a dictionary to populate model
@@ -61,23 +61,15 @@ One record corresponds to a row in the dictionary. Columns will be created for e
 
 Importing from a text file can be down interactively from the GUI by right clicking on the table and choosing 'Import Table' from the popup menu.
 
-==Set preferences==
-
-Preferences for the table can be set on the constructor method, for example:
+==Sort the table==
 {{{
-TableCanvas(frame, namefield='name',
-               cellwidth=50, cellbackgr='#E3F6CE',
-               thefont="Arial 10",rowheight=16,editable=False,
-               rowselectedcolor='yellow',reverseorder=1)
+#by column name
+table.sortTable(columnName='label')
+#by column index
+table.sortTable(columnIndex=1) 
 }}}
 
-Or can be loaded later from an external preferences file:
-{{{
-preferences=Preferences('TablesApp')
-table.loadPrefs(preferences)
-}}}
-
-==Add new rows and columns==
+==Add and delete rows and columns==
 If column names are not given in the argument then a dialog will pop up in the GUI asking for the name which will likely not be what you want.
 {{{
 #add with automatic key
@@ -87,10 +79,12 @@ table.addRow(keyname, label='abc')
 #same as above with dict as column data
 table.addRow(keyname, **{'label'='abc'})
 table.addColumn(colname)
+#delete rows
+table.deleteRows(range(0,2))
 }}}
 
-==Put data in cells==
-Currently the method is to get a handle on the table model and populate the data attribute directly then redraw the table. This is somewhat clumsy and a method to do it directly from the table will be added.
+==Change data in individual cells==
+Simply get a handle on the table model and populate the data attribute (a dictionary) directly, then redraw the table. 
 {{{
 table.model.data[row][col] = value
 table.redrawTable()
@@ -100,6 +94,31 @@ table.redrawTable()
 Column labels can be changed programmatically by accessing the *columnlabels* attribute of the table model:
 {{{
 table.model.columnlabels[colname] = newlabel
+}}}
+
+==Row headers==
+The row header displays the row index number by default, but it can be used to show the row/record key names if necessary. You may also want to set the row header width to something larger than the default (40). Both these options are supplied in the constructor.
+
+{{{
+table = TableCanvas(master, model, rowheaderwidth=100, showkeynamesinheader=True)
+}}}
+
+You can hide the row header by setting rowheaderwidth=0.
+
+==Set preferences==
+
+Preferences for the table can be set on the constructor method, for example:
+{{{
+TableCanvas(frame, model=model,
+               cellwidth=50, cellbackgr='#E3F6CE',
+               thefont="Arial 10",rowheight=16,editable=False,
+               rowselectedcolor='yellow',reverseorder=1)
+}}}
+
+Or can be loaded later from an external preferences file:
+{{{
+preferences=Preferences('TablesApp')
+table.loadPrefs(preferences)
 }}}
 
 ==Save and load from a file==
