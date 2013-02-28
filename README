@@ -27,6 +27,13 @@ see http://code.google.com/p/tkintertable/wiki/Usage
 CHANGES
 
 ------
+1.1.2
+------
+
+* removed defunct code for filtering in model
+* filterColumn method added, can now filter properly from model class
+
+------
 1.1.1
 ------
 

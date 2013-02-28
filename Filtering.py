@@ -23,12 +23,38 @@ from Tkinter import *
 import Pmw
 from types import *
 
+def doFiltering(searchfunc, filters=None):
+    """Module level method. Filter recs by several filters using a user provided
+       search function.
+       filters is a list of tuples of the form (key,value,operator,bool)
+       returns: found record keys"""
+
+    if filters == None:
+        return
+    F = filters
+    sets = []
+    for f in F:
+        col, val, op, boolean = f
+        names = searchfunc(col, val, op)
+        sets.append((set(names), boolean))
+    names = sets[0][0]
+    for s in sets[1:]:
+        b=s[1]
+        if b == 'AND':
+            names = names & s[0]
+        elif b == 'OR':
+            names = names | s[0]
+        elif b == 'NOT':
+            names = names - s[0]
+    names = list(names)
+    return names
+
 class FilterFrame(Frame):
 
     def __init__(self, parent, fields, callback=None, closecallback=None):
-        """Create a filtering gui frame
+        """Create a filtering gui frame.
         Callback must be some method that can accept tuples of filter
-        parameters connected by boolean operators  """
+        parameters connected by boolean operators """
         Frame.__init__(self, parent)
         self.parent = parent
         self.callback = callback
@@ -61,27 +87,12 @@ class FilterFrame(Frame):
         self.destroy()
         return
 
-    def doFiltering(self, searchfunc, filters=None):
-        """Filter recs by several filters using user provided search function.
-        Provides a list of tuples with filter values"""
+    def doFiltering(self, searchfunc):
         F=[]
         for f in self.filters:
             F.append(f.getFilter())
-        sets = []
-        for f in F:
-            col, val, op, boolean = f
-            names = searchfunc(col, val, op)
-            sets.append((set(names), boolean))
-        names = sets[0][0]
-        for s in sets[1:]:
-            b=s[1]
-            if b == 'AND':
-                names = names & s[0]
-            elif b == 'OR':
-                names = names | s[0]
-            elif b == 'NOT':
-                names = names - s[0]
-        names = list(names)
+        print F
+        names = doFiltering(searchfunc, F)
         self.updateResults(len(names))
         return names
 

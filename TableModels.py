@@ -20,6 +20,8 @@
 """
 
 from TableFormula import Formula
+import Filtering
+from Filtering import Operators
 from types import *
 import operator
 import string, types, copy
@@ -497,35 +499,19 @@ class TableModel(object):
         return colindex
 
     def getColumnData(self, columnIndex=None, columnName=None,
-                      filterby=None):
+                        filters=None):
         """Return the data in a list for this col,
-            filterby is a tuple of key, value that allows to filter by rec attribute
-        """
-
-        if columnIndex != None:
+            filters is a tuple of the form (key,value,operator,bool)"""
+        if columnIndex != None and columnIndex < len(self.columnNames):
             columnName = self.getColumnName(columnIndex)
-        coldata = []
-        if filterby != None and filterby[0] in self.columnNames:
-            f, vals = filterby
-            if type(vals) is not types.ListType:
-                vals = [vals]
-            for r in self.reclist:
-                if self.data[r].has_key(f) and self.data[r][f] in vals:
-                    if not self.data[r].has_key(columnName):
-                        coldata.append('')
-                    else:
-                        coldata.append(self.data[r][columnName])
-        else:
-            for r in self.reclist:
-                if not self.data[r].has_key(columnName):
-                    coldata.append('')
-                else:
-                    coldata.append(self.data[r][columnName])
+        names = Filtering.doFiltering(searchfunc=self.filterBy,
+                                         filters=filters)
+        coldata = [self.data[n][columnName] for n in names]
         return coldata
 
-    def getColumns(self, colnames, filterby=None, allowempty=True):
+    def getColumns(self, colnames, filters=None, allowempty=True):
         """Get column data for multiple cols, with given filter options,
-            filterby: a tuple of key value that allows filtering
+            filterby: list of tuples of the form (key,value,operator,bool)
             allowempty: boolean if false means rows with empty vals for any
             required fields are not returned
             returns: lists of column data"""
@@ -535,21 +521,20 @@ class TableModel(object):
                 if i == '' or i == None:
                     return False
             return True
-
         coldata=[]
         for c in colnames:
-            vals = self.getColumnData(columnName=c, filterby=filterby)
+            vals = self.getColumnData(columnName=c, filters=filters)
             coldata.append(vals)
         if allowempty == False:
             result = [i for i in zip(*coldata) if evaluate(i) == True]
             coldata = zip(*result)
         return coldata
 
-    def getDict(self, colnames, filterby=None):
+    def getDict(self, colnames, filters=None):
         """Get the model data as a dict for given columns with filter options"""
         data={}
-        names, = self.getColumns(['name'], filterby)
-        cols = self.getColumns(colnames, filterby)
+        names = self.reclist
+        cols = self.getColumns(colnames, filters)
         coldata = zip(*cols)
         for name,cdata in zip(names, coldata):
             data[name] = dict(zip(colnames,cdata))
@@ -557,9 +542,10 @@ class TableModel(object):
 
     def filterBy(self, filtercol, value, op='contains', userecnames=False,
                      progresscallback=None):
-        """Filter recs according to one column"""
+        """The searching function that we apply to the model data.
+           This is used in Filtering.doFiltering to find the required recs
+           according to column, value and an operator"""
 
-        from Filtering import Operators
         funcs = {'contains':Operators.contains,'=':Operators.equals,
                    '>':Operators.greaterthan,'<':Operators.lessthan,
                    'starts with':Operators.startswith,
@@ -588,26 +574,7 @@ class TableModel(object):
                     item = str(data[rec][filtercol])
                 if func(value, item):
                     names.append(rec)
-
         return names
-
-    def filterByExpr(self, expr):
-        """Filter recs using simple expression"""
-        import shlex
-        criteria=[]
-        if filterby != None:
-            lexer = shlex.shlex(filterby)
-            expr = list(lexer)
-            print expr
-            i=0
-            for e in range(0,len(expr),3):
-                print e
-                try:
-                    criteria.append((expr[e],expr[e+2]))
-                except:
-                    pass
-
-            print criteria
 
     def getRowCount(self):
          """Returns the number of rows in the table model."""
@@ -624,7 +591,6 @@ class TableModel(object):
         name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
-
         if coltype == 'number':
             try:
                 if value == '': #need this to allow deletion of values
