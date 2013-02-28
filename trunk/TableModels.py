@@ -444,9 +444,15 @@ class TableModel(object):
             start = max(ints)+1
         else:
             start = 0
+        #we don't use addRow as it's too slow
         keys = range(start,start+numrows)
+        #make sure no keys are present already
+        keys = list(set(keys)-set(self.reclist))
+        newdata = {}
         for k in keys:
-            self.addRow(k)
+            newdata[k] = {}
+        self.data.update(newdata)
+        self.reclist.extend(newdata.keys())
         return keys
 
     def autoAddColumns(self, numcols=None):
