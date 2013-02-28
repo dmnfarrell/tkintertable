@@ -420,11 +420,12 @@ class TableCanvas(Canvas):
         self.setSelectedRow(self.model.getRecordIndex(key))
         return
 
-    def addRows(self, key=None):
+    def addRows(self, num=None):
         """Add new rows"""
-        num = tkSimpleDialog.askinteger("Now many rows?",
-                                        "Number of rows:",initialvalue=1,
-                                         parent=self.parentframe)
+        if num == None:
+            num = tkSimpleDialog.askinteger("Now many rows?",
+                                            "Number of rows:",initialvalue=1,
+                                             parent=self.parentframe)
         if not num:
             return
         keys = self.model.autoAddRows(num)

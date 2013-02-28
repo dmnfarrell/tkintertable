@@ -94,6 +94,7 @@ def test1(root):
     #print table.getSelectionValues()
     #table.plotSelected(graphtype='XY')
     #save data
+    #table.addRows(50000)
     model.save('test.table')
     #load new data
     table.load('test.table')
@@ -147,7 +148,7 @@ def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    #test2()
+    test2()
     test3()
     test4()
     print 'GUI tests done'
