@@ -7,8 +7,9 @@ CHANGES
 ------
 
 * removed defunct code for filtering in model
-* filterColumn method added, can now filter properly from model class
+* can now filter properly from model class
 * changed autoaddrows to make much faster for large number of rows
+* added notequals operator for filtering
 
 ------
 1.1.1
