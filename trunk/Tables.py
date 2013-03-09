@@ -592,7 +592,6 @@ class TableCanvas(Canvas):
         """
         if self.model==None:
             return
-        from Filtering import FilterFrame
         names = self.filterframe.doFiltering(searchfunc=self.model.filterBy)
         #create a list of filtered recs
         self.model.filteredrecs = names
