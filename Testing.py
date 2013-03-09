@@ -59,6 +59,14 @@ def createData(rows=20, cols=5):
             i+=1
     return data
 
+def createTable(model):
+    t=Toplevel()
+    app = App(t)
+    master = app.main
+    table = TableCanvas(master, model,rowheaderwidth=50)
+    table.createTableFrame()
+    return table
+
 def test1(root):
     """Setup a table and populate it with data"""
     app = App(root)
@@ -121,35 +129,37 @@ def test2():
 
 def test3():
     """Drawing large tables"""
-    t=Toplevel()
-    app = App(t)
-    master = app.main
-    model = TableModel()
     data = createData(100000)
     model.importDict(data)
-    table = TableCanvas(master, model,rowheaderwidth=50)
-    table.createTableFrame()
+    createTable(model)
     return
 
 def test4():
     """Filtering/searching"""
     model = TableModel()
-    data = createData(1000)
+    data = createData(100)
     model.importDict(data)
-    searchterms = [('label', 'aa', 'contains', 'AND'),
-                   ('label', 'bb', 'contains', 'OR')]
+    model.addColumn('comment')
+    for i in model.reclist:
+        val = random.sample(['a','b','c'],1)[0]
+        model.data[i]['comment'] = val
+    #searchterms = [('label', 'aa', 'contains', 'AND'),
+    #               ('label', 'bb', 'contains', 'OR')]
+    searchterms = [('comment', 'a', '!=', 'AND'),
+                   ('comment', 'b', '!=', 'AND')]
     vals = model.getColumnData(columnIndex=0, filters=searchterms)
-    model.getColumns(model.columnNames, filters=searchterms)
-    model.getDict(model.columnNames, filters=searchterms)
+    #model.getColumns(model.columnNames, filters=searchterms)
+    #model.getDict(model.columnNames, filters=searchterms)
     print '%s found' %len(vals)
+    createTable(model)
     return
 
 def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    test2()
-    test3()
+    #test2()
+    #test3()
     test4()
     print 'GUI tests done'
     return root

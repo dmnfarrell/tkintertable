@@ -21,7 +21,6 @@
 
 from TableFormula import Formula
 import Filtering
-from Filtering import Operators
 from types import *
 import operator
 import string, types, copy
@@ -552,11 +551,7 @@ class TableModel(object):
            This is used in Filtering.doFiltering to find the required recs
            according to column, value and an operator"""
 
-        funcs = {'contains':Operators.contains,'=':Operators.equals,
-                   '>':Operators.greaterthan,'<':Operators.lessthan,
-                   'starts with':Operators.startswith,
-                   'ends with':Operators.endswith,
-                   'has length':Operators.haslength}
+        funcs = Filtering.operatornames
         floatops = ['=','>','<']
         func = funcs[op]
         data = self.data
@@ -567,8 +562,9 @@ class TableModel(object):
                 #try to do float comparisons if required
                 if op in floatops:
                     try:
+                        #print float(data[rec][filtercol])
                         item = float(data[rec][filtercol])
-                        v=float(value)
+                        v = float(value)
                         if func(v, item) == True:
                             names.append(rec)
                         continue

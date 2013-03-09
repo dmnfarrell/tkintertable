@@ -22,6 +22,56 @@
 from Tkinter import *
 import Pmw
 from types import *
+import re
+
+def contains(v1,v2):
+    if v1 in v2:
+        return True
+
+def equals(v1,v2):
+    if v1==v2:
+        return True
+
+def notequals(v1,v2):
+    if v1!=v2:
+        return True
+
+def greaterthan(v1,v2):
+    if v2>v1:
+        return True
+    return False
+
+def lessthan(v1,v2):
+    if v2<v1:
+        return True
+    return False
+
+def startswith(v1,v2):
+    if v2.startswith(v1):
+        return True
+
+def endswith(v1,v2):
+    if v2.endswith(v1):
+        return True
+
+def haslength(v1,v2):
+    if len(v2)>v1:
+        return True
+
+def isnumber(v1,v2):
+    try:
+        float(v2)
+        return True
+    except:
+        return False
+
+operatornames = {'contains':contains,'=':equals,
+                   '!=':notequals,
+                   '>':greaterthan,'<':lessthan,
+                   'starts with':startswith,
+                   'ends with':endswith,
+                   'has length':haslength,
+                   'is number':isnumber}
 
 def doFiltering(searchfunc, filters=None):
     """Module level method. Filter recs by several filters using a user provided
@@ -46,6 +96,7 @@ def doFiltering(searchfunc, filters=None):
             names = names | s[0]
         elif b == 'NOT':
             names = names - s[0]
+        #print len(names)
     names = list(names)
     return names
 
@@ -76,7 +127,7 @@ class FilterFrame(Frame):
     def addFilterBar(self):
         """Add filter"""
         index = len(self.filters)
-        f=FilterBar(self, index, self.fields)
+        f = FilterBar(self, index, self.fields)
         self.filters.append(f)
         f.grid(row=index+1,column=0,columnspan=5,sticky='news',padx=2,pady=2)
         return
@@ -91,7 +142,6 @@ class FilterFrame(Frame):
         F=[]
         for f in self.filters:
             F.append(f.getFilter())
-        print F
         names = doFiltering(searchfunc, F)
         self.updateResults(len(names))
         return names
@@ -102,18 +152,15 @@ class FilterFrame(Frame):
 
 class FilterBar(Frame):
     """Class providing filter widgets"""
-    operators = ['contains','=','>','<','starts with',
-                 'ends with','has length']
+    operators = ['contains','=','!=','>','<','starts with',
+                 'ends with','has length','is number']
     booleanops = ['AND','OR','NOT']
     def __init__(self, parent, index, fields):
         Frame.__init__(self, parent)
         self.parent=parent
         self.index = index
         self.filtercol=StringVar()
-        if 'name' in fields:
-            initial = 'name'
-        else:
-            initial = fields[0]
+        initial = fields[0]
         filtercolmenu = Pmw.OptionMenu(self,
                 labelpos = 'w',
                 label_text = 'Column:',
@@ -140,6 +187,9 @@ class FilterBar(Frame):
                 initialitem = 'AND',
                 menubutton_width = 6)
         booleanopmenu.grid(row=0,column=0,sticky='news',padx=2,pady=2)
+        #disable the boolean operator if it's the first filter
+        if self.index == 0:
+            booleanopmenu.component('menubutton').configure(state=DISABLED)
         cbutton=Button(self,text='-', command=self.close)
         cbutton.grid(row=0,column=5,sticky='news',padx=2,pady=2)
         return
@@ -158,38 +208,4 @@ class FilterBar(Frame):
         booleanop = self.booleanop.get()
         return col, val, op, booleanop
 
-class Operators(object):
 
-    def __init__(self):
-        return
-
-    @classmethod
-    def contains(self,v1,v2):
-        if v1 in v2:
-            return True
-    @classmethod
-    def equals(self,v1,v2):
-        if v1==v2:
-            return True
-    @classmethod
-    def greaterthan(self,v1,v2):
-        if v2>v1:
-            return True
-        return False
-    @classmethod
-    def lessthan(self,v1,v2):
-        if v2<v1:
-            return True
-        return False
-    @classmethod
-    def startswith(self,v1,v2):
-        if v2.startswith(v1):
-            return True
-    @classmethod
-    def endswith(self,v1,v2):
-        if v2.endswith(v1):
-            return True
-    @classmethod
-    def haslength(self,v1,v2):
-        if len(v2)>v1:
-            return True
