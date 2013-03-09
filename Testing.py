@@ -129,7 +129,8 @@ def test2():
 
 def test3():
     """Drawing large tables"""
-    data = createData(100000)
+    data = createData(10000)
+    model = TableModel()
     model.importDict(data)
     createTable(model)
     return
@@ -151,15 +152,15 @@ def test4():
     #model.getColumns(model.columnNames, filters=searchterms)
     #model.getDict(model.columnNames, filters=searchterms)
     print '%s found' %len(vals)
-    createTable(model)
+    #createTable(model)
     return
 
 def GUITests():
     """Run standard tests"""
     root = Tk()
     test1(root)
-    #test2()
-    #test3()
+    test2()
+    test3()
     test4()
     print 'GUI tests done'
     return root
