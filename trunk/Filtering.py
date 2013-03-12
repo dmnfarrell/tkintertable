@@ -28,6 +28,10 @@ def contains(v1,v2):
     if v1 in v2:
         return True
 
+def excludes(v1, v2):
+    if not v1 in v2:
+        return True
+
 def equals(v1,v2):
     if v1==v2:
         return True
@@ -65,8 +69,8 @@ def isnumber(v1,v2):
     except:
         return False
 
-operatornames = {'contains':contains,'=':equals,
-                   '!=':notequals,
+operatornames = {'=':equals,'!=':notequals,
+                   'contains':contains,'excludes':excludes,
                    '>':greaterthan,'<':lessthan,
                    'starts with':startswith,
                    'ends with':endswith,
@@ -152,7 +156,7 @@ class FilterFrame(Frame):
 
 class FilterBar(Frame):
     """Class providing filter widgets"""
-    operators = ['contains','=','!=','>','<','starts with',
+    operators = ['contains','excludes','=','!=','>','<','starts with',
                  'ends with','has length','is number']
     booleanops = ['AND','OR','NOT']
     def __init__(self, parent, index, fields):

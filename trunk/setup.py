@@ -4,7 +4,7 @@ home=os.path.expanduser('~')
 
 setup(
     name = 'tkintertable',
-    version = '1.1.2',
+    version = '1.1.3',
     description = 'Extendable table class for Tkinter',
     url='http://code.google.com/p/tkintertable/',
     license='GPL v3',
