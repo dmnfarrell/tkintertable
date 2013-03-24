@@ -1,17 +1,16 @@
 """
-    Manage preferences
-    Copyright (C) Damien Farrell, Jens Erik Nielsen, University College Dublin 2005
- 
+    Manages preferences for Table class.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
- 
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
- 
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -27,7 +26,7 @@ class Preferences:
         filename='.'+program+'_preferences'
         dirs=self.get_dirs()
         self.noprefs = False
-        try:    
+        try:
             for ldir in dirs:
                 fn=os.path.join(ldir,filename)
 
@@ -38,7 +37,7 @@ class Preferences:
                 else:
                     self.noprefs = True
             if self.noprefs == True:
-                raise                 
+                raise
         except:
             #
             # If we didn't find a file then set to default and save
@@ -122,7 +121,7 @@ class Preferences:
             raise 'No such key',key
         self.save_prefs()
         return
-    
+
     #
     # ---------
     #
@@ -173,7 +172,7 @@ class Preferences:
         try:
             fd=open(filename)
             self.prefs=pickle.load(fd)
-            fd.close()            
+            fd.close()
         except:
             fd.close()
             fd=open(filename,'rb')
@@ -200,5 +199,5 @@ class Preferences:
         pickle.dump(self.prefs,fd)
         fd.close()
         return
-    
-    
+
+

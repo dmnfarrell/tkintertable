@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 """
+    Module implementing the TableModel class that manages data for
+    it's associated TableCanvas.
+
     Created Oct 2008
-    TableModel Class
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or
@@ -716,18 +718,6 @@ class TableModel(object):
                             self.addColumn(f)
                         self.data[rec][f] = model.data[rec][f]
         return
-
-    '''def addRecord(self, name, **kwargs):
-        """Add new rec with all fields in kwargs dict"""
-        #name = kwargs[kwargs.keys()[0]]
-        self.addRow(name)
-        self.addColumn('name')
-        self.data[name]['name'] = name
-        for k in kwargs:
-            if not k in self.columnNames:
-                self.addColumn(k)
-            self.data[name][k] = str(kwargs[k])
-        return'''
 
     def save(self, filename=None):
         """Save model to file"""

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Sample App to illustrate table functionality.
     Created January 2008
-    Sample App to illustrate table functionality
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or

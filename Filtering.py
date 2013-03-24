@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Module implements Table filtering and searching functionality.
     Created Oct 2008
-    Table Filtering Class
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or
@@ -68,6 +68,11 @@ def isnumber(v1,v2):
         return True
     except:
         return False
+
+def regex(v1,v2):
+    """Apply a regular expression"""
+    print re.findall(v1,v2)
+    return
 
 operatornames = {'=':equals,'!=':notequals,
                    'contains':contains,'excludes':excludes,

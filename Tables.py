@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Implements the core TableCanvas class.
     Created Oct 2008
-    Table Class
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or

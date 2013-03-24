@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 """
+    Images stored as PhotoImage objects, for buttons and logos.
     Created Oct 2008
-    TablePlotter Class
     Copyright (C) Damien Farrell
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
- 
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
- 
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -721,7 +721,7 @@ def tableapp_logo():
             +'BvX01OlMPlZ9y+w00U0cTmSISDVAAzSAA1uQBspL1FdVlV8tUA+UydGjSWHw'
             +'BWKIBmzAxWBtVmfFCjxrSNOEB2y4BmyQh3rAohp9noAAADs=')
      return img
-    
+
 def add_row():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -749,7 +749,7 @@ def add_row():
             +'R4hkEPBiDpkyCxKUcQtX7gABAVrIMYPnTAGYW2Ki8SBwRZw3btqwSYOmtOkO'
             +'AlOcKDEiBAgOGmLLRmCwdsGAADs=')
      return img
-     
+
 def add_col():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -833,7 +833,7 @@ def del_col():
             +'GsoINvMhDY0WMmZg8DPhzpkWaGBuWANzhQY/EezQmSMnjps2HWq4YJECRQY/'
             +'DxosSHDAAAEBIkq8UEGCwwWDBEdk0JDhdkAAOw==')
      return img
-     
+
 def new_proj():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -860,8 +860,8 @@ def new_proj():
             +'YIiQOTIUZpUCAkN8QZKkbBImPnwUETKFgMAPXpiQeQKziZiXUxgI3ODFyZO/'
             +'T6AsGbxkCgKBGbpEISMFZhCYUxIIvMBFSxYsV6hM2cz5gMAKEyI8aLDAwIDT'
             +'qAMYXE0wIAA7')
-     return img     
-     
+     return img
+
 def open_proj():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -918,7 +918,7 @@ def save_proj():
             +'kSA5ugTjQAsUJUJMiJDAy6QhR5AQkVRjAMTfqRwAWmQIUaJDm5YQAA6xwIMO'
             +'NkB88MDBgICAADs=')
      return img
-   
+
 def prefs():
     import Tkinter as tk
     img = tk.PhotoImage(format='gif',data=
@@ -945,7 +945,7 @@ def prefs():
             +'MAjaQPJDiRcIQ8BYURIlB8EZRnoQsaLABQkWU5RAWcG0CBAfDAwUGJikSJIl'
             +'NGQUEbKDhgOCMbAkeVKlyRIoSYI8kdBA4AsgX2J0+IDESAQJMaxoILhhAgMz'
             +'HZ4sWWDGgACIAjcE0YEANsEIBgZADAgAOw==')
-    return img  
+    return img
 
 def plot():
     import Tkinter as tk
@@ -972,7 +972,7 @@ def plot():
             +'HxAYODIAiA8eO3QYkSAwhQmBBAQEIFikRowVKEosrDDwhBIRBjdgoECQRAgQ'
             +'Bi8gaUBR4AQGCrqKHWswIAA7')
     return img
-    
+
 def plotprefs():
     import Tkinter as tk
     img = tk.PhotoImage(format='gif',data=
@@ -999,7 +999,7 @@ def plotprefs():
             +'ZZwMlPBgwUAreMSkIdOEoAM1BQRWaYMlixcmBRUQENCHxx4oGZT8gHghjhwk'
             +'GCgGqOCjB8KAADs=')
     return img
-    
+
 def start():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -1014,7 +1014,7 @@ def start():
             +'DYWrmUKuBSGwDHy0bUSuuAYlBnO9drY3ASEFzFXG0NEBHQHONt/Z2nykpEmu'
             +'S0gA6OvsSUEAOw==')
      return img
-     
+
 def end():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -1029,7 +1029,7 @@ def end():
             +'eV2FmQyvIQWxAHCiVgYlBrjDRKs/OMgFIQHMzcZLAR3Uus28hjjbxFs25JjV'
             +'R6ncQ+JN7e7vREEAOw==')
      return img
-     
+
 def next():
      import Tkinter as tk
      img = tk.PhotoImage(format='gif',data=
@@ -1078,7 +1078,7 @@ def prev():
             +'AAAAAAAAAAAAAAAAAAAAACH5BAMAAC0ALAAAAAAQABAAAAhdAFsIHEiwoMGD'
             +'CBMqXChwAsOGEh5O+KDBQYMFChIgOGCgAIGGG1isSHGixIgQHjhcoDBAoIQM'
             +'KlCYICECRAcMFSI8EDDQAQQLDDRy9DhAQACCGB8KTKC0qdOnDwMCADs=')
-     return img     
+     return img
 
 def search():
      import Tkinter as tk
@@ -1105,4 +1105,4 @@ def search():
             +'UpYgMUJEjAeDL85EUXKkyI4cYQgYZAHGCk0dNYw8EWBQhYwxUHTQMNKlxIaG'
             +'JlxU8cLFCQkRQCY0/NCBwIAAHDIM0fDgIkEJF4RgUOB2oAMLQRDUHZhgwd6/'
             +'fwMCADs=')
-     return img  
+     return img
