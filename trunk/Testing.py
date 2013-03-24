@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Table Testing module.
     Created Oct 2008
-    Table Testing module
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or
@@ -155,6 +155,21 @@ def test4():
     #createTable(model)
     return
 
+def test5():
+    """frame placement"""
+    import Pmw
+    t=Toplevel()
+    app = App(t)
+    master = app.main
+    w = Pmw.Group(master,
+                tag_text='Show/Hide')
+    w.pack(fill=BOTH)
+    f=Frame(master)
+    f.pack(fill=BOTH)
+    table = TableCanvas(w)
+    table.createTableFrame()
+    return
+
 def GUITests():
     """Run standard tests"""
     root = Tk()
@@ -162,6 +177,7 @@ def GUITests():
     test2()
     test3()
     test4()
+    #test5()
     print 'GUI tests done'
     return root
 

@@ -1,4 +1,7 @@
 """
+
+    This set of classes allows interactive spreadsheet-style tables to be added into
+    an application.
     Created January 2008
     Custom Table Package
     Copyright (C) Damien Farrell
@@ -18,4 +21,3 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-VERSION = '1.03'

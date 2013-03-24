@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Module for basic plotting inside the TableCanvas. Uses matplotlib.
     Created August 2008
-    Matplotlib Plotter Class
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
+    Table Dialog classes.
     Created Oct 2008
-    Table Dialog Classes
     Copyright (C) Damien Farrell
 
     This program is free software; you can redistribute it and/or
