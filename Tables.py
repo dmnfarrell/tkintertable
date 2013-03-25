@@ -1369,7 +1369,7 @@ class TableCanvas(Canvas):
 
     def plotSelected(self, graphtype='XY'):
         """Plot the selected data using pylab - if possible"""
-        from PylabPlot import pylabPlotter
+        from Plot import pylabPlotter
         if not hasattr(self, 'pyplot'):
             self.pyplot = pylabPlotter()
         plotdata = []
