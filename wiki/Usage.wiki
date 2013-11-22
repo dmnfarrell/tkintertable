@@ -51,8 +51,8 @@ table.redrawTable()
 
 where data is a dictionary of the form
 {{{
-{{'rec1': {'col1': 99.88, 'col2': 108.79, 'label': 'rec1'},
-{'rec2': {'col1': 99.88, 'col2': 108.79, 'label': 'rec2'},
+{'rec1': {'col1': 99.88, 'col2': 108.79, 'label': 'rec1'},
+'rec2': {'col1': 99.88, 'col2': 108.79, 'label': 'rec2'},
 ..
 }
 }}}
