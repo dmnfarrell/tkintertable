@@ -1,0 +1,5 @@
+# Concept #
+
+The tkintertable library utilizes the concept of table view->model such as that used in java Swing and other widget libraries. The `TableCanvas` class is the graphical element that handles all the user interaction, GUI changes, formatting etc. This class inherits from Tkinter canvas, and we put all basic table functionality in this base class. In practice you can  sub-class this and add any specialist functionality, either by overriding the required parent class methods or adding extra ones. Each `TableCanvas` has a `TableModel` associated with it, this class handles the data storage, and manipulation. A model can be created and then supplied to the `TableCanvas` object constructor, if not a default model is created.
+
+![http://tkintertable.googlecode.com/svn/wiki/images/tkintertableoverview.png](http://tkintertable.googlecode.com/svn/wiki/images/tkintertableoverview.png)
