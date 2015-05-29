@@ -222,14 +222,17 @@ class TableCanvas(Canvas):
         return
 
     def getVisibleRegion(self):
+        """Get visible region of table to display"""
         x1, y1 = self.canvasx(0), self.canvasy(0)
-        w, h = self.winfo_width(), self.winfo_height()
+        #w, h = self.winfo_width(), self.winfo_height()
+        w,h= self.master.winfo_width(), self.master.winfo_height()
         if w <= 1.0 or h <= 1.0:
             w, h = self.master.winfo_width(), self.master.winfo_height()
         x2, y2 = self.canvasx(w), self.canvasy(h)
         return x1, y1, x2, y2
 
     def getRowPosition(self, y):
+        """Get current row from canvas position"""
         h = self.rowheight
         y_start = self.y_start
         row = (int(y)-y_start)/h
@@ -240,6 +243,7 @@ class TableCanvas(Canvas):
         return row
 
     def getColPosition(self, x):
+        """Get current col from canvas position"""
         x_start = self.x_start
         w = self.cellwidth
         i=0
@@ -273,7 +277,7 @@ class TableCanvas(Canvas):
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
-        
+
         self.tablewidth = (self.cellwidth) * self.cols
         self.configure(bg=self.cellbackgr)
         self.setColPositions()
@@ -292,12 +296,12 @@ class TableCanvas(Canvas):
         self.visiblerows = range(startvisiblerow, endvisiblerow)
         startvisiblecol, endvisiblecol = self.getVisibleCols(x1, x2)
         self.visiblecols = range(startvisiblecol, endvisiblecol)
-        
+
         if self.cols == 0 or self.rows == 0:
             self.delete('entry')
             self.delete('rowrect')
             self.delete('currentrect')
-            self.delete('gridline','text')            
+            self.delete('gridline','text')
             self.tablerowheader.redraw()
             return
 
@@ -472,7 +476,7 @@ class TableCanvas(Canvas):
                                       parent=self.parentframe)
             if n == True:
                 rows = self.multiplerowlist
-                self.model.deleteRows(rows)                
+                self.model.deleteRows(rows)
                 self.clearSelected()
                 self.setSelectedRow(0)
                 self.redrawTable()
@@ -957,15 +961,11 @@ class TableCanvas(Canvas):
             if self.currentrow == 0:
                 return
             else:
-                #self.yview('moveto', y)
-                #self.tablerowheader.yview('moveto', y)
                 self.currentrow  = self.currentrow -1
         elif event.keysym == 'Down':
             if self.currentrow >= self.rows-1:
                 return
             else:
-                #self.yview('moveto', y)
-                #self.tablerowheader.yview('moveto', y)
                 self.currentrow  = self.currentrow +1
         elif event.keysym == 'Right' or event.keysym == 'Tab':
             if self.currentcol >= self.cols-1:
@@ -977,7 +977,14 @@ class TableCanvas(Canvas):
             else:
                 self.currentcol  = self.currentcol +1
         elif event.keysym == 'Left':
-            self.currentcol  = self.currentcol -1
+            if self.currentcol == 0:
+                if self.currentrow == 0:
+                    return
+                else:
+                    self.currentcol = self.cols-1
+                    self.currentrow = self.currentrow - 1
+            else:
+                self.currentcol  = self.currentcol -1
         self.drawSelectedRect(self.currentrow, self.currentcol)
         coltype = self.model.getColumnType(self.currentcol)
         if coltype == 'text' or coltype == 'number':
@@ -988,16 +995,14 @@ class TableCanvas(Canvas):
     def handle_double_click(self, event):
         """Do double click stuff. Selected row/cols will already have
            been set with single click binding"""
-        #print 'double click'
-        row = self.get_row_clicked(event)
+
+        '''row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
-        #absrow = self.get_AbsoluteRow(row)
         model=self.getModel()
         cellvalue = model.getCellRecord(row, col)
         if Formula.isFormula(cellvalue):
-            self.formula_Dialog(row, col, cellvalue)
-            #self.enterFormula(rowclicked, colclicked)
-        #self.drawCellEntry(self.currentrow, self.currentcol)
+            self.formula_Dialog(row, col, cellvalue)'''
+
         return
 
     def handle_right_click(self, event):
@@ -1075,7 +1080,6 @@ class TableCanvas(Canvas):
         """Formula dialog"""
         self.mode = 'formula'
         print self.mode
-        #absrow = self.get_AbsoluteRow(row)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=300
         h=h=self.rowheight * 3
@@ -1087,9 +1091,9 @@ class TableCanvas(Canvas):
             #get text area contents and do formula
             f = self.formulaText.get(1.0, END)
             f = f.strip('\n')
-            self.model.setFormulaAt(f,absrow,col)
+            self.model.setFormulaAt(f,row,col)
             value = self.model.doFormula(f)
-            color = self.model.getColorAt(absrow,col,'fg')
+            color = self.model.getColorAt(row,col,'fg')
             self.drawText(row, col, value, color)
             close()
             self.mode = 'normal'
@@ -1596,6 +1600,7 @@ class TableCanvas(Canvas):
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         wrap = False
+        pad=5
         # If celltxt is a number then we make it a string
         if type(celltxt) is types.FloatType or type(celltxt) is types.IntType:
             celltxt=str(celltxt)
@@ -1611,11 +1616,11 @@ class TableCanvas(Canvas):
         if align == None:
             align = 'center'
         elif align == 'w':
-            x1 = x1-w/2+1
+            x1 = x1-w/2+pad
         elif align == 'e':
-            x1 = x1+w/2-1
+            x1 = x1+w/2-pad
 
-        if w < 15:
+        if w < 18:
             celltxt = '.'
         else:
             fontsize = self.fontsize

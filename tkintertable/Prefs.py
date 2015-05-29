@@ -16,13 +16,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
+import os
+
 class Preferences:
 
     def __init__(self,program,defaults):
-        #
-        # Find and load the preferences file
-        #
-        import os
+
+        """Find and load the preferences file"""
+
         filename='.'+program+'_preferences'
         dirs=self.get_dirs()
         self.noprefs = False
@@ -39,9 +40,8 @@ class Preferences:
             if self.noprefs == True:
                 raise
         except:
-            #
+
             # If we didn't find a file then set to default and save
-            #
             print 'Did not find preferences!!!'
             self.prefs=defaults.copy()
 	    print dirs
@@ -49,70 +49,45 @@ class Preferences:
             self.prefs['_prefdir']=dirs[0]
             self.prefs['_preffile']=self.pref_file
             self.save_prefs()
-            #
-            # Can we set more variables?
-            #
+
             # Defaults savedir?
-            #
+
             if os.environ.has_key('HOMEPATH'):
                 self.prefs['datadir']=os.environ['HOMEPATH']
             if os.environ.has_key('HOME'):
                 self.prefs['datadir']=os.environ['HOME']
-            #
-            # Use 'my documents' if available
-            #
 
+            # Use 'my documents' if available
             if hasattr(self.prefs,'datadir'):
                 mydocs=os.path.join(self.prefs['datadir'],'My Documents')
                 if os.path.isdir(mydocs):
                     self.prefs['datadir']=mydocs
 
-            #
+
             # Always save
-            #
             self.save_prefs()
         return
 
-    #
-    # ---------
-    #
-
     def __del__(self):
-        #
         # Make sure we save the file when killed
-        #
         self.save_prefs()
         return
 
-    #
-    # ---------
-    #
-
     def set(self,key,value):
-        #
         # Set a key
-        #
         self.prefs[key]=value
         self.save_prefs()
         return
 
-    #
-    # ---------
-    #
 
     def get(self,key):
-        #
-        # Get a value
-        #
+
         if self.prefs.has_key(key):
             return self.prefs[key]
         else:
             raise NameError,'No such key'
         return
 
-    #
-    # ---------
-    #
 
     def delete(self,key):
         if self.prefs.has_key(key):
@@ -122,29 +97,22 @@ class Preferences:
         self.save_prefs()
         return
 
-    #
-    # ---------
-    #
-
     def get_dirs(self):
-        #
-        # Compile a prioritised list of all dirs
-        #
+
+        """Compile a prioritised list of all dirs"""
+
         dirs=[]
         keys=['HOME','HOMEPATH','HOMEDRIVE']
         import os, sys
         for key in keys:
             if os.environ.has_key(key):
                 dirs.append(os.environ[key])
-        #
+
         if os.environ.has_key('HOMEPATH'):
-            #
             # windows
-            #
             dirs.append(os.environ['HOMEPATH'])
-        #
+
         # Drives
-        #
         possible_dirs=["C:\\","D:\\","/"]
         for pdir in possible_dirs:
             if os.path.isdir(pdir):
@@ -158,16 +126,10 @@ class Preferences:
                 rdirs.append(dirname)
         return rdirs
 
-    #
-    # ---------
-    #
-
     def load_prefs(self,filename):
-        #
-        # Load prefs
-        #
+        """Load prefs"""
         self.pref_file=filename
-        print "loading prefs from ",self.pref_file
+        #print "loading prefs from ",self.pref_file
         import pickle
         try:
             fd=open(filename)
@@ -180,16 +142,9 @@ class Preferences:
             fd.close()
         return
 
-    #
-    # ----------
-    #
-
     def save_prefs(self):
-        #
-        # Save prefs
-        #
+        """Save prefs"""
         import pickle
-
         try:
             fd=open(self.pref_file,'w')
         except:

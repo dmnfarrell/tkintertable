@@ -110,14 +110,14 @@ class TablesApp(Frame):
         self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
         self.menu.add_cascade(label='Sheet',menu=self.sheet_menu['var'])
 
-        self.IO_menu={'01Import from csv file':{'cmd':self.import_cvs},
-                      '02Export to csv file':{'cmd':self.export_cvs},
+        self.IO_menu={'01Import from csv file':{'cmd':self.import_csv},
+                      '02Export to csv file':{'cmd':self.export_csv},
                       }
 
         self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
         self.menu.add_cascade(label='Import/Export',menu=self.IO_menu['var'])
-       
-        # Help menu        
+
+        # Help menu
         self.help_menu={'01Online Help':{'cmd':self.online_documentation},
                         '02About':{'cmd':self.about_Tables}}
         self.help_menu=self.create_pulldown(self.menu,self.help_menu)
@@ -127,7 +127,7 @@ class TablesApp(Frame):
 
         return
 
-    def create_pulldown(self,menu,dict):        
+    def create_pulldown(self,menu,dict):
         """ Create a pulldown in var from the info in dict  """
         var=Menu(menu,tearoff=0)
         items=dict.keys()
@@ -135,13 +135,13 @@ class TablesApp(Frame):
         for item in items:
             if item[-3:]=='sep':
                 var.add_separator()
-            else:                
-                # Do we have a command?                
+            else:
+                # Do we have a command?
                 command=None
                 if dict[item].has_key('cmd'):
                     command=dict[item]['cmd']
-                
-                # Put the command in there                
+
+                # Put the command in there
                 if dict[item].has_key('sc'):
                     var.add_command(label='%-25s %9s' %(item[2:],dict[item]['sc']),command=command)
                 else:
@@ -211,9 +211,9 @@ class TablesApp(Frame):
 
     def open_project(self, filename=None):
         if filename == None:
-            filename=tkFileDialog.askopenfilename(defaultextension='.tbleprj"',
+            filename=tkFileDialog.askopenfilename(defaultextension='.tblprj"',
                                                       initialdir=os.getcwd(),
-                                                      filetypes=[("TableApp project","*.tbleprj"),
+                                                      filetypes=[("TableApp project","*.tblprj"),
                                                                  ("All files","*.*")],
                                                       parent=self.tablesapp_win)
         if os.path.isfile(filename):
@@ -267,10 +267,9 @@ class TablesApp(Frame):
             self.currenttable.destroy()
         return
 
-    def import_cvs(self):
-        importer = TableImporter()
-        #datafile = importer.open_File(self.tablesapp_win)
+    def import_csv(self):
 
+        importer = TableImporter()
         #just use the dialog to load and import the file
         importdialog = importer.import_Dialog(self.tablesapp_win)
         self.tablesapp_win.wait_window(importdialog)
@@ -281,11 +280,11 @@ class TablesApp(Frame):
         self.new_project(sheetdata)
         return
 
-    def export_cvs(self):
+    def export_csv(self):
+        from Tables_IO import TableExporter
         exporter = TableExporter()
         exporter.ExportTableData(self.currenttable)
         return
-
 
     def add_Sheet(self, sheetname=None, sheetdata=None):
         """Add a new sheet - handles all the table creation stuff"""
@@ -421,15 +420,6 @@ class TablesApp(Frame):
 
     def plotSetup(self, event=None):
         self.currenttable.plotSetup()
-        return
-
-    def normal_view(self,event=None):
-        self.currenttable.paging_Off()
-        return
-
-    def page_view(self,event=None):
-        self.currenttable.paging = 1
-        self.currenttable.redrawTable()
         return
 
     def about_Tables(self):
