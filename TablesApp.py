@@ -116,16 +116,8 @@ class TablesApp(Frame):
 
         self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
         self.menu.add_cascade(label='Import/Export',menu=self.IO_menu['var'])
-
-
-        self.view_menu = Menu(self.menu, tearoff=0)
-        self.view_menu.add_radiobutton(label="Normal View", state=ACTIVE,command=self.normal_view)
-        self.view_menu.add_radiobutton(label="Page View", command=self.page_view)
-        self.menu.add_cascade(label='View',menu=self.view_menu)
-
-        #
-        # Help menu
-        #
+       
+        # Help menu        
         self.help_menu={'01Online Help':{'cmd':self.online_documentation},
                         '02About':{'cmd':self.about_Tables}}
         self.help_menu=self.create_pulldown(self.menu,self.help_menu)
@@ -135,26 +127,21 @@ class TablesApp(Frame):
 
         return
 
-    def create_pulldown(self,menu,dict):
-        #
-        # Create a pulldown in var from the info in dict
-        #
+    def create_pulldown(self,menu,dict):        
+        """ Create a pulldown in var from the info in dict  """
         var=Menu(menu,tearoff=0)
         items=dict.keys()
         items.sort()
         for item in items:
             if item[-3:]=='sep':
                 var.add_separator()
-            else:
-                #
-                # Do we have a command?
-                #
+            else:                
+                # Do we have a command?                
                 command=None
                 if dict[item].has_key('cmd'):
                     command=dict[item]['cmd']
-                #
-                # Put the command in there
-                #
+                
+                # Put the command in there                
                 if dict[item].has_key('sc'):
                     var.add_command(label='%-25s %9s' %(item[2:],dict[item]['sc']),command=command)
                 else:
@@ -226,7 +213,7 @@ class TablesApp(Frame):
         if filename == None:
             filename=tkFileDialog.askopenfilename(defaultextension='.tbleprj"',
                                                       initialdir=os.getcwd(),
-                                                      filetypes=[("Pickle file","*.tbleprj"),
+                                                      filetypes=[("TableApp project","*.tbleprj"),
                                                                  ("All files","*.*")],
                                                       parent=self.tablesapp_win)
         if os.path.isfile(filename):
@@ -369,19 +356,19 @@ class TablesApp(Frame):
 
     def add_Row(self):
         """Add a new row"""
-        self.currenttable.add_Row()
+        self.currenttable.addRow()
         self.saved = 0
         return
 
     def delete_Row(self):
         """Delete currently selected row"""
-        self.currenttable.delete_Row()
+        self.currenttable.deleteRow()
         self.saved = 0
         return
 
     def add_Column(self):
         """Add a new column"""
-        self.currenttable.add_Column()
+        self.currenttable.addColumn()
         self.saved = 0
         return
 
@@ -393,13 +380,13 @@ class TablesApp(Frame):
 
     def autoAdd_Rows(self):
         """Auto add x rows"""
-        self.currenttable.autoAdd_Rows()
+        self.currenttable.autoAddRows()
         self.saved = 0
         return
 
     def autoAdd_Columns(self):
         """Auto add x rows"""
-        self.currenttable.autoAdd_Columns()
+        self.currenttable.autoAddColumns()
         self.saved = 0
         return
 

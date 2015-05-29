@@ -273,11 +273,7 @@ class TableCanvas(Canvas):
         model = self.model
         self.rows = self.model.getRowCount()
         self.cols = self.model.getColumnCount()
-        if self.cols == 0 or self.rows == 0:
-            self.delete('entry')
-            self.delete('rowrect')
-            self.delete('currentrect')
-            return
+        
         self.tablewidth = (self.cellwidth) * self.cols
         self.configure(bg=self.cellbackgr)
         self.setColPositions()
@@ -296,6 +292,14 @@ class TableCanvas(Canvas):
         self.visiblerows = range(startvisiblerow, endvisiblerow)
         startvisiblecol, endvisiblecol = self.getVisibleCols(x1, x2)
         self.visiblecols = range(startvisiblecol, endvisiblecol)
+        
+        if self.cols == 0 or self.rows == 0:
+            self.delete('entry')
+            self.delete('rowrect')
+            self.delete('currentrect')
+            self.delete('gridline','text')            
+            self.tablerowheader.redraw()
+            return
 
         self.drawGrid(startvisiblerow, endvisiblerow)
         align = self.align
@@ -468,9 +472,9 @@ class TableCanvas(Canvas):
                                       parent=self.parentframe)
             if n == True:
                 rows = self.multiplerowlist
-                self.model.deleteRows(rows)
-                self.setSelectedRow(0)
+                self.model.deleteRows(rows)                
                 self.clearSelected()
+                self.setSelectedRow(0)
                 self.redrawTable()
         else:
             n = tkMessageBox.askyesno("Delete",
@@ -1234,8 +1238,8 @@ class TableCanvas(Canvas):
                         "Formulae->Value" : lambda : self.convertFormulae(rows, cols)}
 
         main = ["Set Fill Color","Set Text Color","Copy", "Paste", "Fill Down","Fill Right",
-                "Clear Data", "Add Row(s)" , "Delete Row(s)"]
-        general = ["Select All", "Auto Fit Columns", "Filter Records", "Preferences"]
+                "Clear Data"]
+        general = ["Select All", "Add Row(s)" , "Delete Row(s)", "Auto Fit Columns", "Filter Records", "Preferences"]
         filecommands = ['New','Load','Save','Import text','Export csv']
         plotcommands = ['Plot Selected','Plot Options']
         utilcommands = ["View Record", "Formulae->Value"]
