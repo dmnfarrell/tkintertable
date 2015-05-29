@@ -415,7 +415,7 @@ class TablesApp(Frame):
         return
 
     def plot(self, event=None):
-        self.currenttable.plot_Selected()
+        self.currenttable.plotSelected()
         return
 
     def plotSetup(self, event=None):

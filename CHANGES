@@ -3,6 +3,14 @@ CHANGES
 =======
 
 ------
+1.2
+------
+
+* moved modules to proper folder for setup.py
+* fixed outstanding bugs from google code
+* improved cell padding
+
+------
 1.1.2
 ------
 

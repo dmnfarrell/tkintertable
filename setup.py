@@ -6,7 +6,7 @@ setup(
     name = 'tkintertable',
     version = '1.2',
     description = 'Extendable table class for Tkinter',
-    url='http://code.google.com/p/tkintertable/',
+    url='https://github.com/dmnfarrell/tkintertable',
     license='GPL v3',
     author = 'Damien Farrell',
     author_email = 'farrell.damien[at]gmail.com',
