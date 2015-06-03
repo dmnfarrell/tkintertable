@@ -1,24 +1,21 @@
-##ABOUT
+##About
 
 Python uses a GUI library called Tkinter as default. This set of classes allows interactive spreadsheet-style tables to be added into an application.
 Tkinter is the standard GUI toolkit for python. It is old but still quite popular. There are various libraries that extend Tkinter functionality, such as Pmw, but there is currently no extendable table class for Tkinter.
 A sample application using these classes is included in the distribution.
 
-##HOMEPAGE
 
-https://github.com/dmnfarrell/tkintertable
-
-##INSTALLATION
+##Installation
 
 ```pip install tkintertable``` or ```easy_install tkintertable```
 
-##GIT CLONE
+##Git clone
 
 You can clone the current source using
 
 git clone https://github.com/dmnfarrell/tkintertable.git
 
-##USAGE
+##Usage
 
 Import the class
 
@@ -28,6 +25,10 @@ To import:
 ```
 from tkintertable.Tables import TableCanvas
 from tkintertable.TableModels import TableModel
+```
+or
+```
+from tkintertable import TableCanvas, TableModel
 ```
 
 Create tables
@@ -133,75 +134,7 @@ table.save('test.table')
 table.load('test.table')
 ```
 
-##CHANGES
+##See also
 
-------
-1.1.2
-------
-
-* removed defunct code for filtering in model
-* can now filter properly from model class
-* changed autoaddrows to make much faster for large number of rows
-* added notequals operator for filtering
-
-------
-1.1.1
-------
-
-* changed importdict method to make more efficient for large amounts of data
-* added more tests
-* fix to autoaddrows
-* changes to sort behaviour so that current order is kept when adding/deleting rows
-* fix to draw visible multiple row selection only
-
-------
-1.1
-------
-
-* table now renders large amounts of data by only drawing visible frame
-* fixes to filtering bar
-* removed paged view
-* removed 'name' as a special field
-* adding rows from GUI no longer requires rec names
-* can now set row header width
-* can now show record keys in row header instead of numbers
-* row header drawn with same alignment as cells
-* renamed most remaining Table.py methods to camel case
-
-------
-1.0.3
-------
-
-* added new, load and save methods to table directly
-* added ImportTable method to table for interactive use
-* fixed clicking outside column header bug
-* fix to update selected col when redrawing
-* added Dialog.py module
-* removed simpletabledialog
-* tidied up popupmenu
-
-------
-1.0.2
-------
-
-* restored Filtering.py, filtering works ok
-* more improvement to auto resize cols, now checks currrent col sizes
-* fixed model.save() method
-* added ability to save table, add rows to popup menu
-* fixed delete cells button binding
-* cell font preferences now uses available fonts from os
-* removed unused prefs from dialog
-
-------
-1.0.1
-------
-
-* add_Column method fixed
-* Added ability to align cells left right or center
-* Fixed problem of sort order lost when deleting rows
-* Sort in descending order works correctly
-* Fixes to plotting, but needs reworking or removal
-* Added setSelectedCells method so a block of cells can be selected
-* Improved text fitting in cells
-* Automatic resizing of columns improved
+https://github.com/dmnfarrell/pandastable
 
