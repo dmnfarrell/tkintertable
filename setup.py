@@ -17,7 +17,7 @@ setup(
     entry_points = { 'gui_scripts': [
                      'tablesapp = tkintertable.TablesApp:main']},
     classifiers = ["Operating System :: OS Independent",
-            "Programming Language :: Python",
+            "Programming Language :: Python :: 2.7",
             "Topic :: Software Development :: User Interfaces",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "Development Status :: 4 - Beta",

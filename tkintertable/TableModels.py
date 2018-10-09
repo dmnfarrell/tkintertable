@@ -24,6 +24,7 @@
 from TableFormula import Formula
 import Filtering
 from types import *
+from collections import OrderedDict
 import operator
 import string, types, copy
 import pickle
@@ -43,6 +44,7 @@ class TableModel(object):
 
     def setupModel(self, newdict, rows=None, columns=None):
         """Create table model"""
+
         if newdict != None:
             self.data = copy.deepcopy(newdict)
             for k in self.keywords:
