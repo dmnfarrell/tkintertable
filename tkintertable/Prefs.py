@@ -16,6 +16,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
+from __future__ import absolute_import, division, print_function
 import os
 
 class Preferences:
@@ -40,11 +41,9 @@ class Preferences:
             if self.noprefs == True:
                 raise
         except:
-
             # If we didn't find a file then set to default and save
-            print 'Did not find preferences!!!'
+            print ('Did not find preferences!!!')
             self.prefs=defaults.copy()
-	    print dirs
             self.pref_file=os.path.join(dirs[0],filename)
             self.prefs['_prefdir']=dirs[0]
             self.prefs['_preffile']=self.pref_file
@@ -52,9 +51,9 @@ class Preferences:
 
             # Defaults savedir?
 
-            if os.environ.has_key('HOMEPATH'):
+            if 'HOMEPATH' in os.environ:
                 self.prefs['datadir']=os.environ['HOMEPATH']
-            if os.environ.has_key('HOME'):
+            if 'HOME' in os.environ:
                 self.prefs['datadir']=os.environ['HOME']
 
             # Use 'my documents' if available
@@ -82,18 +81,19 @@ class Preferences:
 
     def get(self,key):
 
-        if self.prefs.has_key(key):
+        if key in self.prefs:
             return self.prefs[key]
         else:
-            raise NameError,'No such key'
+            pass
         return
 
 
     def delete(self,key):
-        if self.prefs.has_key(key):
+        if key in self.prefs:
             del self.prefs[key]
         else:
-            raise 'No such key',key
+            #raise 'No such key',key
+            pass
         self.save_prefs()
         return
 
@@ -105,10 +105,10 @@ class Preferences:
         keys=['HOME','HOMEPATH','HOMEDRIVE']
         import os, sys
         for key in keys:
-            if os.environ.has_key(key):
+            if key in os.environ:
                 dirs.append(os.environ[key])
 
-        if os.environ.has_key('HOMEPATH'):
+        if 'HOMEPATH' in os.environ:
             # windows
             dirs.append(os.environ['HOMEPATH'])
 
@@ -128,31 +128,31 @@ class Preferences:
 
     def load_prefs(self,filename):
         """Load prefs"""
+        
         self.pref_file=filename
         #print "loading prefs from ",self.pref_file
         import pickle
         try:
-            fd=open(filename)
-            self.prefs=pickle.load(fd)
+            fd = open(filename)
+            self.prefs = pickle.load(fd)
             fd.close()
         except:
             fd.close()
-            fd=open(filename,'rb')
-            self.prefs=pickle.load(fd)
+            fd = open(filename,'rb')
+            self.prefs = pickle.load(fd)
             fd.close()
         return
 
     def save_prefs(self):
         """Save prefs"""
+
         import pickle
         try:
-            fd=open(self.pref_file,'w')
+            fd = open(self.pref_file,'wb')
         except:
-            print 'could not save'
+            print ('could not save')
             return
 
         pickle.dump(self.prefs,fd)
         fd.close()
         return
-
-

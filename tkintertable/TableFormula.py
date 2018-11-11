@@ -20,7 +20,17 @@
 """
 
 #import sys, os
-from Tkinter import *
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
 from types import *
 import re
 
@@ -38,15 +48,15 @@ class Formula(object):
     def isFormula(cls, rec):
         """Evaluate the cell and return true if its a formula"""
         isform = False
-        if type(rec) is DictType:
-            if rec.has_key('formula'):
+        if type(rec) is dict:
+            if 'formula' in rec:
                 isform = True
         return isform
 
     @classmethod
     def getFormula(cls, rec):
         """Get the formula field string"""
-        if not type(rec) is DictType:
+        if not type(rec) is dict:
             return None
         string = rec['formula']
         #print string
@@ -104,7 +114,7 @@ class Formula(object):
     def doFormula(cls, cellformula, data):
         """Evaluate the formula for a cell and return the result
            takes a formula dict or just the string as input"""
-        if type(cellformula) is DictType:
+        if type(cellformula) is dict:
             cellformula = cellformula['formula']
 
         vals = []
@@ -136,4 +146,3 @@ class Formula(object):
         #print 'expr', expr
         result = eval(expr)
         return str(round(result,3))
-

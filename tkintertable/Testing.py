@@ -19,10 +19,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+except:
+    from Tkinter import *
+    from ttk import *
 import random, string
-from Tkinter import *
-from Tables import TableCanvas
-from TableModels import TableModel
+from .Tables import TableCanvas
+from .TableModels import TableModel
 
 """Testing general functionality of tables"""
 
@@ -32,8 +38,18 @@ class App:
         self.main.pack(fill=BOTH,expand=1)
         master.geometry('600x400+200+100')
 
+def sampledata():
+    """Return a sample dictionary for creating a table"""
+
+    data={}
+    cols = ['a','b','c','d','e']
+    for i in range(10):
+        data[i] = {i:round(random.random(),2) for i in cols}
+    return data
+
 def createRandomStrings(l,n):
     """create list of l random strings, each of length n"""
+
     names = []
     for i in range(l):
         val = ''.join(random.choice(string.ascii_lowercase) for x in range(n))
@@ -151,7 +167,7 @@ def test4():
     vals = model.getColumnData(columnIndex=0, filters=searchterms)
     #model.getColumns(model.columnNames, filters=searchterms)
     #model.getDict(model.columnNames, filters=searchterms)
-    print '%s found' %len(vals)
+    print ('%s found' %len(vals))
     #createTable(model)
     return
 
@@ -178,7 +194,7 @@ def GUITests():
     test3()
     test4()
     #test5()
-    print 'GUI tests done'
+    print ('GUI tests done')
     return root
 
 def main():

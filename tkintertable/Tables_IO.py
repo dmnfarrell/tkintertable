@@ -19,10 +19,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from Tkinter import *
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
 import Pmw
 import os, csv
-import tkFileDialog
 
 class TableImporter:
     """Provides import utility methods for the Table and Table Model classes"""
@@ -37,14 +46,16 @@ class TableImporter:
 
     def import_Dialog(self, parent):
         """Allows user to set some import options"""
+
         self.parent=parent
         self.master=Toplevel()
         self.master.title("Import Data")
         self.xsize = 450
         self.ysize = 370
         top=self.master.winfo_toplevel()
-        rootx=top.winfo_rootx()
-        rooty=top.winfo_rooty()
+        #rootx=top.winfo_rootx()
+        #rooty=top.winfo_rooty()
+        self.master.geometry('400x400+200+200')
 
         self.sep_choice = Pmw.OptionMenu(
             parent = self.master,labelpos = 'w',
@@ -88,7 +99,7 @@ class TableImporter:
     def open_File(self, parent):
 
         savedir = os.getcwd()
-        filename=tkFileDialog.askopenfile(defaultextension='.csv',
+        filename=filedialog.askopenfile(defaultextension='.csv',
                                                 initialdir=savedir,
                                                 initialfile='',
                                                 filetypes=[("Data file","*.csv"),
@@ -148,7 +159,7 @@ class TableExporter:
         """Export table data to a comma separated file"""
 
         parent=table.parentframe
-        filename = tkFileDialog.asksaveasfilename(parent=parent,defaultextension='.csv',
+        filename = filedialog.asksaveasfilename(parent=parent,defaultextension='.csv',
                                                   filetypes=[("CSV files","*.csv")] )
         if not filename:
             return
@@ -167,4 +178,3 @@ class TableExporter:
         for row in recs.keys():
             writer.writerow(recs[row])
         return
-

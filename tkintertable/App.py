@@ -19,17 +19,25 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from Tkinter import *
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+from tkinter import font
 import Pmw
-import tkFileDialog, tkMessageBox, tkSimpleDialog
-import re
-import os
-import time
-import pickle
-from Custom import MyTable
-from TableModels import TableModel
-from Tables_IO import TableImporter
-from Prefs import Preferences
+import re, os, time, pickle
+from collections import OrderedDict
+from .Custom import MyTable
+from .TableModels import TableModel
+from .Tables_IO import TableImporter
+from .Prefs import Preferences
 
 class TablesApp(Frame):
     """
@@ -78,6 +86,7 @@ class TablesApp(Frame):
 
     def createMenuBar(self):
         """Create the menu bar for the application. """
+
         self.menu=Menu(self.tablesapp_win)
         self.proj_menu={'01New':{'cmd':self.new_project},
                         '02Open':{'cmd':self.open_project},
@@ -129,20 +138,21 @@ class TablesApp(Frame):
 
     def create_pulldown(self,menu,dict):
         """ Create a pulldown in var from the info in dict  """
-        var=Menu(menu,tearoff=0)
-        items=dict.keys()
-        items.sort()
+
+        var = Menu(menu,tearoff=0)
+        items = dict.keys()
+        #items.sort()
         for item in items:
             if item[-3:]=='sep':
                 var.add_separator()
             else:
                 # Do we have a command?
                 command=None
-                if dict[item].has_key('cmd'):
+                if 'cmd' in  dict[item]:
                     command=dict[item]['cmd']
 
                 # Put the command in there
-                if dict[item].has_key('sc'):
+                if 'sc' in dict[item]:
                     var.add_command(label='%-25s %9s' %(item[2:],dict[item]['sc']),command=command)
                 else:
                     var.add_command(label='%-25s' %(item[2:]),command=command)
@@ -182,7 +192,6 @@ class TablesApp(Frame):
 
     def showPrefsDialog(self):
         self.prefswindow = self.currenttable.showtablePrefs()
-
         return
 
 
@@ -194,7 +203,7 @@ class TablesApp(Frame):
 
         #Create the sheets dict
         self.sheets = {}
-        self.notebook = Pmw.NoteBook(self.tablesapp_win, raisecommand=self.setcurrenttable)
+        self.notebook = Notebook(self.tablesapp_win)
         self.notebook.pack(fill='both', expand=1, padx=4, pady=4)
         if data !=None:
             for s in data.keys():
@@ -202,16 +211,16 @@ class TablesApp(Frame):
                 try:
                     self.add_Sheet(s ,sdata)
                 except:
-                    print 'skipping'
+                    print ('skipping')
         else:
             #do the table adding stuff for the initial sheet
             self.add_Sheet('sheet1')
-        self.notebook.setnaturalsize()
+        #self.notebook.setnaturalsize()
         return
 
     def open_project(self, filename=None):
         if filename == None:
-            filename=tkFileDialog.askopenfilename(defaultextension='.tblprj"',
+            filename=filedialog.askopenfilename(defaultextension='.tblprj"',
                                                       initialdir=os.getcwd(),
                                                       filetypes=[("TableApp project","*.tblprj"),
                                                                  ("All files","*.*")],
@@ -236,13 +245,13 @@ class TablesApp(Frame):
 
     def save_as_project(self):
         """Save as a new filename"""
-        filename=tkFileDialog.asksaveasfilename(parent=self.tablesapp_win,
+        filename=filedialog.asksaveasfilename(parent=self.tablesapp_win,
                                                 defaultextension='.tblprj',
                                                 initialdir=self.defaultsavedir,
                                                 filetypes=[("TableApp project","*.tblprj"),
                                                            ("All files","*.*")])
         if not filename:
-            print 'Returning'
+            print ('Returning')
             return
         self.filename=filename
         self.do_save_project(self.filename)
@@ -288,19 +297,22 @@ class TablesApp(Frame):
 
     def add_Sheet(self, sheetname=None, sheetdata=None):
         """Add a new sheet - handles all the table creation stuff"""
+
         def checksheet_name(name):
             if name == '':
                 tkMessageBox.showwarning("Whoops", "Name should not be blank.")
                 return 0
-            if self.sheets.has_key(name):
+            if name in self.sheets:
                 tkMessageBox.showwarning("Name exists", "Sheet name already exists!")
                 return 0
-        noshts = len(self.notebook.pagenames())
+        names = [self.notebook.tab(i, "text") for i in self.notebook.tabs()]
+        noshts = len(names)
         if sheetname == None:
-            sheetname = tkSimpleDialog.askstring("New sheet name?", "Enter sheet name:",
+            sheetname = simpledialog.askstring("New sheet name?", "Enter sheet name:",
                                                 initialvalue='sheet'+str(noshts+1))
         checksheet_name(sheetname)
-        page = self.notebook.add(sheetname)
+        page = Frame(self.notebook)
+        self.notebook.add(page, text=sheetname)
         #Create the table and model if data present
         if sheetdata != None:
             model = TableModel(sheetdata)
@@ -336,7 +348,7 @@ class TablesApp(Frame):
     def rename_Sheet(self):
         """Rename a sheet"""
         s = self.notebook.getcurselection()
-        newname = tkSimpleDialog.askstring("New sheet name?", "Enter new sheet name:",
+        newname = simpledialog.askstring("New sheet name?", "Enter new sheet name:",
                                                 initialvalue=s)
         if newname == None:
             return
@@ -427,14 +439,14 @@ class TablesApp(Frame):
         self.ab_win.geometry('+100+350')
         self.ab_win.title('About TablesApp')
 
-        import Table_images
+        from . import Table_images
         logo = Table_images.tableapp_logo()
         label = Label(self.ab_win,image=logo)
         label.image = logo
         label.grid(row=0,column=0,sticky='news',padx=4,pady=4)
 
         text=['Tables Sample App ','Shows the use of Tablecanvas class for tkinter',
-                'Copyright (C) Damien Farrell 2008', 'This program is free software; you can redistribute it and/or',
+                'Copyright (C) Damien Farrell 2008-', 'This program is free software; you can redistribute it and/or',
                 'modify it under the terms of the GNU General Public License',
                 'as published by the Free Software Foundation; either version 2',
                 'of the License, or (at your option) any later version.']
@@ -461,7 +473,7 @@ class ToolBar(Frame):
     """Uses the parent instance to provide the functions"""
     def __init__(self, parent=None, parentapp=None):
         Frame.__init__(self, parent, width=600, height=40)
-        import Table_images
+        from . import Table_images
         self.parentframe = parent
         self.parentapp = parentapp
         #add buttons
@@ -488,14 +500,12 @@ class ToolBar(Frame):
 
     def add_button(self, name, callback, img=None):
         if img==None:
-            b = Button(self, text=name, command=callback,
-                         relief=GROOVE)
+            b = Button(self, text=name, command=callback)
         else:
             b = Button(self, text=name, command=callback,
-                             relief=GROOVE,
                              image=img)
         b.image = img
-        b.pack(side=LEFT, padx=2, pady=2, ipadx=3, ipady=3)
+        b.pack(side=LEFT, padx=2, pady=2, ipadx=1, ipady=1)
 
         return
 

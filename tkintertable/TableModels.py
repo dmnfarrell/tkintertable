@@ -21,8 +21,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from TableFormula import Formula
-import Filtering
+from __future__ import absolute_import, division, print_function
+from .TableFormula import Formula
+from . import Filtering
 from types import *
 from collections import OrderedDict
 import operator
@@ -48,11 +49,11 @@ class TableModel(object):
         if newdict != None:
             self.data = copy.deepcopy(newdict)
             for k in self.keywords:
-                if self.data.has_key(k):
+                if k in self.data:
                     self.__dict__[self.keywords[k]] = self.data[k]
                     del self.data[k]
             #read in the record list order
-            if self.data.has_key('reclist'):
+            if 'reclist' in self.data:
                 temp = self.data['reclist']
                 del self.data['reclist']
                 self.reclist = temp
@@ -63,7 +64,7 @@ class TableModel(object):
             self.createEmptyModel()
 
         if not set(self.reclist) == set(self.data.keys()):
-            print 'reclist does not match data keys'
+            print ('reclist does not match data keys')
         #restore last column order
         if hasattr(self, 'columnOrder') and self.columnOrder != None:
             self.columnNames=[]
@@ -104,6 +105,7 @@ class TableModel(object):
 
     def createEmptyModel(self):
         """Create the basic empty model dict"""
+
         self.data = {}
         # Define the starting column names and locations in the table.
         self.columnNames = []
@@ -113,7 +115,7 @@ class TableModel(object):
         self.columnlabels={}
         for colname in self.columnNames:
             self.columnlabels[colname]=colname
-        self.reclist = self.data.keys()
+        self.reclist = list(self.data.keys())
         return
 
     def importDict(self, newdata):
@@ -131,7 +133,7 @@ class TableModel(object):
             self.addColumn(c)
         #add the data
         self.data.update(newdata)
-        self.reclist = self.data.keys()
+        self.reclist = list(self.data.keys())
         return
 
     def getDefaultTypes(self):
@@ -204,7 +206,7 @@ class TableModel(object):
         coltype = self.columntypes[colname]
         name = self.getRecName(rowIndex)
         #print self.data[name]
-        if self.data[name].has_key(colname):
+        if colname in self.data[name]:
             celldata=self.data[name][colname]
         else:
             celldata=None
@@ -215,7 +217,7 @@ class TableModel(object):
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
         name = self.getRecName(rowIndex)
-        if self.data[name].has_key(colname):
+        if colname in self.data[name]:
             del self.data[name][colname]
         return
 
@@ -241,11 +243,11 @@ class TableModel(object):
         #self.data[newname]['Name'] = newname
         del self.data[currname]
         for key in ['bg', 'fg']:
-            if self.colors[key].has_key(currname):
+            if currname in self.colors[key]:
                 temp = copy.deepcopy(self.colors[key][currname])
                 self.colors[key][newname] = temp
                 del self.colors[key][currname]
-        print 'renamed'
+        print ('renamed')
         #would also need to resolve all refs to this rec in formulas here!
 
         return
@@ -257,7 +259,7 @@ class TableModel(object):
 
          value = None
          if columnName != None and recName != None:
-             if not self.data[recName].has_key(columnName):
+             if columnName not in self.data[recName]:
                  return ''
              cell = self.data[recName][columnName]
          else:
@@ -271,7 +273,7 @@ class TableModel(object):
              value = self.doFormula(cell)
              return value
 
-         if not type(cell) is DictType:
+         if not type(cell) is dict:
              if coltype == 'text' or coltype == 'Text':
                  value = cell
              elif coltype == 'number':
@@ -283,7 +285,7 @@ class TableModel(object):
          return value
 
     def getRecordIndex(self, recname):
-        rowIndex = self.reclist.index(recname)
+        rowIndex = int(self.reclist.index(recname))
         return rowIndex
 
     def setSortOrder(self, columnIndex=None, columnName=None, reverse=0):
@@ -366,8 +368,8 @@ class TableModel(object):
             return
         if key==None:
             key = self.getNextKey()
-        if self.data.has_key(key) or key in self.reclist:
-            print 'name already present!!'
+        if key in self.data or key in self.reclist:
+            print ('name already present!!')
             return
         self.data[key]={}
         for k in kwargs:
@@ -419,7 +421,7 @@ class TableModel(object):
         del self.columntypes[colname]
         #remove this field from every record
         for recname in self.reclist:
-            if self.data[recname].has_key(colname):
+            if colname in self.data[recname]:
                 del self.data[recname][colname]
         if self.sortkey != None:
             currIndex = self.getColumnIndex(self.sortkey)
@@ -461,7 +463,8 @@ class TableModel(object):
     def autoAddColumns(self, numcols=None):
         """Automatically add x number of cols"""
 
-        alphabet = string.lowercase[:26]
+        #alphabet = string.lowercase[:26]
+        alphabet = string.ascii_lowercase
         currcols=self.getColumnCount()
         #find where to start
         start = currcols + 1
@@ -562,7 +565,7 @@ class TableModel(object):
         #coltype = self.columntypes[filtercol]
         names=[]
         for rec in self.reclist:
-            if data[rec].has_key(filtercol):
+            if filtercol in data[rec]:
                 #try to do float comparisons if required
                 if op in floatops:
                     try:
@@ -623,7 +626,7 @@ class TableModel(object):
         """Return color of that record field for the table"""
         name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
-        if self.colors[key].has_key(name) and self.colors[key][name].has_key(colname):
+        if name in self.colors[key] and colname in self.colors[key][name]:
             return self.colors[key][name][colname]
         else:
             return None
@@ -632,7 +635,7 @@ class TableModel(object):
         """Set color"""
         name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
-        if not self.colors[key].has_key(name):
+        if not name in self.colors[key]:
             self.colors[key][name] = {}
         self.colors[key][name][colname] = str(color)
         return
@@ -664,8 +667,8 @@ class TableModel(object):
             ncol = thiscol + offset
 
         newrecname, newcolname = self.getRecColNames(nrow, ncol)
-        print 'recname, colname', recname, colname
-        print 'thisrow, col', thisrow, thiscol
+        print ('recname, colname', recname, colname)
+        print ('thisrow, col', thisrow, thiscol)
         return newrecname, newcolname
 
     def appendtoFormula(self, formula, rowIndex, colIndex):
@@ -689,7 +692,7 @@ class TableModel(object):
         cells, ops = Formula.readExpression(frmla)
 
         for c in cells:
-            print c
+            print (c)
             if type(c) is not ListType:
                 nc = c
             else:
@@ -706,15 +709,15 @@ class TableModel(object):
            in both models"""
         if fields == None: fields = model.columnNames
         for rec in self.reclist:
-            if not self.data[rec].has_key(key):
+            if not key in self.data[rec]:
                 continue
             for new in model.reclist:
-                if not model.data[new].has_key(key):
+                if not key in model.data[new]:
                     continue
                 if self.data[rec][key] == model.data[new][key]:
                 #if new == rec:
                     for f in fields:
-                        if not model.data[rec].has_key(f):
+                        if not f in model.data[rec]:
                             continue
                         if not f in self.columnNames:
                             self.addColumn(f)

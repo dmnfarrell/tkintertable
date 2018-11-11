@@ -19,11 +19,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from Tkinter import *
-import types
-import tkSimpleDialog, tkFileDialog, tkMessageBox
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter.simpledialog import Dialog
+    from tkinter import font
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+    from tkSimpleDialog import Dialog
+    #import TkFont as font
 
-class RecordViewDialog(tkSimpleDialog.Dialog):
+class RecordViewDialog(Dialog):
     """Dialog for viewing and editing table records"""
 
     def __init__(self, parent, title=None, table=None, row=None):
@@ -35,11 +47,12 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
             self.recname = self.model.getRecName(row)
         else:
             return
-        tkSimpleDialog.Dialog.__init__(self, parent, title)
+        simpledialog.Dialog.__init__(self, parent, title)
         return
 
     def body(self, master):
         """Show all record fields in entry fields or labels"""
+
         model = self.model
         cols = self.recdata.keys()
         self.editable = []
@@ -48,18 +61,17 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
         self.fieldvars['Name'] = StringVar()
         self.fieldvars['Name'].set(self.recname)
         Label(master, text='Rec Name:').grid(row=0,column=0,padx=2,pady=2,sticky='news')
-        Entry(master, textvariable=self.fieldvars['Name'],
-                relief=GROOVE,bg='yellow').grid(row=0,column=1,padx=2,pady=2,sticky='news')
+        Entry(master, textvariable=self.fieldvars['Name']).grid(row=0,column=1,padx=2,pady=2,sticky='news')
         i=1
         for col in cols:
             self.fieldvars[col] = StringVar()
-            if self.recdata.has_key(col):
+            if col in self.recdata:
                 val = self.recdata[col]
                 self.fieldvars[col].set(val)
             self.fieldnames[col] = Label(master, text=col).grid(row=i,column=0,padx=2,pady=2,sticky='news')
-            ent = Entry(master, textvariable=self.fieldvars[col], relief=GROOVE,bg='white')
+            ent = Entry(master, textvariable=self.fieldvars[col])
             ent.grid(row=i,column=1,padx=2,pady=2,sticky='news')
-            if not type(self.recdata[col]) is types.StringType:
+            if not type(self.recdata[col]) is str:
                 ent.config(state=DISABLED)
             else:
                 self.editable.append(col)
@@ -81,7 +93,7 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
             colname = model.getColumnName(col)
             if not colname in self.editable:
                 continue
-            if not self.fieldvars.has_key(colname):
+            if not colname in self.fieldvars:
                 continue
             val = self.fieldvars[colname].get()
             model.setValueAt(val, absrow, col)
@@ -90,7 +102,7 @@ class RecordViewDialog(tkSimpleDialog.Dialog):
         self.table.redrawTable()
         return
 
-class MultipleValDialog(tkSimpleDialog.Dialog):
+class MultipleValDialog(simpledialog.Dialog):
     """Simple dialog to get multiple values"""
 
     def __init__(self, parent, title=None, initialvalues=None, labels=None, types=None):
@@ -98,7 +110,7 @@ class MultipleValDialog(tkSimpleDialog.Dialog):
             self.initialvalues = initialvalues
             self.labels = labels
             self.types = types
-        tkSimpleDialog.Dialog.__init__(self, parent, title)
+        simpledialog.Dialog.__init__(self, parent, title)
 
     def body(self, master):
 
@@ -116,7 +128,7 @@ class MultipleValDialog(tkSimpleDialog.Dialog):
                 s=None
 
             if self.types[i] == 'list':
-                button=Menubutton(master, textvariable=self.vrs[i],relief=RAISED)
+                button=Menubutton(master, textvariable=self.vrs[i])
                 menu=Menu(button,tearoff=0)
                 button['menu']=menu
                 choices=self.initialvalues[i]
@@ -129,7 +141,7 @@ class MultipleValDialog(tkSimpleDialog.Dialog):
                 self.vrs[i].set(self.initialvalues[i][0])
             else:
                 self.vrs[i].set(self.initialvalues[i])
-                self.entries.append(Entry(master, textvariable=self.vrs[i], show=s, bg='white'))
+                self.entries.append(Entry(master, textvariable=self.vrs[i], show=s))
             self.entries[i].grid(row=r, column=1,padx=2,pady=2,sticky='news')
             r+=1
 
@@ -141,4 +153,3 @@ class MultipleValDialog(tkSimpleDialog.Dialog):
         for i in range(len(self.labels)):
             self.results.append(self.vrs[i].get())
         return
-

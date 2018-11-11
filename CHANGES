@@ -3,6 +3,13 @@ CHANGES
 =======
 
 ------
+1.3
+------
+
+* now works with python 3
+* can provide dict to table constructor 
+
+------
 1.2
 ------
 
@@ -79,5 +86,3 @@ CHANGES
 * Added setSelectedCells method so a block of cells can be selected
 * Improved text fitting in cells
 * Automatic resizing of columns improved
-
-

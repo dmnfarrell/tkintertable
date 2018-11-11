@@ -19,7 +19,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from Tkinter import *
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+except:
+    from Tkinter import *
+    from ttk import *
 import Pmw
 from types import *
 import re
@@ -71,7 +78,7 @@ def isnumber(v1,v2):
 
 def regex(v1,v2):
     """Apply a regular expression"""
-    print re.findall(v1,v2)
+    print (re.findall(v1,v2))
     return
 
 operatornames = {'=':equals,'!=':notequals,
@@ -122,7 +129,7 @@ class FilterFrame(Frame):
         self.fields = fields
         self.filters = []
         self.addFilterBar()
-        addbutton=Button(self,text='Go', command=self.callback,bg='lightblue')
+        addbutton=Button(self,text='Go', command=self.callback)
         addbutton.grid(row=0,column=0,sticky='news',padx=2,pady=2)
         addbutton=Button(self,text='+Add Filter', command=self.addFilterBar)
         addbutton.grid(row=0,column=1,sticky='news',padx=2,pady=2)
@@ -186,7 +193,7 @@ class FilterBar(Frame):
                 menubutton_width = 8)
         operatormenu.grid(row=0,column=2,sticky='news',padx=2,pady=2)
         self.filtercolvalue=StringVar()
-        valsbox=Entry(self,textvariable=self.filtercolvalue,width=20,bg='white')
+        valsbox=Entry(self,textvariable=self.filtercolvalue,width=20)
         valsbox.grid(row=0,column=3,sticky='news',padx=2,pady=2)
         valsbox.bind("<Return>", self.parent.callback)
         self.booleanop=StringVar()
@@ -216,5 +223,3 @@ class FilterBar(Frame):
         op = self.operator.get()
         booleanop = self.booleanop.get()
         return col, val, op, booleanop
-
-

@@ -19,7 +19,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-from Tables import TableCanvas, ColumnHeader
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter import font
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+    import TkFont as font
+
+from .Tables import TableCanvas, ColumnHeader
 
 class MyTable(TableCanvas):
      """Sub-class of Tablecanvas, with some changes in behaviour to make

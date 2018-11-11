@@ -19,14 +19,27 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
+from __future__ import absolute_import, print_function
 import sys, os
 import copy
-from Tkinter import *
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+except:
+    from Tkinter import *
+    from ttk import *
+if (sys.version_info > (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+else:
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+
 from math import *
 try:
     import numpy
 except:
-    print 'you need numpy to do statistics'
+    pass
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -68,7 +81,7 @@ class pylabPlotter(object):
         try:
             self.setupPlotVars()
         except:
-            print 'no tk running'
+            print ('no tk running')
         self.currdata = None
         #self.format = None  #data format
         self.plottitle = ''
@@ -107,7 +120,7 @@ class pylabPlotter(object):
             if len(r)==0:
                 continue
             ax = pylab.subplot(ydim,dim,i)
-            print r
+            print (r)
             for j in range(len(r)):
                 r[j] = float(r[j])
             pylab.hist(r,bins=bins)
@@ -135,7 +148,7 @@ class pylabPlotter(object):
             if len(r)==0:
                 continue
             fig = pylab.subplot(ydim,dim,i)
-            print r
+
             for j in range(len(r)):
                 r[j] = float(r[j])
             pylab.pie(r)
@@ -185,7 +198,7 @@ class pylabPlotter(object):
             try:
                 data = self.currdata
             except:
-                print 'no data to plot'
+                print ('no data to plot')
                 return
         else:
             self.setData(data)
@@ -237,7 +250,6 @@ class pylabPlotter(object):
         pylab.ylabel(self.plotylabel)
         #create legend data
         if self.showlegend == 1:
-            print legendlines
             pylab.legend(legendlines,seriesnames,
                          loc=self.legendloc)
         if self.grid == 1:
@@ -370,7 +382,7 @@ class pylabPlotter(object):
             """Choose color for data series"""
             d=x[0]
             c=x[1]
-            print 'passed', 'd',d, 'c',c
+            #print 'passed', 'd',d, 'c',c
             import tkColorChooser
             colour,colour_string = tkColorChooser.askcolor(c,parent=self.plotprefswin)
             if colour != None:
@@ -456,7 +468,7 @@ class pylabPlotter(object):
         Entry(labelsframe,textvariable=self.plotxlabelvar,bg='white',relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
         Label(labelsframe,text='Y-axis label:').grid(row=2,column=0,padx=2,pady=2)
         Entry(labelsframe,textvariable=self.plotylabelvar,bg='white',relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
-        print self.currdata
+
         if self.currdata != None:
             #print self.dataseriesvars
             row=row+1
@@ -518,4 +530,3 @@ class pylabPlotter(object):
         self.plotprefswin.grab_set()
 
         return
-
