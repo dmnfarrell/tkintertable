@@ -1,4 +1,4 @@
-[![PyPI version shields.io](https://img.shields.io/pypi/v/pandastable.svg)](https://pypi.python.org/pypi/pandastable/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/tkintertable.svg)](https://pypi.python.org/pypi/tkintertable/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## About
