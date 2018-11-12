@@ -23,15 +23,19 @@ from __future__ import absolute_import, division, print_function
 try:
     from tkinter import *
     from tkinter.ttk import *
-    from tkinter import filedialog, messagebox, simpledialog
 except:
     from Tkinter import *
     from ttk import *
+if (sys.version_info > (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter import font
+else:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import tkMessageBox as messagebox
-from tkinter import font
-import Pmw
+    import tkFont as font
+
+#import Pmw
 import re, os, time, pickle
 from collections import OrderedDict
 from .Custom import MyTable
@@ -161,6 +165,7 @@ class TablesApp(Frame):
 
     def createSearchBar(self, event=None):
         """Add a find entry box"""
+
         frame = Frame(self.tablesapp_win)
         row=0
         def close():
@@ -177,9 +182,9 @@ class TablesApp(Frame):
         frame.pack(fill=BOTH, expand=NO)
         return
 
-
     def loadprefs(self):
         """Setup default prefs file if any of the keys are not present"""
+
         defaultprefs = {'textsize':14,
                          'windowwidth': 800 ,'windowheight':600}
         for prop in defaultprefs.keys():
@@ -194,9 +199,9 @@ class TablesApp(Frame):
         self.prefswindow = self.currenttable.showtablePrefs()
         return
 
-
     def new_project(self, data=None):
         """Create a new table, with model and add the frame"""
+
         if hasattr(self,'currenttable'):
             self.notebook.destroy()
             self.currenttable.destroy()
@@ -219,6 +224,7 @@ class TablesApp(Frame):
         return
 
     def open_project(self, filename=None):
+
         if filename == None:
             filename=filedialog.askopenfilename(defaultextension='.tblprj"',
                                                       initialdir=os.getcwd(),
@@ -226,14 +232,15 @@ class TablesApp(Frame):
                                                                  ("All files","*.*")],
                                                       parent=self.tablesapp_win)
         if os.path.isfile(filename):
-            fd=open(filename)
-            data=pickle.load(fd)
+            fd = open(filename, 'rb')
+            data = pickle.load(fd)
             fd.close()
         self.new_project(data)
         self.filename=filename
         return
 
     def save_project(self):
+
         if not hasattr(self, 'filename'):
             self.save_as_project()
         elif self.filename == None:
@@ -245,6 +252,7 @@ class TablesApp(Frame):
 
     def save_as_project(self):
         """Save as a new filename"""
+
         filename=filedialog.asksaveasfilename(parent=self.tablesapp_win,
                                                 defaultextension='.tblprj',
                                                 initialdir=self.defaultsavedir,
@@ -259,13 +267,14 @@ class TablesApp(Frame):
 
     def do_save_project(self, filename):
         """Get model dicts and write all to pickle file"""
+
         data={}
         for s in self.sheets.keys():
             currtable = self.sheets[s]
             model = currtable.getModel()
             data[s] = model.getData()
 
-        fd=open(filename,'w')
+        fd=open(filename,'wb')
         pickle.dump(data,fd)
         fd.close()
         return
@@ -300,10 +309,10 @@ class TablesApp(Frame):
 
         def checksheet_name(name):
             if name == '':
-                tkMessageBox.showwarning("Whoops", "Name should not be blank.")
+                messagebox.showwarning("Whoops", "Name should not be blank.")
                 return 0
             if name in self.sheets:
-                tkMessageBox.showwarning("Name exists", "Sheet name already exists!")
+                messagebox.showwarning("Name exists", "Sheet name already exists!")
                 return 0
         names = [self.notebook.tab(i, "text") for i in self.notebook.tabs()]
         noshts = len(names)
@@ -331,13 +340,17 @@ class TablesApp(Frame):
 
     def delete_Sheet(self):
         """Delete a sheet"""
-        s = self.notebook.getcurselection()
-        self.notebook.delete(s)
+
+        s = self.notebook.index(self.notebook.select())
+        name = self.notebook.tab(s, 'text')
+        #self.notebook.delete(s)
+        self.notebook.forget(s)
         del self.sheets[s]
         return
 
     def copy_Sheet(self, newname=None):
         """Copy a sheet"""
+
         newdata = self.currenttable.getModel().getData().copy()
         if newname==None:
             self.add_Sheet(None, newdata)
@@ -347,7 +360,9 @@ class TablesApp(Frame):
 
     def rename_Sheet(self):
         """Rename a sheet"""
-        s = self.notebook.getcurselection()
+
+        #s = self.notebook.getcurselection()
+        s = self.notebook.index(self.notebook.select())
         newname = simpledialog.askstring("New sheet name?", "Enter new sheet name:",
                                                 initialvalue=s)
         if newname == None:
@@ -358,8 +373,10 @@ class TablesApp(Frame):
 
     def setcurrenttable(self, event):
         """Set the currenttable so that menu items work with visible sheet"""
+
         try:
-            s = self.notebook.getcurselection()
+            #s = self.notebook.getcurselection()
+            s = self.notebook.index(self.notebook.select())
             self.currenttable = self.sheets[s]
         except:
             pass
@@ -373,30 +390,35 @@ class TablesApp(Frame):
 
     def delete_Row(self):
         """Delete currently selected row"""
+
         self.currenttable.deleteRow()
         self.saved = 0
         return
 
     def add_Column(self):
         """Add a new column"""
+
         self.currenttable.addColumn()
         self.saved = 0
         return
 
     def delete_Column(self):
         """Delete currently selected column in table"""
-        self.currenttable.delete_Column()
+
+        self.currenttable.deleteColumn()
         self.saved = 0
         return
 
     def autoAdd_Rows(self):
         """Auto add x rows"""
+
         self.currenttable.autoAddRows()
         self.saved = 0
         return
 
     def autoAdd_Columns(self):
         """Auto add x rows"""
+
         self.currenttable.autoAddColumns()
         self.saved = 0
         return
@@ -407,6 +429,7 @@ class TablesApp(Frame):
 
     def do_find_text(self, event=None):
         """Find the text in the table"""
+
         if not hasattr(self,'currenttable'):
             return
         import string
@@ -419,6 +442,7 @@ class TablesApp(Frame):
 
     def do_find_again(self, event=None):
         """Find again"""
+
         if not hasattr(self,'currenttable'):
             return
         searchstring=self.findtext.get()
@@ -435,6 +459,7 @@ class TablesApp(Frame):
         return
 
     def about_Tables(self):
+
         self.ab_win=Toplevel()
         self.ab_win.geometry('+100+350')
         self.ab_win.title('About TablesApp')
@@ -459,6 +484,7 @@ class TablesApp(Frame):
 
     def online_documentation(self,event=None):
         """Open the online documentation"""
+
         import webbrowser
         link='http://sourceforge.net/projects/tkintertable/'
         webbrowser.open(link,autoraise=1)
@@ -471,6 +497,7 @@ class TablesApp(Frame):
 
 class ToolBar(Frame):
     """Uses the parent instance to provide the functions"""
+
     def __init__(self, parent=None, parentapp=None):
         Frame.__init__(self, parent, width=600, height=40)
         from . import Table_images

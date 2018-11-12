@@ -121,7 +121,8 @@ class TableModel(object):
     def importCSV(self, filename, sep=','):
         """Import table data from a comma separated file."""
 
-        if not os.path.isfile(filename):
+        if not os.path.isfile(filename) or not os.path.exists(filename):
+            print ('no such file')
             return None
 
         #takes first row as field names
@@ -613,7 +614,7 @@ class TableModel(object):
 
     def setValueAt(self, value, rowIndex, columnIndex):
         """Changed the dictionary when cell is updated by user"""
-        
+
         name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]

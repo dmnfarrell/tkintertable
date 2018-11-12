@@ -1,0 +1,21 @@
+Description
+-----------
+
+This package allows interactive spreadsheet-style tables to be added into a Tkinter application.
+Tkinter is the standard GUI toolkit for python. A sample application using these classes
+is included in the distribution.
+
+Installation
+------------
+
+pip install tkintertable or easy_install tkintertable
+
+You can clone the current source using
+
+git clone https://github.com/dmnfarrell/tkintertable.git
+
+https://github.com/dmnfarrell/tkintertable/wiki for more info.
+
+
+
+

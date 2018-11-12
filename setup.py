@@ -2,18 +2,22 @@ from setuptools import setup
 import sys,os
 home=os.path.expanduser('~')
 
+with open('description.txt') as f:
+    long_description = f.read()
+
 setup(
     name = 'tkintertable',
     version = '1.3',
     description = 'Extendable table class for Tkinter',
+    long_description = long_description,
     url='https://github.com/dmnfarrell/tkintertable',
     license='GPL v3',
     author = 'Damien Farrell',
     author_email = 'farrell.damien[at]gmail.com',
     packages = ['tkintertable'],
-    install_requires=['Pmw','future'],
-    dependency_links = [
-          "http://download.sourceforge.net/pmw/Pmw.1.3.tar.gz"],
+    package_data={'tkintertable': [ '../description.txt']},
+    install_requires=['future'],
+    dependency_links = [],
     entry_points = { 'gui_scripts': [
                      'tablesapp = tkintertable.App:main']},
     classifiers = ["Operating System :: OS Independent",

@@ -23,15 +23,17 @@ from __future__ import absolute_import, division, print_function
 try:
     from tkinter import *
     from tkinter.ttk import *
-    from tkinter import filedialog, messagebox, simpledialog
-    from tkinter import font
 except:
     from Tkinter import *
     from ttk import *
+if (sys.version_info > (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter import font
+else:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import tkMessageBox as messagebox
-    import TkFont as font
+    import tkFont as font
 
 from .TableModels import TableModel
 from .TableFormula import Formula
@@ -105,6 +107,7 @@ class TableCanvas(Canvas):
 
     def set_defaults(self):
         """Set default settings"""
+
         self.cellwidth=150
         self.maxcellwidth=200
         self.rowheight=20
@@ -130,6 +133,7 @@ class TableCanvas(Canvas):
     def setFontSize(self):
         """Set font size to match font, we need to get rid of fontsize as
             a separate variable?"""
+
         if hasattr(self, 'thefont') and type(self.thefont) is tuple:
             self.fontsize = self.thefont[1]
         return
@@ -199,6 +203,7 @@ class TableCanvas(Canvas):
 
     def createfromDict(self, data):
         """Attempt to create a new model/table from a dict"""
+
         try:
             namefield=self.namefield
         except:
@@ -1801,7 +1806,6 @@ class TableCanvas(Canvas):
     def drawTooltip(self, row, col):
         """Draw a tooltip showing contents of cell"""
 
-        #absrow = self.get_AbsoluteRow(row)
         x1,y1,x2,y2 = self.getCellCoords(row,col)
         w=x2-x1
         text = self.model.getValueAt(row,col)
@@ -1811,8 +1815,8 @@ class TableCanvas(Canvas):
 
         # If text is a number we make it a string
         if type(text) is float or type is int:
-            text=str(text)
-        if text == None or text == '' or len(str(text))<=3:
+            text = str(text)
+        if text == None or text == '' or len(str(text))<=10:
             return
 
         sfont = font.Font(family='Arial', size=12,weight='bold')
@@ -1887,30 +1891,30 @@ class TableCanvas(Canvas):
         Checkbutton(frame1, text="Alternate Row Color", variable=self.alternaterowsvar,
                     onvalue=1, offvalue=0).grid(row=row,column=0, columnspan=2, sticky='news')
         row=row+1
-        lblrowheight=Label(frame1,text='Row Height:')
+        lblrowheight = Label(frame1,text='Row Height:')
         lblrowheight.grid(row=row,column=0,padx=3,pady=2)
-        rowheightentry=Scale(frame1,from_=12,to=50, orient='horizontal',
-                            variable=self.rowheightvar)
+        rowheightentry = Spinbox(frame1,from_=12,to=50,width=10,
+                            textvariable=self.rowheightvar)
         rowheightentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
-        lblcellwidth=Label(frame1,text='Cell Width:')
+        lblcellwidth = Label(frame1,text='Cell Width:')
         lblcellwidth.grid(row=row,column=0,padx=3,pady=2)
-        cellwidthentry=Scale(frame1,from_=20,to=500, orient='horizontal',
-                             variable=self.cellwidthvar)
+        cellwidthentry = Spinbox(frame1,from_=20,to=500, width=10,
+                             textvariable=self.cellwidthvar)
         cellwidthentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
 
-        lbllinewidth=Label(frame1,text='Line Width:')
+        lbllinewidth = Label(frame1,text='Line Width:')
         lbllinewidth.grid(row=row,column=0,padx=3,pady=2)
-        linewidthentry=Scale(frame1,from_=0,to=10,orient='horizontal',
-                            variable=self.linewidthvar)
+        linewidthentry = Spinbox(frame1,from_=0,to=10,width=10,
+                            textvariable=self.linewidthvar)
         linewidthentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
 
-        rowhdrwidth=Label(frame1,text='Row Header Width:')
+        rowhdrwidth = Label(frame1,text='Row Header Width:')
         rowhdrwidth.grid(row=row,column=0,padx=3,pady=2)
-        rowhdrentry=Scale(frame1,from_=0,to=300, orient='horizontal',
-                            variable=self.rowheaderwidthvar)
+        rowhdrentry = Spinbox(frame1,from_=0,to=300, width=10,
+                            textvariable=self.rowheaderwidthvar)
         rowhdrentry.grid(row=row,column=1,padx=3,pady=2)
         row=row+1
 
@@ -1937,8 +1941,8 @@ class TableCanvas(Canvas):
 
         lblfontsize=Label(frame2,text='Text Size:')
         lblfontsize.grid(row=row,column=0,padx=3,pady=2)
-        fontsizeentry=Scale(frame2,from_=6,to=50, orient='horizontal', #resolution=1,
-                            variable=self.celltextsizevar)
+        fontsizeentry = Spinbox(frame2,from_=6,to=50, width=20,
+                                textvariable=self.celltextsizevar)
 
         fontsizeentry.grid(row=row,column=1, sticky='wens',padx=3,pady=2)
         row=row+1
@@ -2001,7 +2005,7 @@ class TableCanvas(Canvas):
         """Load table specific prefs from the prefs instance used
            if they are not present, create them."""
 
-        if prefs==None:
+        if prefs == None:
             prefs=Preferences('Table',{'check_for_update':1})
         self.prefs = prefs
         defaultprefs = {'horizlines':self.horizlines, 'vertlines':self.vertlines,
@@ -2017,10 +2021,10 @@ class TableCanvas(Canvas):
                         'rowheaderwidth': self.rowheaderwidth}
 
         for prop in defaultprefs.keys():
-            #try:
-            #    print(self.prefs.get(prop))
-            #except:
-            self.prefs.set(prop, defaultprefs[prop])
+            try:
+                print(self.prefs.get(prop))
+            except:
+                self.prefs.set(prop, defaultprefs[prop])
 
         self.defaultprefs = defaultprefs
 
@@ -2056,6 +2060,7 @@ class TableCanvas(Canvas):
 
     def savePrefs(self):
         """Save and set the prefs"""
+
         try:
             self.prefs.set('horizlines', self.horizlinesvar.get())
             self.horizlines = self.horizlinesvar.get()
@@ -2081,13 +2086,15 @@ class TableCanvas(Canvas):
             self.thefont = (self.prefs.get('celltextfont'), self.prefs.get('celltextsize'))
             self.fontsize = self.prefs.get('celltextsize')
 
-        except ValueError:
+        except ValueError as e:
+            print (e)
             pass
         self.prefs.save_prefs()
         return
 
     def applyPrefs(self):
         """Apply prefs to the table by redrawing"""
+
         self.savePrefs()
         self.redrawTable()
         return
@@ -2104,6 +2111,7 @@ class TableCanvas(Canvas):
 
     def check_hyperlink(self,event=None):
         """Check if a hyperlink was clicked"""
+
         row = self.get_row_clicked(event)
         col = self.get_col_clicked(event)
         #absrow = self.get_AbsoluteRow(row)
@@ -2216,7 +2224,8 @@ class TableCanvas(Canvas):
 
     def exportTable(self, filename=None):
         """Do a simple export of the cell contents to csv"""
-        from Tables_IO import TableExporter
+
+        from .Tables_IO import TableExporter
         exporter = TableExporter()
         exporter.ExportTableData(self)
         return
@@ -2296,7 +2305,7 @@ class ColumnHeader(Canvas):
         if cols == 0:
             return
         for col in self.table.visiblecols:
-            colname=self.model.columnNames[col]
+            colname = self.model.columnNames[col]
             if not colname in self.model.columnlabels:
                 self.model.columnlabels[colname]=colname
             collabel = self.model.columnlabels[colname]
@@ -2307,7 +2316,7 @@ class ColumnHeader(Canvas):
             x = self.table.col_positions[col]
 
             if len(collabel)>w/10:
-                collabel=collabel[0:int(w)/12]+'.'
+                collabel = collabel[0:int(w/12)]+'.'
             line = self.create_line(x, 0, x, h, tag=('gridline', 'vertline'),
                                  fill='white', width=2)
 

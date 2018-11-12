@@ -23,17 +23,19 @@ from __future__ import absolute_import, division, print_function
 try:
     from tkinter import *
     from tkinter.ttk import *
-    from tkinter import filedialog, messagebox, simpledialog
-    from tkinter.simpledialog import Dialog
-    from tkinter import font
 except:
     from Tkinter import *
     from ttk import *
+if (sys.version_info > (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter.simpledialog import Dialog
+    from tkinter import font
+else:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import tkMessageBox as messagebox
     from tkSimpleDialog import Dialog
-    #import TkFont as font
+    import tkFont as font
 
 class RecordViewDialog(Dialog):
     """Dialog for viewing and editing table records"""
@@ -106,7 +108,7 @@ class MultipleValDialog(simpledialog.Dialog):
     """Simple dialog to get multiple values"""
 
     def __init__(self, parent, title=None, initialvalues=None, labels=None, types=None):
-        if labels != None and types != NoneType:
+        if labels != None:
             self.initialvalues = initialvalues
             self.labels = labels
             self.types = types
