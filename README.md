@@ -43,13 +43,20 @@ so avoid using the pack or grid methods.
 tframe = Frame(master)
 tframe.pack()
 table = TableCanvas(tframe)
-table.createTableFrame()
+table.show()
 ```
 
 We can also create a model from some data, then use that model to initiate the table:
 ```
 model = TableModel()
 table = TableCanvas(frame, model=model)
+```
+
+### Update the table
+
+This needs to be called to update the display after programmatically changing the table contents:
+```
+table.redraw()
 ```
 
 ### Get data into the table
@@ -64,25 +71,22 @@ Each record corresponds to a row in the dictionary. Columns will be created for 
 
 Then provide this dict to the constructor:
 ```
-table = TableCanvas(data=data)
+table = TableCanvas(frame, data=data)
 ```
 
 Or we get a handle on the model (or we can create the model first and supply it as an argument to the table constructor):
 ```
 model = table.model
 model.importDict(data) 
-table.redrawTable()
+table.redraw()
 ```
 
-Importing from a text file can be down interactively from the GUI by right clicking on the table and
-choosing 'Import Table' from the popup menu.
-
-### Update the table
-
-This may need to be called to update the display after programmatically changing the table contents:
+### Importing from a text file
 ```
-table.redrawTable()
+table.importCSV(filename, sep=',')
 ```
+
+This can also be done interactively from the GUI by right clicking on the table and choosing 'Import Table' from the popup menu.
 
 ### Sort the table
 ```
@@ -108,11 +112,16 @@ table.deleteRows(range(0,2))
 ```
 
 ### Change data in individual cells
-Simply get a handle on the table model dict and populate the data attribute (a dictionary) directly, then redraw the table.
+
+Simply get a handle on the table model dict and alter the data attribute (a dictionary) directly, then redraw the table.
 ```
-table.model.data[row][col] = value
+data = table.model.data
+cols = table.columnNames #get the current columns
+data[row][col] = value #use row and column names, not cell coordinates
+table.model.setValueAt(value,rowindex,colindex) ##use cell coords
 table.redrawTable()
 ```
+
 ### Change column labels
 Column labels can be changed programmatically by accessing the columnlabels attribute of the table model:
 ```
