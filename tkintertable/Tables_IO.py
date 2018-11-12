@@ -122,13 +122,13 @@ class TableImporter:
 
     def do_ModelImport(self):
         """imports and places the result in self.modeldata"""
+        
         self.data = self.ImportTableModel(self.datafile)
         self.close()
         return
 
-    def ImportTableModel(self,filename):
-        """Import table data from a comma separated file and create data for a model
-           This is reusable outside the GUI dialog also."""
+    def ImportTableModel(self, filename):
+        """Import table data from a comma separated file and create data for a model."""
 
         if not os.path.isfile(filename):
             return None

@@ -364,6 +364,10 @@ class TableCanvas(Canvas):
         self.redrawVisible(event, callback)
         return
 
+    def redraw(self, event=None, callback=None):
+        self.redrawVisible(event, callback)
+        return
+
     def redrawCell(self, row=None, col=None, recname=None, colname=None):
         """Redraw a specific cell only"""
 
@@ -432,8 +436,6 @@ class TableCanvas(Canvas):
     def sortTable(self, columnIndex=0, columnName=None, reverse=0):
         """Set up sort order dict based on currently selected field"""
 
-        #if columnName != None:
-        #    columnIndex = self.model.getColumnIndex(columnName)
         self.model.setSortOrder(columnIndex, columnName, reverse)
         self.redrawTable()
         return
@@ -441,16 +443,16 @@ class TableCanvas(Canvas):
     def set_xviews(self,*args):
         """Set the xview of table and col header"""
 
-        apply(self.xview,args)
-        apply(self.tablecolheader.xview,args)
+        self.xview(*args)
+        self.tablecolheader.xview(*args)
         self.redrawVisible()
         return
 
     def set_yviews(self,*args):
         """Set the xview of table and row header"""
 
-        apply(self.yview,args)
-        apply(self.tablerowheader.yview,args)
+        self.yview(*args)
+        self.tablerowheader.yview(*args)
         self.redrawVisible()
         return
 
@@ -2194,14 +2196,21 @@ class TableCanvas(Canvas):
         return
 
     def importTable(self):
+        self.importCSV()
+
+    def importCSV(self, filename=None):
         """Import from csv file"""
 
-        from .Tables_IO import TableImporter
-        importer = TableImporter()
-        importdialog = importer.import_Dialog(self.master)
-        self.master.wait_window(importdialog)
-        model = TableModel()
-        model.importDict(importer.data)
+        if filename is None:
+            from .Tables_IO import TableImporter
+            importer = TableImporter()
+            importdialog = importer.import_Dialog(self.master)
+            self.master.wait_window(importdialog)
+            model = TableModel()
+            model.importDict(importer.data)
+        else:
+            model = TableModel()
+            model.importCSV(filename)
         self.updateModel(model)
         return
 

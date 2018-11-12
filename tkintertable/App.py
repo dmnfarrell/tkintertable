@@ -290,7 +290,7 @@ class TablesApp(Frame):
         return
 
     def export_csv(self):
-        from Tables_IO import TableExporter
+        from .Tables_IO import TableExporter
         exporter = TableExporter()
         exporter.ExportTableData(self.currenttable)
         return

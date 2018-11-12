@@ -28,7 +28,7 @@ from types import *
 from collections import OrderedDict
 import operator
 import string, types, copy
-import pickle
+import pickle, os, sys, csv
 
 class TableModel(object):
     """A base model for managing the data in a TableCanvas class"""
@@ -116,6 +116,22 @@ class TableModel(object):
         for colname in self.columnNames:
             self.columnlabels[colname]=colname
         self.reclist = list(self.data.keys())
+        return
+
+    def importCSV(self, filename, sep=','):
+        """Import table data from a comma separated file."""
+
+        if not os.path.isfile(filename):
+            return None
+
+        #takes first row as field names
+        dictreader = csv.DictReader(open(filename, "r"), delimiter=sep)
+        dictdata = {}
+        count=0
+        for rec in dictreader:
+            dictdata[count]=rec
+            count=count+1
+        self.importDict(dictdata)
         return
 
     def importDict(self, newdata):
@@ -597,6 +613,7 @@ class TableModel(object):
 
     def setValueAt(self, value, rowIndex, columnIndex):
         """Changed the dictionary when cell is updated by user"""
+        
         name = self.getRecName(rowIndex)
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
