@@ -27,7 +27,7 @@ try:
 except:
     from Tkinter import *
     from ttk import *
-import Pmw
+#import Pmw
 from types import *
 import re
 
@@ -177,35 +177,36 @@ class FilterBar(Frame):
         self.index = index
         self.filtercol=StringVar()
         initial = fields[0]
-        filtercolmenu = Pmw.OptionMenu(self,
-                labelpos = 'w',
-                label_text = 'Column:',
-                menubutton_textvariable = self.filtercol,
-                items = fields,
-                initialitem = initial,
-                menubutton_width = 10)
+        filtercolmenu = Combobox(self,
+                #labelpos = 'w',
+                #label_text = 'Column:',
+                textvariable = self.filtercol,
+                values = fields,
+                #initialitem = initial,
+                width = 10)
         filtercolmenu.grid(row=0,column=1,sticky='news',padx=2,pady=2)
         self.operator=StringVar()
-        operatormenu = Pmw.OptionMenu(self,
-                menubutton_textvariable = self.operator,
-                items = self.operators,
-                initialitem = 'contains',
-                menubutton_width = 8)
+        operatormenu = Combobox(self,
+                textvariable = self.operator,
+                values = self.operators,
+                #initialitem = 'contains',
+                width = 8)
         operatormenu.grid(row=0,column=2,sticky='news',padx=2,pady=2)
         self.filtercolvalue=StringVar()
         valsbox=Entry(self,textvariable=self.filtercolvalue,width=20)
         valsbox.grid(row=0,column=3,sticky='news',padx=2,pady=2)
         valsbox.bind("<Return>", self.parent.callback)
         self.booleanop=StringVar()
-        booleanopmenu = Pmw.OptionMenu(self,
-                menubutton_textvariable = self.booleanop,
-                items = self.booleanops,
-                initialitem = 'AND',
-                menubutton_width = 6)
+        self.booleanop.set('AND')
+        booleanopmenu = Combobox(self,
+                textvariable = self.booleanop,
+                values = self.booleanops,
+                #initialitem = 'AND',
+                width = 6)
         booleanopmenu.grid(row=0,column=0,sticky='news',padx=2,pady=2)
         #disable the boolean operator if it's the first filter
-        if self.index == 0:
-            booleanopmenu.component('menubutton').configure(state=DISABLED)
+        #if self.index == 0:
+        #    booleanopmenu.component('menubutton').configure(state=DISABLED)
         cbutton=Button(self,text='-', command=self.close)
         cbutton.grid(row=0,column=5,sticky='news',padx=2,pady=2)
         return

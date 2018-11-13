@@ -1191,6 +1191,7 @@ class TableCanvas(Canvas):
 
     def convertFormulae(self, rows, cols=None):
         """Convert the formulas in the cells to their result values"""
+
         if len(self.multiplerowlist) == 0 or len(self.multiplecollist) == 0:
             return None
 
@@ -1206,11 +1207,13 @@ class TableCanvas(Canvas):
 
     def paste(self, event=None):
         """Copy from clipboard"""
+
         print (self.parentframe.clipboard_get())
         return
 
     def copyCell(self, rows, cols=None):
         """Copy cell contents to a temp internal clipboard"""
+
         row = rows[0]; col = cols[0]
         #absrow = self.get_AbsoluteRow(row)
         self.clipboard = copy.deepcopy(self.model.getCellRecord(row, col))
@@ -1218,6 +1221,7 @@ class TableCanvas(Canvas):
 
     def pasteCell(self, rows, cols=None):
         """Paste cell from internal clipboard"""
+
         row = rows[0]; col = cols[0]
         #absrow = self.get_AbsoluteRow(row)
         val = self.clipboard
@@ -1227,6 +1231,7 @@ class TableCanvas(Canvas):
 
     def copyColumns(self):
         """Copy current selected cols"""
+
         M = self.model
         coldata = {}
         for col in self.multiplecollist:
@@ -1236,6 +1241,7 @@ class TableCanvas(Canvas):
 
     def pasteColumns(self, coldata):
         """Paste new cols, overwrites existing names"""
+
         M = self.model
         for name in coldata:
             if name not in M.columnNames:
@@ -1920,23 +1926,20 @@ class TableCanvas(Canvas):
 
         #fonts
         fts = self.getFonts()
-
-        def setFont():
-            self.thefont = self.fontbox.getcurselection()
+        self.fontvar = StringVar()
+        self.fontvar.set(self.prefs.get('celltextfont'))
+        def setFont(*args):
+            self.thefont = self.fontvar.get()
             return
 
-        import Pmw
-        self.fontbox = Pmw.ScrolledListBox(frame2,
-                        items=(fts),
-                        labelpos='w',
-                        label_text='Font:',
-                        listbox_height = 6,
-                        selectioncommand = setFont,
-                        usehullsize = 1,
-                        hull_width = 200,
-                        hull_height = 80)
-        self.fontbox.setvalue(self.prefs.get('celltextfont'))
-        self.fontbox.grid(row=row,column=0, columnspan=2, sticky='nes', padx=3,pady=2)
+        self.fontbox = Combobox(frame2,
+                        values=(fts),
+                        text='Font:',
+                        height = 6,
+                        textvariable=self.fontvar)
+        self.fontvar.trace('w', setFont)
+        Label(frame2,text='Font:').grid(row=row,column=0,padx=3,pady=2)
+        self.fontbox.grid(row=row,column=1, columnspan=2, sticky='nes', padx=3,pady=2)
         row=row+1
 
         lblfontsize=Label(frame2,text='Text Size:')
@@ -2020,11 +2023,11 @@ class TableCanvas(Canvas):
                         'rowselectedcolor': self.rowselectedcolor,
                         'rowheaderwidth': self.rowheaderwidth}
 
-        for prop in defaultprefs.keys():
-            try:
-                print(self.prefs.get(prop))
-            except:
-                self.prefs.set(prop, defaultprefs[prop])
+        for prop in defaultprefs:
+            if not prop in self.prefs.prefs:
+                #print (defaultprefs[prop])
+                if defaultprefs[prop] != 'None':
+                    self.prefs.set(prop, defaultprefs[prop])
 
         self.defaultprefs = defaultprefs
 
@@ -2077,7 +2080,7 @@ class TableCanvas(Canvas):
             self.prefs.set('linewidth', self.linewidthvar.get())
             self.linewidth = self.linewidthvar.get()
             self.prefs.set('celltextsize', self.celltextsizevar.get())
-            self.prefs.set('celltextfont', self.fontbox.getcurselection())
+            self.prefs.set('celltextfont', self.fontvar.get())
             self.prefs.set('cellbackgr', self.cellbackgr)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
@@ -2548,6 +2551,7 @@ class RowHeader(Canvas):
        takes it's size and rendering from the parent table
        This also handles row/record selection as opposed to cell
        selection"""
+
     def __init__(self, parent=None, table=None, width=40):
         Canvas.__init__(self, parent, bg='gray75', width=width, height=None)
 
@@ -2628,6 +2632,7 @@ class RowHeader(Canvas):
 
     def handle_left_ctrl_click(self, event):
         """Handle ctrl clicks - for multiple row selections"""
+
         rowclicked = self.table.get_row_clicked(event)
         multirowlist = self.table.multiplerowlist
         if 0 <= rowclicked < self.table.rows:
@@ -2652,6 +2657,7 @@ class RowHeader(Canvas):
 
     def handle_mouse_drag(self, event):
         """Handle mouse moved with button held down, multiple selections"""
+
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         rowover = self.table.get_row_clicked(event)
@@ -2680,6 +2686,7 @@ class RowHeader(Canvas):
 
     def drawSelectedRows(self, rows=None):
         """Draw selected rows, accepts a list or integer"""
+
         self.delete('rect')
         if type(rows) is not list:
             rowlist=[]
@@ -2694,6 +2701,7 @@ class RowHeader(Canvas):
 
     def drawRect(self, row=None, tag=None, color=None, outline=None, delete=1):
         """Draw a rect representing row selection"""
+
         if tag==None:
             tag='rect'
         if color==None:
@@ -2716,6 +2724,7 @@ class RowHeader(Canvas):
 class AutoScrollbar(Scrollbar):
     """a scrollbar that hides itself if it's not needed.  only
        works if you use the grid geometry manager."""
+
     def set(self, lo, hi):
         if float(lo) <= 0.0 and float(hi) >= 1.0:
             # grid_remove is currently missing from Tkinter!

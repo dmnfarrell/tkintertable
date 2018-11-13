@@ -159,6 +159,7 @@ class TableModel(object):
 
     def getData(self):
         """Return the current data for saving"""
+
         data = copy.deepcopy(self.data)
         data['colors'] = self.colors
         data['columnnames'] = self.columnNames
@@ -177,6 +178,7 @@ class TableModel(object):
     def getAllCells(self):
         """Return a dict of the form rowname: list of cell contents
           Useful for a simple table export for example"""
+
         records={}
         for row in range(len(self.reclist)):
             recdata=[]
@@ -187,6 +189,7 @@ class TableModel(object):
 
     def getColCells(self, colIndex):
         """Get the viewable contents of a col into a list"""
+
         collist = []
         if self.getColumnType(colIndex) == 'Link':
             return ['xxxxxx']

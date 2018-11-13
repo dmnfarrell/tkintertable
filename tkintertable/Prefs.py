@@ -74,9 +74,7 @@ class Preferences:
 
         if key in self.prefs:
             return self.prefs[key]
-        else:
-            pass
-        return
+        return 
 
 
     def delete(self,key):

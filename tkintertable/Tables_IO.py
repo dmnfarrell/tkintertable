@@ -30,7 +30,7 @@ except:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import tkMessageBox as messagebox
-import Pmw
+
 import os, csv
 
 class TableImporter:
@@ -39,7 +39,7 @@ class TableImporter:
     def __init__(self):
         """Setup globals"""
         #self.separator = ','
-        self.separator_list = {',':',',' ':'space','\t':'tab','blank':' ',':':':'}
+        self.separator_list = [',',' ','\t',':']
         self.var_sep = StringVar()
         self.var_sep.set(',')
         return
@@ -53,29 +53,20 @@ class TableImporter:
         self.xsize = 450
         self.ysize = 370
         top=self.master.winfo_toplevel()
-        #rootx=top.winfo_rootx()
-        #rooty=top.winfo_rooty()
         self.master.geometry('400x400+200+200')
 
-        self.sep_choice = Pmw.OptionMenu(
-            parent = self.master,labelpos = 'w',
-            label_text = 'Record separator:',
-            menubutton_textvariable = self.var_sep,
-            items = self.separator_list.keys(),
-            initialitem = ',',
-            menubutton_width = 4,
-            command= self.update_display)
-
-        self.sep_choice.grid(row=0,column=0,sticky='nw',padx=2,pady=2)
+        self.sep_choice = Combobox(self.master,
+                            text = 'Record separator:',
+                            textvariable = self.var_sep,
+                            values = self.separator_list,
+                            width = 4)
+        self.var_sep.trace('w', self.update_display)
+        Label(self.master,text='separator:').grid(row=0,column=0,sticky='nw',padx=2,pady=2)
+        self.sep_choice.grid(row=0,column=1,sticky='nw',padx=2,pady=2)
         #place for text preview frame
-
-        self.textframe=Pmw.ScrolledFrame(self.master,
-                    labelpos = 'n', label_text = 'Preview',
-                    usehullsize = 1,
-                    hull_width = 450,
-                    hull_height = 300)
+        self.textframe = Frame(self.master)
         self.textframe.grid(row=1,column=0,columnspan=5,sticky='news',padx=2,pady=2)
-        self.previewarea = Text(self.textframe.interior(), bg='white', width=400, height=500)
+        self.previewarea = Text(self.textframe, bg='white', width=400, height=500)
         self.previewarea.pack(fill=BOTH, expand=1)
         #buttons
         self.openButton = Button(self.master, text = 'Open File',
@@ -92,6 +83,7 @@ class TableImporter:
         return self.master
 
     def do_openFile(self):
+
         self.datafile = self.open_File(self.parent)
         self.update_display()
         return
@@ -110,11 +102,12 @@ class TableImporter:
             datafile = filename.name
         return datafile
 
-    def update_display(self,evt=None):
+    def update_display(self, *args):
         """Preview loaded file"""
+
         sep = self.var_sep.get()
         self.previewarea.delete(1.0, END)
-        reader = csv.reader(open(self.datafile, "rb"), delimiter=sep)
+        reader = csv.reader(open(self.datafile, "r"), delimiter=sep)
         for row in reader:
             self.previewarea.insert(END,row)
             self.previewarea.insert(END,'\n')
@@ -122,7 +115,7 @@ class TableImporter:
 
     def do_ModelImport(self):
         """imports and places the result in self.modeldata"""
-        
+
         self.data = self.ImportTableModel(self.datafile)
         self.close()
         return
@@ -137,7 +130,7 @@ class TableImporter:
         except:
             sep = ','
         #takes first row as field names
-        dictreader = csv.DictReader(open(filename, "rb"), delimiter=sep)
+        dictreader = csv.DictReader(open(filename, "r"), delimiter=sep)
         dictdata = {}
         count=0
         for rec in dictreader:

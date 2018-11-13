@@ -15,7 +15,7 @@ import sys, os, shutil
 shutil.rmtree('tkintertableapp', ignore_errors=True)
 path=os.path.abspath('../')
 
-version = '1.0.0'
+version = '1.3.1'
 
 f = Freezer('tkintertableapp', excludes=('wx'))
 f.addScript(os.path.join(path, "TablesApp.py"))
@@ -29,7 +29,7 @@ mpldir = matplotlib.get_data_path()
 datadir = 'tkintertableapp/mpl-data'
 shutil.copytree(mpldir, datadir)
 
-#add resource files             
+#add resource files
 shutil.copy('logo.ico', 'tkintertableapp')
 shutil.copy('../sample.table', 'tkintertableapp')
 
@@ -38,7 +38,6 @@ import zipfile
 f = zipfile.ZipFile("tkintertableapp-"+version+".zip", "w")
 for dirpath, dirnames, filenames in os.walk('tkintertableapp'):
     for fname in filenames:
-        fullname = os.path.join(dirpath, fname)        
+        fullname = os.path.join(dirpath, fname)
         f.write(fullname)
 f.close()
-
