@@ -2236,11 +2236,12 @@ class TableCanvas(Canvas):
     @classmethod
     def checkOSType(cls):
         """Check the OS we are in"""
+        
         ostyp=''
         var_s=['OSTYPE','OS']
         for var in var_s:
             if var in os.environ:
-                ostyp = string.lower(os.environ[var])
+                ostyp = os.environ[var].lower()
 
         ostyp=ostyp.lower()
         if ostyp.find('windows')!=-1:
