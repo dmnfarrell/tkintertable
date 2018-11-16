@@ -48,7 +48,7 @@ import platform
 class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
-    def __init__(self, parent=None, model=None, data=None,
+    def __init__(self, parent=None, model=None, data=None, read_only=False,
                  width=None, height=None,
                  rows=10, cols=5, **kwargs):
         Canvas.__init__(self, parent, bg='white',
@@ -63,6 +63,7 @@ class TableCanvas(Canvas):
         self.height = height
         self.set_defaults()
 
+        self.read_only = read_only
         self.currentpage = None
         self.navFrame = None
         self.currentrow = 0
@@ -905,7 +906,10 @@ class TableCanvas(Canvas):
 
     def handle_left_click(self, event):
         """Respond to a single press"""
+
         #which row and column is the click inside?
+        if self.read_only is True:
+            return
         self.clearSelected()
         self.allrows = False
         rowclicked = self.get_row_clicked(event)
@@ -968,6 +972,7 @@ class TableCanvas(Canvas):
 
     def handle_mouse_drag(self, event):
         """Handle mouse moved with button held down, multiple selections"""
+
         if hasattr(self, 'cellentry'):
             self.cellentry.destroy()
         rowover = self.get_row_clicked(event)
@@ -984,17 +989,19 @@ class TableCanvas(Canvas):
             return
         else:
             self.endcol = colover
+            if self.startcol is None or self.endcol is None:
+                return
             if self.endcol < self.startcol:
-                self.multiplecollist=range(self.endcol, self.startcol+1)
+                self.multiplecollist = range(self.endcol, self.startcol+1)
             else:
-                self.multiplecollist=range(self.startcol, self.endcol+1)
+                self.multiplecollist = range(self.startcol, self.endcol+1)
             #print self.multiplecollist
         #draw the selected rows
         if self.endrow != self.startrow:
             if self.endrow < self.startrow:
-                self.multiplerowlist=range(self.endrow, self.startrow+1)
+                self.multiplerowlist = range(self.endrow, self.startrow+1)
             else:
-                self.multiplerowlist=range(self.startrow, self.endrow+1)
+                self.multiplerowlist = range(self.startrow, self.endrow+1)
             self.drawMultipleRows(self.multiplerowlist)
             self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             #draw selected cells outline using row and col lists
@@ -1070,6 +1077,8 @@ class TableCanvas(Canvas):
     def handle_right_click(self, event):
         """respond to a right click"""
 
+        if self.read_only is True:
+            return
         self.delete('tooltip')
         self.tablerowheader.clearSelected()
         if hasattr(self, 'rightmenu'):
@@ -2236,7 +2245,7 @@ class TableCanvas(Canvas):
     @classmethod
     def checkOSType(cls):
         """Check the OS we are in"""
-        
+
         ostyp=''
         var_s=['OSTYPE','OS']
         for var in var_s:
