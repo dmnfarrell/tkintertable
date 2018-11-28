@@ -455,7 +455,7 @@ class TableCanvas(Canvas):
         return
 
     def set_yviews(self,*args):
-        """Set the xview of table and row header"""
+        """Set the yview of table and row header"""
 
         self.yview(*args)
         self.tablerowheader.yview(*args)
