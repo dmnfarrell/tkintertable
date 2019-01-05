@@ -158,7 +158,7 @@ class TableExporter:
             return
         if sep == None:
             sep = ','
-        writer = csv.writer(file(filename, "w"), delimiter=sep)
+        writer = csv.writer(open(filename, "w"), delimiter=sep)
         model=table.getModel()
         recs = model.getAllCells()
         #take column labels as field names
