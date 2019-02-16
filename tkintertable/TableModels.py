@@ -201,6 +201,7 @@ class TableModel(object):
 
     def getlongestEntry(self, columnIndex):
         """Get the longest cell entry in the col"""
+
         collist = self.getColCells(columnIndex)
         maxw=5
         for c in collist:
@@ -215,12 +216,14 @@ class TableModel(object):
 
     def getRecordAtRow(self, rowIndex):
         """Get the entire record at the specifed row."""
+
         name = self.getRecName(rowIndex)
         record = self.data[name]
         return record
 
     def getCellRecord(self, rowIndex, columnIndex):
         """Get the data held in this row and column"""
+
         value = None
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
@@ -234,6 +237,7 @@ class TableModel(object):
 
     def deleteCellRecord(self, rowIndex, columnIndex):
         """Remove the cell data at this row/column"""
+
         colname = self.getColumnName(columnIndex)
         coltype = self.columntypes[colname]
         name = self.getRecName(rowIndex)
@@ -243,6 +247,7 @@ class TableModel(object):
 
     def getRecName(self, rowIndex):
         """Get record name from row number"""
+
         if len(self.reclist)==0:
             return None
         if self.filteredrecs != None:
@@ -254,6 +259,7 @@ class TableModel(object):
     def setRecName(self, newname, rowIndex):
         """Set the record name to another value - requires re-setting in all
            dicts that this rec is referenced"""
+
         if len(self.reclist)==0:
             return None
         currname = self.getRecName(rowIndex)
@@ -318,7 +324,7 @@ class TableModel(object):
             self.sortkey = self.getColumnName(columnIndex)
         else:
             return
-        self.reclist = self.createSortMap(self.reclist, self.sortkey, reverse)
+        self.reclist = list(self.createSortMap(self.reclist, self.sortkey, reverse))
         if self.filteredrecs != None:
             self.filteredrecs = self.createSortMap(self.filteredrecs, self.sortkey, reverse)
         return
@@ -750,14 +756,14 @@ class TableModel(object):
         if filename == None:
             return
         data = self.getData()
-        fd = open(filename,'w')
+        fd = open(filename,'wb')
         pickle.dump(data,fd)
         fd.close()
         return
 
     def load(self, filename):
         """Load model from pickle file"""
-        fd=open(filename,'r')
+        fd=open(filename,'rb')
         data = pickle.load(fd)
         self.setupModel(data)
         return

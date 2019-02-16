@@ -29,11 +29,13 @@ except:
 if (sys.version_info > (3, 0)):
     from tkinter import filedialog, messagebox, simpledialog
     from tkinter import font
+    import tkinter.colorchooser as tkColorChooser
 else:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import tkMessageBox as messagebox
     import tkFont as font
+    import tkColorChooser
 
 from .TableModels import TableModel
 from .TableFormula import Formula
@@ -933,6 +935,8 @@ class TableCanvas(Canvas):
         #reset multiple selection list
         self.multiplerowlist=[]
         self.multiplerowlist.append(rowclicked)
+        if rowclicked is None or colclicked is None:
+            return
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
             self.setSelectedCol(colclicked)
@@ -1271,12 +1275,11 @@ class TableCanvas(Canvas):
 
         model = self.getModel()
         if newColor == None:
-            import tkColorChooser
             ctuple, newColor = tkColorChooser.askcolor(title='pick a color')
             if newColor == None:
                 return
 
-        if type(rows) is IntType:
+        if type(rows) is int:
             x=rows
             rows=[]
             rows.append(x)
@@ -1870,7 +1873,7 @@ class TableCanvas(Canvas):
         return
 
     def getaColor(self, oldcolor):
-        import tkColorChooser
+
         ctuple, newcolor = tkColorChooser.askcolor(title='pick a color', initialcolor=oldcolor,
                                                    parent=self.parentframe)
         if ctuple == None:
@@ -2032,6 +2035,7 @@ class TableCanvas(Canvas):
                         'rowselectedcolor': self.rowselectedcolor,
                         'rowheaderwidth': self.rowheaderwidth}
 
+        #print (self.prefs.__dict__)
         for prop in defaultprefs:
             if not prop in self.prefs.prefs:
                 #print (defaultprefs[prop])
@@ -2113,7 +2117,6 @@ class TableCanvas(Canvas):
 
     def AskForColorButton(self, frame, text, func):
         def SetColor():
-            import tkColorChooser
             ctuple, variable = tkColorChooser.askcolor(title='pick a color',
                                                        initialcolor=self.cellbackgr)
 
