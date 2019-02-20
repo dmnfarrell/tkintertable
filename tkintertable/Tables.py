@@ -44,7 +44,7 @@ from .Dialogs import *
 
 import math, time
 import os, types
-import string, copy
+import copy
 import platform
 
 class TableCanvas(Canvas):
@@ -2254,7 +2254,7 @@ class TableCanvas(Canvas):
         for var in var_s:
             if var in os.environ:
                 try:
-                    ostyp = string.lower(os.environ[var])
+                    ostyp = str.lower(os.environ[var])
                 except:
                     ostyp = os.environ[var].lower()
 
