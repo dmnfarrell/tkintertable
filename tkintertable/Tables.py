@@ -65,7 +65,6 @@ class TableCanvas(Canvas):
         self.height = height
         self.set_defaults()
 
-        self.read_only = read_only
         self.currentpage = None
         self.navFrame = None
         self.currentrow = 0
@@ -78,7 +77,10 @@ class TableCanvas(Canvas):
         self.multiplecollist=[]
         self.col_positions=[]       #record current column grid positions
         self.mode = 'normal'
-        self.editable = True
+        if read_only:
+            self.editable = False
+        else:
+            self.editable = True
         self.filtered = False
 
         self.loadPrefs()
