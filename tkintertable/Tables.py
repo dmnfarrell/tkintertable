@@ -77,10 +77,7 @@ class TableCanvas(Canvas):
         self.multiplecollist=[]
         self.col_positions=[]       #record current column grid positions
         self.mode = 'normal'
-        if read_only:
-            self.editable = False
-        else:
-            self.editable = True
+        self.read_only = read_only
         self.filtered = False
 
         self.loadPrefs()
@@ -912,8 +909,6 @@ class TableCanvas(Canvas):
         """Respond to a single press"""
 
         #which row and column is the click inside?
-        if self.read_only is True:
-            return
         self.clearSelected()
         self.allrows = False
         rowclicked = self.get_row_clicked(event)
@@ -938,6 +933,8 @@ class TableCanvas(Canvas):
         self.multiplerowlist=[]
         self.multiplerowlist.append(rowclicked)
         if rowclicked is None or colclicked is None:
+            return
+        if self.read_only is True:    
             return
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
@@ -1602,7 +1599,7 @@ class TableCanvas(Canvas):
     def drawCellEntry(self, row, col, text=None):
         """When the user single/double clicks on a text/number cell, bring up entry window"""
 
-        if self.editable == False:
+        if self.read_only == True:
             return
         #absrow = self.get_AbsoluteRow(row)
         h=self.rowheight
@@ -2463,8 +2460,10 @@ class ColumnHeader(Canvas):
 
     def handle_right_click(self, event):
         """respond to a right click"""
+
         self.handle_left_click(event)
-        self.rightmenu = self.popupMenu(event)
+        if self.table.read_only == False:
+            self.rightmenu = self.popupMenu(event)
         return
 
     def handle_right_release(self, event):
