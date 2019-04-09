@@ -79,6 +79,10 @@ class TableCanvas(Canvas):
         self.mode = 'normal'
         self.read_only = read_only
         self.filtered = False
+        self.leftclick_only = False
+        self.header_selection = True
+        self.multirow_selection = True
+        self.cell_selection = True
 
         self.loadPrefs()
         #set any options passed in kwargs to overwrite defaults and prefs
@@ -157,6 +161,8 @@ class TableCanvas(Canvas):
     def do_bindings(self):
         """Bind keys and mouse clicks, this can be overriden"""
         self.bind("<Button-1>",self.handle_left_click)
+        if self.leftclick_only:
+            return
         self.bind("<Double-Button-1>",self.handle_double_click)
         self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
         self.bind("<Shift-Button-1>", self.handle_left_shift_click)
@@ -357,11 +363,14 @@ class TableCanvas(Canvas):
         self.tablecolheader.redraw()
         self.tablerowheader.redraw(align=self.align, showkeys=self.showkeynamesinheader)
         #self.setSelectedRow(self.currentrow)
-        self.drawSelectedRow()
-        self.drawSelectedRect(self.currentrow, self.currentcol)
+        if self.header_selection:
+            self.drawSelectedRow()
+
+        if self.cell_selection:
+            self.drawSelectedRect(self.currentrow, self.currentcol)
         #print self.multiplerowlist
 
-        if len(self.multiplerowlist)>1:
+        if self.multirow_selection and len(self.multiplerowlist)>1:
             self.tablerowheader.drawSelectedRows(self.multiplerowlist)
             self.drawMultipleRows(self.multiplerowlist)
             self.drawMultipleCells()
@@ -934,17 +943,17 @@ class TableCanvas(Canvas):
         self.multiplerowlist.append(rowclicked)
         if rowclicked is None or colclicked is None:
             return
-        if self.read_only is True:    
-            return
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
             self.setSelectedCol(colclicked)
             self.drawSelectedRect(self.currentrow, self.currentcol)
-            self.drawSelectedRow()
-            self.tablerowheader.drawSelectedRows(rowclicked)
-            coltype = self.model.getColumnType(colclicked)
-            if coltype == 'text' or coltype == 'number':
-                self.drawCellEntry(rowclicked, colclicked)
+            if self.header_selection:
+                self.drawSelectedRow()
+                self.tablerowheader.drawSelectedRows(rowclicked)
+                if self.cell_selection:
+                    coltype = self.model.getColumnType(colclicked)
+                    if coltype == 'text' or coltype == 'number':
+                        self.drawCellEntry(rowclicked, colclicked)
         return
 
     def handle_left_release(self,event):
@@ -1648,8 +1657,9 @@ class TableCanvas(Canvas):
                         takefocus=1,
                         font=self.thefont)
         self.cellentry.icursor(END)
-        self.cellentry.bind('<Return>', callback)
-        self.cellentry.bind('<KeyRelease>', callback)
+        if not self.leftclick_only:
+            self.cellentry.bind('<Return>', callback)
+            self.cellentry.bind('<KeyRelease>', callback)
         self.cellentry.focus_set()
         self.entrywin=self.create_window(x1+self.inset,y1+self.inset,
                                 width=w-self.inset*2,height=h-self.inset*2,
@@ -2293,17 +2303,20 @@ class ColumnHeader(Canvas):
             self.config(width=self.table.width)
             #self.colnames = self.model.columnNames
             self.columnlabels = self.model.columnlabels
-            self.bind('<Button-1>',self.handle_left_click)
-            self.bind("<ButtonRelease-1>", self.handle_left_release)
-            self.bind('<B1-Motion>', self.handle_mouse_drag)
-            self.bind('<Motion>', self.handle_mouse_move)
-            self.bind('<Shift-Button-1>', self.handle_left_shift_click)
-            if self.table.ostyp=='mac':
-                #For mac we bind Shift, left-click to right click
-                self.bind("<Button-2>", self.handle_right_click)
-                self.bind('<Shift-Button-1>',self.handle_right_click)
-            else:
-                self.bind("<Button-3>", self.handle_right_click)
+
+            if self.table.header_selection:
+                self.bind('<Button-1>',self.handle_left_click)
+                self.bind("<ButtonRelease-1>", self.handle_left_release)
+                self.bind('<B1-Motion>', self.handle_mouse_drag)
+                self.bind('<Motion>', self.handle_mouse_move)
+                self.bind('<Shift-Button-1>', self.handle_left_shift_click)
+                if self.table.ostyp=='mac':
+                    #For mac we bind Shift, left-click to right click
+                    self.bind("<Button-2>", self.handle_right_click)
+                    self.bind('<Shift-Button-1>',self.handle_right_click)
+                else:
+                    self.bind("<Button-3>", self.handle_right_click)
+
             self.thefont = self.table.thefont
         return
 
@@ -2580,12 +2593,13 @@ class RowHeader(Canvas):
             self.config(height = self.table.height)
             self.startrow = self.endrow = None
             self.model = self.table.getModel()
-            self.bind('<Button-1>',self.handle_left_click)
-            self.bind("<ButtonRelease-1>", self.handle_left_release)
-            self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
-            self.bind('<Button-3>',self.handle_right_click)
-            self.bind('<B1-Motion>', self.handle_mouse_drag)
-            #self.bind('<Shift-Button-1>', self.handle_left_shift_click)
+            if self.table.header_selection:
+                self.bind('<Button-1>',self.handle_left_click)
+                self.bind("<ButtonRelease-1>", self.handle_left_release)
+                self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
+                self.bind('<Button-3>',self.handle_right_click)
+                self.bind('<B1-Motion>', self.handle_mouse_drag)
+                #self.bind('<Shift-Button-1>', self.handle_left_shift_click)
         return
 
     def redraw(self, align='w', showkeys=False):
