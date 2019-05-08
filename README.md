@@ -21,6 +21,10 @@ git clone https://github.com/dmnfarrell/tkintertable.git
 
 See the [wiki](https://github.com/dmnfarrell/tkintertable/wiki/Usage) for how to use the table in Python.
 
+## API docs
+
+For programmers, the module documentation is at http://dmnfarrell.github.io/tkintertable/index.html. You are encouraged to subclass the TableCanvas class to add new functionality.
+
 ##  See also
 
 https://github.com/dmnfarrell/pandastable
