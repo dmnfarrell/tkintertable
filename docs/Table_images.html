@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.Table_images API documentation</title>
+<meta name="description" content="Images stored as PhotoImage objects, for buttons and logos.
+Created Oct 2008
+Copyright (C) Damien Farrell …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.Table_images</code></h1>
+</header>
+<section id="section-intro">
+<p>Images stored as PhotoImage objects, for buttons and logos.
+Created Oct 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Images stored as PhotoImage objects, for buttons and logos.
+    Created Oct 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+except:
+    from Tkinter import *
+    from ttk import *
+
+def tableapp_logo():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+            &#39;R0lGODlhtwC3APYAAAAAAAcAAAwAAA4AABMAABYAABIVERcbFRUXGBodHyYA&#39;
+            +&#39;ADkAAB0iGyEkJjItKC01KS42Kj44Mj85MzM4PDQ5PUwAAF8AAHUAAHoAAGYd&#39;
+            +&#39;H1okJn4iJHUtMDlDNVxAMVhENUxRP2tQPk9IQEFHTEdUQkhVQltOU1FZX1JZ&#39;
+            +&#39;X2VbR2NaUGNaUVtsVG5ja35zZ2hxeoEAAIMAAIsAAJUEA5kAAJoDA5oHBZQK&#39;
+            +&#39;CJsKCJoNC5sRDYYUEJwUEJwYEp0bFZ0eGIUkHJ4iGp4lHYYrLp8sIp8vJYA5&#39;
+            +&#39;PaAzKKE2KqE5LaE9L4VENaFAMqNHN6ROPaRRP4FVQqRUQqVbR6ZeSq1VW6dl&#39;
+            +&#39;T6dsVKhpUqhvV6l2XKp5X7Fja7RxenKHaaqEZ6uHaayOb62Rca6bea6ffK6h&#39;
+            +&#39;fp6QgYKOmLuOmK+kgLCog7CrhrGyi7G1jrK5kLK8k7O/lr6cqMKturPDmLTG&#39;
+            +&#39;m7XKnbTNoLXQo7XUpbbXqMW3xcjG1fzlzczX6M/i8wAAAAAAACH5BAEAAH4A&#39;
+            +&#39;LAAAAAC3ALcAAAf+gH6Cg4SFhoeIiYqLjI2Oj5CRkpOUlY4AlpmNmJqdmwCg&#39;
+            +&#39;oaKjpKWmp6ipqqusra6vsKWEsbS1tre4ubmzur2+v8DBsoOhIy/HyMnKy8zN&#39;
+            +&#39;zs4JoR0s1NXW19jZ2tvbB6EiLuHi4+Tl5ufo5xKhvABmffDx8vP09fb39xSh&#39;
+            +&#39;XXj9/v8AAwocSJAghFBl9ihcyLChw4cQI0J0wY4YqHf4MmrcWE8fKH4FQ4oc&#39;
+            +&#39;KfAgqIQSU6pc6ZAiqHYYOcqc2XEfyZs4DSJkybPnxIqCQsWkSXSmRwAgcyrN&#39;
+            +&#39;aRIASp9Qe7rkFPRi0asyjyZdylVk06dRw6acChOr2Yxau6oN+VWsW4n+ZC26&#39;
+            +&#39;O0u35se1eEvufMu3Ydyqc+sKhpc2r+F+bfsq3vPXj9DBgwsfzpt4Md/GjyHX&#39;
+            +&#39;lTx5bWXLbjFb1UyXc+eun0GHFR2YtFnTp5emVg2V9VDXRWHHZrqX9mqgjkfj&#39;
+            +&#39;vqp7983Zvnna7sOlufPn0KNLn049Dz04GSpoX2Kle3c3xo/3Tu5zOY3z6NOr&#39;
+            +&#39;X8++vfsz9Ki4p0EmPEnk5FWan8+/P3/488jnXn32eTVefizt59+CDNIAoDwC&#39;
+            +&#39;tkdggQXhh2BECjao4XvxzTchhQNZeOFDGW5oYnoPxhMhex+CGJCII/oF3GMn&#39;
+            +&#39;1ohihwO6qNNJMSY4o1U2BpkiPCuu16KO/sD+2KNCJQap4ZB9FKnekUjioeSS&#39;
+            +&#39;TTrJIJRSpkclklf2uJweZJZp5pl6xMHfFmi2WSYfOEpY5YsHLknij61xpAd/&#39;
+            +&#39;XJzVJXpf6hhmjMvNtOd8fZr153mBujjoiIXKdKh7iWK1KH1zAvTohZHqyaef&#39;
+            +&#39;Hmb6z6YIdrrRpO1VetWljYJIan6maoQqe6oWxWpIaPzgw6689urDD2mo9Sp5&#39;
+            +&#39;sWY063q1EnUrQWzowF8NYXhWp50yviTXbbJ+qmioA8nhQ39e4DVscsXic6x6&#39;
+            +&#39;ydK0bEB1ENGfFpRNS+1C5d5zbnrpzrTuP3co0Z8Vho3rW7323ItevjLt688T&#39;
+            +&#39;/U1xmMC0EVyPwef+IcyRwnhY0d8Tk0GsmsT0UEyDxRsp7EV/TdzRsbzzMoYn&#39;
+            +&#39;tsZqaym3/YhRA39KqLwyjy3faS1gE6Ag9NBEFy20CfxxYPTSTAu9wXwelCD1&#39;
+            +&#39;BzPwtwMIUmet9dZcd521AaFEsMLYZJdt9tlop6122g4AZQsB/FVwiwXzKQBK&#39;
+            +&#39;ATLwh0EAwvTti1yxwD2f3LbQ7Z7dAsDAHwwD+O24LoAFHvfcdQdwAX8xNP74&#39;
+            +&#39;5rW0Y8wzy7TAnxGglz7EfCEAwd8NKXDj+usseAMKOOnUbvvt5azzc3B5nirz&#39;
+            +&#39;qvMVwR8PbNjnMWggzyMyyRpd2p8TBR5vWfLyLA9qjTWsYTzL81Ifj/X+29qY&#39;
+            +&#39;xPY891wtVbzDbO7vtjoZrXHSL+Y9PODPHKQPdsDPPbXz91E/8E7Cgv7KZz56&#39;
+            +&#39;vYwm/2ufk3Dwht3ETzH9S6CyGHQz90AvNg/sSwTZN0H/IGEM/AnWaTJ4mQMa&#39;
+            +&#39;ioPq8s8R6oAHJsyHCBjcn502iKjrzWeF/WBDBdsTrs6Q8C00pJQN2yMEFvpD&#39;
+            +&#39;CvPhAR18KEMsmVBSKNTXfIIgB4DMIQfzqQITCVhAl+0uM1CsYfjaMwaBZGE+&#39;
+            +&#39;NWjDzpzSRYYEMVVDNJJA7PCD+TBhjWDp4htpFccpDSQM/BHDw5oopid6Soz2&#39;
+            +&#39;k9NAjjBFnYmLkIQypO8QCUBFCkQN/MlCwCD+CSlJZouSCrSkQJwwnxzMIV5c&#39;
+            +&#39;LOAekdVHLxXEDTaYTxRQycY2MsmTMQNlB0UpkCugUQ2PTKX5VomuVgIqJHTg&#39;
+            +&#39;wQ2DWUtbEhNfxmSUSE42HzBIS5g9e+bBoompkNxBCPPpQf5Qw0lO4XJ9ukxh&#39;
+            +&#39;jkQCwvkAjJzYbJk2K8bNVvnDX+6xAXi48sPQnPMefDiDQAdK0DNYxyxx0MAC&#39;
+            +&#39;FgqFLzjUoVUciRseSlGKao+f5SzVP4ejkeKIykoZhdVGOYoPj4qqn2LpH0kJ&#39;
+            +&#39;Y5OP6iWe3RvpSu2CFJe+tJltVOlKTZoplP7mi8KZKUd4OiefRkWnJCVqlYxa&#39;
+            +&#39;G5kKVR5KBVNIieX+1Key9C421dRUyVVVq0ZVUFsdWFef+lVHhTVieApa09bK&#39;
+            +&#39;1rayFQGheIDX5krXutpVa2ADhdjWxte++vVsbfsZ5wZL2MLaAnCGTaxiF1sR&#39;
+            +&#39;xjr2sYP1XOkmS9nKRgMU04CdZjfrOtkBgHa4C61oczdWoZbVVWf9WGlneloK&#39;
+            +&#39;MbU8q91pS7OapNQiL7ZJnS1tQQpT/uGWo62Nnm2n99vhBJd8ONVjcXFz3PC8&#39;
+            +&#39;VirLdU1zB5hcVUaXNNN14HDld13NZDeGvZ1hdyHz3RFuF4LjjYxuaftc5aRX&#39;
+            +&#39;MOXdYnWH+d7NrDer7fURUHtn1Xzc16b5XQlSgftflwZYP/UtTYE/euD+sST4&#39;
+            +&#39;LPHFoy1vuV/19XceER5keJ1Y4Qt3dMEnPa8GH/waEPdUxCXssIdLauKiohiI&#39;
+            +&#39;JMZKhje54UKqeMX2mDEt82jdG+OYHjpmJo/p6+MfQ7XFS32xP4ts5KvWdLeI&#39;
+            +&#39;UXJKY0wcJEu1xpFkcpODfM35ZpPKubEyWLHcSS0bmcvCkvJP0QfGJscDzfD0&#39;
+            +&#39;sjzBTBQ4Y5TM5jTzj+0sGzUflc404bNSGgwXQBtFzGbFs0b1jGNB80bRImX0&#39;
+            +&#39;ih2NE0JjyNBZQTRqIU3V/arVraAO9VrhCgq53vXUqK5rXgGw17+6+tWAdRtk&#39;
+            +&#39;Z03rXyC21rjO9Ssip+te+9oUkq2ssIetjMv+AiCznE22smP3jdE629m6Y3NQ&#39;
+            +&#39;3dwHSouH01yVtIetfR8/N1XbF+b2SCz9E3D3V9wGwrZYze1VTbvW27BlN1nd&#39;
+            +&#39;LVx1o1XepqU3cof8ZXyzVt/OhTd0/S1brEKZ3D6TNn+3DHDq8nvOBM+twXeL&#39;
+            +&#39;8JZgeqgN1669VRtxAk+cvQJ3b8eNm3HwyjmmI2duyc278dumXLorl+/DUa5w&#39;
+            +&#39;Czc65hKe8IBJ/nH8hly/Naf2kXsO4J8L+OIbQTdbjI7gl2MX5xo+uW+d7l2o&#39;
+            +&#39;01jq4qU6ea2+4wl7MehCd/JWQN5y4mpdvUQ3MNMdfHb4cl3IXt+5ytPO4LUX&#39;
+            +&#39;uu32pXuIy85dvCu1WO8n5jt6/Q7ht3d55lMHe9iVXiG7X5rwJQa8iwU/YsjL&#39;
+            +&#39;2PBppnyKFS90xu8I6xzmPLU9HyLHl1v0bib9TRGfddQzXPJJ1jyMLV9l2F8Z&#39;
+            +&#39;9DZ2/ZkxH2fWh74dJzCD8IdP/OIb//jIT37yGxAKEnTh+dCPvvSnT/3qW9/6&#39;
+            +&#39;DAiFCsrA/e57//vgD7/4xy9+EeDp1+hHfzvSz35dr7/98J+1J+avCODQXxP2&#39;
+            +&#39;v7/+98///vv//44QCAA7&#39;)
+     return img
+
+def add_row():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACFfHSZlIixtJzN1Ljd6MTl9Mzp+NEJ3uzyBNj2C&#39;
+            +&#39;N0GHOkKIO0iPQEqSQkuTQ0yVRE2WRVGbSFijT12gVV6rVGOlWmOxWXy+dn7B&#39;
+            +&#39;eVKEw1WGxlaHx12KxV+MxlmKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b&#39;
+            +&#39;1HKe1nSg13Wh13qj2nqk2X2l3H6o3YDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx&#39;
+            +&#39;44yy5I+05ZC15pO355S355a66Zi66Zq865u9652+656/7InGgorGhI7Jh5PL&#39;
+            +&#39;i5fMkpjOkJ3QlKHTmKXVnKTToLDYrLrdtr3fuZ/A7aHB7qLB76PC76bD6anE&#39;
+            +&#39;6KrG6azG6azH6K3H6azH6q3H6q7J6a7J6rDI6LDJ6bDJ6rLL6rPM6rXM6LrQ&#39;
+            +&#39;67vQ677S67/T69ji8Nvk8dvl8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z&#39;
+            +&#39;+fD0+vH2+vL2+vT3+////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHkALAAAAAAQABAAAAjPAPMIHEiwYJ4p&#39;
+            +&#39;UqAE+dFjhw4cNmjIcMFCYJQ7GDNqxKhCoJA7S5QkQWKkyJAYMDDcQSEQyB08&#39;
+            +&#39;MGPKvGNCoI87VHLq3HmHhEAeOPFUiYklJhwRAnPYsXJFSxYuX7B88TJmzQeB&#39;
+            +&#39;N+p0wQMmAsyiMNVsEFiDThgxEBqIuVBhggQHDA4QGDBjDp4HFigoMPDESRMm&#39;
+            +&#39;R4hkEPBiDpkyCxKUcQtX7gABAVrIMYPnTAGYW2Ki8SBwRZw3btqwSYOmtOkO&#39;
+            +&#39;AlOcKDEiBAgOGmLLRmCwdsGAADs=&#39;)
+     return img
+
+def add_col():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAADdrGT5wIkx7MUR3a09/e1OMKFePLV+JSWCJSWaO&#39;
+            +&#39;T3GXX3y+dlKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b&#39;
+            +&#39;1HKe1nSg13Wh13qj2nqk2X2l3H6o3YGrYYe5YIe6YIu6Yo26ZIy8ZY+8Z4+7&#39;
+            +&#39;aoDBeoTDfpGvnY6uooCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnLHTkLLS&#39;
+            +&#39;lbHWkrTUlbbUnJ/A7aHB7qLB76PC76bD6anE6KrG6azH6K3H6azH6q7J6a7J&#39;
+            +&#39;6rDI6LDJ6bDJ6rLL6rPM6rXM6LfO6rrQ67vQ673R677S67/T69Dmutji8Nvk&#39;
+            +&#39;8dvl8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+///&#39;
+            +&#39;/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHQALAAAAAAQABAAAAjTAOkIHEiw4EAm&#39;
+            +&#39;SnjowGGjxowYL1p86CBwiZyLGDNe3CCwhxwiQ4QEAfLDh4oUDORkELhDzpyX&#39;
+            +&#39;MGPKuSAwhxwnOHPqlFNB4I2bB57AjAJzzQSBNOJAQTFFCpUrUa5Y2WIGgkAZ&#39;
+            +&#39;cKocwDIUZhkHAmG8yYJCi1kuUVgsUICggEAXbrgc8AJzRQgkYlAcCEAHhJsu&#39;
+            +&#39;KLwI/pKgyJE5Jk7w9dAGzIEwMAckgWmELwc2atKgOUNmjAASI+aIUExHAwYL&#39;
+            +&#39;FCREeNCAgIESRkoY4GtwYIDbt+kEBAA7&#39;)
+     return img
+
+def del_row():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAEJ3u3y+dlKEw1aHx12KxVmKyFuKyV6Oy1+Py2OS&#39;
+            +&#39;zmSTzmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk2X2l3H6o3eoRHOwaI+4m&#39;
+            +&#39;Lu4oMO8sM/AxN/E1OvE2O+RZU/RFSPVJTPZOUPdTVfdUVvhYWedhWPphYPpj&#39;
+            +&#39;Yvxvbf54dIDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB&#39;
+            +&#39;7qLB76PC76bD6anE6KrG6azG6azH6K3H6azH6q3H6q7I6K7J6a7J6rDI6LDJ&#39;
+            +&#39;6bDJ6rXM6LXN6r7S67/T6/mZk/qinPutpvu5sfzDutji8Nvk8dvl8d7n8t7n&#39;
+            +&#39;8/zLwf3OxOLq9Obt9urw9+vx9+3y+O7z+fH2+vL2+vT3+////wAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHEALAAAAAAQABAAAAjMAOMIHEiwYBwk&#39;
+            +&#39;R4rw0IHDRo0ZMV60qDBBoJE3GDNqxBhBYI83RIYICQLkhw8WKwS8eSBwxxs4&#39;
+            +&#39;MGPKfNNAYI43SXLq3PlmgcAbOOEoidkkppoEAmm4WcLkiRMpVZpUoXJljAGB&#39;
+            +&#39;MtpMgWOFaEwxJwTCUKEiBQoSIDpkwEAlCpgRIeK4UGGmzBcvXbhsuQCnhAgT&#39;
+            +&#39;HzhYMItWLYYLF7BgAeNhQxwKbLLA0RITSkwwGgRKWJMGzRkyYcCIHl1AIAQH&#39;
+            +&#39;DBQgOEBggOvXAQzKLhgQADs=&#39;)
+     return img
+
+def del_col():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAHy+dlKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmST&#39;
+            +&#39;zmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk2X2l3H6o3bpDBLhFA7lEA7lF&#39;
+            +&#39;A7xCBLxDBbxNBbxWHb1XHrhWIr5bKIRnaYttbsRXHd1kAcdlJ8prL9J2PeFo&#39;
+            +&#39;A+52AOp5Be9/GPh2AP93Ef9/GOZ3IYDBeoTDfv+GIeuKQP+STfSdY/WocreT&#39;
+            +&#39;ib+Xi4Cp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S355a66Zi66Zq8&#39;
+            +&#39;65u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB7qLB76PC76bD&#39;
+            +&#39;6anE6KrG6azH6K3H6azH6q7J6a7J6rDI6LDJ6bDJ6rLL6rPM6rXM6LfO6rrQ&#39;
+            +&#39;67vQ673R677S67/T6/a1jfe1jf7Nrv7WuNji8Nvk8dvl8d7n8t7n8+Lq9Obt&#39;
+            +&#39;9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+////wAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAH4ALAAAAAAQABAAAAjXAP0IHEiw4MAp&#39;
+            +&#39;UZAYISIkyI8eO3JQkCBQCp+LGDNehCAwCR8oT5w0YbJESQwYAfg4EHiET5+X&#39;
+            +&#39;MGPyYSCwCJ8qOHPq5KNA4JCbLazAxAKzDgKBQPZc0aAlyxYvWLx0EQOngEAf&#39;
+            +&#39;eri0+DIU5psBAnnkAaMhjNkxWG6A2OAhhEAdeMa0KAMTxwk1bGyYsOCnAh4y&#39;
+            +&#39;GsoINvMhDY0WMmZg8DPhzpkWaGBuWANzhQY/EezQmSMnjps2HWq4YJECRQY/&#39;
+            +&#39;DxosSHDAAAEBIkq8UEGCwwWDBEdk0JDhdkAAOw==&#39;)
+     return img
+
+def new_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAEJ3u3y+dlKEw1SGxFWGxlaHx12KxVyKxl+MxlmK&#39;
+            +&#39;yFuKyV+NyF6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk&#39;
+            +&#39;2X2l3H6o3YDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB&#39;
+            +&#39;7qLB76PC76bD6anE6KrG6azG6azH6K3H6azH6q3H6q7I6K7J6a7J6rDI6LDJ&#39;
+            +&#39;6bDJ6rLL6rPM6rXM6LXN6rfO6rrP6rrQ67vQ673R677S67/T69ji8Nvk8dvl&#39;
+            +&#39;8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vL2+/T3+///&#39;
+            +&#39;/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAGUALAAAAAAQABAAAAjEAMsIHEiw4EAc&#39;
+            +&#39;NlqsSHHCBAkRIDxowCDwxpiLGDNetCDQxZgaNGbIiAHjRQcOAsZQEMhiDJmX&#39;
+            +&#39;MGOOkSBQxRgdOHPqHANBIIqbZHbA9AFziwOBJcLw6AHkxxAjPowUUWJFgcAR&#39;
+            +&#39;YIiQOTIUZpUCAkN8QZKkbBImPnwUETKFgMAPXpiQeQKziZiXUxgI3ODFyZO/&#39;
+            +&#39;T6AsGbxkCgKBGbpEISMFZhCYUxIIvMBFSxYsV6hM2cz5gMAKEyI8aLDAwIDT&#39;
+            +&#39;qAMYXE0wIAA7&#39;)
+     return img
+
+def open_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAABV5ABt5AB57AyF9ACV/ACZ+ECR8FUJ3uy2DAS2D&#39;
+            +&#39;CTWHCTCHFzyLEESPFkaQGUqRHFKXIleYKFubKV6fOlygPGKdMGOfMWWfMWih&#39;
+            +&#39;NGujN2mjOW6jOG+lPW6kPl+hQ2KjRmalSGilRnSrT3yvVXy+dkmCpVKHpVOG&#39;
+            +&#39;vFKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b1HKe1nSg&#39;
+            +&#39;13Wh13qj2nqk2X2l3H6o3YGzWoCzYYK1Z4W2ZoW2aom4a466b5C8dIDBeoTD&#39;
+            +&#39;foCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S355a66Zi66Zq865u9&#39;
+            +&#39;652+656/7InGgo7Jh5bBgJfCgpPLi5jCg57FiJjOkJ3QlKHGiqHHiqXIjajL&#39;
+            +&#39;kKnKkKrLka3NlKHTmKXVnLDOlp/A7aHB7qLB76PC76bD6anE6KrG6azG6azH&#39;
+            +&#39;6K3H6azH6q7J6a7J6rLK4bDJ6bDJ6rLL6rPM6rfO6rrQ67vQ677S67/T69bi&#39;
+            +&#39;6t7n8uLq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+////wAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAJAALAAAAAAQABAAAAjcACEJHEiw4MA2&#39;
+            +&#39;a6xQkQLlSZMlSY7syCGQjaOLGDNevCHwiqM0aMB84ZIFi5EiJRzVEFjF0aOX&#39;
+            +&#39;MGM6miFwiqM3OHPqdBRDYJSbj+DAnAPz0AuBThrFkVOHjp08czxgwDOIhUAm&#39;
+            +&#39;jO480jN0Qw8JglQIVLJoDx8+HThksEDCzIgHKAQiUdTn0R8Nas6YIUNEjIgF&#39;
+            +&#39;Anko8vPnz4UzQ4QA8fGjS4UCkHQkAvQo0IQyY8J4CbIlhAGBOBAZKkQoAgQH&#39;
+            +&#39;DShoAcHghEAbNGTAcNFiRYoUCj4cMIHAYEECAwgGBAA7&#39;)
+     return img
+
+def save_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBarS5fpjppqj5qqzNoukRtq0RwsFd+u1F/w1N/&#39;
+            +&#39;wXy+dl2Ev1SBxFWDxliEw1uGx1uKyV2IyF6Oy1+Py2GKx2CJyWGLyWKLyGWN&#39;
+            +&#39;ymWNzGiOzWyLzWiL026K122L2myN3GOSzmSTzmmQzW6TzGiW0WqX0W6X1G6Z&#39;
+            +&#39;02+b1HGY0HOZ0XOa1HKe1nWa0Hee2Xmc1Xue1Hie2Hif2Hmf23uc3XCP4XSg&#39;
+            +&#39;13Wh13mg2Xqg2Xqj2nuh3Hqk2Xyj232j3n2l3H6l3X6o3YS/UYS/VIDBeoTD&#39;
+            +&#39;fpjJb5nJcYKk1oCm3YWi3YCp3YKq34Wo3YGn4YGn4oSs4Ieu4Yiv4oyv5Iyx&#39;
+            +&#39;44yy5I+05ZC15pK15pO355S355e26pa66Zq275m46pi66Zq865u9652+656/&#39;
+            +&#39;7KG/6qG/74nGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7Z7A76HB7qLB76PC76bD&#39;
+            +&#39;6anE6KrG6azG6azH6K3H6azH6q7J6rPH47DJ6rLL6rPM6rfO6rrO77DN87rQ&#39;
+            +&#39;67vQ677S67/T68fuh8fujNf0otf2ot7n8///3eLq9Obt9uXx7ebx7ebw7+bx&#39;
+            +&#39;7+n05Ojz6urz8+rw9+vx9+318+3y+O7z+e/z+f//4PD0+vH2+vL2+vT3+/H4&#39;
+            +&#39;//f7//r7/fr8/fv8/fv8/vz9/v39/v///wAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAKkALAAAAAAQABAAAAjzAFPFcTMmTBct&#39;
+            +&#39;WKxMicIEyI5UqeB8mkix4sQbEMl8asNmjZo0aM4YKbLgUwqIYj6hWsmy5ScT&#39;
+            +&#39;EMF8mkOzps1PIiBumYmKDss7LC1RgHjFUx07efCciKEiyYYRLlZgSFWlkx5U&#39;
+            +&#39;fFBpCIRqT8syFqRw6uOnLIQ3qEisDAWKSoUmmv6gGoRKgplRpU6ZEkXKiQIh&#39;
+            +&#39;mgQNGpzhSxAlPnTkmCGDQY9MhFAVQnUhC5QnP3jQeMECAQ5MlRoxUtSAC6VH&#39;
+            +&#39;kSA5ugTjQAsUJUJMiJDAy6QhR5AQkVRjAMTfqRwAWmQIUaJDm5YQAA6xwIMO&#39;
+            +&#39;NkB88MDBgICAADs=&#39;)
+     return img
+
+def prefs():
+
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAElJSU5OTlFRUVJSUlNTU1hYWFpaWltbW1xcXGFh&#39;
+            +&#39;YWJiYmRkZGdnZ2lpaWpqamtra21tbW5ubm9vb3FxcXZ2dnd3d3l5eXp6en5+&#39;
+            +&#39;foCAgIGBgYKCgoODg4SEhIWFhYeHh4mJiYuLi4yMjI+Pj5OTk5SUlJWVlZmZ&#39;
+            +&#39;mZqampycnJ6enqCgoKGhoaOjo6SkpKWlpaampqenp6ioqKqqqqurq6ysrK2t&#39;
+            +&#39;rbCwsLGxsbKysrW1tba2tre3t7m5ubq6ury8vL29vb6+vr+/v8DAwMHBwcLC&#39;
+            +&#39;wsPDw8TExMXFxcbGxsfHx8jIyMnJycrKysvLy8zMzM3Nzc7Ozs/Pz9DQ0NHR&#39;
+            +&#39;0dLS0tTU1NXV1dbW1tjY2NnZ2dvb29zc3N3d3d7e3uLi4uTk5OXl5efn5+np&#39;
+            +&#39;6e3t7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAGYALAAAAAAQABAAAAjUAM0IHGhmCZIh&#39;
+            +&#39;BBMOXCImjA2FA6U4MWPkixcdZmzIcEGwSxkuRoRkuYLDxpMxPUQIdIKky5Ut&#39;
+            +&#39;XEZusfKEyQWCSa5AafJDRQsjSor0GMgECREtUYBwEEjiiJEoI0B0QEImSxMp&#39;
+            +&#39;MAjaQPJDiRcIQ8BYURIlB8EZRnoQsaLABQkWU5RAWcG0CBAfDAwUGJikSJIl&#39;
+            +&#39;NGQUEbKDhgOCMbAkeVKlyRIoSYI8kdBA4AsgX2J0+IDESAQJMaxoILhhAgMz&#39;
+            +&#39;HZ4sWWDGgACIAjcE0YEANsEIBgZADAgAOw==&#39;)
+    return img
+
+def plot():
+
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAC5fpTBiqTBiqjJkrDNmrjRosTVosjZrtTdrtjxy&#39;
+            +&#39;vz10wj51wz52xD92xT93xkZwu1prrUJ3xkB4x0F5yUF6ykJ6y0J7zEN8zEN8&#39;
+            +&#39;zUR9zkV+0EV/0XCfvY1Sfa5FZe0iK+4mLu4nL+8oMO8rMu8tNPAuNfAxN/Ay&#39;
+            +&#39;OPEzOfE2PPE3PPI4PfI5Puc3Qeg4QfI7QPA9Q/I8QfM9QvM/Q8xNYvRCRvRD&#39;
+            +&#39;R/RFSPVKTfZNT/dSVPhXWPhYWflcXPldXflhYPpjYvtmZftnZftraY9kk6he&#39;
+            +&#39;goyhwJOs0Zyx0P6WlPyZl/61sgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAE0ALAAAAAAQABAAAAhzAJsIHEiwoMGD&#39;
+            +&#39;AnEgNHhjSYuFBGewgEhwBUQNA1UMJDIkCMEMSTpEeNEkwYECQpj8IEjBQRMX&#39;
+            +&#39;HxAYODIAiA8eO3QYkSAwhQmBBAQEIFikRowVKEosrDDwhBIRBjdgoECQRAgQ&#39;
+            +&#39;Bi8gaUBR4AQGCrqKHWswIAA7&#39;)
+    return img
+
+def plotprefs():
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAFU9ETxyvz10wj51wz52xD92xT93xltujUJ3xkB4&#39;
+            +&#39;x0F5yUF6ykJ6y0J7zEN8zEN8zUR9zkV+0EV/0XCfvYdfKJxpHYNlK6pkHL56&#39;
+            +&#39;GrN3Lbl5LvAyOPEzOfE3PPI4PfI5PvA9Q/I8QfM9QvM/Q8dvIupeM8xNYvRC&#39;
+            +&#39;RvRDR/RFSPVKTfZNT/dSVPhXWPhYWflcXPldXflhYPpjYvtmZftnZftraY9k&#39;
+            +&#39;k6hegraDGZGKdJaTbaqJQ7yNQr2IScGCNNKIN9mMNtiMONiNONGVK+aBOOS3&#39;
+            +&#39;JMGKTMmFQc2NRMWYSdCdRtqUQduVQ9yVQt+ZQNiaVMeXYs+daNilWNejY9W2&#39;
+            +&#39;eta4c+e+d+TJVfXfW/XcXvXcX+3KbefLd+3QeO7Tee7Sfe7TfPffY/bdbPDT&#39;
+            +&#39;efHUe/LWevfhWvfiW/jiXZOs0Zyx0NuxhdG3kPyZl/61sufAi/nHlPnJke/S&#39;
+            +&#39;rPbTrvDStPnjsvzgxP32wv32xP33x//y4P/z5QAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAH0ALAAAAAAQABAAAAiZAPsIHEiwoMGD&#39;
+            +&#39;AlUgNJjCDYiFBEd8gEjQA8QIA6ewWdLHRo0ZBCGsoaDjSh0+c47QeBOD4AID&#39;
+            +&#39;fcDYgUPnjhQZMFy0YIEjgcAwecZwoRIFAcEbJ0KY+KJnCxozTwoyGNhFj5Yz&#39;
+            +&#39;ZZwMlPBgwUAreMSkIdOEoAM1BQRWaYMlixcmBRUQENCHxx4oGZT8gHghjhwk&#39;
+            +&#39;GCgGqOCjB8KAADs=&#39;)
+    return img
+
+def start():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhGAAYAKUAAP///+bm/+Xl/uPj/OHh++Df+d7d993d99vb9dvb9NnZ&#39;
+            +&#39;8tnZ5tfW8NTU7tLS69DQ6dDP6c3N58vL5cnJ48fH4MTE3sLC3MDAzL/A2b2+&#39;
+            +&#39;17u71Lm507e30LW1z7S0zrOzzLCwya6ux6ysxaqqw6iowaenwaWlv6OjvaOj&#39;
+            +&#39;vKGguqChup6euJyctZqas5aWr5SUrY+PqI2NpoiIoYaGn4KDm4GBmoCAmTMz&#39;
+            +&#39;ZgAAAP///////////////////////////yH+EUNyZWF0ZWQgd2l0aCBHSU1Q&#39;
+            +&#39;ACH5BAEAAD8ALAMAAAAVABgAAAanwJ9wSCwaj8ikUogr3p7PJG7RHJpa1xsS&#39;
+            +&#39;17lQh7arSWvkzrrfnw3bIhPNoXNVLXYzM+dZaK5m23EVMXgZfHRYbjgRLhUw&#39;
+            +&#39;GIV9WUwNLooUj4ZjPzcNJg0sEZeQbQAAm50rEJdhhz+kNwadnY9rka2lBiGc&#39;
+            +&#39;DYWrmUKuBSGwDHy0bUSuuAYlBnO9drY3ASEFzFXG0NEBHQHONt/Z2nykpEmu&#39;
+            +&#39;S0gA6OvsSUEAOw==&#39;)
+     return img
+
+def end():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhGAAYAKUAAP///+bm/+Xl/uPj/OHh++Df+d7d993d99vb9dvb9NnZ&#39;
+            +&#39;8tnZ5tfW8NTU7tLS69DQ6dDP6c3N58vL5cnJ48fH4MTE3sLC3MDAzL/A2b2+&#39;
+            +&#39;17u71Lm507e30LW1z7S0zrOzzLCwya6ux6ysxaqqw6iowaenwaWlv6OjvaOj&#39;
+            +&#39;vKGguqChup6euJyctZqas5aWr5SUrY+PqI2NpoiIoYaGn4KDm4GBmoCAmTMz&#39;
+            +&#39;ZgAAAP///////////////////////////yH+EUNyZWF0ZWQgd2l0aCBHSU1Q&#39;
+            +&#39;ACH5BAEAAD8ALAAAAAAVABgAAAaqwJ9wSCwaj8ikEKdM4hZM5G06HT4vnajx&#39;
+            +&#39;1jJ1lwvsLHu8eU02a2cWGmuHXG/a2l5n3j9zd27NzDIxFW9xLXxWGDAVLhFa&#39;
+            +&#39;emhHOBSLLg1RhIZEOBEsDSYNN3lnmEsQK52fAACXRjinJgY3qaF7Ra2eIbCy&#39;
+            +&#39;eV2FmQyvIQWxAHCiVgYlBrjDRKs/OMgFIQHMzcZLAR3Uus28hjjbxFs25JjV&#39;
+            +&#39;R6ncQ+JN7e7vREEAOw==&#39;)
+     return img
+
+def next():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBeHSRjISlpJS9wKjV4LzuANUKIO0WIP0mLREqM&#39;
+            +&#39;RUmRQU+ZR1CRSlydVVahTV6hWVypU2KjWmKxWGi4XW2+YXy+dnHDZXTHaIDB&#39;
+            +&#39;eoLCfYTDfofFgYnGgovHhY7Jh5DKiZPLi5XMjpjOkJrPk53QlJ/SlqHTmKPU&#39;
+            +&#39;mqXVnKfWnqnXoKvYoq7apQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAC4ALAAAAAAQABAAAAheAF0IHEiwoMGD&#39;
+            +&#39;CBMqXJiQAcOBCw4QxIDhQgUKEyI8YLBAgoMCAzG0YKEChQkSIkB44KChwQCB&#39;
+            +&#39;F1akOFFiRIgPHTZksKBAgMCLGTdGNIAAQgKfDAcgZbj0odOnUA8GBAA7&#39;)
+     return img
+
+def prev():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBeHSRjISlpJS9wKjV4LzuANUKIO0mRQU+ZR1ah&#39;
+            +&#39;TVypU2SqW2KxWGi4XXi9cnu+cXy+dnHDZXTHaH7AeIDBeoPBeoLCfYTDfobI&#39;
+            +&#39;e4fJfIrMf4fFgYnGgovHhYvNgI7Jh5DKiZPLi5XMjpjOkJrPk53QlJ/SlqHT&#39;
+            +&#39;mKPUmqXVnKfWnqvYogAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAC0ALAAAAAAQABAAAAhdAFsIHEiwoMGD&#39;
+            +&#39;CBMqXChwAsOGEh5O+KDBQYMFChIgOGCgAIGGG1isSHGixIgQHjhcoDBAoIQM&#39;
+            +&#39;KlCYICECRAcMFSI8EDDQAQQLDDRy9DhAQACCGB8KTKC0qdOnDwMCADs=&#39;)
+     return img
+
+def search():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAHaczXufzXug0H+l05JaEJNbEZVdFJdfGJpiG51l&#39;
+            +&#39;H51nIp5mIqNrKKVtK6hwMKpyMq93ObF5PLV9Qbd/RLyES7yNVcWXZMeZZsyi&#39;
+            +&#39;dc6kdpKUnYqTooWp1oaq14qu2Yyw24+y3ZGox5O235y6352735a44Zq845u9&#39;
+            +&#39;5J/A56LD6KbG66jI7KvL7q7J6K7O8K/P8bXP7LfQ7bTT9LvW87vX87jW9rnX&#39;
+            +&#39;973V8L3X873Y877Z87vZ+b3b+r7b+r/c+tWuht21ieTBnejLq8Da9MHa9MLb&#39;
+            +&#39;9MPc9MTc9MXd9cbd9cfe9cDe/MHe/Mjd88ne88je9cjf9cnf9crg9cvh9s3h&#39;
+            +&#39;9czh9s7i9szi+M3i+dDi9dDj9tHl99Lk99Pl99bn99fn99Pm+Nbn+Nno+Nrp&#39;
+            +&#39;+N3q+d7r+d/s+d7s+uHt+eLt+eLu+ePu+gAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAG0ALAAAAAAQABAAAAiTANsIHEiwYEEe&#39;
+            +&#39;NmbAaGFwoI8saNaoIYMjRcM2WNh8uUJlS5kYIwzeMPPFyhQoSahoAWFwRhor&#39;
+            +&#39;UpYgMUJEjAeDL85EUXKkyI4cYQgYZAHGCk0dNYw8EWBQhYwxUHTQMNKlxIaG&#39;
+            +&#39;JlxU8cLFCQkRQCY0/NCBwIAAHDIM0fDgIkEJF4RgUOB2oAMLQRDUHZhgwd6/&#39;
+            +&#39;fwMCADs=&#39;)
+     return img</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="tkintertable.Table_images.add_col"><code class="name flex">
+<span>def <span class="ident">add_col</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_col():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAADdrGT5wIkx7MUR3a09/e1OMKFePLV+JSWCJSWaO&#39;
+            +&#39;T3GXX3y+dlKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b&#39;
+            +&#39;1HKe1nSg13Wh13qj2nqk2X2l3H6o3YGrYYe5YIe6YIu6Yo26ZIy8ZY+8Z4+7&#39;
+            +&#39;aoDBeoTDfpGvnY6uooCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnLHTkLLS&#39;
+            +&#39;lbHWkrTUlbbUnJ/A7aHB7qLB76PC76bD6anE6KrG6azH6K3H6azH6q7J6a7J&#39;
+            +&#39;6rDI6LDJ6bDJ6rLL6rPM6rXM6LfO6rrQ67vQ673R677S67/T69Dmutji8Nvk&#39;
+            +&#39;8dvl8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+///&#39;
+            +&#39;/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHQALAAAAAAQABAAAAjTAOkIHEiw4EAm&#39;
+            +&#39;SnjowGGjxowYL1p86CBwiZyLGDNe3CCwhxwiQ4QEAfLDh4oUDORkELhDzpyX&#39;
+            +&#39;MGPKuSAwhxwnOHPqlFNB4I2bB57AjAJzzQSBNOJAQTFFCpUrUa5Y2WIGgkAZ&#39;
+            +&#39;cKocwDIUZhkHAmG8yYJCi1kuUVgsUICggEAXbrgc8AJzRQgkYlAcCEAHhJsu&#39;
+            +&#39;KLwI/pKgyJE5Jk7w9dAGzIEwMAckgWmELwc2atKgOUNmjAASI+aIUExHAwYL&#39;
+            +&#39;FCREeNCAgIESRkoY4GtwYIDbt+kEBAA7&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.add_row"><code class="name flex">
+<span>def <span class="ident">add_row</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_row():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACFfHSZlIixtJzN1Ljd6MTl9Mzp+NEJ3uzyBNj2C&#39;
+            +&#39;N0GHOkKIO0iPQEqSQkuTQ0yVRE2WRVGbSFijT12gVV6rVGOlWmOxWXy+dn7B&#39;
+            +&#39;eVKEw1WGxlaHx12KxV+MxlmKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b&#39;
+            +&#39;1HKe1nSg13Wh13qj2nqk2X2l3H6o3YDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx&#39;
+            +&#39;44yy5I+05ZC15pO355S355a66Zi66Zq865u9652+656/7InGgorGhI7Jh5PL&#39;
+            +&#39;i5fMkpjOkJ3QlKHTmKXVnKTToLDYrLrdtr3fuZ/A7aHB7qLB76PC76bD6anE&#39;
+            +&#39;6KrG6azG6azH6K3H6azH6q3H6q7J6a7J6rDI6LDJ6bDJ6rLL6rPM6rXM6LrQ&#39;
+            +&#39;67vQ677S67/T69ji8Nvk8dvl8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z&#39;
+            +&#39;+fD0+vH2+vL2+vT3+////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHkALAAAAAAQABAAAAjPAPMIHEiwYJ4p&#39;
+            +&#39;UqAE+dFjhw4cNmjIcMFCYJQ7GDNqxKhCoJA7S5QkQWKkyJAYMDDcQSEQyB08&#39;
+            +&#39;MGPKvGNCoI87VHLq3HmHhEAeOPFUiYklJhwRAnPYsXJFSxYuX7B88TJmzQeB&#39;
+            +&#39;N+p0wQMmAsyiMNVsEFiDThgxEBqIuVBhggQHDA4QGDBjDp4HFigoMPDESRMm&#39;
+            +&#39;R4hkEPBiDpkyCxKUcQtX7gABAVrIMYPnTAGYW2Ki8SBwRZw3btqwSYOmtOkO&#39;
+            +&#39;AlOcKDEiBAgOGmLLRmCwdsGAADs=&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.del_col"><code class="name flex">
+<span>def <span class="ident">del_col</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def del_col():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAHy+dlKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmST&#39;
+            +&#39;zmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk2X2l3H6o3bpDBLhFA7lEA7lF&#39;
+            +&#39;A7xCBLxDBbxNBbxWHb1XHrhWIr5bKIRnaYttbsRXHd1kAcdlJ8prL9J2PeFo&#39;
+            +&#39;A+52AOp5Be9/GPh2AP93Ef9/GOZ3IYDBeoTDfv+GIeuKQP+STfSdY/WocreT&#39;
+            +&#39;ib+Xi4Cp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S355a66Zi66Zq8&#39;
+            +&#39;65u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB7qLB76PC76bD&#39;
+            +&#39;6anE6KrG6azH6K3H6azH6q7J6a7J6rDI6LDJ6bDJ6rLL6rPM6rXM6LfO6rrQ&#39;
+            +&#39;67vQ673R677S67/T6/a1jfe1jf7Nrv7WuNji8Nvk8dvl8d7n8t7n8+Lq9Obt&#39;
+            +&#39;9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+////wAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAH4ALAAAAAAQABAAAAjXAP0IHEiw4MAp&#39;
+            +&#39;UZAYISIkyI8eO3JQkCBQCp+LGDNehCAwCR8oT5w0YbJESQwYAfg4EHiET5+X&#39;
+            +&#39;MGPyYSCwCJ8qOHPq5KNA4JCbLazAxAKzDgKBQPZc0aAlyxYvWLx0EQOngEAf&#39;
+            +&#39;eri0+DIU5psBAnnkAaMhjNkxWG6A2OAhhEAdeMa0KAMTxwk1bGyYsOCnAh4y&#39;
+            +&#39;GsoINvMhDY0WMmZg8DPhzpkWaGBuWANzhQY/EezQmSMnjps2HWq4YJECRQY/&#39;
+            +&#39;DxosSHDAAAEBIkq8UEGCwwWDBEdk0JDhdkAAOw==&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.del_row"><code class="name flex">
+<span>def <span class="ident">del_row</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def del_row():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAEJ3u3y+dlKEw1aHx12KxVmKyFuKyV6Oy1+Py2OS&#39;
+            +&#39;zmSTzmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk2X2l3H6o3eoRHOwaI+4m&#39;
+            +&#39;Lu4oMO8sM/AxN/E1OvE2O+RZU/RFSPVJTPZOUPdTVfdUVvhYWedhWPphYPpj&#39;
+            +&#39;Yvxvbf54dIDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB&#39;
+            +&#39;7qLB76PC76bD6anE6KrG6azG6azH6K3H6azH6q3H6q7I6K7J6a7J6rDI6LDJ&#39;
+            +&#39;6bDJ6rXM6LXN6r7S67/T6/mZk/qinPutpvu5sfzDutji8Nvk8dvl8d7n8t7n&#39;
+            +&#39;8/zLwf3OxOLq9Obt9urw9+vx9+3y+O7z+fH2+vL2+vT3+////wAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAHEALAAAAAAQABAAAAjMAOMIHEiwYBwk&#39;
+            +&#39;R4rw0IHDRo0ZMV60qDBBoJE3GDNqxBhBYI83RIYICQLkhw8WKwS8eSBwxxs4&#39;
+            +&#39;MGPKfNNAYI43SXLq3PlmgcAbOOEoidkkppoEAmm4WcLkiRMpVZpUoXJljAGB&#39;
+            +&#39;MtpMgWOFaEwxJwTCUKEiBQoSIDpkwEAlCpgRIeK4UGGmzBcvXbhsuQCnhAgT&#39;
+            +&#39;HzhYMItWLYYLF7BgAeNhQxwKbLLA0RITSkwwGgRKWJMGzRkyYcCIHl1AIAQH&#39;
+            +&#39;DBQgOEBggOvXAQzKLhgQADs=&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.end"><code class="name flex">
+<span>def <span class="ident">end</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def end():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhGAAYAKUAAP///+bm/+Xl/uPj/OHh++Df+d7d993d99vb9dvb9NnZ&#39;
+            +&#39;8tnZ5tfW8NTU7tLS69DQ6dDP6c3N58vL5cnJ48fH4MTE3sLC3MDAzL/A2b2+&#39;
+            +&#39;17u71Lm507e30LW1z7S0zrOzzLCwya6ux6ysxaqqw6iowaenwaWlv6OjvaOj&#39;
+            +&#39;vKGguqChup6euJyctZqas5aWr5SUrY+PqI2NpoiIoYaGn4KDm4GBmoCAmTMz&#39;
+            +&#39;ZgAAAP///////////////////////////yH+EUNyZWF0ZWQgd2l0aCBHSU1Q&#39;
+            +&#39;ACH5BAEAAD8ALAAAAAAVABgAAAaqwJ9wSCwaj8ikEKdM4hZM5G06HT4vnajx&#39;
+            +&#39;1jJ1lwvsLHu8eU02a2cWGmuHXG/a2l5n3j9zd27NzDIxFW9xLXxWGDAVLhFa&#39;
+            +&#39;emhHOBSLLg1RhIZEOBEsDSYNN3lnmEsQK52fAACXRjinJgY3qaF7Ra2eIbCy&#39;
+            +&#39;eV2FmQyvIQWxAHCiVgYlBrjDRKs/OMgFIQHMzcZLAR3Uus28hjjbxFs25JjV&#39;
+            +&#39;R6ncQ+JN7e7vREEAOw==&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.new_proj"><code class="name flex">
+<span>def <span class="ident">new_proj</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def new_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAEJ3u3y+dlKEw1SGxFWGxlaHx12KxVyKxl+MxlmK&#39;
+            +&#39;yFuKyV+NyF6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b1HKe1nSg13Wh13qj2nqk&#39;
+            +&#39;2X2l3H6o3YDBeoTDfoCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S3&#39;
+            +&#39;55a66Zi66Zq865u9652+656/7InGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7aHB&#39;
+            +&#39;7qLB76PC76bD6anE6KrG6azG6azH6K3H6azH6q3H6q7I6K7J6a7J6rDI6LDJ&#39;
+            +&#39;6bDJ6rLL6rPM6rXM6LXN6rfO6rrP6rrQ67vQ673R677S67/T69ji8Nvk8dvl&#39;
+            +&#39;8d7n8t7n8+Lq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vL2+/T3+///&#39;
+            +&#39;/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAGUALAAAAAAQABAAAAjEAMsIHEiw4EAc&#39;
+            +&#39;NlqsSHHCBAkRIDxowCDwxpiLGDNetCDQxZgaNGbIiAHjRQcOAsZQEMhiDJmX&#39;
+            +&#39;MGOOkSBQxRgdOHPqHANBIIqbZHbA9AFziwOBJcLw6AHkxxAjPowUUWJFgcAR&#39;
+            +&#39;YIiQOTIUZpUCAkN8QZKkbBImPnwUETKFgMAPXpiQeQKziZiXUxgI3ODFyZO/&#39;
+            +&#39;T6AsGbxkCgKBGbpEISMFZhCYUxIIvMBFSxYsV6hM2cz5gMAKEyI8aLDAwIDT&#39;
+            +&#39;qAMYXE0wIAA7&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.next"><code class="name flex">
+<span>def <span class="ident">next</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def next():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBeHSRjISlpJS9wKjV4LzuANUKIO0WIP0mLREqM&#39;
+            +&#39;RUmRQU+ZR1CRSlydVVahTV6hWVypU2KjWmKxWGi4XW2+YXy+dnHDZXTHaIDB&#39;
+            +&#39;eoLCfYTDfofFgYnGgovHhY7Jh5DKiZPLi5XMjpjOkJrPk53QlJ/SlqHTmKPU&#39;
+            +&#39;mqXVnKfWnqnXoKvYoq7apQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAC4ALAAAAAAQABAAAAheAF0IHEiwoMGD&#39;
+            +&#39;CBMqXJiQAcOBCw4QxIDhQgUKEyI8YLBAgoMCAzG0YKEChQkSIkB44KChwQCB&#39;
+            +&#39;F1akOFFiRIgPHTZksKBAgMCLGTdGNIAAQgKfDAcgZbj0odOnUA8GBAA7&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.open_proj"><code class="name flex">
+<span>def <span class="ident">open_proj</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def open_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAABV5ABt5AB57AyF9ACV/ACZ+ECR8FUJ3uy2DAS2D&#39;
+            +&#39;CTWHCTCHFzyLEESPFkaQGUqRHFKXIleYKFubKV6fOlygPGKdMGOfMWWfMWih&#39;
+            +&#39;NGujN2mjOW6jOG+lPW6kPl+hQ2KjRmalSGilRnSrT3yvVXy+dkmCpVKHpVOG&#39;
+            +&#39;vFKEw1WGxlaHx1mKyFuKyV6Oy1+Py2OSzmSTzmiW0WqX0W6Z02+b1HKe1nSg&#39;
+            +&#39;13Wh13qj2nqk2X2l3H6o3YGzWoCzYYK1Z4W2ZoW2aom4a466b5C8dIDBeoTD&#39;
+            +&#39;foCp3YKq34Ss4Ieu4Yiv4oyx44yy5I+05ZC15pO355S355a66Zi66Zq865u9&#39;
+            +&#39;652+656/7InGgo7Jh5bBgJfCgpPLi5jCg57FiJjOkJ3QlKHGiqHHiqXIjajL&#39;
+            +&#39;kKnKkKrLka3NlKHTmKXVnLDOlp/A7aHB7qLB76PC76bD6anE6KrG6azG6azH&#39;
+            +&#39;6K3H6azH6q7J6a7J6rLK4bDJ6bDJ6rLL6rPM6rfO6rrQ67vQ677S67/T69bi&#39;
+            +&#39;6t7n8uLq9Obt9urw9+vx9+3y+O7z+e/z+fD0+vH2+vL2+vT3+////wAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAJAALAAAAAAQABAAAAjcACEJHEiw4MA2&#39;
+            +&#39;a6xQkQLlSZMlSY7syCGQjaOLGDNevCHwiqM0aMB84ZIFi5EiJRzVEFjF0aOX&#39;
+            +&#39;MGM6miFwiqM3OHPqdBRDYJSbj+DAnAPz0AuBThrFkVOHjp08czxgwDOIhUAm&#39;
+            +&#39;jO480jN0Qw8JglQIVLJoDx8+HThksEDCzIgHKAQiUdTn0R8Nas6YIUNEjIgF&#39;
+            +&#39;Anko8vPnz4UzQ4QA8fGjS4UCkHQkAvQo0IQyY8J4CbIlhAGBOBAZKkQoAgQH&#39;
+            +&#39;DShoAcHghEAbNGTAcNFiRYoUCj4cMIHAYEECAwgGBAA7&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.plot"><code class="name flex">
+<span>def <span class="ident">plot</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plot():
+
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAC5fpTBiqTBiqjJkrDNmrjRosTVosjZrtTdrtjxy&#39;
+            +&#39;vz10wj51wz52xD92xT93xkZwu1prrUJ3xkB4x0F5yUF6ykJ6y0J7zEN8zEN8&#39;
+            +&#39;zUR9zkV+0EV/0XCfvY1Sfa5FZe0iK+4mLu4nL+8oMO8rMu8tNPAuNfAxN/Ay&#39;
+            +&#39;OPEzOfE2PPE3PPI4PfI5Puc3Qeg4QfI7QPA9Q/I8QfM9QvM/Q8xNYvRCRvRD&#39;
+            +&#39;R/RFSPVKTfZNT/dSVPhXWPhYWflcXPldXflhYPpjYvtmZftnZftraY9kk6he&#39;
+            +&#39;goyhwJOs0Zyx0P6WlPyZl/61sgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAE0ALAAAAAAQABAAAAhzAJsIHEiwoMGD&#39;
+            +&#39;AnEgNHhjSYuFBGewgEhwBUQNA1UMJDIkCMEMSTpEeNEkwYECQpj8IEjBQRMX&#39;
+            +&#39;HxAYODIAiA8eO3QYkSAwhQmBBAQEIFikRowVKEosrDDwhBIRBjdgoECQRAgQ&#39;
+            +&#39;Bi8gaUBR4AQGCrqKHWswIAA7&#39;)
+    return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.plotprefs"><code class="name flex">
+<span>def <span class="ident">plotprefs</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plotprefs():
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAFU9ETxyvz10wj51wz52xD92xT93xltujUJ3xkB4&#39;
+            +&#39;x0F5yUF6ykJ6y0J7zEN8zEN8zUR9zkV+0EV/0XCfvYdfKJxpHYNlK6pkHL56&#39;
+            +&#39;GrN3Lbl5LvAyOPEzOfE3PPI4PfI5PvA9Q/I8QfM9QvM/Q8dvIupeM8xNYvRC&#39;
+            +&#39;RvRDR/RFSPVKTfZNT/dSVPhXWPhYWflcXPldXflhYPpjYvtmZftnZftraY9k&#39;
+            +&#39;k6hegraDGZGKdJaTbaqJQ7yNQr2IScGCNNKIN9mMNtiMONiNONGVK+aBOOS3&#39;
+            +&#39;JMGKTMmFQc2NRMWYSdCdRtqUQduVQ9yVQt+ZQNiaVMeXYs+daNilWNejY9W2&#39;
+            +&#39;eta4c+e+d+TJVfXfW/XcXvXcX+3KbefLd+3QeO7Tee7Sfe7TfPffY/bdbPDT&#39;
+            +&#39;efHUe/LWevfhWvfiW/jiXZOs0Zyx0NuxhdG3kPyZl/61sufAi/nHlPnJke/S&#39;
+            +&#39;rPbTrvDStPnjsvzgxP32wv32xP33x//y4P/z5QAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAH0ALAAAAAAQABAAAAiZAPsIHEiwoMGD&#39;
+            +&#39;AlUgNJjCDYiFBEd8gEjQA8QIA6ewWdLHRo0ZBCGsoaDjSh0+c47QeBOD4AID&#39;
+            +&#39;fcDYgUPnjhQZMFy0YIEjgcAwecZwoRIFAcEbJ0KY+KJnCxozTwoyGNhFj5Yz&#39;
+            +&#39;ZZwMlPBgwUAreMSkIdOEoAM1BQRWaYMlixcmBRUQENCHxx4oGZT8gHghjhwk&#39;
+            +&#39;GCgGqOCjB8KAADs=&#39;)
+    return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.prefs"><code class="name flex">
+<span>def <span class="ident">prefs</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def prefs():
+
+    img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAElJSU5OTlFRUVJSUlNTU1hYWFpaWltbW1xcXGFh&#39;
+            +&#39;YWJiYmRkZGdnZ2lpaWpqamtra21tbW5ubm9vb3FxcXZ2dnd3d3l5eXp6en5+&#39;
+            +&#39;foCAgIGBgYKCgoODg4SEhIWFhYeHh4mJiYuLi4yMjI+Pj5OTk5SUlJWVlZmZ&#39;
+            +&#39;mZqampycnJ6enqCgoKGhoaOjo6SkpKWlpaampqenp6ioqKqqqqurq6ysrK2t&#39;
+            +&#39;rbCwsLGxsbKysrW1tba2tre3t7m5ubq6ury8vL29vb6+vr+/v8DAwMHBwcLC&#39;
+            +&#39;wsPDw8TExMXFxcbGxsfHx8jIyMnJycrKysvLy8zMzM3Nzc7Ozs/Pz9DQ0NHR&#39;
+            +&#39;0dLS0tTU1NXV1dbW1tjY2NnZ2dvb29zc3N3d3d7e3uLi4uTk5OXl5efn5+np&#39;
+            +&#39;6e3t7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAGYALAAAAAAQABAAAAjUAM0IHGhmCZIh&#39;
+            +&#39;BBMOXCImjA2FA6U4MWPkixcdZmzIcEGwSxkuRoRkuYLDxpMxPUQIdIKky5Ut&#39;
+            +&#39;XEZusfKEyQWCSa5AafJDRQsjSor0GMgECREtUYBwEEjiiJEoI0B0QEImSxMp&#39;
+            +&#39;MAjaQPJDiRcIQ8BYURIlB8EZRnoQsaLABQkWU5RAWcG0CBAfDAwUGJikSJIl&#39;
+            +&#39;NGQUEbKDhgOCMbAkeVKlyRIoSYI8kdBA4AsgX2J0+IDESAQJMaxoILhhAgMz&#39;
+            +&#39;HZ4sWWDGgACIAjcE0YEANsEIBgZADAgAOw==&#39;)
+    return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.prev"><code class="name flex">
+<span>def <span class="ident">prev</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def prev():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBeHSRjISlpJS9wKjV4LzuANUKIO0mRQU+ZR1ah&#39;
+            +&#39;TVypU2SqW2KxWGi4XXi9cnu+cXy+dnHDZXTHaH7AeIDBeoPBeoLCfYTDfobI&#39;
+            +&#39;e4fJfIrMf4fFgYnGgovHhYvNgI7Jh5DKiZPLi5XMjpjOkJrPk53QlJ/SlqHT&#39;
+            +&#39;mKPUmqXVnKfWnqvYogAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAC0ALAAAAAAQABAAAAhdAFsIHEiwoMGD&#39;
+            +&#39;CBMqXChwAsOGEh5O+KDBQYMFChIgOGCgAIGGG1isSHGixIgQHjhcoDBAoIQM&#39;
+            +&#39;KlCYICECRAcMFSI8EDDQAQQLDDRy9DhAQACCGB8KTKC0qdOnDwMCADs=&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.save_proj"><code class="name flex">
+<span>def <span class="ident">save_proj</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_proj():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAACBarS5fpjppqj5qqzNoukRtq0RwsFd+u1F/w1N/&#39;
+            +&#39;wXy+dl2Ev1SBxFWDxliEw1uGx1uKyV2IyF6Oy1+Py2GKx2CJyWGLyWKLyGWN&#39;
+            +&#39;ymWNzGiOzWyLzWiL026K122L2myN3GOSzmSTzmmQzW6TzGiW0WqX0W6X1G6Z&#39;
+            +&#39;02+b1HGY0HOZ0XOa1HKe1nWa0Hee2Xmc1Xue1Hie2Hif2Hmf23uc3XCP4XSg&#39;
+            +&#39;13Wh13mg2Xqg2Xqj2nuh3Hqk2Xyj232j3n2l3H6l3X6o3YS/UYS/VIDBeoTD&#39;
+            +&#39;fpjJb5nJcYKk1oCm3YWi3YCp3YKq34Wo3YGn4YGn4oSs4Ieu4Yiv4oyv5Iyx&#39;
+            +&#39;44yy5I+05ZC15pK15pO355S355e26pa66Zq275m46pi66Zq865u9652+656/&#39;
+            +&#39;7KG/6qG/74nGgo7Jh5PLi5jOkJ3QlKHTmKXVnJ/A7Z7A76HB7qLB76PC76bD&#39;
+            +&#39;6anE6KrG6azG6azH6K3H6azH6q7J6rPH47DJ6rLL6rPM6rfO6rrO77DN87rQ&#39;
+            +&#39;67vQ677S67/T68fuh8fujNf0otf2ot7n8///3eLq9Obt9uXx7ebx7ebw7+bx&#39;
+            +&#39;7+n05Ojz6urz8+rw9+vx9+318+3y+O7z+e/z+f//4PD0+vH2+vL2+vT3+/H4&#39;
+            +&#39;//f7//r7/fr8/fv8/fv8/vz9/v39/v///wAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAEAAKkALAAAAAAQABAAAAjzAFPFcTMmTBct&#39;
+            +&#39;WKxMicIEyI5UqeB8mkix4sQbEMl8asNmjZo0aM4YKbLgUwqIYj6hWsmy5ScT&#39;
+            +&#39;EMF8mkOzps1PIiBumYmKDss7LC1RgHjFUx07efCciKEiyYYRLlZgSFWlkx5U&#39;
+            +&#39;fFBpCIRqT8syFqRw6uOnLIQ3qEisDAWKSoUmmv6gGoRKgplRpU6ZEkXKiQIh&#39;
+            +&#39;mgQNGpzhSxAlPnTkmCGDQY9MhFAVQnUhC5QnP3jQeMECAQ5MlRoxUtSAC6VH&#39;
+            +&#39;kSA5ugTjQAsUJUJMiJDAy6QhR5AQkVRjAMTfqRwAWmQIUaJDm5YQAA6xwIMO&#39;
+            +&#39;NkB88MDBgICAADs=&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.search"><code class="name flex">
+<span>def <span class="ident">search</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def search():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhEAAQAIcAAAAAAHaczXufzXug0H+l05JaEJNbEZVdFJdfGJpiG51l&#39;
+            +&#39;H51nIp5mIqNrKKVtK6hwMKpyMq93ObF5PLV9Qbd/RLyES7yNVcWXZMeZZsyi&#39;
+            +&#39;dc6kdpKUnYqTooWp1oaq14qu2Yyw24+y3ZGox5O235y6352735a44Zq845u9&#39;
+            +&#39;5J/A56LD6KbG66jI7KvL7q7J6K7O8K/P8bXP7LfQ7bTT9LvW87vX87jW9rnX&#39;
+            +&#39;973V8L3X873Y877Z87vZ+b3b+r7b+r/c+tWuht21ieTBnejLq8Da9MHa9MLb&#39;
+            +&#39;9MPc9MTc9MXd9cbd9cfe9cDe/MHe/Mjd88ne88je9cjf9cnf9crg9cvh9s3h&#39;
+            +&#39;9czh9s7i9szi+M3i+dDi9dDj9tHl99Lk99Pl99bn99fn99Pm+Nbn+Nno+Nrp&#39;
+            +&#39;+N3q+d7r+d/s+d7s+uHt+eLt+eLu+ePu+gAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;
+            +&#39;AAAAAAAAAAAAAAAAAAAAACH5BAMAAG0ALAAAAAAQABAAAAiTANsIHEiwYEEe&#39;
+            +&#39;NmbAaGFwoI8saNaoIYMjRcM2WNh8uUJlS5kYIwzeMPPFyhQoSahoAWFwRhor&#39;
+            +&#39;UpYgMUJEjAeDL85EUXKkyI4cYQgYZAHGCk0dNYw8EWBQhYwxUHTQMNKlxIaG&#39;
+            +&#39;JlxU8cLFCQkRQCY0/NCBwIAAHDIM0fDgIkEJF4RgUOB2oAMLQRDUHZhgwd6/&#39;
+            +&#39;fwMCADs=&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def start():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+             &#39;R0lGODlhGAAYAKUAAP///+bm/+Xl/uPj/OHh++Df+d7d993d99vb9dvb9NnZ&#39;
+            +&#39;8tnZ5tfW8NTU7tLS69DQ6dDP6c3N58vL5cnJ48fH4MTE3sLC3MDAzL/A2b2+&#39;
+            +&#39;17u71Lm507e30LW1z7S0zrOzzLCwya6ux6ysxaqqw6iowaenwaWlv6OjvaOj&#39;
+            +&#39;vKGguqChup6euJyctZqas5aWr5SUrY+PqI2NpoiIoYaGn4KDm4GBmoCAmTMz&#39;
+            +&#39;ZgAAAP///////////////////////////yH+EUNyZWF0ZWQgd2l0aCBHSU1Q&#39;
+            +&#39;ACH5BAEAAD8ALAMAAAAVABgAAAanwJ9wSCwaj8ikUogr3p7PJG7RHJpa1xsS&#39;
+            +&#39;17lQh7arSWvkzrrfnw3bIhPNoXNVLXYzM+dZaK5m23EVMXgZfHRYbjgRLhUw&#39;
+            +&#39;GIV9WUwNLooUj4ZjPzcNJg0sEZeQbQAAm50rEJdhhz+kNwadnY9rka2lBiGc&#39;
+            +&#39;DYWrmUKuBSGwDHy0bUSuuAYlBnO9drY3ASEFzFXG0NEBHQHONt/Z2nykpEmu&#39;
+            +&#39;S0gA6OvsSUEAOw==&#39;)
+     return img</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Table_images.tableapp_logo"><code class="name flex">
+<span>def <span class="ident">tableapp_logo</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tableapp_logo():
+
+     img = PhotoImage(format=&#39;gif&#39;,data=
+            &#39;R0lGODlhtwC3APYAAAAAAAcAAAwAAA4AABMAABYAABIVERcbFRUXGBodHyYA&#39;
+            +&#39;ADkAAB0iGyEkJjItKC01KS42Kj44Mj85MzM4PDQ5PUwAAF8AAHUAAHoAAGYd&#39;
+            +&#39;H1okJn4iJHUtMDlDNVxAMVhENUxRP2tQPk9IQEFHTEdUQkhVQltOU1FZX1JZ&#39;
+            +&#39;X2VbR2NaUGNaUVtsVG5ja35zZ2hxeoEAAIMAAIsAAJUEA5kAAJoDA5oHBZQK&#39;
+            +&#39;CJsKCJoNC5sRDYYUEJwUEJwYEp0bFZ0eGIUkHJ4iGp4lHYYrLp8sIp8vJYA5&#39;
+            +&#39;PaAzKKE2KqE5LaE9L4VENaFAMqNHN6ROPaRRP4FVQqRUQqVbR6ZeSq1VW6dl&#39;
+            +&#39;T6dsVKhpUqhvV6l2XKp5X7Fja7RxenKHaaqEZ6uHaayOb62Rca6bea6ffK6h&#39;
+            +&#39;fp6QgYKOmLuOmK+kgLCog7CrhrGyi7G1jrK5kLK8k7O/lr6cqMKturPDmLTG&#39;
+            +&#39;m7XKnbTNoLXQo7XUpbbXqMW3xcjG1fzlzczX6M/i8wAAAAAAACH5BAEAAH4A&#39;
+            +&#39;LAAAAAC3ALcAAAf+gH6Cg4SFhoeIiYqLjI2Oj5CRkpOUlY4AlpmNmJqdmwCg&#39;
+            +&#39;oaKjpKWmp6ipqqusra6vsKWEsbS1tre4ubmzur2+v8DBsoOhIy/HyMnKy8zN&#39;
+            +&#39;zs4JoR0s1NXW19jZ2tvbB6EiLuHi4+Tl5ufo5xKhvABmffDx8vP09fb39xSh&#39;
+            +&#39;XXj9/v8AAwocSJAghFBl9ihcyLChw4cQI0J0wY4YqHf4MmrcWE8fKH4FQ4oc&#39;
+            +&#39;KfAgqIQSU6pc6ZAiqHYYOcqc2XEfyZs4DSJkybPnxIqCQsWkSXSmRwAgcyrN&#39;
+            +&#39;aRIASp9Qe7rkFPRi0asyjyZdylVk06dRw6acChOr2Yxau6oN+VWsW4n+ZC26&#39;
+            +&#39;O0u35se1eEvufMu3Ydyqc+sKhpc2r+F+bfsq3vPXj9DBgwsfzpt4Md/GjyHX&#39;
+            +&#39;lTx5bWXLbjFb1UyXc+eun0GHFR2YtFnTp5emVg2V9VDXRWHHZrqX9mqgjkfj&#39;
+            +&#39;vqp7983Zvnna7sOlufPn0KNLn049Dz04GSpoX2Kle3c3xo/3Tu5zOY3z6NOr&#39;
+            +&#39;X8++vfsz9Ki4p0EmPEnk5FWan8+/P3/488jnXn32eTVefizt59+CDNIAoDwC&#39;
+            +&#39;tkdggQXhh2BECjao4XvxzTchhQNZeOFDGW5oYnoPxhMhex+CGJCII/oF3GMn&#39;
+            +&#39;1ohihwO6qNNJMSY4o1U2BpkiPCuu16KO/sD+2KNCJQap4ZB9FKnekUjioeSS&#39;
+            +&#39;TTrJIJRSpkclklf2uJweZJZp5pl6xMHfFmi2WSYfOEpY5YsHLknij61xpAd/&#39;
+            +&#39;XJzVJXpf6hhmjMvNtOd8fZr153mBujjoiIXKdKh7iWK1KH1zAvTohZHqyaef&#39;
+            +&#39;Hmb6z6YIdrrRpO1VetWljYJIan6maoQqe6oWxWpIaPzgw6689urDD2mo9Sp5&#39;
+            +&#39;sWY063q1EnUrQWzowF8NYXhWp50yviTXbbJ+qmioA8nhQ39e4DVscsXic6x6&#39;
+            +&#39;ydK0bEB1ENGfFpRNS+1C5d5zbnrpzrTuP3co0Z8Vho3rW7323ItevjLt688T&#39;
+            +&#39;/U1xmMC0EVyPwef+IcyRwnhY0d8Tk0GsmsT0UEyDxRsp7EV/TdzRsbzzMoYn&#39;
+            +&#39;tsZqaym3/YhRA39KqLwyjy3faS1gE6Ag9NBEFy20CfxxYPTSTAu9wXwelCD1&#39;
+            +&#39;BzPwtwMIUmet9dZcd521AaFEsMLYZJdt9tlop6122g4AZQsB/FVwiwXzKQBK&#39;
+            +&#39;ATLwh0EAwvTti1yxwD2f3LbQ7Z7dAsDAHwwD+O24LoAFHvfcdQdwAX8xNP74&#39;
+            +&#39;5rW0Y8wzy7TAnxGglz7EfCEAwd8NKXDj+usseAMKOOnUbvvt5azzc3B5nirz&#39;
+            +&#39;qvMVwR8PbNjnMWggzyMyyRpd2p8TBR5vWfLyLA9qjTWsYTzL81Ifj/X+29qY&#39;
+            +&#39;xPY891wtVbzDbO7vtjoZrXHSL+Y9PODPHKQPdsDPPbXz91E/8E7Cgv7KZz56&#39;
+            +&#39;vYwm/2ufk3Dwht3ETzH9S6CyGHQz90AvNg/sSwTZN0H/IGEM/AnWaTJ4mQMa&#39;
+            +&#39;ioPq8s8R6oAHJsyHCBjcn502iKjrzWeF/WBDBdsTrs6Q8C00pJQN2yMEFvpD&#39;
+            +&#39;CvPhAR18KEMsmVBSKNTXfIIgB4DMIQfzqQITCVhAl+0uM1CsYfjaMwaBZGE+&#39;
+            +&#39;NWjDzpzSRYYEMVVDNJJA7PCD+TBhjWDp4htpFccpDSQM/BHDw5oopid6Soz2&#39;
+            +&#39;k9NAjjBFnYmLkIQypO8QCUBFCkQN/MlCwCD+CSlJZouSCrSkQJwwnxzMIV5c&#39;
+            +&#39;LOAekdVHLxXEDTaYTxRQycY2MsmTMQNlB0UpkCugUQ2PTKX5VomuVgIqJHTg&#39;
+            +&#39;wQ2DWUtbEhNfxmSUSE42HzBIS5g9e+bBoompkNxBCPPpQf5Qw0lO4XJ9ukxh&#39;
+            +&#39;jkQCwvkAjJzYbJk2K8bNVvnDX+6xAXi48sPQnPMefDiDQAdK0DNYxyxx0MAC&#39;
+            +&#39;FgqFLzjUoVUciRseSlGKao+f5SzVP4ejkeKIykoZhdVGOYoPj4qqn2LpH0kJ&#39;
+            +&#39;Y5OP6iWe3RvpSu2CFJe+tJltVOlKTZoplP7mi8KZKUd4OiefRkWnJCVqlYxa&#39;
+            +&#39;G5kKVR5KBVNIieX+1Key9C421dRUyVVVq0ZVUFsdWFef+lVHhTVieApa09bK&#39;
+            +&#39;1rayFQGheIDX5krXutpVa2ADhdjWxte++vVsbfsZ5wZL2MLaAnCGTaxiF1sR&#39;
+            +&#39;xjr2sYP1XOkmS9nKRgMU04CdZjfrOtkBgHa4C61oczdWoZbVVWf9WGlneloK&#39;
+            +&#39;MbU8q91pS7OapNQiL7ZJnS1tQQpT/uGWo62Nnm2n99vhBJd8ONVjcXFz3PC8&#39;
+            +&#39;VirLdU1zB5hcVUaXNNN14HDld13NZDeGvZ1hdyHz3RFuF4LjjYxuaftc5aRX&#39;
+            +&#39;MOXdYnWH+d7NrDer7fURUHtn1Xzc16b5XQlSgftflwZYP/UtTYE/euD+sST4&#39;
+            +&#39;LPHFoy1vuV/19XceER5keJ1Y4Qt3dMEnPa8GH/waEPdUxCXssIdLauKiohiI&#39;
+            +&#39;JMZKhje54UKqeMX2mDEt82jdG+OYHjpmJo/p6+MfQ7XFS32xP4ts5KvWdLeI&#39;
+            +&#39;UXJKY0wcJEu1xpFkcpODfM35ZpPKubEyWLHcSS0bmcvCkvJP0QfGJscDzfD0&#39;
+            +&#39;sjzBTBQ4Y5TM5jTzj+0sGzUflc404bNSGgwXQBtFzGbFs0b1jGNB80bRImX0&#39;
+            +&#39;ih2NE0JjyNBZQTRqIU3V/arVraAO9VrhCgq53vXUqK5rXgGw17+6+tWAdRtk&#39;
+            +&#39;Z03rXyC21rjO9Ssip+te+9oUkq2ssIetjMv+AiCznE22smP3jdE629m6Y3NQ&#39;
+            +&#39;3dwHSouH01yVtIetfR8/N1XbF+b2SCz9E3D3V9wGwrZYze1VTbvW27BlN1nd&#39;
+            +&#39;LVx1o1XepqU3cof8ZXyzVt/OhTd0/S1brEKZ3D6TNn+3DHDq8nvOBM+twXeL&#39;
+            +&#39;8JZgeqgN1669VRtxAk+cvQJ3b8eNm3HwyjmmI2duyc278dumXLorl+/DUa5w&#39;
+            +&#39;Czc65hKe8IBJ/nH8hly/Naf2kXsO4J8L+OIbQTdbjI7gl2MX5xo+uW+d7l2o&#39;
+            +&#39;01jq4qU6ea2+4wl7MehCd/JWQN5y4mpdvUQ3MNMdfHb4cl3IXt+5ytPO4LUX&#39;
+            +&#39;uu32pXuIy85dvCu1WO8n5jt6/Q7ht3d55lMHe9iVXiG7X5rwJQa8iwU/YsjL&#39;
+            +&#39;2PBppnyKFS90xu8I6xzmPLU9HyLHl1v0bib9TRGfddQzXPJJ1jyMLV9l2F8Z&#39;
+            +&#39;9DZ2/ZkxH2fWh74dJzCD8IdP/OIb//jIT37yGxAKEnTh+dCPvvSnT/3qW9/6&#39;
+            +&#39;DAiFCsrA/e57//vgD7/4xy9+EeDp1+hHfzvSz35dr7/98J+1J+avCODQXxP2&#39;
+            +&#39;v7/+98///vv//44QCAA7&#39;)
+     return img</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="tkintertable.Table_images.add_col" href="#tkintertable.Table_images.add_col">add_col</a></code></li>
+<li><code><a title="tkintertable.Table_images.add_row" href="#tkintertable.Table_images.add_row">add_row</a></code></li>
+<li><code><a title="tkintertable.Table_images.del_col" href="#tkintertable.Table_images.del_col">del_col</a></code></li>
+<li><code><a title="tkintertable.Table_images.del_row" href="#tkintertable.Table_images.del_row">del_row</a></code></li>
+<li><code><a title="tkintertable.Table_images.end" href="#tkintertable.Table_images.end">end</a></code></li>
+<li><code><a title="tkintertable.Table_images.new_proj" href="#tkintertable.Table_images.new_proj">new_proj</a></code></li>
+<li><code><a title="tkintertable.Table_images.next" href="#tkintertable.Table_images.next">next</a></code></li>
+<li><code><a title="tkintertable.Table_images.open_proj" href="#tkintertable.Table_images.open_proj">open_proj</a></code></li>
+<li><code><a title="tkintertable.Table_images.plot" href="#tkintertable.Table_images.plot">plot</a></code></li>
+<li><code><a title="tkintertable.Table_images.plotprefs" href="#tkintertable.Table_images.plotprefs">plotprefs</a></code></li>
+<li><code><a title="tkintertable.Table_images.prefs" href="#tkintertable.Table_images.prefs">prefs</a></code></li>
+<li><code><a title="tkintertable.Table_images.prev" href="#tkintertable.Table_images.prev">prev</a></code></li>
+<li><code><a title="tkintertable.Table_images.save_proj" href="#tkintertable.Table_images.save_proj">save_proj</a></code></li>
+<li><code><a title="tkintertable.Table_images.search" href="#tkintertable.Table_images.search">search</a></code></li>
+<li><code><a title="tkintertable.Table_images.start" href="#tkintertable.Table_images.start">start</a></code></li>
+<li><code><a title="tkintertable.Table_images.tableapp_logo" href="#tkintertable.Table_images.tableapp_logo">tableapp_logo</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

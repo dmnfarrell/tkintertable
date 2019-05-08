@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.Custom API documentation</title>
+<meta name="description" content="Custom Table sub-class illustrate table functionality.
+Created January 2008
+Copyright (C) Damien Farrell …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.Custom</code></h1>
+</header>
+<section id="section-intro">
+<p>Custom Table sub-class illustrate table functionality.
+Created January 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Custom Table sub-class illustrate table functionality.
+    Created January 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter import font
+except:
+    from Tkinter import *
+    from ttk import *
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+    import TkFont as font
+
+from .Tables import TableCanvas, ColumnHeader
+
+class MyTable(TableCanvas):
+     &#34;&#34;&#34;Sub-class of Tablecanvas, with some changes in behaviour to make
+        a customised table - just an example&#34;&#34;&#34;
+     def __init__(self, parent=None, model=None):
+         TableCanvas.__init__(self, parent, model)
+         self.cellbackgr = &#39;#FFFAF0&#39;
+         self.entrybackgr = &#39;white&#39;
+
+         self.selectedcolor = &#39;yellow&#39;
+         self.rowselectedcolor = &#39;#B0E0E6&#39;
+         self.multipleselectioncolor = &#39;#ECD672&#39;
+
+         return</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tkintertable.Custom.MyTable"><code class="flex name class">
+<span>class <span class="ident">MyTable</span></span>
+<span>(</span><span>parent=None, model=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sub-class of Tablecanvas, with some changes in behaviour to make
+a customised table - just an example</p>
+<p>Construct a canvas widget with the parent MASTER.</p>
+<p>Valid resource names: background, bd, bg, borderwidth, closeenough,
+confine, cursor, height, highlightbackground, highlightcolor,
+highlightthickness, insertbackground, insertborderwidth,
+insertofftime, insertontime, insertwidth, offset, relief,
+scrollregion, selectbackground, selectborderwidth, selectforeground,
+state, takefocus, width, xscrollcommand, xscrollincrement,
+yscrollcommand, yscrollincrement.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MyTable(TableCanvas):
+     &#34;&#34;&#34;Sub-class of Tablecanvas, with some changes in behaviour to make
+        a customised table - just an example&#34;&#34;&#34;
+     def __init__(self, parent=None, model=None):
+         TableCanvas.__init__(self, parent, model)
+         self.cellbackgr = &#39;#FFFAF0&#39;
+         self.entrybackgr = &#39;white&#39;
+
+         self.selectedcolor = &#39;yellow&#39;
+         self.rowselectedcolor = &#39;#B0E0E6&#39;
+         self.multipleselectioncolor = &#39;#ECD672&#39;
+
+         return</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="tkintertable.Tables.TableCanvas" href="Tables.html#tkintertable.Tables.TableCanvas">TableCanvas</a></li>
+<li>tkinter.Canvas</li>
+<li>tkinter.Widget</li>
+<li>tkinter.BaseWidget</li>
+<li>tkinter.Misc</li>
+<li>tkinter.Pack</li>
+<li>tkinter.Place</li>
+<li>tkinter.Grid</li>
+<li>tkinter.XView</li>
+<li>tkinter.YView</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="tkintertable.Tables.TableCanvas" href="Tables.html#tkintertable.Tables.TableCanvas">TableCanvas</a></b></code>:
+<ul class="hlist">
+<li><code><a title="tkintertable.Tables.TableCanvas.addColumn" href="Tables.html#tkintertable.Tables.TableCanvas.addColumn">addColumn</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.addRow" href="Tables.html#tkintertable.Tables.TableCanvas.addRow">addRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.addRows" href="Tables.html#tkintertable.Tables.TableCanvas.addRows">addRows</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.adjustColumnWidths" href="Tables.html#tkintertable.Tables.TableCanvas.adjustColumnWidths">adjustColumnWidths</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.applyPrefs" href="Tables.html#tkintertable.Tables.TableCanvas.applyPrefs">applyPrefs</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.autoAddColumns" href="Tables.html#tkintertable.Tables.TableCanvas.autoAddColumns">autoAddColumns</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.autoResizeColumns" href="Tables.html#tkintertable.Tables.TableCanvas.autoResizeColumns">autoResizeColumns</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.checkDataEntry" href="Tables.html#tkintertable.Tables.TableCanvas.checkDataEntry">checkDataEntry</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.checkOSType" href="Tables.html#tkintertable.Tables.TableCanvas.checkOSType">checkOSType</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.check_hyperlink" href="Tables.html#tkintertable.Tables.TableCanvas.check_hyperlink">check_hyperlink</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.clearData" href="Tables.html#tkintertable.Tables.TableCanvas.clearData">clearData</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.closeFilterFrame" href="Tables.html#tkintertable.Tables.TableCanvas.closeFilterFrame">closeFilterFrame</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.convertFormulae" href="Tables.html#tkintertable.Tables.TableCanvas.convertFormulae">convertFormulae</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.copyCell" href="Tables.html#tkintertable.Tables.TableCanvas.copyCell">copyCell</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.copyColumns" href="Tables.html#tkintertable.Tables.TableCanvas.copyColumns">copyColumns</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.createFilteringBar" href="Tables.html#tkintertable.Tables.TableCanvas.createFilteringBar">createFilteringBar</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.createfromDict" href="Tables.html#tkintertable.Tables.TableCanvas.createfromDict">createfromDict</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.deleteCells" href="Tables.html#tkintertable.Tables.TableCanvas.deleteCells">deleteCells</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.deleteColumn" href="Tables.html#tkintertable.Tables.TableCanvas.deleteColumn">deleteColumn</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.deleteRow" href="Tables.html#tkintertable.Tables.TableCanvas.deleteRow">deleteRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.doFilter" href="Tables.html#tkintertable.Tables.TableCanvas.doFilter">doFilter</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.do_bindings" href="Tables.html#tkintertable.Tables.TableCanvas.do_bindings">do_bindings</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawCellEntry" href="Tables.html#tkintertable.Tables.TableCanvas.drawCellEntry">drawCellEntry</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawGrid" href="Tables.html#tkintertable.Tables.TableCanvas.drawGrid">drawGrid</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawMultipleCells" href="Tables.html#tkintertable.Tables.TableCanvas.drawMultipleCells">drawMultipleCells</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawMultipleRows" href="Tables.html#tkintertable.Tables.TableCanvas.drawMultipleRows">drawMultipleRows</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawRect" href="Tables.html#tkintertable.Tables.TableCanvas.drawRect">drawRect</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawRowHeader" href="Tables.html#tkintertable.Tables.TableCanvas.drawRowHeader">drawRowHeader</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawSelectedCol" href="Tables.html#tkintertable.Tables.TableCanvas.drawSelectedCol">drawSelectedCol</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawSelectedRect" href="Tables.html#tkintertable.Tables.TableCanvas.drawSelectedRect">drawSelectedRect</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawSelectedRow" href="Tables.html#tkintertable.Tables.TableCanvas.drawSelectedRow">drawSelectedRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawText" href="Tables.html#tkintertable.Tables.TableCanvas.drawText">drawText</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.drawTooltip" href="Tables.html#tkintertable.Tables.TableCanvas.drawTooltip">drawTooltip</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.exportTable" href="Tables.html#tkintertable.Tables.TableCanvas.exportTable">exportTable</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.fillAcross" href="Tables.html#tkintertable.Tables.TableCanvas.fillAcross">fillAcross</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.fillDown" href="Tables.html#tkintertable.Tables.TableCanvas.fillDown">fillDown</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.findValue" href="Tables.html#tkintertable.Tables.TableCanvas.findValue">findValue</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.formula_Dialog" href="Tables.html#tkintertable.Tables.TableCanvas.formula_Dialog">formula_Dialog</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getCanvasPos" href="Tables.html#tkintertable.Tables.TableCanvas.getCanvasPos">getCanvasPos</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getCellCoords" href="Tables.html#tkintertable.Tables.TableCanvas.getCellCoords">getCellCoords</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getColPosition" href="Tables.html#tkintertable.Tables.TableCanvas.getColPosition">getColPosition</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getGeometry" href="Tables.html#tkintertable.Tables.TableCanvas.getGeometry">getGeometry</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getModel" href="Tables.html#tkintertable.Tables.TableCanvas.getModel">getModel</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getRecordInfo" href="Tables.html#tkintertable.Tables.TableCanvas.getRecordInfo">getRecordInfo</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getRowPosition" href="Tables.html#tkintertable.Tables.TableCanvas.getRowPosition">getRowPosition</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getSelectedColumn" href="Tables.html#tkintertable.Tables.TableCanvas.getSelectedColumn">getSelectedColumn</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getSelectedRow" href="Tables.html#tkintertable.Tables.TableCanvas.getSelectedRow">getSelectedRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getSelectionValues" href="Tables.html#tkintertable.Tables.TableCanvas.getSelectionValues">getSelectionValues</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getVisibleCols" href="Tables.html#tkintertable.Tables.TableCanvas.getVisibleCols">getVisibleCols</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getVisibleRegion" href="Tables.html#tkintertable.Tables.TableCanvas.getVisibleRegion">getVisibleRegion</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getVisibleRows" href="Tables.html#tkintertable.Tables.TableCanvas.getVisibleRows">getVisibleRows</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_col_clicked" href="Tables.html#tkintertable.Tables.TableCanvas.get_col_clicked">get_col_clicked</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_currentColName" href="Tables.html#tkintertable.Tables.TableCanvas.get_currentColName">get_currentColName</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_currentRecCol" href="Tables.html#tkintertable.Tables.TableCanvas.get_currentRecCol">get_currentRecCol</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_currentRecord" href="Tables.html#tkintertable.Tables.TableCanvas.get_currentRecord">get_currentRecord</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_currentRecordName" href="Tables.html#tkintertable.Tables.TableCanvas.get_currentRecordName">get_currentRecordName</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_row_clicked" href="Tables.html#tkintertable.Tables.TableCanvas.get_row_clicked">get_row_clicked</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.get_selectedRecordNames" href="Tables.html#tkintertable.Tables.TableCanvas.get_selectedRecordNames">get_selectedRecordNames</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.getplotlabels" href="Tables.html#tkintertable.Tables.TableCanvas.getplotlabels">getplotlabels</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.gotonextCell" href="Tables.html#tkintertable.Tables.TableCanvas.gotonextCell">gotonextCell</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.gotonextRow" href="Tables.html#tkintertable.Tables.TableCanvas.gotonextRow">gotonextRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.gotoprevRow" href="Tables.html#tkintertable.Tables.TableCanvas.gotoprevRow">gotoprevRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handleFormulaClick" href="Tables.html#tkintertable.Tables.TableCanvas.handleFormulaClick">handleFormulaClick</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_arrow_keys" href="Tables.html#tkintertable.Tables.TableCanvas.handle_arrow_keys">handle_arrow_keys</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_double_click" href="Tables.html#tkintertable.Tables.TableCanvas.handle_double_click">handle_double_click</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_left_click" href="Tables.html#tkintertable.Tables.TableCanvas.handle_left_click">handle_left_click</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_left_ctrl_click" href="Tables.html#tkintertable.Tables.TableCanvas.handle_left_ctrl_click">handle_left_ctrl_click</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_left_shift_click" href="Tables.html#tkintertable.Tables.TableCanvas.handle_left_shift_click">handle_left_shift_click</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_motion" href="Tables.html#tkintertable.Tables.TableCanvas.handle_motion">handle_motion</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_mouse_drag" href="Tables.html#tkintertable.Tables.TableCanvas.handle_mouse_drag">handle_mouse_drag</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.handle_right_click" href="Tables.html#tkintertable.Tables.TableCanvas.handle_right_click">handle_right_click</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.importCSV" href="Tables.html#tkintertable.Tables.TableCanvas.importCSV">importCSV</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.isInsideTable" href="Tables.html#tkintertable.Tables.TableCanvas.isInsideTable">isInsideTable</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.isLink" href="Tables.html#tkintertable.Tables.TableCanvas.isLink">isLink</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.load" href="Tables.html#tkintertable.Tables.TableCanvas.load">load</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.loadPrefs" href="Tables.html#tkintertable.Tables.TableCanvas.loadPrefs">loadPrefs</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.mouse_wheel" href="Tables.html#tkintertable.Tables.TableCanvas.mouse_wheel">mouse_wheel</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.movetoSelectedRow" href="Tables.html#tkintertable.Tables.TableCanvas.movetoSelectedRow">movetoSelectedRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.new" href="Tables.html#tkintertable.Tables.TableCanvas.new">new</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.paste" href="Tables.html#tkintertable.Tables.TableCanvas.paste">paste</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.pasteCell" href="Tables.html#tkintertable.Tables.TableCanvas.pasteCell">pasteCell</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.pasteColumns" href="Tables.html#tkintertable.Tables.TableCanvas.pasteColumns">pasteColumns</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.plotSelected" href="Tables.html#tkintertable.Tables.TableCanvas.plotSelected">plotSelected</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.plotSetup" href="Tables.html#tkintertable.Tables.TableCanvas.plotSetup">plotSetup</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.popupMenu" href="Tables.html#tkintertable.Tables.TableCanvas.popupMenu">popupMenu</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.redrawCell" href="Tables.html#tkintertable.Tables.TableCanvas.redrawCell">redrawCell</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.redrawVisible" href="Tables.html#tkintertable.Tables.TableCanvas.redrawVisible">redrawVisible</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.resizeColumn" href="Tables.html#tkintertable.Tables.TableCanvas.resizeColumn">resizeColumn</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.save" href="Tables.html#tkintertable.Tables.TableCanvas.save">save</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.savePrefs" href="Tables.html#tkintertable.Tables.TableCanvas.savePrefs">savePrefs</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.select_All" href="Tables.html#tkintertable.Tables.TableCanvas.select_All">select_All</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setColPositions" href="Tables.html#tkintertable.Tables.TableCanvas.setColPositions">setColPositions</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setFontSize" href="Tables.html#tkintertable.Tables.TableCanvas.setFontSize">setFontSize</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setModel" href="Tables.html#tkintertable.Tables.TableCanvas.setModel">setModel</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setRowHeight" href="Tables.html#tkintertable.Tables.TableCanvas.setRowHeight">setRowHeight</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setSelectedCells" href="Tables.html#tkintertable.Tables.TableCanvas.setSelectedCells">setSelectedCells</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setSelectedCol" href="Tables.html#tkintertable.Tables.TableCanvas.setSelectedCol">setSelectedCol</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setSelectedRow" href="Tables.html#tkintertable.Tables.TableCanvas.setSelectedRow">setSelectedRow</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.set_defaults" href="Tables.html#tkintertable.Tables.TableCanvas.set_defaults">set_defaults</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.set_xviews" href="Tables.html#tkintertable.Tables.TableCanvas.set_xviews">set_xviews</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.set_yviews" href="Tables.html#tkintertable.Tables.TableCanvas.set_yviews">set_yviews</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.setcellColor" href="Tables.html#tkintertable.Tables.TableCanvas.setcellColor">setcellColor</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.show" href="Tables.html#tkintertable.Tables.TableCanvas.show">show</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.show_progressbar" href="Tables.html#tkintertable.Tables.TableCanvas.show_progressbar">show_progressbar</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.showtablePrefs" href="Tables.html#tkintertable.Tables.TableCanvas.showtablePrefs">showtablePrefs</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.sortTable" href="Tables.html#tkintertable.Tables.TableCanvas.sortTable">sortTable</a></code></li>
+<li><code><a title="tkintertable.Tables.TableCanvas.updateModel" href="Tables.html#tkintertable.Tables.TableCanvas.updateModel">updateModel</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tkintertable.Custom.MyTable" href="#tkintertable.Custom.MyTable">MyTable</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
