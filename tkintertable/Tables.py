@@ -934,7 +934,7 @@ class TableCanvas(Canvas):
         self.multiplerowlist.append(rowclicked)
         if rowclicked is None or colclicked is None:
             return
-        if self.read_only is True:    
+        if self.read_only is True:
             return
         if 0 <= rowclicked < self.rows and 0 <= colclicked < self.cols:
             self.setSelectedRow(rowclicked)
@@ -1752,7 +1752,7 @@ class TableCanvas(Canvas):
     def isLink(self, cell):
         """Checks if cell is a hyperlink, without using isinstance"""
         try:
-            if 'link' in cell:
+            if 'link' in cell and type(cell) is dict:
                 return True
         except:
             return False
