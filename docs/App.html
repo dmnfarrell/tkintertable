@@ -1,0 +1,1942 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.App API documentation</title>
+<meta name="description" content="Sample App to illustrate table functionality.
+Created January 2008
+Copyright (C) Damien Farrell …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.App</code></h1>
+</header>
+<section id="section-intro">
+<p>Sample App to illustrate table functionality.
+Created January 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Sample App to illustrate table functionality.
+    Created January 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+except:
+    from Tkinter import *
+    from ttk import *
+if (sys.version_info &gt; (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+    from tkinter import font
+else:
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+    import tkFont as font
+
+#import Pmw
+import re, os, time, pickle
+from collections import OrderedDict
+from .Custom import MyTable
+from .TableModels import TableModel
+from .Tables_IO import TableImporter
+from .Prefs import Preferences
+
+class TablesApp(Frame):
+    &#34;&#34;&#34;
+    Tables app
+    &#34;&#34;&#34;
+    def __init__(self,parent=None,data=None,datafile=None):
+        &#34;Initialize the application.&#34;
+        self.parent=parent
+
+        #If there is data to be loaded, show the dialog first
+        if not self.parent:
+            Frame.__init__(self)
+            self.tablesapp_win=self.master
+
+        else:
+            self.tablesapp_win=Toplevel()
+
+        # Get platform into a variable
+        import platform
+        self.currplatform=platform.system()
+        if not hasattr(self,&#39;defaultsavedir&#39;):
+            self.defaultsavedir = os.getcwd()
+
+        self.preferences=Preferences(&#39;TablesApp&#39;,{&#39;check_for_update&#39;:1})
+        self.loadprefs()
+        self.tablesapp_win.title(&#39;Tables Application&#39;)
+        self.tablesapp_win.geometry(&#39;+200+200&#39;)
+        self.x_size=800
+        self.y_size=600
+        self.createMenuBar()
+        self.apptoolBar = ToolBar(self.tablesapp_win, self)
+        self.apptoolBar.pack(fill=BOTH, expand=NO)
+        #add find bar
+        #self.createSearchBar()
+
+        if data != None:
+            self.data = data
+            self.new_project(data)
+        elif datafile != None:
+            self.open_project(datafile)
+        else:
+            self.new_project()
+
+        self.tablesapp_win.protocol(&#39;WM_DELETE_WINDOW&#39;,self.quit)
+        return
+
+    def createMenuBar(self):
+        &#34;&#34;&#34;Create the menu bar for the application. &#34;&#34;&#34;
+
+        self.menu=Menu(self.tablesapp_win)
+        self.proj_menu={&#39;01New&#39;:{&#39;cmd&#39;:self.new_project},
+                        &#39;02Open&#39;:{&#39;cmd&#39;:self.open_project},
+                        &#39;03Close&#39;:{&#39;cmd&#39;:self.close_project},
+                        &#39;04Save&#39;:{&#39;cmd&#39;:self.save_project},
+                        &#39;05Save As&#39;:{&#39;cmd&#39;:self.save_as_project},
+                        &#39;06Preferences..&#39;:{&#39;cmd&#39;:self.showPrefsDialog},
+                        &#39;08Quit&#39;:{&#39;cmd&#39;:self.quit}}
+        if self.parent:
+            self.proj_menu[&#39;08Return to Database&#39;]={&#39;cmd&#39;:self.return_data}
+        self.proj_menu=self.create_pulldown(self.menu,self.proj_menu)
+        self.menu.add_cascade(label=&#39;Project&#39;,menu=self.proj_menu[&#39;var&#39;])
+
+        self.records_menu={&#39;01Add Row&#39;:{&#39;cmd&#39;:self.add_Row},
+                         &#39;02Delete Row&#39;:{&#39;cmd&#39;:self.delete_Row},
+                         &#39;03Add Column&#39;:{&#39;cmd&#39;:self.add_Column},
+                         &#39;04Delete Column&#39;:{&#39;cmd&#39;:self.delete_Column},
+                         &#39;05Auto Add Rows&#39;:{&#39;cmd&#39;:self.autoAdd_Rows},
+                         &#39;06Auto Add Columns&#39;:{&#39;cmd&#39;:self.autoAdd_Columns},
+                         &#39;07Find&#39;:{&#39;cmd&#39;:self.createSearchBar},
+                         }
+        self.records_menu=self.create_pulldown(self.menu,self.records_menu)
+        self.menu.add_cascade(label=&#39;Records&#39;,menu=self.records_menu[&#39;var&#39;])
+
+        self.sheet_menu={&#39;01Add Sheet&#39;:{&#39;cmd&#39;:self.add_Sheet},
+                         &#39;02Remove Sheet&#39;:{&#39;cmd&#39;:self.delete_Sheet},
+                         &#39;03Copy Sheet&#39;:{&#39;cmd&#39;:self.copy_Sheet},
+                         &#39;04Rename Sheet&#39;:{&#39;cmd&#39;:self.rename_Sheet},
+                         }
+        self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
+        self.menu.add_cascade(label=&#39;Sheet&#39;,menu=self.sheet_menu[&#39;var&#39;])
+
+        self.IO_menu={&#39;01Import from csv file&#39;:{&#39;cmd&#39;:self.import_csv},
+                      &#39;02Export to csv file&#39;:{&#39;cmd&#39;:self.export_csv},
+                      }
+
+        self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
+        self.menu.add_cascade(label=&#39;Import/Export&#39;,menu=self.IO_menu[&#39;var&#39;])
+
+        # Help menu
+        self.help_menu={&#39;01Online Help&#39;:{&#39;cmd&#39;:self.online_documentation},
+                        &#39;02About&#39;:{&#39;cmd&#39;:self.about_Tables}}
+        self.help_menu=self.create_pulldown(self.menu,self.help_menu)
+        self.menu.add_cascade(label=&#39;Help&#39;,menu=self.help_menu[&#39;var&#39;])
+
+        self.tablesapp_win.config(menu=self.menu)
+
+        return
+
+    def create_pulldown(self,menu,dict):
+        &#34;&#34;&#34; Create a pulldown in var from the info in dict  &#34;&#34;&#34;
+
+        var = Menu(menu,tearoff=0)
+        items = dict.keys()
+        #items.sort()
+        for item in items:
+            if item[-3:]==&#39;sep&#39;:
+                var.add_separator()
+            else:
+                # Do we have a command?
+                command=None
+                if &#39;cmd&#39; in  dict[item]:
+                    command=dict[item][&#39;cmd&#39;]
+
+                # Put the command in there
+                if &#39;sc&#39; in dict[item]:
+                    var.add_command(label=&#39;%-25s %9s&#39; %(item[2:],dict[item][&#39;sc&#39;]),command=command)
+                else:
+                    var.add_command(label=&#39;%-25s&#39; %(item[2:]),command=command)
+        dict[&#39;var&#39;]=var
+        return dict
+
+    def createSearchBar(self, event=None):
+        &#34;&#34;&#34;Add a find entry box&#34;&#34;&#34;
+
+        frame = Frame(self.tablesapp_win)
+        row=0
+        def close():
+            frame.destroy()
+        self.findtext=StringVar()
+        self.findbox=Entry(frame,textvariable=self.findtext,width=30,bg=&#39;white&#39;)
+        self.findbox.grid(row=row,column=1,sticky=&#39;news&#39;,columnspan=2,padx=2,pady=2)
+        self.findbox.bind(&#39;&lt;Return&gt;&#39;,self.do_find_text)
+        Label(frame,text=&#39;Find:&#39;).grid(row=row,column=0,sticky=&#39;ew&#39;)
+        self.findagainbutton=Button(frame,text=&#39;Find Again&#39;, command=self.do_find_again)
+        self.findagainbutton.grid(row=row,column=3,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.cbutton=Button(frame,text=&#39;Close&#39;, command=close)
+        self.cbutton.grid(row=row,column=4,sticky=&#39;news&#39;,padx=2,pady=2)
+        frame.pack(fill=BOTH, expand=NO)
+        return
+
+    def loadprefs(self):
+        &#34;&#34;&#34;Setup default prefs file if any of the keys are not present&#34;&#34;&#34;
+
+        defaultprefs = {&#39;textsize&#39;:14,
+                         &#39;windowwidth&#39;: 800 ,&#39;windowheight&#39;:600}
+        for prop in defaultprefs.keys():
+            try:
+                self.preferences.get(prop)
+            except:
+                self.preferences.set(prop, defaultprefs[prop])
+
+        return
+
+    def showPrefsDialog(self):
+        self.prefswindow = self.currenttable.showtablePrefs()
+        return
+
+    def new_project(self, data=None):
+        &#34;&#34;&#34;Create a new table, with model and add the frame&#34;&#34;&#34;
+
+        if hasattr(self,&#39;currenttable&#39;):
+            self.notebook.destroy()
+            self.currenttable.destroy()
+
+        #Create the sheets dict
+        self.sheets = {}
+        self.notebook = Notebook(self.tablesapp_win)
+        self.notebook.pack(fill=&#39;both&#39;, expand=1, padx=4, pady=4)
+        if data !=None:
+            for s in data.keys():
+                sdata = data[s]
+                try:
+                    self.add_Sheet(s ,sdata)
+                except:
+                    print (&#39;skipping&#39;)
+        else:
+            #do the table adding stuff for the initial sheet
+            self.add_Sheet(&#39;sheet1&#39;)
+        #self.notebook.setnaturalsize()
+        return
+
+    def open_project(self, filename=None):
+
+        if filename == None:
+            filename=filedialog.askopenfilename(defaultextension=&#39;.tblprj&#34;&#39;,
+                                                      initialdir=os.getcwd(),
+                                                      filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                                 (&#34;All files&#34;,&#34;*.*&#34;)],
+                                                      parent=self.tablesapp_win)
+        if os.path.isfile(filename):
+            fd = open(filename, &#39;rb&#39;)
+            data = pickle.load(fd)
+            fd.close()
+        self.new_project(data)
+        self.filename=filename
+        return
+
+    def save_project(self):
+
+        if not hasattr(self, &#39;filename&#39;):
+            self.save_as_project()
+        elif self.filename == None:
+            self.save_as_project()
+        else:
+            self.do_save_project(self.filename)
+
+        return
+
+    def save_as_project(self):
+        &#34;&#34;&#34;Save as a new filename&#34;&#34;&#34;
+
+        filename=filedialog.asksaveasfilename(parent=self.tablesapp_win,
+                                                defaultextension=&#39;.tblprj&#39;,
+                                                initialdir=self.defaultsavedir,
+                                                filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                           (&#34;All files&#34;,&#34;*.*&#34;)])
+        if not filename:
+            print (&#39;Returning&#39;)
+            return
+        self.filename=filename
+        self.do_save_project(self.filename)
+        return
+
+    def do_save_project(self, filename):
+        &#34;&#34;&#34;Get model dicts and write all to pickle file&#34;&#34;&#34;
+
+        data={}
+        for s in self.sheets.keys():
+            currtable = self.sheets[s]
+            model = currtable.getModel()
+            data[s] = model.getData()
+
+        fd=open(filename,&#39;wb&#39;)
+        pickle.dump(data,fd)
+        fd.close()
+        return
+
+    def close_project(self):
+        if hasattr(self,&#39;currenttable&#39;):
+            #self.notebook.destroy()
+            self.currenttable.destroy()
+        return
+
+    def import_csv(self):
+
+        importer = TableImporter()
+        #just use the dialog to load and import the file
+        importdialog = importer.import_Dialog(self.tablesapp_win)
+        self.tablesapp_win.wait_window(importdialog)
+        model = TableModel()
+        model.importDict(importer.data)
+        sheetdata = {}
+        sheetdata[&#39;sheet1&#39;] = model.getData()
+        self.new_project(sheetdata)
+        return
+
+    def export_csv(self):
+        from .Tables_IO import TableExporter
+        exporter = TableExporter()
+        exporter.ExportTableData(self.currenttable)
+        return
+
+    def add_Sheet(self, sheetname=None, sheetdata=None):
+        &#34;&#34;&#34;Add a new sheet - handles all the table creation stuff&#34;&#34;&#34;
+
+        def checksheet_name(name):
+            if name == &#39;&#39;:
+                messagebox.showwarning(&#34;Whoops&#34;, &#34;Name should not be blank.&#34;)
+                return 0
+            if name in self.sheets:
+                messagebox.showwarning(&#34;Name exists&#34;, &#34;Sheet name already exists!&#34;)
+                return 0
+        names = [self.notebook.tab(i, &#34;text&#34;) for i in self.notebook.tabs()]
+        noshts = len(names)
+        if sheetname == None:
+            sheetname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter sheet name:&#34;,
+                                                initialvalue=&#39;sheet&#39;+str(noshts+1))
+        checksheet_name(sheetname)
+        page = Frame(self.notebook)
+        self.notebook.add(page, text=sheetname)
+        #Create the table and model if data present
+        if sheetdata != None:
+            model = TableModel(sheetdata)
+            self.currenttable = MyTable(page, model)
+        else:
+            self.currenttable = MyTable(page)
+
+        #Load preferences into table
+        self.currenttable.loadPrefs(self.preferences)
+        #This handles all the canvas and header in the frame passed to constructor
+        self.currenttable.createTableFrame()
+        #add the table to the sheet dict
+        self.sheets[sheetname] = self.currenttable
+        self.saved = 0
+        return sheetname
+
+    def delete_Sheet(self):
+        &#34;&#34;&#34;Delete a sheet&#34;&#34;&#34;
+
+        s = self.notebook.index(self.notebook.select())
+        name = self.notebook.tab(s, &#39;text&#39;)
+        #self.notebook.delete(s)
+        self.notebook.forget(s)
+        del self.sheets[s]
+        return
+
+    def copy_Sheet(self, newname=None):
+        &#34;&#34;&#34;Copy a sheet&#34;&#34;&#34;
+
+        newdata = self.currenttable.getModel().getData().copy()
+        if newname==None:
+            self.add_Sheet(None, newdata)
+        else:
+            self.add_Sheet(newname, newdata)
+        return
+
+    def rename_Sheet(self):
+        &#34;&#34;&#34;Rename a sheet&#34;&#34;&#34;
+
+        #s = self.notebook.getcurselection()
+        s = self.notebook.index(self.notebook.select())
+        newname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter new sheet name:&#34;,
+                                                initialvalue=s)
+        if newname == None:
+            return
+        self.copy_Sheet(newname)
+        self.delete_Sheet()
+        return
+
+    def setcurrenttable(self, event):
+        &#34;&#34;&#34;Set the currenttable so that menu items work with visible sheet&#34;&#34;&#34;
+
+        try:
+            #s = self.notebook.getcurselection()
+            s = self.notebook.index(self.notebook.select())
+            self.currenttable = self.sheets[s]
+        except:
+            pass
+        return
+
+    def add_Row(self):
+        &#34;&#34;&#34;Add a new row&#34;&#34;&#34;
+        self.currenttable.addRow()
+        self.saved = 0
+        return
+
+    def delete_Row(self):
+        &#34;&#34;&#34;Delete currently selected row&#34;&#34;&#34;
+
+        self.currenttable.deleteRow()
+        self.saved = 0
+        return
+
+    def add_Column(self):
+        &#34;&#34;&#34;Add a new column&#34;&#34;&#34;
+
+        self.currenttable.addColumn()
+        self.saved = 0
+        return
+
+    def delete_Column(self):
+        &#34;&#34;&#34;Delete currently selected column in table&#34;&#34;&#34;
+
+        self.currenttable.deleteColumn()
+        self.saved = 0
+        return
+
+    def autoAdd_Rows(self):
+        &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+        self.currenttable.autoAddRows()
+        self.saved = 0
+        return
+
+    def autoAdd_Columns(self):
+        &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+        self.currenttable.autoAddColumns()
+        self.saved = 0
+        return
+
+    def findValue(self):
+        self.currenttable.findValue()
+        return
+
+    def do_find_text(self, event=None):
+        &#34;&#34;&#34;Find the text in the table&#34;&#34;&#34;
+
+        if not hasattr(self,&#39;currenttable&#39;):
+            return
+        import string
+        if string.strip(self.findtext.get())==&#39;&#39;:
+            return
+        searchstring=self.findtext.get()
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring)
+        return
+
+    def do_find_again(self, event=None):
+        &#34;&#34;&#34;Find again&#34;&#34;&#34;
+
+        if not hasattr(self,&#39;currenttable&#39;):
+            return
+        searchstring=self.findtext.get()
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring, findagain=1)
+        return
+
+    def plot(self, event=None):
+        self.currenttable.plotSelected()
+        return
+
+    def plotSetup(self, event=None):
+        self.currenttable.plotSetup()
+        return
+
+    def about_Tables(self):
+
+        self.ab_win=Toplevel()
+        self.ab_win.geometry(&#39;+100+350&#39;)
+        self.ab_win.title(&#39;About TablesApp&#39;)
+
+        from . import Table_images
+        logo = Table_images.tableapp_logo()
+        label = Label(self.ab_win,image=logo)
+        label.image = logo
+        label.grid(row=0,column=0,sticky=&#39;news&#39;,padx=4,pady=4)
+
+        text=[&#39;Tables Sample App &#39;,&#39;Shows the use of Tablecanvas class for tkinter&#39;,
+                &#39;Copyright (C) Damien Farrell 2008-&#39;, &#39;This program is free software; you can redistribute it and/or&#39;,
+                &#39;modify it under the terms of the GNU General Public License&#39;,
+                &#39;as published by the Free Software Foundation; either version 2&#39;,
+                &#39;of the License, or (at your option) any later version.&#39;]
+        row=1
+        for line in text:
+            tmp=Label(self.ab_win,text=line)
+            tmp.grid(row=row,column=0,sticky=&#39;news&#39;,padx=4)
+            row=row+1
+        return
+
+    def online_documentation(self,event=None):
+        &#34;&#34;&#34;Open the online documentation&#34;&#34;&#34;
+
+        import webbrowser
+        link=&#39;http://sourceforge.net/projects/tkintertable/&#39;
+        webbrowser.open(link,autoraise=1)
+        return
+
+    def quit(self):
+        self.tablesapp_win.destroy()
+
+        return
+
+class ToolBar(Frame):
+    &#34;&#34;&#34;Uses the parent instance to provide the functions&#34;&#34;&#34;
+
+    def __init__(self, parent=None, parentapp=None):
+        Frame.__init__(self, parent, width=600, height=40)
+        from . import Table_images
+        self.parentframe = parent
+        self.parentapp = parentapp
+        #add buttons
+        img = Table_images.new_proj()
+        self.add_button(&#39;New Project&#39;, self.parentapp.new_project, img)
+        img = Table_images.open_proj()
+        self.add_button(&#39;Open Project&#39;, self.parentapp.open_project, img)
+        img = Table_images.save_proj()
+        self.add_button(&#39;Save Project&#39;, self.parentapp.save_project, img)
+        img = Table_images.add_row()
+        self.add_button(&#39;Add record&#39;, self.parentapp.add_Row, img)
+        img = Table_images.add_col()
+        self.add_button(&#39;Add col&#39;, self.parentapp.add_Column, img)
+        img = Table_images.del_row()
+        self.add_button(&#39;Delete record&#39;, self.parentapp.delete_Row, img)
+        img = Table_images.del_col()
+        self.add_button(&#39;Delete col&#39;, self.parentapp.delete_Column, img)
+        img = Table_images.plot()
+        self.add_button(&#39;Plot&#39;, self.parentapp.plot, img)
+        img = Table_images.plotprefs()
+        self.add_button(&#39;Plot Prefs&#39;, self.parentapp.plotSetup, img)
+
+        return
+
+    def add_button(self, name, callback, img=None):
+        if img==None:
+            b = Button(self, text=name, command=callback)
+        else:
+            b = Button(self, text=name, command=callback,
+                             image=img)
+        b.image = img
+        b.pack(side=LEFT, padx=2, pady=2, ipadx=1, ipady=1)
+
+        return
+
+# Main function, run when invoked as a stand-alone Python program.
+
+def main():
+    &#34;Run the application&#34;
+    import sys, os
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option(&#34;-f&#34;, &#34;--file&#34;, dest=&#34;tablefile&#34;,
+                        help=&#34;Open a table file&#34;, metavar=&#34;FILE&#34;)
+    opts, remainder = parser.parse_args()
+    if opts.tablefile != None:
+        app=TablesApp(datafile=opts.tablefile)
+    else:
+        app=TablesApp()
+    app.mainloop()
+    return
+
+if __name__ == &#39;__main__&#39;:
+    main()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="tkintertable.App.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Run the application</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def main():
+    &#34;Run the application&#34;
+    import sys, os
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option(&#34;-f&#34;, &#34;--file&#34;, dest=&#34;tablefile&#34;,
+                        help=&#34;Open a table file&#34;, metavar=&#34;FILE&#34;)
+    opts, remainder = parser.parse_args()
+    if opts.tablefile != None:
+        app=TablesApp(datafile=opts.tablefile)
+    else:
+        app=TablesApp()
+    app.mainloop()
+    return</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tkintertable.App.TablesApp"><code class="flex name class">
+<span>class <span class="ident">TablesApp</span></span>
+<span>(</span><span>parent=None, data=None, datafile=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Tables app</p>
+<p>Initialize the application.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TablesApp(Frame):
+    &#34;&#34;&#34;
+    Tables app
+    &#34;&#34;&#34;
+    def __init__(self,parent=None,data=None,datafile=None):
+        &#34;Initialize the application.&#34;
+        self.parent=parent
+
+        #If there is data to be loaded, show the dialog first
+        if not self.parent:
+            Frame.__init__(self)
+            self.tablesapp_win=self.master
+
+        else:
+            self.tablesapp_win=Toplevel()
+
+        # Get platform into a variable
+        import platform
+        self.currplatform=platform.system()
+        if not hasattr(self,&#39;defaultsavedir&#39;):
+            self.defaultsavedir = os.getcwd()
+
+        self.preferences=Preferences(&#39;TablesApp&#39;,{&#39;check_for_update&#39;:1})
+        self.loadprefs()
+        self.tablesapp_win.title(&#39;Tables Application&#39;)
+        self.tablesapp_win.geometry(&#39;+200+200&#39;)
+        self.x_size=800
+        self.y_size=600
+        self.createMenuBar()
+        self.apptoolBar = ToolBar(self.tablesapp_win, self)
+        self.apptoolBar.pack(fill=BOTH, expand=NO)
+        #add find bar
+        #self.createSearchBar()
+
+        if data != None:
+            self.data = data
+            self.new_project(data)
+        elif datafile != None:
+            self.open_project(datafile)
+        else:
+            self.new_project()
+
+        self.tablesapp_win.protocol(&#39;WM_DELETE_WINDOW&#39;,self.quit)
+        return
+
+    def createMenuBar(self):
+        &#34;&#34;&#34;Create the menu bar for the application. &#34;&#34;&#34;
+
+        self.menu=Menu(self.tablesapp_win)
+        self.proj_menu={&#39;01New&#39;:{&#39;cmd&#39;:self.new_project},
+                        &#39;02Open&#39;:{&#39;cmd&#39;:self.open_project},
+                        &#39;03Close&#39;:{&#39;cmd&#39;:self.close_project},
+                        &#39;04Save&#39;:{&#39;cmd&#39;:self.save_project},
+                        &#39;05Save As&#39;:{&#39;cmd&#39;:self.save_as_project},
+                        &#39;06Preferences..&#39;:{&#39;cmd&#39;:self.showPrefsDialog},
+                        &#39;08Quit&#39;:{&#39;cmd&#39;:self.quit}}
+        if self.parent:
+            self.proj_menu[&#39;08Return to Database&#39;]={&#39;cmd&#39;:self.return_data}
+        self.proj_menu=self.create_pulldown(self.menu,self.proj_menu)
+        self.menu.add_cascade(label=&#39;Project&#39;,menu=self.proj_menu[&#39;var&#39;])
+
+        self.records_menu={&#39;01Add Row&#39;:{&#39;cmd&#39;:self.add_Row},
+                         &#39;02Delete Row&#39;:{&#39;cmd&#39;:self.delete_Row},
+                         &#39;03Add Column&#39;:{&#39;cmd&#39;:self.add_Column},
+                         &#39;04Delete Column&#39;:{&#39;cmd&#39;:self.delete_Column},
+                         &#39;05Auto Add Rows&#39;:{&#39;cmd&#39;:self.autoAdd_Rows},
+                         &#39;06Auto Add Columns&#39;:{&#39;cmd&#39;:self.autoAdd_Columns},
+                         &#39;07Find&#39;:{&#39;cmd&#39;:self.createSearchBar},
+                         }
+        self.records_menu=self.create_pulldown(self.menu,self.records_menu)
+        self.menu.add_cascade(label=&#39;Records&#39;,menu=self.records_menu[&#39;var&#39;])
+
+        self.sheet_menu={&#39;01Add Sheet&#39;:{&#39;cmd&#39;:self.add_Sheet},
+                         &#39;02Remove Sheet&#39;:{&#39;cmd&#39;:self.delete_Sheet},
+                         &#39;03Copy Sheet&#39;:{&#39;cmd&#39;:self.copy_Sheet},
+                         &#39;04Rename Sheet&#39;:{&#39;cmd&#39;:self.rename_Sheet},
+                         }
+        self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
+        self.menu.add_cascade(label=&#39;Sheet&#39;,menu=self.sheet_menu[&#39;var&#39;])
+
+        self.IO_menu={&#39;01Import from csv file&#39;:{&#39;cmd&#39;:self.import_csv},
+                      &#39;02Export to csv file&#39;:{&#39;cmd&#39;:self.export_csv},
+                      }
+
+        self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
+        self.menu.add_cascade(label=&#39;Import/Export&#39;,menu=self.IO_menu[&#39;var&#39;])
+
+        # Help menu
+        self.help_menu={&#39;01Online Help&#39;:{&#39;cmd&#39;:self.online_documentation},
+                        &#39;02About&#39;:{&#39;cmd&#39;:self.about_Tables}}
+        self.help_menu=self.create_pulldown(self.menu,self.help_menu)
+        self.menu.add_cascade(label=&#39;Help&#39;,menu=self.help_menu[&#39;var&#39;])
+
+        self.tablesapp_win.config(menu=self.menu)
+
+        return
+
+    def create_pulldown(self,menu,dict):
+        &#34;&#34;&#34; Create a pulldown in var from the info in dict  &#34;&#34;&#34;
+
+        var = Menu(menu,tearoff=0)
+        items = dict.keys()
+        #items.sort()
+        for item in items:
+            if item[-3:]==&#39;sep&#39;:
+                var.add_separator()
+            else:
+                # Do we have a command?
+                command=None
+                if &#39;cmd&#39; in  dict[item]:
+                    command=dict[item][&#39;cmd&#39;]
+
+                # Put the command in there
+                if &#39;sc&#39; in dict[item]:
+                    var.add_command(label=&#39;%-25s %9s&#39; %(item[2:],dict[item][&#39;sc&#39;]),command=command)
+                else:
+                    var.add_command(label=&#39;%-25s&#39; %(item[2:]),command=command)
+        dict[&#39;var&#39;]=var
+        return dict
+
+    def createSearchBar(self, event=None):
+        &#34;&#34;&#34;Add a find entry box&#34;&#34;&#34;
+
+        frame = Frame(self.tablesapp_win)
+        row=0
+        def close():
+            frame.destroy()
+        self.findtext=StringVar()
+        self.findbox=Entry(frame,textvariable=self.findtext,width=30,bg=&#39;white&#39;)
+        self.findbox.grid(row=row,column=1,sticky=&#39;news&#39;,columnspan=2,padx=2,pady=2)
+        self.findbox.bind(&#39;&lt;Return&gt;&#39;,self.do_find_text)
+        Label(frame,text=&#39;Find:&#39;).grid(row=row,column=0,sticky=&#39;ew&#39;)
+        self.findagainbutton=Button(frame,text=&#39;Find Again&#39;, command=self.do_find_again)
+        self.findagainbutton.grid(row=row,column=3,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.cbutton=Button(frame,text=&#39;Close&#39;, command=close)
+        self.cbutton.grid(row=row,column=4,sticky=&#39;news&#39;,padx=2,pady=2)
+        frame.pack(fill=BOTH, expand=NO)
+        return
+
+    def loadprefs(self):
+        &#34;&#34;&#34;Setup default prefs file if any of the keys are not present&#34;&#34;&#34;
+
+        defaultprefs = {&#39;textsize&#39;:14,
+                         &#39;windowwidth&#39;: 800 ,&#39;windowheight&#39;:600}
+        for prop in defaultprefs.keys():
+            try:
+                self.preferences.get(prop)
+            except:
+                self.preferences.set(prop, defaultprefs[prop])
+
+        return
+
+    def showPrefsDialog(self):
+        self.prefswindow = self.currenttable.showtablePrefs()
+        return
+
+    def new_project(self, data=None):
+        &#34;&#34;&#34;Create a new table, with model and add the frame&#34;&#34;&#34;
+
+        if hasattr(self,&#39;currenttable&#39;):
+            self.notebook.destroy()
+            self.currenttable.destroy()
+
+        #Create the sheets dict
+        self.sheets = {}
+        self.notebook = Notebook(self.tablesapp_win)
+        self.notebook.pack(fill=&#39;both&#39;, expand=1, padx=4, pady=4)
+        if data !=None:
+            for s in data.keys():
+                sdata = data[s]
+                try:
+                    self.add_Sheet(s ,sdata)
+                except:
+                    print (&#39;skipping&#39;)
+        else:
+            #do the table adding stuff for the initial sheet
+            self.add_Sheet(&#39;sheet1&#39;)
+        #self.notebook.setnaturalsize()
+        return
+
+    def open_project(self, filename=None):
+
+        if filename == None:
+            filename=filedialog.askopenfilename(defaultextension=&#39;.tblprj&#34;&#39;,
+                                                      initialdir=os.getcwd(),
+                                                      filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                                 (&#34;All files&#34;,&#34;*.*&#34;)],
+                                                      parent=self.tablesapp_win)
+        if os.path.isfile(filename):
+            fd = open(filename, &#39;rb&#39;)
+            data = pickle.load(fd)
+            fd.close()
+        self.new_project(data)
+        self.filename=filename
+        return
+
+    def save_project(self):
+
+        if not hasattr(self, &#39;filename&#39;):
+            self.save_as_project()
+        elif self.filename == None:
+            self.save_as_project()
+        else:
+            self.do_save_project(self.filename)
+
+        return
+
+    def save_as_project(self):
+        &#34;&#34;&#34;Save as a new filename&#34;&#34;&#34;
+
+        filename=filedialog.asksaveasfilename(parent=self.tablesapp_win,
+                                                defaultextension=&#39;.tblprj&#39;,
+                                                initialdir=self.defaultsavedir,
+                                                filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                           (&#34;All files&#34;,&#34;*.*&#34;)])
+        if not filename:
+            print (&#39;Returning&#39;)
+            return
+        self.filename=filename
+        self.do_save_project(self.filename)
+        return
+
+    def do_save_project(self, filename):
+        &#34;&#34;&#34;Get model dicts and write all to pickle file&#34;&#34;&#34;
+
+        data={}
+        for s in self.sheets.keys():
+            currtable = self.sheets[s]
+            model = currtable.getModel()
+            data[s] = model.getData()
+
+        fd=open(filename,&#39;wb&#39;)
+        pickle.dump(data,fd)
+        fd.close()
+        return
+
+    def close_project(self):
+        if hasattr(self,&#39;currenttable&#39;):
+            #self.notebook.destroy()
+            self.currenttable.destroy()
+        return
+
+    def import_csv(self):
+
+        importer = TableImporter()
+        #just use the dialog to load and import the file
+        importdialog = importer.import_Dialog(self.tablesapp_win)
+        self.tablesapp_win.wait_window(importdialog)
+        model = TableModel()
+        model.importDict(importer.data)
+        sheetdata = {}
+        sheetdata[&#39;sheet1&#39;] = model.getData()
+        self.new_project(sheetdata)
+        return
+
+    def export_csv(self):
+        from .Tables_IO import TableExporter
+        exporter = TableExporter()
+        exporter.ExportTableData(self.currenttable)
+        return
+
+    def add_Sheet(self, sheetname=None, sheetdata=None):
+        &#34;&#34;&#34;Add a new sheet - handles all the table creation stuff&#34;&#34;&#34;
+
+        def checksheet_name(name):
+            if name == &#39;&#39;:
+                messagebox.showwarning(&#34;Whoops&#34;, &#34;Name should not be blank.&#34;)
+                return 0
+            if name in self.sheets:
+                messagebox.showwarning(&#34;Name exists&#34;, &#34;Sheet name already exists!&#34;)
+                return 0
+        names = [self.notebook.tab(i, &#34;text&#34;) for i in self.notebook.tabs()]
+        noshts = len(names)
+        if sheetname == None:
+            sheetname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter sheet name:&#34;,
+                                                initialvalue=&#39;sheet&#39;+str(noshts+1))
+        checksheet_name(sheetname)
+        page = Frame(self.notebook)
+        self.notebook.add(page, text=sheetname)
+        #Create the table and model if data present
+        if sheetdata != None:
+            model = TableModel(sheetdata)
+            self.currenttable = MyTable(page, model)
+        else:
+            self.currenttable = MyTable(page)
+
+        #Load preferences into table
+        self.currenttable.loadPrefs(self.preferences)
+        #This handles all the canvas and header in the frame passed to constructor
+        self.currenttable.createTableFrame()
+        #add the table to the sheet dict
+        self.sheets[sheetname] = self.currenttable
+        self.saved = 0
+        return sheetname
+
+    def delete_Sheet(self):
+        &#34;&#34;&#34;Delete a sheet&#34;&#34;&#34;
+
+        s = self.notebook.index(self.notebook.select())
+        name = self.notebook.tab(s, &#39;text&#39;)
+        #self.notebook.delete(s)
+        self.notebook.forget(s)
+        del self.sheets[s]
+        return
+
+    def copy_Sheet(self, newname=None):
+        &#34;&#34;&#34;Copy a sheet&#34;&#34;&#34;
+
+        newdata = self.currenttable.getModel().getData().copy()
+        if newname==None:
+            self.add_Sheet(None, newdata)
+        else:
+            self.add_Sheet(newname, newdata)
+        return
+
+    def rename_Sheet(self):
+        &#34;&#34;&#34;Rename a sheet&#34;&#34;&#34;
+
+        #s = self.notebook.getcurselection()
+        s = self.notebook.index(self.notebook.select())
+        newname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter new sheet name:&#34;,
+                                                initialvalue=s)
+        if newname == None:
+            return
+        self.copy_Sheet(newname)
+        self.delete_Sheet()
+        return
+
+    def setcurrenttable(self, event):
+        &#34;&#34;&#34;Set the currenttable so that menu items work with visible sheet&#34;&#34;&#34;
+
+        try:
+            #s = self.notebook.getcurselection()
+            s = self.notebook.index(self.notebook.select())
+            self.currenttable = self.sheets[s]
+        except:
+            pass
+        return
+
+    def add_Row(self):
+        &#34;&#34;&#34;Add a new row&#34;&#34;&#34;
+        self.currenttable.addRow()
+        self.saved = 0
+        return
+
+    def delete_Row(self):
+        &#34;&#34;&#34;Delete currently selected row&#34;&#34;&#34;
+
+        self.currenttable.deleteRow()
+        self.saved = 0
+        return
+
+    def add_Column(self):
+        &#34;&#34;&#34;Add a new column&#34;&#34;&#34;
+
+        self.currenttable.addColumn()
+        self.saved = 0
+        return
+
+    def delete_Column(self):
+        &#34;&#34;&#34;Delete currently selected column in table&#34;&#34;&#34;
+
+        self.currenttable.deleteColumn()
+        self.saved = 0
+        return
+
+    def autoAdd_Rows(self):
+        &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+        self.currenttable.autoAddRows()
+        self.saved = 0
+        return
+
+    def autoAdd_Columns(self):
+        &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+        self.currenttable.autoAddColumns()
+        self.saved = 0
+        return
+
+    def findValue(self):
+        self.currenttable.findValue()
+        return
+
+    def do_find_text(self, event=None):
+        &#34;&#34;&#34;Find the text in the table&#34;&#34;&#34;
+
+        if not hasattr(self,&#39;currenttable&#39;):
+            return
+        import string
+        if string.strip(self.findtext.get())==&#39;&#39;:
+            return
+        searchstring=self.findtext.get()
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring)
+        return
+
+    def do_find_again(self, event=None):
+        &#34;&#34;&#34;Find again&#34;&#34;&#34;
+
+        if not hasattr(self,&#39;currenttable&#39;):
+            return
+        searchstring=self.findtext.get()
+        if self.currenttable!=None:
+            self.currenttable.findValue(searchstring, findagain=1)
+        return
+
+    def plot(self, event=None):
+        self.currenttable.plotSelected()
+        return
+
+    def plotSetup(self, event=None):
+        self.currenttable.plotSetup()
+        return
+
+    def about_Tables(self):
+
+        self.ab_win=Toplevel()
+        self.ab_win.geometry(&#39;+100+350&#39;)
+        self.ab_win.title(&#39;About TablesApp&#39;)
+
+        from . import Table_images
+        logo = Table_images.tableapp_logo()
+        label = Label(self.ab_win,image=logo)
+        label.image = logo
+        label.grid(row=0,column=0,sticky=&#39;news&#39;,padx=4,pady=4)
+
+        text=[&#39;Tables Sample App &#39;,&#39;Shows the use of Tablecanvas class for tkinter&#39;,
+                &#39;Copyright (C) Damien Farrell 2008-&#39;, &#39;This program is free software; you can redistribute it and/or&#39;,
+                &#39;modify it under the terms of the GNU General Public License&#39;,
+                &#39;as published by the Free Software Foundation; either version 2&#39;,
+                &#39;of the License, or (at your option) any later version.&#39;]
+        row=1
+        for line in text:
+            tmp=Label(self.ab_win,text=line)
+            tmp.grid(row=row,column=0,sticky=&#39;news&#39;,padx=4)
+            row=row+1
+        return
+
+    def online_documentation(self,event=None):
+        &#34;&#34;&#34;Open the online documentation&#34;&#34;&#34;
+
+        import webbrowser
+        link=&#39;http://sourceforge.net/projects/tkintertable/&#39;
+        webbrowser.open(link,autoraise=1)
+        return
+
+    def quit(self):
+        self.tablesapp_win.destroy()
+
+        return</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>tkinter.ttk.Frame</li>
+<li>tkinter.ttk.Widget</li>
+<li>tkinter.Widget</li>
+<li>tkinter.BaseWidget</li>
+<li>tkinter.Misc</li>
+<li>tkinter.Pack</li>
+<li>tkinter.Place</li>
+<li>tkinter.Grid</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.App.TablesApp.about_Tables"><code class="name flex">
+<span>def <span class="ident">about_Tables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def about_Tables(self):
+
+    self.ab_win=Toplevel()
+    self.ab_win.geometry(&#39;+100+350&#39;)
+    self.ab_win.title(&#39;About TablesApp&#39;)
+
+    from . import Table_images
+    logo = Table_images.tableapp_logo()
+    label = Label(self.ab_win,image=logo)
+    label.image = logo
+    label.grid(row=0,column=0,sticky=&#39;news&#39;,padx=4,pady=4)
+
+    text=[&#39;Tables Sample App &#39;,&#39;Shows the use of Tablecanvas class for tkinter&#39;,
+            &#39;Copyright (C) Damien Farrell 2008-&#39;, &#39;This program is free software; you can redistribute it and/or&#39;,
+            &#39;modify it under the terms of the GNU General Public License&#39;,
+            &#39;as published by the Free Software Foundation; either version 2&#39;,
+            &#39;of the License, or (at your option) any later version.&#39;]
+    row=1
+    for line in text:
+        tmp=Label(self.ab_win,text=line)
+        tmp.grid(row=row,column=0,sticky=&#39;news&#39;,padx=4)
+        row=row+1
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.add_Column"><code class="name flex">
+<span>def <span class="ident">add_Column</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a new column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_Column(self):
+    &#34;&#34;&#34;Add a new column&#34;&#34;&#34;
+
+    self.currenttable.addColumn()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.add_Row"><code class="name flex">
+<span>def <span class="ident">add_Row</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a new row</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_Row(self):
+    &#34;&#34;&#34;Add a new row&#34;&#34;&#34;
+    self.currenttable.addRow()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.add_Sheet"><code class="name flex">
+<span>def <span class="ident">add_Sheet</span></span>(<span>self, sheetname=None, sheetdata=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a new sheet - handles all the table creation stuff</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_Sheet(self, sheetname=None, sheetdata=None):
+    &#34;&#34;&#34;Add a new sheet - handles all the table creation stuff&#34;&#34;&#34;
+
+    def checksheet_name(name):
+        if name == &#39;&#39;:
+            messagebox.showwarning(&#34;Whoops&#34;, &#34;Name should not be blank.&#34;)
+            return 0
+        if name in self.sheets:
+            messagebox.showwarning(&#34;Name exists&#34;, &#34;Sheet name already exists!&#34;)
+            return 0
+    names = [self.notebook.tab(i, &#34;text&#34;) for i in self.notebook.tabs()]
+    noshts = len(names)
+    if sheetname == None:
+        sheetname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter sheet name:&#34;,
+                                            initialvalue=&#39;sheet&#39;+str(noshts+1))
+    checksheet_name(sheetname)
+    page = Frame(self.notebook)
+    self.notebook.add(page, text=sheetname)
+    #Create the table and model if data present
+    if sheetdata != None:
+        model = TableModel(sheetdata)
+        self.currenttable = MyTable(page, model)
+    else:
+        self.currenttable = MyTable(page)
+
+    #Load preferences into table
+    self.currenttable.loadPrefs(self.preferences)
+    #This handles all the canvas and header in the frame passed to constructor
+    self.currenttable.createTableFrame()
+    #add the table to the sheet dict
+    self.sheets[sheetname] = self.currenttable
+    self.saved = 0
+    return sheetname</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.autoAdd_Columns"><code class="name flex">
+<span>def <span class="ident">autoAdd_Columns</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Auto add x rows</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def autoAdd_Columns(self):
+    &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+    self.currenttable.autoAddColumns()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.autoAdd_Rows"><code class="name flex">
+<span>def <span class="ident">autoAdd_Rows</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Auto add x rows</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def autoAdd_Rows(self):
+    &#34;&#34;&#34;Auto add x rows&#34;&#34;&#34;
+
+    self.currenttable.autoAddRows()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.close_project"><code class="name flex">
+<span>def <span class="ident">close_project</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close_project(self):
+    if hasattr(self,&#39;currenttable&#39;):
+        #self.notebook.destroy()
+        self.currenttable.destroy()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.copy_Sheet"><code class="name flex">
+<span>def <span class="ident">copy_Sheet</span></span>(<span>self, newname=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Copy a sheet</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy_Sheet(self, newname=None):
+    &#34;&#34;&#34;Copy a sheet&#34;&#34;&#34;
+
+    newdata = self.currenttable.getModel().getData().copy()
+    if newname==None:
+        self.add_Sheet(None, newdata)
+    else:
+        self.add_Sheet(newname, newdata)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.createMenuBar"><code class="name flex">
+<span>def <span class="ident">createMenuBar</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create the menu bar for the application.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def createMenuBar(self):
+    &#34;&#34;&#34;Create the menu bar for the application. &#34;&#34;&#34;
+
+    self.menu=Menu(self.tablesapp_win)
+    self.proj_menu={&#39;01New&#39;:{&#39;cmd&#39;:self.new_project},
+                    &#39;02Open&#39;:{&#39;cmd&#39;:self.open_project},
+                    &#39;03Close&#39;:{&#39;cmd&#39;:self.close_project},
+                    &#39;04Save&#39;:{&#39;cmd&#39;:self.save_project},
+                    &#39;05Save As&#39;:{&#39;cmd&#39;:self.save_as_project},
+                    &#39;06Preferences..&#39;:{&#39;cmd&#39;:self.showPrefsDialog},
+                    &#39;08Quit&#39;:{&#39;cmd&#39;:self.quit}}
+    if self.parent:
+        self.proj_menu[&#39;08Return to Database&#39;]={&#39;cmd&#39;:self.return_data}
+    self.proj_menu=self.create_pulldown(self.menu,self.proj_menu)
+    self.menu.add_cascade(label=&#39;Project&#39;,menu=self.proj_menu[&#39;var&#39;])
+
+    self.records_menu={&#39;01Add Row&#39;:{&#39;cmd&#39;:self.add_Row},
+                     &#39;02Delete Row&#39;:{&#39;cmd&#39;:self.delete_Row},
+                     &#39;03Add Column&#39;:{&#39;cmd&#39;:self.add_Column},
+                     &#39;04Delete Column&#39;:{&#39;cmd&#39;:self.delete_Column},
+                     &#39;05Auto Add Rows&#39;:{&#39;cmd&#39;:self.autoAdd_Rows},
+                     &#39;06Auto Add Columns&#39;:{&#39;cmd&#39;:self.autoAdd_Columns},
+                     &#39;07Find&#39;:{&#39;cmd&#39;:self.createSearchBar},
+                     }
+    self.records_menu=self.create_pulldown(self.menu,self.records_menu)
+    self.menu.add_cascade(label=&#39;Records&#39;,menu=self.records_menu[&#39;var&#39;])
+
+    self.sheet_menu={&#39;01Add Sheet&#39;:{&#39;cmd&#39;:self.add_Sheet},
+                     &#39;02Remove Sheet&#39;:{&#39;cmd&#39;:self.delete_Sheet},
+                     &#39;03Copy Sheet&#39;:{&#39;cmd&#39;:self.copy_Sheet},
+                     &#39;04Rename Sheet&#39;:{&#39;cmd&#39;:self.rename_Sheet},
+                     }
+    self.sheet_menu=self.create_pulldown(self.menu,self.sheet_menu)
+    self.menu.add_cascade(label=&#39;Sheet&#39;,menu=self.sheet_menu[&#39;var&#39;])
+
+    self.IO_menu={&#39;01Import from csv file&#39;:{&#39;cmd&#39;:self.import_csv},
+                  &#39;02Export to csv file&#39;:{&#39;cmd&#39;:self.export_csv},
+                  }
+
+    self.IO_menu=self.create_pulldown(self.menu,self.IO_menu)
+    self.menu.add_cascade(label=&#39;Import/Export&#39;,menu=self.IO_menu[&#39;var&#39;])
+
+    # Help menu
+    self.help_menu={&#39;01Online Help&#39;:{&#39;cmd&#39;:self.online_documentation},
+                    &#39;02About&#39;:{&#39;cmd&#39;:self.about_Tables}}
+    self.help_menu=self.create_pulldown(self.menu,self.help_menu)
+    self.menu.add_cascade(label=&#39;Help&#39;,menu=self.help_menu[&#39;var&#39;])
+
+    self.tablesapp_win.config(menu=self.menu)
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.createSearchBar"><code class="name flex">
+<span>def <span class="ident">createSearchBar</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a find entry box</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def createSearchBar(self, event=None):
+    &#34;&#34;&#34;Add a find entry box&#34;&#34;&#34;
+
+    frame = Frame(self.tablesapp_win)
+    row=0
+    def close():
+        frame.destroy()
+    self.findtext=StringVar()
+    self.findbox=Entry(frame,textvariable=self.findtext,width=30,bg=&#39;white&#39;)
+    self.findbox.grid(row=row,column=1,sticky=&#39;news&#39;,columnspan=2,padx=2,pady=2)
+    self.findbox.bind(&#39;&lt;Return&gt;&#39;,self.do_find_text)
+    Label(frame,text=&#39;Find:&#39;).grid(row=row,column=0,sticky=&#39;ew&#39;)
+    self.findagainbutton=Button(frame,text=&#39;Find Again&#39;, command=self.do_find_again)
+    self.findagainbutton.grid(row=row,column=3,sticky=&#39;news&#39;,padx=2,pady=2)
+    self.cbutton=Button(frame,text=&#39;Close&#39;, command=close)
+    self.cbutton.grid(row=row,column=4,sticky=&#39;news&#39;,padx=2,pady=2)
+    frame.pack(fill=BOTH, expand=NO)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.create_pulldown"><code class="name flex">
+<span>def <span class="ident">create_pulldown</span></span>(<span>self, menu, dict)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a pulldown in var from the info in dict</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_pulldown(self,menu,dict):
+    &#34;&#34;&#34; Create a pulldown in var from the info in dict  &#34;&#34;&#34;
+
+    var = Menu(menu,tearoff=0)
+    items = dict.keys()
+    #items.sort()
+    for item in items:
+        if item[-3:]==&#39;sep&#39;:
+            var.add_separator()
+        else:
+            # Do we have a command?
+            command=None
+            if &#39;cmd&#39; in  dict[item]:
+                command=dict[item][&#39;cmd&#39;]
+
+            # Put the command in there
+            if &#39;sc&#39; in dict[item]:
+                var.add_command(label=&#39;%-25s %9s&#39; %(item[2:],dict[item][&#39;sc&#39;]),command=command)
+            else:
+                var.add_command(label=&#39;%-25s&#39; %(item[2:]),command=command)
+    dict[&#39;var&#39;]=var
+    return dict</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.delete_Column"><code class="name flex">
+<span>def <span class="ident">delete_Column</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete currently selected column in table</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete_Column(self):
+    &#34;&#34;&#34;Delete currently selected column in table&#34;&#34;&#34;
+
+    self.currenttable.deleteColumn()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.delete_Row"><code class="name flex">
+<span>def <span class="ident">delete_Row</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete currently selected row</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete_Row(self):
+    &#34;&#34;&#34;Delete currently selected row&#34;&#34;&#34;
+
+    self.currenttable.deleteRow()
+    self.saved = 0
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.delete_Sheet"><code class="name flex">
+<span>def <span class="ident">delete_Sheet</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete a sheet</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete_Sheet(self):
+    &#34;&#34;&#34;Delete a sheet&#34;&#34;&#34;
+
+    s = self.notebook.index(self.notebook.select())
+    name = self.notebook.tab(s, &#39;text&#39;)
+    #self.notebook.delete(s)
+    self.notebook.forget(s)
+    del self.sheets[s]
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.do_find_again"><code class="name flex">
+<span>def <span class="ident">do_find_again</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Find again</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def do_find_again(self, event=None):
+    &#34;&#34;&#34;Find again&#34;&#34;&#34;
+
+    if not hasattr(self,&#39;currenttable&#39;):
+        return
+    searchstring=self.findtext.get()
+    if self.currenttable!=None:
+        self.currenttable.findValue(searchstring, findagain=1)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.do_find_text"><code class="name flex">
+<span>def <span class="ident">do_find_text</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Find the text in the table</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def do_find_text(self, event=None):
+    &#34;&#34;&#34;Find the text in the table&#34;&#34;&#34;
+
+    if not hasattr(self,&#39;currenttable&#39;):
+        return
+    import string
+    if string.strip(self.findtext.get())==&#39;&#39;:
+        return
+    searchstring=self.findtext.get()
+    if self.currenttable!=None:
+        self.currenttable.findValue(searchstring)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.do_save_project"><code class="name flex">
+<span>def <span class="ident">do_save_project</span></span>(<span>self, filename)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get model dicts and write all to pickle file</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def do_save_project(self, filename):
+    &#34;&#34;&#34;Get model dicts and write all to pickle file&#34;&#34;&#34;
+
+    data={}
+    for s in self.sheets.keys():
+        currtable = self.sheets[s]
+        model = currtable.getModel()
+        data[s] = model.getData()
+
+    fd=open(filename,&#39;wb&#39;)
+    pickle.dump(data,fd)
+    fd.close()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.export_csv"><code class="name flex">
+<span>def <span class="ident">export_csv</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def export_csv(self):
+    from .Tables_IO import TableExporter
+    exporter = TableExporter()
+    exporter.ExportTableData(self.currenttable)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.findValue"><code class="name flex">
+<span>def <span class="ident">findValue</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def findValue(self):
+    self.currenttable.findValue()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.import_csv"><code class="name flex">
+<span>def <span class="ident">import_csv</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def import_csv(self):
+
+    importer = TableImporter()
+    #just use the dialog to load and import the file
+    importdialog = importer.import_Dialog(self.tablesapp_win)
+    self.tablesapp_win.wait_window(importdialog)
+    model = TableModel()
+    model.importDict(importer.data)
+    sheetdata = {}
+    sheetdata[&#39;sheet1&#39;] = model.getData()
+    self.new_project(sheetdata)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.loadprefs"><code class="name flex">
+<span>def <span class="ident">loadprefs</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Setup default prefs file if any of the keys are not present</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def loadprefs(self):
+    &#34;&#34;&#34;Setup default prefs file if any of the keys are not present&#34;&#34;&#34;
+
+    defaultprefs = {&#39;textsize&#39;:14,
+                     &#39;windowwidth&#39;: 800 ,&#39;windowheight&#39;:600}
+    for prop in defaultprefs.keys():
+        try:
+            self.preferences.get(prop)
+        except:
+            self.preferences.set(prop, defaultprefs[prop])
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.new_project"><code class="name flex">
+<span>def <span class="ident">new_project</span></span>(<span>self, data=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new table, with model and add the frame</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def new_project(self, data=None):
+    &#34;&#34;&#34;Create a new table, with model and add the frame&#34;&#34;&#34;
+
+    if hasattr(self,&#39;currenttable&#39;):
+        self.notebook.destroy()
+        self.currenttable.destroy()
+
+    #Create the sheets dict
+    self.sheets = {}
+    self.notebook = Notebook(self.tablesapp_win)
+    self.notebook.pack(fill=&#39;both&#39;, expand=1, padx=4, pady=4)
+    if data !=None:
+        for s in data.keys():
+            sdata = data[s]
+            try:
+                self.add_Sheet(s ,sdata)
+            except:
+                print (&#39;skipping&#39;)
+    else:
+        #do the table adding stuff for the initial sheet
+        self.add_Sheet(&#39;sheet1&#39;)
+    #self.notebook.setnaturalsize()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.online_documentation"><code class="name flex">
+<span>def <span class="ident">online_documentation</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Open the online documentation</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def online_documentation(self,event=None):
+    &#34;&#34;&#34;Open the online documentation&#34;&#34;&#34;
+
+    import webbrowser
+    link=&#39;http://sourceforge.net/projects/tkintertable/&#39;
+    webbrowser.open(link,autoraise=1)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.open_project"><code class="name flex">
+<span>def <span class="ident">open_project</span></span>(<span>self, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def open_project(self, filename=None):
+
+    if filename == None:
+        filename=filedialog.askopenfilename(defaultextension=&#39;.tblprj&#34;&#39;,
+                                                  initialdir=os.getcwd(),
+                                                  filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                             (&#34;All files&#34;,&#34;*.*&#34;)],
+                                                  parent=self.tablesapp_win)
+    if os.path.isfile(filename):
+        fd = open(filename, &#39;rb&#39;)
+        data = pickle.load(fd)
+        fd.close()
+    self.new_project(data)
+    self.filename=filename
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.plot"><code class="name flex">
+<span>def <span class="ident">plot</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plot(self, event=None):
+    self.currenttable.plotSelected()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.plotSetup"><code class="name flex">
+<span>def <span class="ident">plotSetup</span></span>(<span>self, event=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plotSetup(self, event=None):
+    self.currenttable.plotSetup()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.quit"><code class="name flex">
+<span>def <span class="ident">quit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Quit the Tcl interpreter. All widgets will be destroyed.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def quit(self):
+    self.tablesapp_win.destroy()
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.rename_Sheet"><code class="name flex">
+<span>def <span class="ident">rename_Sheet</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Rename a sheet</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def rename_Sheet(self):
+    &#34;&#34;&#34;Rename a sheet&#34;&#34;&#34;
+
+    #s = self.notebook.getcurselection()
+    s = self.notebook.index(self.notebook.select())
+    newname = simpledialog.askstring(&#34;New sheet name?&#34;, &#34;Enter new sheet name:&#34;,
+                                            initialvalue=s)
+    if newname == None:
+        return
+    self.copy_Sheet(newname)
+    self.delete_Sheet()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.save_as_project"><code class="name flex">
+<span>def <span class="ident">save_as_project</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save as a new filename</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_as_project(self):
+    &#34;&#34;&#34;Save as a new filename&#34;&#34;&#34;
+
+    filename=filedialog.asksaveasfilename(parent=self.tablesapp_win,
+                                            defaultextension=&#39;.tblprj&#39;,
+                                            initialdir=self.defaultsavedir,
+                                            filetypes=[(&#34;TableApp project&#34;,&#34;*.tblprj&#34;),
+                                                       (&#34;All files&#34;,&#34;*.*&#34;)])
+    if not filename:
+        print (&#39;Returning&#39;)
+        return
+    self.filename=filename
+    self.do_save_project(self.filename)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.save_project"><code class="name flex">
+<span>def <span class="ident">save_project</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_project(self):
+
+    if not hasattr(self, &#39;filename&#39;):
+        self.save_as_project()
+    elif self.filename == None:
+        self.save_as_project()
+    else:
+        self.do_save_project(self.filename)
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.setcurrenttable"><code class="name flex">
+<span>def <span class="ident">setcurrenttable</span></span>(<span>self, event)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the currenttable so that menu items work with visible sheet</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setcurrenttable(self, event):
+    &#34;&#34;&#34;Set the currenttable so that menu items work with visible sheet&#34;&#34;&#34;
+
+    try:
+        #s = self.notebook.getcurselection()
+        s = self.notebook.index(self.notebook.select())
+        self.currenttable = self.sheets[s]
+    except:
+        pass
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.App.TablesApp.showPrefsDialog"><code class="name flex">
+<span>def <span class="ident">showPrefsDialog</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def showPrefsDialog(self):
+    self.prefswindow = self.currenttable.showtablePrefs()
+    return</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="tkintertable.App.ToolBar"><code class="flex name class">
+<span>class <span class="ident">ToolBar</span></span>
+<span>(</span><span>parent=None, parentapp=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Uses the parent instance to provide the functions</p>
+<p>Construct a Ttk Frame with parent master.</p>
+<p>STANDARD OPTIONS</p>
+<pre><code>class, cursor, style, takefocus
+</code></pre>
+<p>WIDGET-SPECIFIC OPTIONS</p>
+<pre><code>borderwidth, relief, padding, width, height
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ToolBar(Frame):
+    &#34;&#34;&#34;Uses the parent instance to provide the functions&#34;&#34;&#34;
+
+    def __init__(self, parent=None, parentapp=None):
+        Frame.__init__(self, parent, width=600, height=40)
+        from . import Table_images
+        self.parentframe = parent
+        self.parentapp = parentapp
+        #add buttons
+        img = Table_images.new_proj()
+        self.add_button(&#39;New Project&#39;, self.parentapp.new_project, img)
+        img = Table_images.open_proj()
+        self.add_button(&#39;Open Project&#39;, self.parentapp.open_project, img)
+        img = Table_images.save_proj()
+        self.add_button(&#39;Save Project&#39;, self.parentapp.save_project, img)
+        img = Table_images.add_row()
+        self.add_button(&#39;Add record&#39;, self.parentapp.add_Row, img)
+        img = Table_images.add_col()
+        self.add_button(&#39;Add col&#39;, self.parentapp.add_Column, img)
+        img = Table_images.del_row()
+        self.add_button(&#39;Delete record&#39;, self.parentapp.delete_Row, img)
+        img = Table_images.del_col()
+        self.add_button(&#39;Delete col&#39;, self.parentapp.delete_Column, img)
+        img = Table_images.plot()
+        self.add_button(&#39;Plot&#39;, self.parentapp.plot, img)
+        img = Table_images.plotprefs()
+        self.add_button(&#39;Plot Prefs&#39;, self.parentapp.plotSetup, img)
+
+        return
+
+    def add_button(self, name, callback, img=None):
+        if img==None:
+            b = Button(self, text=name, command=callback)
+        else:
+            b = Button(self, text=name, command=callback,
+                             image=img)
+        b.image = img
+        b.pack(side=LEFT, padx=2, pady=2, ipadx=1, ipady=1)
+
+        return</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>tkinter.ttk.Frame</li>
+<li>tkinter.ttk.Widget</li>
+<li>tkinter.Widget</li>
+<li>tkinter.BaseWidget</li>
+<li>tkinter.Misc</li>
+<li>tkinter.Pack</li>
+<li>tkinter.Place</li>
+<li>tkinter.Grid</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.App.ToolBar.add_button"><code class="name flex">
+<span>def <span class="ident">add_button</span></span>(<span>self, name, callback, img=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_button(self, name, callback, img=None):
+    if img==None:
+        b = Button(self, text=name, command=callback)
+    else:
+        b = Button(self, text=name, command=callback,
+                         image=img)
+    b.image = img
+    b.pack(side=LEFT, padx=2, pady=2, ipadx=1, ipady=1)
+
+    return</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="tkintertable.App.main" href="#tkintertable.App.main">main</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tkintertable.App.TablesApp" href="#tkintertable.App.TablesApp">TablesApp</a></code></h4>
+<ul class="">
+<li><code><a title="tkintertable.App.TablesApp.about_Tables" href="#tkintertable.App.TablesApp.about_Tables">about_Tables</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.add_Column" href="#tkintertable.App.TablesApp.add_Column">add_Column</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.add_Row" href="#tkintertable.App.TablesApp.add_Row">add_Row</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.add_Sheet" href="#tkintertable.App.TablesApp.add_Sheet">add_Sheet</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.autoAdd_Columns" href="#tkintertable.App.TablesApp.autoAdd_Columns">autoAdd_Columns</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.autoAdd_Rows" href="#tkintertable.App.TablesApp.autoAdd_Rows">autoAdd_Rows</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.close_project" href="#tkintertable.App.TablesApp.close_project">close_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.copy_Sheet" href="#tkintertable.App.TablesApp.copy_Sheet">copy_Sheet</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.createMenuBar" href="#tkintertable.App.TablesApp.createMenuBar">createMenuBar</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.createSearchBar" href="#tkintertable.App.TablesApp.createSearchBar">createSearchBar</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.create_pulldown" href="#tkintertable.App.TablesApp.create_pulldown">create_pulldown</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.delete_Column" href="#tkintertable.App.TablesApp.delete_Column">delete_Column</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.delete_Row" href="#tkintertable.App.TablesApp.delete_Row">delete_Row</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.delete_Sheet" href="#tkintertable.App.TablesApp.delete_Sheet">delete_Sheet</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.do_find_again" href="#tkintertable.App.TablesApp.do_find_again">do_find_again</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.do_find_text" href="#tkintertable.App.TablesApp.do_find_text">do_find_text</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.do_save_project" href="#tkintertable.App.TablesApp.do_save_project">do_save_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.export_csv" href="#tkintertable.App.TablesApp.export_csv">export_csv</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.findValue" href="#tkintertable.App.TablesApp.findValue">findValue</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.import_csv" href="#tkintertable.App.TablesApp.import_csv">import_csv</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.loadprefs" href="#tkintertable.App.TablesApp.loadprefs">loadprefs</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.new_project" href="#tkintertable.App.TablesApp.new_project">new_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.online_documentation" href="#tkintertable.App.TablesApp.online_documentation">online_documentation</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.open_project" href="#tkintertable.App.TablesApp.open_project">open_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.plot" href="#tkintertable.App.TablesApp.plot">plot</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.plotSetup" href="#tkintertable.App.TablesApp.plotSetup">plotSetup</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.quit" href="#tkintertable.App.TablesApp.quit">quit</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.rename_Sheet" href="#tkintertable.App.TablesApp.rename_Sheet">rename_Sheet</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.save_as_project" href="#tkintertable.App.TablesApp.save_as_project">save_as_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.save_project" href="#tkintertable.App.TablesApp.save_project">save_project</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.setcurrenttable" href="#tkintertable.App.TablesApp.setcurrenttable">setcurrenttable</a></code></li>
+<li><code><a title="tkintertable.App.TablesApp.showPrefsDialog" href="#tkintertable.App.TablesApp.showPrefsDialog">showPrefsDialog</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="tkintertable.App.ToolBar" href="#tkintertable.App.ToolBar">ToolBar</a></code></h4>
+<ul class="">
+<li><code><a title="tkintertable.App.ToolBar.add_button" href="#tkintertable.App.ToolBar.add_button">add_button</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

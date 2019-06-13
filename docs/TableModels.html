@@ -1,0 +1,2885 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.TableModels API documentation</title>
+<meta name="description" content="Module implementing the TableModel class that manages data for
+it&#39;s associated TableCanvas …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.TableModels</code></h1>
+</header>
+<section id="section-intro">
+<p>Module implementing the TableModel class that manages data for
+it's associated TableCanvas.</p>
+<p>Created Oct 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Module implementing the TableModel class that manages data for
+    it&#39;s associated TableCanvas.
+
+    Created Oct 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, division, print_function
+from .TableFormula import Formula
+from . import Filtering
+from types import *
+from collections import OrderedDict
+import operator
+import string, types, copy
+import pickle, os, sys, csv
+
+class TableModel(object):
+    &#34;&#34;&#34;A base model for managing the data in a TableCanvas class&#34;&#34;&#34;
+
+    keywords = {&#39;columnnames&#39;:&#39;columnNames&#39;, &#39;columntypes&#39;:&#39;columntypes&#39;,
+               &#39;columnlabels&#39;:&#39;columnlabels&#39;, &#39;columnorder&#39;:&#39;columnOrder&#39;,
+               &#39;colors&#39;:&#39;colors&#39;}
+
+    def __init__(self, newdict=None, rows=None, columns=None):
+        &#34;&#34;&#34;Constructor&#34;&#34;&#34;
+        self.initialiseFields()
+        self.setupModel(newdict, rows, columns)
+        return
+
+    def setupModel(self, newdict, rows=None, columns=None):
+        &#34;&#34;&#34;Create table model&#34;&#34;&#34;
+
+        if newdict != None:
+            self.data = copy.deepcopy(newdict)
+            for k in self.keywords:
+                if k in self.data:
+                    self.__dict__[self.keywords[k]] = self.data[k]
+                    del self.data[k]
+            #read in the record list order
+            if &#39;reclist&#39; in self.data:
+                temp = self.data[&#39;reclist&#39;]
+                del self.data[&#39;reclist&#39;]
+                self.reclist = temp
+            else:
+                self.reclist = self.data.keys()
+        else:
+            #just make a new empty model
+            self.createEmptyModel()
+
+        if not set(self.reclist) == set(self.data.keys()):
+            print (&#39;reclist does not match data keys&#39;)
+        #restore last column order
+        if hasattr(self, &#39;columnOrder&#39;) and self.columnOrder != None:
+            self.columnNames=[]
+            for i in self.columnOrder.keys():
+                self.columnNames.append(self.columnOrder[i])
+                i=i+1
+        self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+        #setup default display for column types
+        self.default_display = {&#39;text&#39; : &#39;showstring&#39;,
+                                &#39;number&#39; : &#39;numtostring&#39;}
+        #set default sort order as first col
+        if len(self.columnNames)&gt;0:
+            self.sortkey = self.columnNames[0]
+        else:
+            self.sortkey = None
+        #add rows and cols if they are given in the constructor
+        if newdict == None:
+            if rows != None:
+                self.autoAddRows(rows)
+            if columns != None:
+                self.autoAddColumns(columns)
+        self.filteredrecs = None
+        return
+
+    def initialiseFields(self):
+        &#34;&#34;&#34;Create base fields, some of which are not saved&#34;&#34;&#34;
+        self.data = None    # holds the table dict
+        self.colors = {}    # holds cell colors
+        self.colors[&#39;fg&#39;]={}
+        self.colors[&#39;bg&#39;]={}
+        #default types
+        self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+        #list of editable column types
+        self.editable={}
+        self.nodisplay = []
+        self.columnwidths={}  #used to store col widths, not held in saved data
+        return
+
+    def createEmptyModel(self):
+        &#34;&#34;&#34;Create the basic empty model dict&#34;&#34;&#34;
+
+        self.data = {}
+        # Define the starting column names and locations in the table.
+        self.columnNames = []
+        self.columntypes = {}
+        self.columnOrder = None
+        #record column labels for use in a table header
+        self.columnlabels={}
+        for colname in self.columnNames:
+            self.columnlabels[colname]=colname
+        self.reclist = list(self.data.keys())
+        return
+
+    def importCSV(self, filename, sep=&#39;,&#39;):
+        &#34;&#34;&#34;Import table data from a comma separated file.&#34;&#34;&#34;
+
+        if not os.path.isfile(filename) or not os.path.exists(filename):
+            print (&#39;no such file&#39;)
+            return None
+
+        #takes first row as field names
+        dictreader = csv.DictReader(open(filename, &#34;r&#34;), delimiter=sep)
+        dictdata = {}
+        count=0
+        for rec in dictreader:
+            dictdata[count]=rec
+            count=count+1
+        self.importDict(dictdata)
+        return
+
+    def importDict(self, newdata):
+        &#34;&#34;&#34;Try to create a table model from a dict of the form
+           {{&#39;rec1&#39;: {&#39;col1&#39;: 3, &#39;col2&#39;: 2}, ..}&#34;&#34;&#34;
+
+        #get cols from sub data keys
+        colnames = []
+        for k in newdata:
+            fields = newdata[k].keys()
+            for f in fields:
+                if not f in colnames:
+                    colnames.append(f)
+        for c in colnames:
+            self.addColumn(c)
+        #add the data
+        self.data.update(newdata)
+        self.reclist = list(self.data.keys())
+        return
+
+    def getDefaultTypes(self):
+        &#34;&#34;&#34;Get possible field types for this table model&#34;&#34;&#34;
+        return self.defaulttypes
+
+    def getData(self):
+        &#34;&#34;&#34;Return the current data for saving&#34;&#34;&#34;
+
+        data = copy.deepcopy(self.data)
+        data[&#39;colors&#39;] = self.colors
+        data[&#39;columnnames&#39;] = self.columnNames
+        #we keep original record order
+        data[&#39;reclist&#39;] = self.reclist
+        #record current col order
+        data[&#39;columnorder&#39;]={}
+        i=0
+        for name in self.columnNames:
+            data[&#39;columnorder&#39;][i] = name
+            i=i+1
+        data[&#39;columntypes&#39;] = self.columntypes
+        data[&#39;columnlabels&#39;] = self.columnlabels
+        return data
+
+    def getAllCells(self):
+        &#34;&#34;&#34;Return a dict of the form rowname: list of cell contents
+          Useful for a simple table export for example&#34;&#34;&#34;
+
+        records={}
+        for row in range(len(self.reclist)):
+            recdata=[]
+            for col in range(len(self.columnNames)):
+                recdata.append(self.getValueAt(row,col))
+            records[row]=recdata
+        return records
+
+    def getColCells(self, colIndex):
+        &#34;&#34;&#34;Get the viewable contents of a col into a list&#34;&#34;&#34;
+
+        collist = []
+        if self.getColumnType(colIndex) == &#39;Link&#39;:
+            return [&#39;xxxxxx&#39;]
+        else:
+            for row in range(len(self.reclist)):
+                v = self.getValueAt(row, colIndex)
+                collist.append(v)
+        return collist
+
+    def getlongestEntry(self, columnIndex):
+        &#34;&#34;&#34;Get the longest cell entry in the col&#34;&#34;&#34;
+
+        collist = self.getColCells(columnIndex)
+        maxw=5
+        for c in collist:
+            try:
+                w = len(str(c))
+            except UnicodeEncodeError:
+                pass
+            if w &gt; maxw:
+                maxw = w
+        #print &#39;longest width&#39;, maxw
+        return maxw
+
+    def getRecordAtRow(self, rowIndex):
+        &#34;&#34;&#34;Get the entire record at the specifed row.&#34;&#34;&#34;
+
+        name = self.getRecName(rowIndex)
+        record = self.data[name]
+        return record
+
+    def getCellRecord(self, rowIndex, columnIndex):
+        &#34;&#34;&#34;Get the data held in this row and column&#34;&#34;&#34;
+
+        value = None
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        name = self.getRecName(rowIndex)
+        #print self.data[name]
+        if colname in self.data[name]:
+            celldata=self.data[name][colname]
+        else:
+            celldata=None
+        return celldata
+
+    def deleteCellRecord(self, rowIndex, columnIndex):
+        &#34;&#34;&#34;Remove the cell data at this row/column&#34;&#34;&#34;
+
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        name = self.getRecName(rowIndex)
+        if colname in self.data[name]:
+            del self.data[name][colname]
+        return
+
+    def getRecName(self, rowIndex):
+        &#34;&#34;&#34;Get record name from row number&#34;&#34;&#34;
+
+        if len(self.reclist)==0:
+            return None
+        if self.filteredrecs != None:
+            name = self.filteredrecs[rowIndex]
+        else:
+            name = self.reclist[rowIndex]
+        return name
+
+    def setRecName(self, newname, rowIndex):
+        &#34;&#34;&#34;Set the record name to another value - requires re-setting in all
+           dicts that this rec is referenced&#34;&#34;&#34;
+
+        if len(self.reclist)==0:
+            return None
+        currname = self.getRecName(rowIndex)
+        self.reclist[rowIndex] = newname
+        temp = copy.deepcopy(self.data[currname])
+        self.data[newname] = temp
+        #self.data[newname][&#39;Name&#39;] = newname
+        del self.data[currname]
+        for key in [&#39;bg&#39;, &#39;fg&#39;]:
+            if currname in self.colors[key]:
+                temp = copy.deepcopy(self.colors[key][currname])
+                self.colors[key][newname] = temp
+                del self.colors[key][currname]
+        print (&#39;renamed&#39;)
+        #would also need to resolve all refs to this rec in formulas here!
+
+        return
+
+    def getRecordAttributeAtColumn(self, rowIndex=None, columnIndex=None,
+                                        recName=None, columnName=None):
+         &#34;&#34;&#34;Get the attribute of the record at the specified column index.
+            This determines what will be displayed in the cell&#34;&#34;&#34;
+
+         value = None
+         if columnName != None and recName != None:
+             if columnName not in self.data[recName]:
+                 return &#39;&#39;
+             cell = self.data[recName][columnName]
+         else:
+             cell = self.getCellRecord(rowIndex, columnIndex)
+             columnName = self.getColumnName(columnIndex)
+         if cell == None:
+             cell=&#39;&#39;
+         # Set the value based on the data record field
+         coltype = self.columntypes[columnName]
+         if Formula.isFormula(cell) == True:
+             value = self.doFormula(cell)
+             return value
+
+         if not type(cell) is dict:
+             if coltype == &#39;text&#39; or coltype == &#39;Text&#39;:
+                 value = cell
+             elif coltype == &#39;number&#39;:
+                 value = str(cell)
+             else:
+                 value = &#39;other&#39;
+         if value==None:
+             value=&#39;&#39;
+         return value
+
+    def getRecordIndex(self, recname):
+        rowIndex = int(self.reclist.index(recname))
+        return rowIndex
+
+    def setSortOrder(self, columnIndex=None, columnName=None, reverse=0):
+        &#34;&#34;&#34;Changes the order that records are sorted in, which will
+           be reflected in the table upon redrawing&#34;&#34;&#34;
+
+        if columnName != None and columnName in self.columnNames:
+            self.sortkey = columnName
+        elif columnIndex != None:
+            self.sortkey = self.getColumnName(columnIndex)
+        else:
+            return
+        self.reclist = list(self.createSortMap(self.reclist, self.sortkey, reverse))
+        if self.filteredrecs != None:
+            self.filteredrecs = self.createSortMap(self.filteredrecs, self.sortkey, reverse)
+        return
+
+    def createSortMap(self, names, sortkey, reverse=0):
+        &#34;&#34;&#34;Create a sort mapping for given list&#34;&#34;&#34;
+
+        recdata = []
+        for rec in names:
+            recdata.append(self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey))
+        #try create list of floats if col has numbers only
+        try:
+            recdata = self.toFloats(recdata)
+        except:
+            pass
+        smap = zip(names, recdata)
+        #sort the mapping by the second key
+        smap = sorted(smap, key=operator.itemgetter(1), reverse=reverse)
+        #now sort the main reclist by the mapping order
+        sortmap = map(operator.itemgetter(0), smap)
+        return sortmap
+
+    def toFloats(self, l):
+        x=[]
+        for i in l:
+            if i == &#39;&#39;:
+                x.append(0.0)
+            else:
+                x.append(float(i))
+        return x
+
+    &#39;&#39;&#39;def getSortIndex(self):
+        &#34;&#34;&#34;Return the current sort order index&#34;&#34;&#34;
+        if self.sortcolumnIndex:
+            return self.sortcolumnIndex
+        else:
+            return 0&#39;&#39;&#39;
+
+    def moveColumn(self, oldcolumnIndex, newcolumnIndex):
+        &#34;&#34;&#34;Changes the order of columns&#34;&#34;&#34;
+        self.oldnames = self.columnNames
+        self.columnNames=[]
+
+        #write out a new column names list - tedious
+        moved = self.oldnames[oldcolumnIndex]
+        del self.oldnames[oldcolumnIndex]
+        #print self.oldnames
+        i=0
+        for c in self.oldnames:
+            if i==newcolumnIndex:
+                self.columnNames.append(moved)
+            self.columnNames.append(c)
+            i=i+1
+        #if new col is at end just append
+        if moved not in self.columnNames:
+            self.columnNames.append(moved)
+        return
+
+    def getNextKey(self):
+        &#34;&#34;&#34;Return the next numeric key in the dict&#34;&#34;&#34;
+        num = len(self.reclist)+1
+        return num
+
+    def addRow(self, key=None, **kwargs):
+        &#34;&#34;&#34;Add a row&#34;&#34;&#34;
+        if key == &#39;&#39;:
+            return
+        if key==None:
+            key = self.getNextKey()
+        if key in self.data or key in self.reclist:
+            print (&#39;name already present!!&#39;)
+            return
+        self.data[key]={}
+        for k in kwargs:
+            if not k in self.columnNames:
+                self.addColumn(k)
+            self.data[key][k] = str(kwargs[k])
+        self.reclist.append(key)
+        return key
+
+    def deleteRow(self, rowIndex=None, key=None, update=True):
+        &#34;&#34;&#34;Delete a row&#34;&#34;&#34;
+        if key == None or not key in self.reclist:
+            key = self.getRecName(rowIndex)
+        del self.data[key]
+        if update==True:
+            self.reclist.remove(key)
+        return
+
+    def deleteRows(self, rowlist=None):
+        &#34;&#34;&#34;Delete multiple or all rows&#34;&#34;&#34;
+        if rowlist == None:
+            rowlist = range(len(self.reclist))
+        names = [self.getRecName(i) for i in rowlist]
+        for name in names:
+            self.deleteRow(key=name, update=True)
+        return
+
+    def addColumn(self, colname=None, coltype=None):
+        &#34;&#34;&#34;Add a column&#34;&#34;&#34;
+        index = self.getColumnCount()+ 1
+        if colname == None:
+            colname=str(index)
+        if colname in self.columnNames:
+            #print &#39;name is present!&#39;
+            return
+        self.columnNames.append(colname)
+        self.columnlabels[colname] = colname
+        if coltype == None:
+            self.columntypes[colname]=&#39;text&#39;
+        else:
+            self.columntypes[colname]=coltype
+        return
+
+    def deleteColumn(self, columnIndex):
+        &#34;&#34;&#34;delete a column&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        self.columnNames.remove(colname)
+        del self.columnlabels[colname]
+        del self.columntypes[colname]
+        #remove this field from every record
+        for recname in self.reclist:
+            if colname in self.data[recname]:
+                del self.data[recname][colname]
+        if self.sortkey != None:
+            currIndex = self.getColumnIndex(self.sortkey)
+            if columnIndex == currIndex:
+                self.setSortOrder(0)
+        #print &#39;column deleted&#39;
+        #print &#39;new cols:&#39;, self.columnNames
+        return
+
+    def deleteColumns(self, cols=None):
+        &#34;&#34;&#34;Remove all cols or list provided&#34;&#34;&#34;
+        if cols == None:
+            cols = self.columnNames
+        if self.getColumnCount() == 0:
+            return
+        for col in cols:
+            self.deleteColumn(col)
+        return
+
+    def autoAddRows(self, numrows=None):
+        &#34;&#34;&#34;Automatically add x number of records&#34;&#34;&#34;
+        rows = self.getRowCount()
+        ints = [i for i in self.reclist if isinstance(i, int)]
+        if len(ints)&gt;0:
+            start = max(ints)+1
+        else:
+            start = 0
+        #we don&#39;t use addRow as it&#39;s too slow
+        keys = range(start,start+numrows)
+        #make sure no keys are present already
+        keys = list(set(keys)-set(self.reclist))
+        newdata = {}
+        for k in keys:
+            newdata[k] = {}
+        self.data.update(newdata)
+        self.reclist.extend(newdata.keys())
+        return keys
+
+    def autoAddColumns(self, numcols=None):
+        &#34;&#34;&#34;Automatically add x number of cols&#34;&#34;&#34;
+
+        #alphabet = string.lowercase[:26]
+        alphabet = string.ascii_lowercase
+        currcols=self.getColumnCount()
+        #find where to start
+        start = currcols + 1
+        end = currcols + numcols + 1
+        new = []
+        for n in range(start, end):
+            new.append(str(n))
+        #check if any of these colnames present
+        common = set(new) &amp; set(self.columnNames)
+        extra = len(common)
+        end = end + extra
+        for x in range(start, end):
+            self.addColumn(str(x))
+        return
+
+    def relabel_Column(self, columnIndex, newname):
+        &#34;&#34;&#34;Change the column label - can be used in a table header&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        self.columnlabels[colname]=newname
+        return
+
+    def getColumnType(self, columnIndex):
+        &#34;&#34;&#34;Get the column type&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        return coltype
+
+    def getColumnCount(self):
+         &#34;&#34;&#34;Returns the number of columns in the data model.&#34;&#34;&#34;
+         return len(self.columnNames)
+
+    def getColumnName(self, columnIndex):
+         &#34;&#34;&#34;Returns the name of the given column by columnIndex.&#34;&#34;&#34;
+         return self.columnNames[columnIndex]
+
+    def getColumnLabel(self, columnIndex):
+        &#34;&#34;&#34;Returns the label for this column&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        return self.columnlabels[colname]
+
+    def getColumnIndex(self, columnName):
+        &#34;&#34;&#34;Returns the column index for this column&#34;&#34;&#34;
+        colindex = self.columnNames.index(columnName)
+        return colindex
+
+    def getColumnData(self, columnIndex=None, columnName=None,
+                        filters=None):
+        &#34;&#34;&#34;Return the data in a list for this col,
+            filters is a tuple of the form (key,value,operator,bool)&#34;&#34;&#34;
+        if columnIndex != None and columnIndex &lt; len(self.columnNames):
+            columnName = self.getColumnName(columnIndex)
+        names = Filtering.doFiltering(searchfunc=self.filterBy,
+                                         filters=filters)
+        coldata = [self.data[n][columnName] for n in names]
+        return coldata
+
+    def getColumns(self, colnames, filters=None, allowempty=True):
+        &#34;&#34;&#34;Get column data for multiple cols, with given filter options,
+            filterby: list of tuples of the form (key,value,operator,bool)
+            allowempty: boolean if false means rows with empty vals for any
+            required fields are not returned
+            returns: lists of column data&#34;&#34;&#34;
+
+        def evaluate(l):
+            for i in l:
+                if i == &#39;&#39; or i == None:
+                    return False
+            return True
+        coldata=[]
+        for c in colnames:
+            vals = self.getColumnData(columnName=c, filters=filters)
+            coldata.append(vals)
+        if allowempty == False:
+            result = [i for i in zip(*coldata) if evaluate(i) == True]
+            coldata = zip(*result)
+        return coldata
+
+    def getDict(self, colnames, filters=None):
+        &#34;&#34;&#34;Get the model data as a dict for given columns with filter options&#34;&#34;&#34;
+        data={}
+        names = self.reclist
+        cols = self.getColumns(colnames, filters)
+        coldata = zip(*cols)
+        for name,cdata in zip(names, coldata):
+            data[name] = dict(zip(colnames,cdata))
+        return data
+
+    def filterBy(self, filtercol, value, op=&#39;contains&#39;, userecnames=False,
+                     progresscallback=None):
+        &#34;&#34;&#34;The searching function that we apply to the model data.
+           This is used in Filtering.doFiltering to find the required recs
+           according to column, value and an operator&#34;&#34;&#34;
+
+        funcs = Filtering.operatornames
+        floatops = [&#39;=&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;]
+        func = funcs[op]
+        data = self.data
+        #coltype = self.columntypes[filtercol]
+        names=[]
+        for rec in self.reclist:
+            if filtercol in data[rec]:
+                #try to do float comparisons if required
+                if op in floatops:
+                    try:
+                        #print float(data[rec][filtercol])
+                        item = float(data[rec][filtercol])
+                        v = float(value)
+                        if func(v, item) == True:
+                            names.append(rec)
+                        continue
+                    except:
+                        pass
+                if filtercol == &#39;name&#39; and userecnames == True:
+                    item = rec
+                else:
+                    item = str(data[rec][filtercol])
+                if func(value, item):
+                    names.append(rec)
+        return names
+
+    def getRowCount(self):
+         &#34;&#34;&#34;Returns the number of rows in the table model.&#34;&#34;&#34;
+         return len(self.reclist)
+
+    def getValueAt(self, rowIndex, columnIndex):
+         &#34;&#34;&#34;Returns the cell value at location specified
+             by columnIndex and rowIndex.&#34;&#34;&#34;
+         value = self.getRecordAttributeAtColumn(rowIndex, columnIndex)
+         return value
+
+    def setValueAt(self, value, rowIndex, columnIndex):
+        &#34;&#34;&#34;Changed the dictionary when cell is updated by user&#34;&#34;&#34;
+
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        if coltype == &#39;number&#39;:
+            try:
+                if value == &#39;&#39;: #need this to allow deletion of values
+                    self.data[name][colname] = &#39;&#39;
+                else:
+                    self.data[name][colname] = float(value)
+            except:
+                pass
+        else:
+            self.data[name][colname] = value
+        return
+
+    def setFormulaAt(self, f, rowIndex, columnIndex):
+        &#34;&#34;&#34;Set a formula at cell given&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        rec = {}
+        rec[&#39;formula&#39;] = f
+        self.data[name][colname] = rec
+        return
+
+    def getColorAt(self, rowIndex, columnIndex, key=&#39;bg&#39;):
+        &#34;&#34;&#34;Return color of that record field for the table&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        if name in self.colors[key] and colname in self.colors[key][name]:
+            return self.colors[key][name][colname]
+        else:
+            return None
+
+    def setColorAt(self, rowIndex, columnIndex, color, key=&#39;bg&#39;):
+        &#34;&#34;&#34;Set color&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        if not name in self.colors[key]:
+            self.colors[key][name] = {}
+        self.colors[key][name][colname] = str(color)
+        return
+
+    def resetcolors(self):
+        &#34;&#34;&#34;Remove all color formatting&#34;&#34;&#34;
+        self.colors={}
+        self.colors[&#39;fg&#39;]={}
+        self.colors[&#39;bg&#39;]={}
+        return
+
+    def getRecColNames(self, rowIndex, ColIndex):
+        &#34;&#34;&#34;Returns the rec and col name as a tuple&#34;&#34;&#34;
+        recname = self.getRecName(rowIndex)
+        colname = self.getColumnName(ColIndex)
+        return (recname, colname)
+
+    def getRecAtRow(self, recname, colname, offset=1, dim=&#39;y&#39;):
+        &#34;&#34;&#34;Get the record name at a specified offset in the current
+           table from the record given, by using the current sort order&#34;&#34;&#34;
+        thisrow = self.getRecordIndex(recname)
+        thiscol = self.getColumnIndex(colname)
+        #table goto next row
+        if dim == &#39;y&#39;:
+            nrow = thisrow + offset
+            ncol = thiscol
+        else:
+            nrow = thisrow
+            ncol = thiscol + offset
+
+        newrecname, newcolname = self.getRecColNames(nrow, ncol)
+        print (&#39;recname, colname&#39;, recname, colname)
+        print (&#39;thisrow, col&#39;, thisrow, thiscol)
+        return newrecname, newcolname
+
+    def appendtoFormula(self, formula, rowIndex, colIndex):
+        &#34;&#34;&#34;Add the input cell to the formula&#34;&#34;&#34;
+        cellRec = getRecColNames(rowIndex, colIndex)
+        formula.append(cellRec)
+        return
+
+    def doFormula(self, cellformula):
+        &#34;&#34;&#34;Evaluate the formula for a cell and return the result&#34;&#34;&#34;
+        value = Formula.doFormula(cellformula, self.data)
+        return value
+
+    def copyFormula(self, cellval, row, col, offset=1, dim=&#39;y&#39;):
+        &#34;&#34;&#34;Copy a formula down or across, using the provided offset&#34;&#34;&#34;
+        import re
+        frmla = Formula.getFormula(cellval)
+        #print &#39;formula&#39;, frmla
+
+        newcells=[]
+        cells, ops = Formula.readExpression(frmla)
+
+        for c in cells:
+            print (c)
+            if type(c) is not ListType:
+                nc = c
+            else:
+                recname = c[0]
+                colname = c[1]
+                nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
+            newcells.append(nc)
+        newformula = Formula.doExpression(newcells, ops, getvalues=False)
+        return newformula
+
+    def merge(self, model, key=&#39;name&#39;, fields=None):
+        &#34;&#34;&#34;Merge another table model with this one based on a key field,
+           we only add records from the new model where the key is present
+           in both models&#34;&#34;&#34;
+        if fields == None: fields = model.columnNames
+        for rec in self.reclist:
+            if not key in self.data[rec]:
+                continue
+            for new in model.reclist:
+                if not key in model.data[new]:
+                    continue
+                if self.data[rec][key] == model.data[new][key]:
+                #if new == rec:
+                    for f in fields:
+                        if not f in model.data[rec]:
+                            continue
+                        if not f in self.columnNames:
+                            self.addColumn(f)
+                        self.data[rec][f] = model.data[rec][f]
+        return
+
+    def save(self, filename=None):
+        &#34;&#34;&#34;Save model to file&#34;&#34;&#34;
+        if filename == None:
+            return
+        data = self.getData()
+        fd = open(filename,&#39;wb&#39;)
+        pickle.dump(data,fd)
+        fd.close()
+        return
+
+    def load(self, filename):
+        &#34;&#34;&#34;Load model from pickle file&#34;&#34;&#34;
+        fd=open(filename,&#39;rb&#39;)
+        data = pickle.load(fd)
+        self.setupModel(data)
+        return
+
+    def copy(self):
+        &#34;&#34;&#34;Return a copy of this model&#34;&#34;&#34;
+        M = TableModel()
+        data = self.getData()
+        M.setupModel(data)
+        return M
+
+    def __repr__(self):
+        return &#39;Table Model with %s rows&#39; %len(self.reclist)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tkintertable.TableModels.TableModel"><code class="flex name class">
+<span>class <span class="ident">TableModel</span></span>
+<span>(</span><span>newdict=None, rows=None, columns=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A base model for managing the data in a TableCanvas class</p>
+<p>Constructor</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TableModel(object):
+    &#34;&#34;&#34;A base model for managing the data in a TableCanvas class&#34;&#34;&#34;
+
+    keywords = {&#39;columnnames&#39;:&#39;columnNames&#39;, &#39;columntypes&#39;:&#39;columntypes&#39;,
+               &#39;columnlabels&#39;:&#39;columnlabels&#39;, &#39;columnorder&#39;:&#39;columnOrder&#39;,
+               &#39;colors&#39;:&#39;colors&#39;}
+
+    def __init__(self, newdict=None, rows=None, columns=None):
+        &#34;&#34;&#34;Constructor&#34;&#34;&#34;
+        self.initialiseFields()
+        self.setupModel(newdict, rows, columns)
+        return
+
+    def setupModel(self, newdict, rows=None, columns=None):
+        &#34;&#34;&#34;Create table model&#34;&#34;&#34;
+
+        if newdict != None:
+            self.data = copy.deepcopy(newdict)
+            for k in self.keywords:
+                if k in self.data:
+                    self.__dict__[self.keywords[k]] = self.data[k]
+                    del self.data[k]
+            #read in the record list order
+            if &#39;reclist&#39; in self.data:
+                temp = self.data[&#39;reclist&#39;]
+                del self.data[&#39;reclist&#39;]
+                self.reclist = temp
+            else:
+                self.reclist = self.data.keys()
+        else:
+            #just make a new empty model
+            self.createEmptyModel()
+
+        if not set(self.reclist) == set(self.data.keys()):
+            print (&#39;reclist does not match data keys&#39;)
+        #restore last column order
+        if hasattr(self, &#39;columnOrder&#39;) and self.columnOrder != None:
+            self.columnNames=[]
+            for i in self.columnOrder.keys():
+                self.columnNames.append(self.columnOrder[i])
+                i=i+1
+        self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+        #setup default display for column types
+        self.default_display = {&#39;text&#39; : &#39;showstring&#39;,
+                                &#39;number&#39; : &#39;numtostring&#39;}
+        #set default sort order as first col
+        if len(self.columnNames)&gt;0:
+            self.sortkey = self.columnNames[0]
+        else:
+            self.sortkey = None
+        #add rows and cols if they are given in the constructor
+        if newdict == None:
+            if rows != None:
+                self.autoAddRows(rows)
+            if columns != None:
+                self.autoAddColumns(columns)
+        self.filteredrecs = None
+        return
+
+    def initialiseFields(self):
+        &#34;&#34;&#34;Create base fields, some of which are not saved&#34;&#34;&#34;
+        self.data = None    # holds the table dict
+        self.colors = {}    # holds cell colors
+        self.colors[&#39;fg&#39;]={}
+        self.colors[&#39;bg&#39;]={}
+        #default types
+        self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+        #list of editable column types
+        self.editable={}
+        self.nodisplay = []
+        self.columnwidths={}  #used to store col widths, not held in saved data
+        return
+
+    def createEmptyModel(self):
+        &#34;&#34;&#34;Create the basic empty model dict&#34;&#34;&#34;
+
+        self.data = {}
+        # Define the starting column names and locations in the table.
+        self.columnNames = []
+        self.columntypes = {}
+        self.columnOrder = None
+        #record column labels for use in a table header
+        self.columnlabels={}
+        for colname in self.columnNames:
+            self.columnlabels[colname]=colname
+        self.reclist = list(self.data.keys())
+        return
+
+    def importCSV(self, filename, sep=&#39;,&#39;):
+        &#34;&#34;&#34;Import table data from a comma separated file.&#34;&#34;&#34;
+
+        if not os.path.isfile(filename) or not os.path.exists(filename):
+            print (&#39;no such file&#39;)
+            return None
+
+        #takes first row as field names
+        dictreader = csv.DictReader(open(filename, &#34;r&#34;), delimiter=sep)
+        dictdata = {}
+        count=0
+        for rec in dictreader:
+            dictdata[count]=rec
+            count=count+1
+        self.importDict(dictdata)
+        return
+
+    def importDict(self, newdata):
+        &#34;&#34;&#34;Try to create a table model from a dict of the form
+           {{&#39;rec1&#39;: {&#39;col1&#39;: 3, &#39;col2&#39;: 2}, ..}&#34;&#34;&#34;
+
+        #get cols from sub data keys
+        colnames = []
+        for k in newdata:
+            fields = newdata[k].keys()
+            for f in fields:
+                if not f in colnames:
+                    colnames.append(f)
+        for c in colnames:
+            self.addColumn(c)
+        #add the data
+        self.data.update(newdata)
+        self.reclist = list(self.data.keys())
+        return
+
+    def getDefaultTypes(self):
+        &#34;&#34;&#34;Get possible field types for this table model&#34;&#34;&#34;
+        return self.defaulttypes
+
+    def getData(self):
+        &#34;&#34;&#34;Return the current data for saving&#34;&#34;&#34;
+
+        data = copy.deepcopy(self.data)
+        data[&#39;colors&#39;] = self.colors
+        data[&#39;columnnames&#39;] = self.columnNames
+        #we keep original record order
+        data[&#39;reclist&#39;] = self.reclist
+        #record current col order
+        data[&#39;columnorder&#39;]={}
+        i=0
+        for name in self.columnNames:
+            data[&#39;columnorder&#39;][i] = name
+            i=i+1
+        data[&#39;columntypes&#39;] = self.columntypes
+        data[&#39;columnlabels&#39;] = self.columnlabels
+        return data
+
+    def getAllCells(self):
+        &#34;&#34;&#34;Return a dict of the form rowname: list of cell contents
+          Useful for a simple table export for example&#34;&#34;&#34;
+
+        records={}
+        for row in range(len(self.reclist)):
+            recdata=[]
+            for col in range(len(self.columnNames)):
+                recdata.append(self.getValueAt(row,col))
+            records[row]=recdata
+        return records
+
+    def getColCells(self, colIndex):
+        &#34;&#34;&#34;Get the viewable contents of a col into a list&#34;&#34;&#34;
+
+        collist = []
+        if self.getColumnType(colIndex) == &#39;Link&#39;:
+            return [&#39;xxxxxx&#39;]
+        else:
+            for row in range(len(self.reclist)):
+                v = self.getValueAt(row, colIndex)
+                collist.append(v)
+        return collist
+
+    def getlongestEntry(self, columnIndex):
+        &#34;&#34;&#34;Get the longest cell entry in the col&#34;&#34;&#34;
+
+        collist = self.getColCells(columnIndex)
+        maxw=5
+        for c in collist:
+            try:
+                w = len(str(c))
+            except UnicodeEncodeError:
+                pass
+            if w &gt; maxw:
+                maxw = w
+        #print &#39;longest width&#39;, maxw
+        return maxw
+
+    def getRecordAtRow(self, rowIndex):
+        &#34;&#34;&#34;Get the entire record at the specifed row.&#34;&#34;&#34;
+
+        name = self.getRecName(rowIndex)
+        record = self.data[name]
+        return record
+
+    def getCellRecord(self, rowIndex, columnIndex):
+        &#34;&#34;&#34;Get the data held in this row and column&#34;&#34;&#34;
+
+        value = None
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        name = self.getRecName(rowIndex)
+        #print self.data[name]
+        if colname in self.data[name]:
+            celldata=self.data[name][colname]
+        else:
+            celldata=None
+        return celldata
+
+    def deleteCellRecord(self, rowIndex, columnIndex):
+        &#34;&#34;&#34;Remove the cell data at this row/column&#34;&#34;&#34;
+
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        name = self.getRecName(rowIndex)
+        if colname in self.data[name]:
+            del self.data[name][colname]
+        return
+
+    def getRecName(self, rowIndex):
+        &#34;&#34;&#34;Get record name from row number&#34;&#34;&#34;
+
+        if len(self.reclist)==0:
+            return None
+        if self.filteredrecs != None:
+            name = self.filteredrecs[rowIndex]
+        else:
+            name = self.reclist[rowIndex]
+        return name
+
+    def setRecName(self, newname, rowIndex):
+        &#34;&#34;&#34;Set the record name to another value - requires re-setting in all
+           dicts that this rec is referenced&#34;&#34;&#34;
+
+        if len(self.reclist)==0:
+            return None
+        currname = self.getRecName(rowIndex)
+        self.reclist[rowIndex] = newname
+        temp = copy.deepcopy(self.data[currname])
+        self.data[newname] = temp
+        #self.data[newname][&#39;Name&#39;] = newname
+        del self.data[currname]
+        for key in [&#39;bg&#39;, &#39;fg&#39;]:
+            if currname in self.colors[key]:
+                temp = copy.deepcopy(self.colors[key][currname])
+                self.colors[key][newname] = temp
+                del self.colors[key][currname]
+        print (&#39;renamed&#39;)
+        #would also need to resolve all refs to this rec in formulas here!
+
+        return
+
+    def getRecordAttributeAtColumn(self, rowIndex=None, columnIndex=None,
+                                        recName=None, columnName=None):
+         &#34;&#34;&#34;Get the attribute of the record at the specified column index.
+            This determines what will be displayed in the cell&#34;&#34;&#34;
+
+         value = None
+         if columnName != None and recName != None:
+             if columnName not in self.data[recName]:
+                 return &#39;&#39;
+             cell = self.data[recName][columnName]
+         else:
+             cell = self.getCellRecord(rowIndex, columnIndex)
+             columnName = self.getColumnName(columnIndex)
+         if cell == None:
+             cell=&#39;&#39;
+         # Set the value based on the data record field
+         coltype = self.columntypes[columnName]
+         if Formula.isFormula(cell) == True:
+             value = self.doFormula(cell)
+             return value
+
+         if not type(cell) is dict:
+             if coltype == &#39;text&#39; or coltype == &#39;Text&#39;:
+                 value = cell
+             elif coltype == &#39;number&#39;:
+                 value = str(cell)
+             else:
+                 value = &#39;other&#39;
+         if value==None:
+             value=&#39;&#39;
+         return value
+
+    def getRecordIndex(self, recname):
+        rowIndex = int(self.reclist.index(recname))
+        return rowIndex
+
+    def setSortOrder(self, columnIndex=None, columnName=None, reverse=0):
+        &#34;&#34;&#34;Changes the order that records are sorted in, which will
+           be reflected in the table upon redrawing&#34;&#34;&#34;
+
+        if columnName != None and columnName in self.columnNames:
+            self.sortkey = columnName
+        elif columnIndex != None:
+            self.sortkey = self.getColumnName(columnIndex)
+        else:
+            return
+        self.reclist = list(self.createSortMap(self.reclist, self.sortkey, reverse))
+        if self.filteredrecs != None:
+            self.filteredrecs = self.createSortMap(self.filteredrecs, self.sortkey, reverse)
+        return
+
+    def createSortMap(self, names, sortkey, reverse=0):
+        &#34;&#34;&#34;Create a sort mapping for given list&#34;&#34;&#34;
+
+        recdata = []
+        for rec in names:
+            recdata.append(self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey))
+        #try create list of floats if col has numbers only
+        try:
+            recdata = self.toFloats(recdata)
+        except:
+            pass
+        smap = zip(names, recdata)
+        #sort the mapping by the second key
+        smap = sorted(smap, key=operator.itemgetter(1), reverse=reverse)
+        #now sort the main reclist by the mapping order
+        sortmap = map(operator.itemgetter(0), smap)
+        return sortmap
+
+    def toFloats(self, l):
+        x=[]
+        for i in l:
+            if i == &#39;&#39;:
+                x.append(0.0)
+            else:
+                x.append(float(i))
+        return x
+
+    &#39;&#39;&#39;def getSortIndex(self):
+        &#34;&#34;&#34;Return the current sort order index&#34;&#34;&#34;
+        if self.sortcolumnIndex:
+            return self.sortcolumnIndex
+        else:
+            return 0&#39;&#39;&#39;
+
+    def moveColumn(self, oldcolumnIndex, newcolumnIndex):
+        &#34;&#34;&#34;Changes the order of columns&#34;&#34;&#34;
+        self.oldnames = self.columnNames
+        self.columnNames=[]
+
+        #write out a new column names list - tedious
+        moved = self.oldnames[oldcolumnIndex]
+        del self.oldnames[oldcolumnIndex]
+        #print self.oldnames
+        i=0
+        for c in self.oldnames:
+            if i==newcolumnIndex:
+                self.columnNames.append(moved)
+            self.columnNames.append(c)
+            i=i+1
+        #if new col is at end just append
+        if moved not in self.columnNames:
+            self.columnNames.append(moved)
+        return
+
+    def getNextKey(self):
+        &#34;&#34;&#34;Return the next numeric key in the dict&#34;&#34;&#34;
+        num = len(self.reclist)+1
+        return num
+
+    def addRow(self, key=None, **kwargs):
+        &#34;&#34;&#34;Add a row&#34;&#34;&#34;
+        if key == &#39;&#39;:
+            return
+        if key==None:
+            key = self.getNextKey()
+        if key in self.data or key in self.reclist:
+            print (&#39;name already present!!&#39;)
+            return
+        self.data[key]={}
+        for k in kwargs:
+            if not k in self.columnNames:
+                self.addColumn(k)
+            self.data[key][k] = str(kwargs[k])
+        self.reclist.append(key)
+        return key
+
+    def deleteRow(self, rowIndex=None, key=None, update=True):
+        &#34;&#34;&#34;Delete a row&#34;&#34;&#34;
+        if key == None or not key in self.reclist:
+            key = self.getRecName(rowIndex)
+        del self.data[key]
+        if update==True:
+            self.reclist.remove(key)
+        return
+
+    def deleteRows(self, rowlist=None):
+        &#34;&#34;&#34;Delete multiple or all rows&#34;&#34;&#34;
+        if rowlist == None:
+            rowlist = range(len(self.reclist))
+        names = [self.getRecName(i) for i in rowlist]
+        for name in names:
+            self.deleteRow(key=name, update=True)
+        return
+
+    def addColumn(self, colname=None, coltype=None):
+        &#34;&#34;&#34;Add a column&#34;&#34;&#34;
+        index = self.getColumnCount()+ 1
+        if colname == None:
+            colname=str(index)
+        if colname in self.columnNames:
+            #print &#39;name is present!&#39;
+            return
+        self.columnNames.append(colname)
+        self.columnlabels[colname] = colname
+        if coltype == None:
+            self.columntypes[colname]=&#39;text&#39;
+        else:
+            self.columntypes[colname]=coltype
+        return
+
+    def deleteColumn(self, columnIndex):
+        &#34;&#34;&#34;delete a column&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        self.columnNames.remove(colname)
+        del self.columnlabels[colname]
+        del self.columntypes[colname]
+        #remove this field from every record
+        for recname in self.reclist:
+            if colname in self.data[recname]:
+                del self.data[recname][colname]
+        if self.sortkey != None:
+            currIndex = self.getColumnIndex(self.sortkey)
+            if columnIndex == currIndex:
+                self.setSortOrder(0)
+        #print &#39;column deleted&#39;
+        #print &#39;new cols:&#39;, self.columnNames
+        return
+
+    def deleteColumns(self, cols=None):
+        &#34;&#34;&#34;Remove all cols or list provided&#34;&#34;&#34;
+        if cols == None:
+            cols = self.columnNames
+        if self.getColumnCount() == 0:
+            return
+        for col in cols:
+            self.deleteColumn(col)
+        return
+
+    def autoAddRows(self, numrows=None):
+        &#34;&#34;&#34;Automatically add x number of records&#34;&#34;&#34;
+        rows = self.getRowCount()
+        ints = [i for i in self.reclist if isinstance(i, int)]
+        if len(ints)&gt;0:
+            start = max(ints)+1
+        else:
+            start = 0
+        #we don&#39;t use addRow as it&#39;s too slow
+        keys = range(start,start+numrows)
+        #make sure no keys are present already
+        keys = list(set(keys)-set(self.reclist))
+        newdata = {}
+        for k in keys:
+            newdata[k] = {}
+        self.data.update(newdata)
+        self.reclist.extend(newdata.keys())
+        return keys
+
+    def autoAddColumns(self, numcols=None):
+        &#34;&#34;&#34;Automatically add x number of cols&#34;&#34;&#34;
+
+        #alphabet = string.lowercase[:26]
+        alphabet = string.ascii_lowercase
+        currcols=self.getColumnCount()
+        #find where to start
+        start = currcols + 1
+        end = currcols + numcols + 1
+        new = []
+        for n in range(start, end):
+            new.append(str(n))
+        #check if any of these colnames present
+        common = set(new) &amp; set(self.columnNames)
+        extra = len(common)
+        end = end + extra
+        for x in range(start, end):
+            self.addColumn(str(x))
+        return
+
+    def relabel_Column(self, columnIndex, newname):
+        &#34;&#34;&#34;Change the column label - can be used in a table header&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        self.columnlabels[colname]=newname
+        return
+
+    def getColumnType(self, columnIndex):
+        &#34;&#34;&#34;Get the column type&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        return coltype
+
+    def getColumnCount(self):
+         &#34;&#34;&#34;Returns the number of columns in the data model.&#34;&#34;&#34;
+         return len(self.columnNames)
+
+    def getColumnName(self, columnIndex):
+         &#34;&#34;&#34;Returns the name of the given column by columnIndex.&#34;&#34;&#34;
+         return self.columnNames[columnIndex]
+
+    def getColumnLabel(self, columnIndex):
+        &#34;&#34;&#34;Returns the label for this column&#34;&#34;&#34;
+        colname = self.getColumnName(columnIndex)
+        return self.columnlabels[colname]
+
+    def getColumnIndex(self, columnName):
+        &#34;&#34;&#34;Returns the column index for this column&#34;&#34;&#34;
+        colindex = self.columnNames.index(columnName)
+        return colindex
+
+    def getColumnData(self, columnIndex=None, columnName=None,
+                        filters=None):
+        &#34;&#34;&#34;Return the data in a list for this col,
+            filters is a tuple of the form (key,value,operator,bool)&#34;&#34;&#34;
+        if columnIndex != None and columnIndex &lt; len(self.columnNames):
+            columnName = self.getColumnName(columnIndex)
+        names = Filtering.doFiltering(searchfunc=self.filterBy,
+                                         filters=filters)
+        coldata = [self.data[n][columnName] for n in names]
+        return coldata
+
+    def getColumns(self, colnames, filters=None, allowempty=True):
+        &#34;&#34;&#34;Get column data for multiple cols, with given filter options,
+            filterby: list of tuples of the form (key,value,operator,bool)
+            allowempty: boolean if false means rows with empty vals for any
+            required fields are not returned
+            returns: lists of column data&#34;&#34;&#34;
+
+        def evaluate(l):
+            for i in l:
+                if i == &#39;&#39; or i == None:
+                    return False
+            return True
+        coldata=[]
+        for c in colnames:
+            vals = self.getColumnData(columnName=c, filters=filters)
+            coldata.append(vals)
+        if allowempty == False:
+            result = [i for i in zip(*coldata) if evaluate(i) == True]
+            coldata = zip(*result)
+        return coldata
+
+    def getDict(self, colnames, filters=None):
+        &#34;&#34;&#34;Get the model data as a dict for given columns with filter options&#34;&#34;&#34;
+        data={}
+        names = self.reclist
+        cols = self.getColumns(colnames, filters)
+        coldata = zip(*cols)
+        for name,cdata in zip(names, coldata):
+            data[name] = dict(zip(colnames,cdata))
+        return data
+
+    def filterBy(self, filtercol, value, op=&#39;contains&#39;, userecnames=False,
+                     progresscallback=None):
+        &#34;&#34;&#34;The searching function that we apply to the model data.
+           This is used in Filtering.doFiltering to find the required recs
+           according to column, value and an operator&#34;&#34;&#34;
+
+        funcs = Filtering.operatornames
+        floatops = [&#39;=&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;]
+        func = funcs[op]
+        data = self.data
+        #coltype = self.columntypes[filtercol]
+        names=[]
+        for rec in self.reclist:
+            if filtercol in data[rec]:
+                #try to do float comparisons if required
+                if op in floatops:
+                    try:
+                        #print float(data[rec][filtercol])
+                        item = float(data[rec][filtercol])
+                        v = float(value)
+                        if func(v, item) == True:
+                            names.append(rec)
+                        continue
+                    except:
+                        pass
+                if filtercol == &#39;name&#39; and userecnames == True:
+                    item = rec
+                else:
+                    item = str(data[rec][filtercol])
+                if func(value, item):
+                    names.append(rec)
+        return names
+
+    def getRowCount(self):
+         &#34;&#34;&#34;Returns the number of rows in the table model.&#34;&#34;&#34;
+         return len(self.reclist)
+
+    def getValueAt(self, rowIndex, columnIndex):
+         &#34;&#34;&#34;Returns the cell value at location specified
+             by columnIndex and rowIndex.&#34;&#34;&#34;
+         value = self.getRecordAttributeAtColumn(rowIndex, columnIndex)
+         return value
+
+    def setValueAt(self, value, rowIndex, columnIndex):
+        &#34;&#34;&#34;Changed the dictionary when cell is updated by user&#34;&#34;&#34;
+
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        if coltype == &#39;number&#39;:
+            try:
+                if value == &#39;&#39;: #need this to allow deletion of values
+                    self.data[name][colname] = &#39;&#39;
+                else:
+                    self.data[name][colname] = float(value)
+            except:
+                pass
+        else:
+            self.data[name][colname] = value
+        return
+
+    def setFormulaAt(self, f, rowIndex, columnIndex):
+        &#34;&#34;&#34;Set a formula at cell given&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        coltype = self.columntypes[colname]
+        rec = {}
+        rec[&#39;formula&#39;] = f
+        self.data[name][colname] = rec
+        return
+
+    def getColorAt(self, rowIndex, columnIndex, key=&#39;bg&#39;):
+        &#34;&#34;&#34;Return color of that record field for the table&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        if name in self.colors[key] and colname in self.colors[key][name]:
+            return self.colors[key][name][colname]
+        else:
+            return None
+
+    def setColorAt(self, rowIndex, columnIndex, color, key=&#39;bg&#39;):
+        &#34;&#34;&#34;Set color&#34;&#34;&#34;
+        name = self.getRecName(rowIndex)
+        colname = self.getColumnName(columnIndex)
+        if not name in self.colors[key]:
+            self.colors[key][name] = {}
+        self.colors[key][name][colname] = str(color)
+        return
+
+    def resetcolors(self):
+        &#34;&#34;&#34;Remove all color formatting&#34;&#34;&#34;
+        self.colors={}
+        self.colors[&#39;fg&#39;]={}
+        self.colors[&#39;bg&#39;]={}
+        return
+
+    def getRecColNames(self, rowIndex, ColIndex):
+        &#34;&#34;&#34;Returns the rec and col name as a tuple&#34;&#34;&#34;
+        recname = self.getRecName(rowIndex)
+        colname = self.getColumnName(ColIndex)
+        return (recname, colname)
+
+    def getRecAtRow(self, recname, colname, offset=1, dim=&#39;y&#39;):
+        &#34;&#34;&#34;Get the record name at a specified offset in the current
+           table from the record given, by using the current sort order&#34;&#34;&#34;
+        thisrow = self.getRecordIndex(recname)
+        thiscol = self.getColumnIndex(colname)
+        #table goto next row
+        if dim == &#39;y&#39;:
+            nrow = thisrow + offset
+            ncol = thiscol
+        else:
+            nrow = thisrow
+            ncol = thiscol + offset
+
+        newrecname, newcolname = self.getRecColNames(nrow, ncol)
+        print (&#39;recname, colname&#39;, recname, colname)
+        print (&#39;thisrow, col&#39;, thisrow, thiscol)
+        return newrecname, newcolname
+
+    def appendtoFormula(self, formula, rowIndex, colIndex):
+        &#34;&#34;&#34;Add the input cell to the formula&#34;&#34;&#34;
+        cellRec = getRecColNames(rowIndex, colIndex)
+        formula.append(cellRec)
+        return
+
+    def doFormula(self, cellformula):
+        &#34;&#34;&#34;Evaluate the formula for a cell and return the result&#34;&#34;&#34;
+        value = Formula.doFormula(cellformula, self.data)
+        return value
+
+    def copyFormula(self, cellval, row, col, offset=1, dim=&#39;y&#39;):
+        &#34;&#34;&#34;Copy a formula down or across, using the provided offset&#34;&#34;&#34;
+        import re
+        frmla = Formula.getFormula(cellval)
+        #print &#39;formula&#39;, frmla
+
+        newcells=[]
+        cells, ops = Formula.readExpression(frmla)
+
+        for c in cells:
+            print (c)
+            if type(c) is not ListType:
+                nc = c
+            else:
+                recname = c[0]
+                colname = c[1]
+                nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
+            newcells.append(nc)
+        newformula = Formula.doExpression(newcells, ops, getvalues=False)
+        return newformula
+
+    def merge(self, model, key=&#39;name&#39;, fields=None):
+        &#34;&#34;&#34;Merge another table model with this one based on a key field,
+           we only add records from the new model where the key is present
+           in both models&#34;&#34;&#34;
+        if fields == None: fields = model.columnNames
+        for rec in self.reclist:
+            if not key in self.data[rec]:
+                continue
+            for new in model.reclist:
+                if not key in model.data[new]:
+                    continue
+                if self.data[rec][key] == model.data[new][key]:
+                #if new == rec:
+                    for f in fields:
+                        if not f in model.data[rec]:
+                            continue
+                        if not f in self.columnNames:
+                            self.addColumn(f)
+                        self.data[rec][f] = model.data[rec][f]
+        return
+
+    def save(self, filename=None):
+        &#34;&#34;&#34;Save model to file&#34;&#34;&#34;
+        if filename == None:
+            return
+        data = self.getData()
+        fd = open(filename,&#39;wb&#39;)
+        pickle.dump(data,fd)
+        fd.close()
+        return
+
+    def load(self, filename):
+        &#34;&#34;&#34;Load model from pickle file&#34;&#34;&#34;
+        fd=open(filename,&#39;rb&#39;)
+        data = pickle.load(fd)
+        self.setupModel(data)
+        return
+
+    def copy(self):
+        &#34;&#34;&#34;Return a copy of this model&#34;&#34;&#34;
+        M = TableModel()
+        data = self.getData()
+        M.setupModel(data)
+        return M
+
+    def __repr__(self):
+        return &#39;Table Model with %s rows&#39; %len(self.reclist)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="tkintertable.TableModels.TableModel.keywords"><code class="name">var <span class="ident">keywords</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.TableModels.TableModel.addColumn"><code class="name flex">
+<span>def <span class="ident">addColumn</span></span>(<span>self, colname=None, coltype=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def addColumn(self, colname=None, coltype=None):
+    &#34;&#34;&#34;Add a column&#34;&#34;&#34;
+    index = self.getColumnCount()+ 1
+    if colname == None:
+        colname=str(index)
+    if colname in self.columnNames:
+        #print &#39;name is present!&#39;
+        return
+    self.columnNames.append(colname)
+    self.columnlabels[colname] = colname
+    if coltype == None:
+        self.columntypes[colname]=&#39;text&#39;
+    else:
+        self.columntypes[colname]=coltype
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.addRow"><code class="name flex">
+<span>def <span class="ident">addRow</span></span>(<span>self, key=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add a row</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def addRow(self, key=None, **kwargs):
+    &#34;&#34;&#34;Add a row&#34;&#34;&#34;
+    if key == &#39;&#39;:
+        return
+    if key==None:
+        key = self.getNextKey()
+    if key in self.data or key in self.reclist:
+        print (&#39;name already present!!&#39;)
+        return
+    self.data[key]={}
+    for k in kwargs:
+        if not k in self.columnNames:
+            self.addColumn(k)
+        self.data[key][k] = str(kwargs[k])
+    self.reclist.append(key)
+    return key</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.appendtoFormula"><code class="name flex">
+<span>def <span class="ident">appendtoFormula</span></span>(<span>self, formula, rowIndex, colIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add the input cell to the formula</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def appendtoFormula(self, formula, rowIndex, colIndex):
+    &#34;&#34;&#34;Add the input cell to the formula&#34;&#34;&#34;
+    cellRec = getRecColNames(rowIndex, colIndex)
+    formula.append(cellRec)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.autoAddColumns"><code class="name flex">
+<span>def <span class="ident">autoAddColumns</span></span>(<span>self, numcols=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Automatically add x number of cols</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def autoAddColumns(self, numcols=None):
+    &#34;&#34;&#34;Automatically add x number of cols&#34;&#34;&#34;
+
+    #alphabet = string.lowercase[:26]
+    alphabet = string.ascii_lowercase
+    currcols=self.getColumnCount()
+    #find where to start
+    start = currcols + 1
+    end = currcols + numcols + 1
+    new = []
+    for n in range(start, end):
+        new.append(str(n))
+    #check if any of these colnames present
+    common = set(new) &amp; set(self.columnNames)
+    extra = len(common)
+    end = end + extra
+    for x in range(start, end):
+        self.addColumn(str(x))
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.autoAddRows"><code class="name flex">
+<span>def <span class="ident">autoAddRows</span></span>(<span>self, numrows=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Automatically add x number of records</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def autoAddRows(self, numrows=None):
+    &#34;&#34;&#34;Automatically add x number of records&#34;&#34;&#34;
+    rows = self.getRowCount()
+    ints = [i for i in self.reclist if isinstance(i, int)]
+    if len(ints)&gt;0:
+        start = max(ints)+1
+    else:
+        start = 0
+    #we don&#39;t use addRow as it&#39;s too slow
+    keys = range(start,start+numrows)
+    #make sure no keys are present already
+    keys = list(set(keys)-set(self.reclist))
+    newdata = {}
+    for k in keys:
+        newdata[k] = {}
+    self.data.update(newdata)
+    self.reclist.extend(newdata.keys())
+    return keys</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.copy"><code class="name flex">
+<span>def <span class="ident">copy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return a copy of this model</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy(self):
+    &#34;&#34;&#34;Return a copy of this model&#34;&#34;&#34;
+    M = TableModel()
+    data = self.getData()
+    M.setupModel(data)
+    return M</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.copyFormula"><code class="name flex">
+<span>def <span class="ident">copyFormula</span></span>(<span>self, cellval, row, col, offset=1, dim='y')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Copy a formula down or across, using the provided offset</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copyFormula(self, cellval, row, col, offset=1, dim=&#39;y&#39;):
+    &#34;&#34;&#34;Copy a formula down or across, using the provided offset&#34;&#34;&#34;
+    import re
+    frmla = Formula.getFormula(cellval)
+    #print &#39;formula&#39;, frmla
+
+    newcells=[]
+    cells, ops = Formula.readExpression(frmla)
+
+    for c in cells:
+        print (c)
+        if type(c) is not ListType:
+            nc = c
+        else:
+            recname = c[0]
+            colname = c[1]
+            nc = list(self.getRecAtRow(recname, colname, offset, dim=dim))
+        newcells.append(nc)
+    newformula = Formula.doExpression(newcells, ops, getvalues=False)
+    return newformula</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.createEmptyModel"><code class="name flex">
+<span>def <span class="ident">createEmptyModel</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create the basic empty model dict</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def createEmptyModel(self):
+    &#34;&#34;&#34;Create the basic empty model dict&#34;&#34;&#34;
+
+    self.data = {}
+    # Define the starting column names and locations in the table.
+    self.columnNames = []
+    self.columntypes = {}
+    self.columnOrder = None
+    #record column labels for use in a table header
+    self.columnlabels={}
+    for colname in self.columnNames:
+        self.columnlabels[colname]=colname
+    self.reclist = list(self.data.keys())
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.createSortMap"><code class="name flex">
+<span>def <span class="ident">createSortMap</span></span>(<span>self, names, sortkey, reverse=0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a sort mapping for given list</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def createSortMap(self, names, sortkey, reverse=0):
+    &#34;&#34;&#34;Create a sort mapping for given list&#34;&#34;&#34;
+
+    recdata = []
+    for rec in names:
+        recdata.append(self.getRecordAttributeAtColumn(recName=rec, columnName=sortkey))
+    #try create list of floats if col has numbers only
+    try:
+        recdata = self.toFloats(recdata)
+    except:
+        pass
+    smap = zip(names, recdata)
+    #sort the mapping by the second key
+    smap = sorted(smap, key=operator.itemgetter(1), reverse=reverse)
+    #now sort the main reclist by the mapping order
+    sortmap = map(operator.itemgetter(0), smap)
+    return sortmap</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.deleteCellRecord"><code class="name flex">
+<span>def <span class="ident">deleteCellRecord</span></span>(<span>self, rowIndex, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove the cell data at this row/column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteCellRecord(self, rowIndex, columnIndex):
+    &#34;&#34;&#34;Remove the cell data at this row/column&#34;&#34;&#34;
+
+    colname = self.getColumnName(columnIndex)
+    coltype = self.columntypes[colname]
+    name = self.getRecName(rowIndex)
+    if colname in self.data[name]:
+        del self.data[name][colname]
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.deleteColumn"><code class="name flex">
+<span>def <span class="ident">deleteColumn</span></span>(<span>self, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>delete a column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteColumn(self, columnIndex):
+    &#34;&#34;&#34;delete a column&#34;&#34;&#34;
+    colname = self.getColumnName(columnIndex)
+    self.columnNames.remove(colname)
+    del self.columnlabels[colname]
+    del self.columntypes[colname]
+    #remove this field from every record
+    for recname in self.reclist:
+        if colname in self.data[recname]:
+            del self.data[recname][colname]
+    if self.sortkey != None:
+        currIndex = self.getColumnIndex(self.sortkey)
+        if columnIndex == currIndex:
+            self.setSortOrder(0)
+    #print &#39;column deleted&#39;
+    #print &#39;new cols:&#39;, self.columnNames
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.deleteColumns"><code class="name flex">
+<span>def <span class="ident">deleteColumns</span></span>(<span>self, cols=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove all cols or list provided</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteColumns(self, cols=None):
+    &#34;&#34;&#34;Remove all cols or list provided&#34;&#34;&#34;
+    if cols == None:
+        cols = self.columnNames
+    if self.getColumnCount() == 0:
+        return
+    for col in cols:
+        self.deleteColumn(col)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.deleteRow"><code class="name flex">
+<span>def <span class="ident">deleteRow</span></span>(<span>self, rowIndex=None, key=None, update=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete a row</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteRow(self, rowIndex=None, key=None, update=True):
+    &#34;&#34;&#34;Delete a row&#34;&#34;&#34;
+    if key == None or not key in self.reclist:
+        key = self.getRecName(rowIndex)
+    del self.data[key]
+    if update==True:
+        self.reclist.remove(key)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.deleteRows"><code class="name flex">
+<span>def <span class="ident">deleteRows</span></span>(<span>self, rowlist=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete multiple or all rows</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteRows(self, rowlist=None):
+    &#34;&#34;&#34;Delete multiple or all rows&#34;&#34;&#34;
+    if rowlist == None:
+        rowlist = range(len(self.reclist))
+    names = [self.getRecName(i) for i in rowlist]
+    for name in names:
+        self.deleteRow(key=name, update=True)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.doFormula"><code class="name flex">
+<span>def <span class="ident">doFormula</span></span>(<span>self, cellformula)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Evaluate the formula for a cell and return the result</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doFormula(self, cellformula):
+    &#34;&#34;&#34;Evaluate the formula for a cell and return the result&#34;&#34;&#34;
+    value = Formula.doFormula(cellformula, self.data)
+    return value</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.filterBy"><code class="name flex">
+<span>def <span class="ident">filterBy</span></span>(<span>self, filtercol, value, op='contains', userecnames=False, progresscallback=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The searching function that we apply to the model data.
+This is used in Filtering.doFiltering to find the required recs
+according to column, value and an operator</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def filterBy(self, filtercol, value, op=&#39;contains&#39;, userecnames=False,
+                 progresscallback=None):
+    &#34;&#34;&#34;The searching function that we apply to the model data.
+       This is used in Filtering.doFiltering to find the required recs
+       according to column, value and an operator&#34;&#34;&#34;
+
+    funcs = Filtering.operatornames
+    floatops = [&#39;=&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;]
+    func = funcs[op]
+    data = self.data
+    #coltype = self.columntypes[filtercol]
+    names=[]
+    for rec in self.reclist:
+        if filtercol in data[rec]:
+            #try to do float comparisons if required
+            if op in floatops:
+                try:
+                    #print float(data[rec][filtercol])
+                    item = float(data[rec][filtercol])
+                    v = float(value)
+                    if func(v, item) == True:
+                        names.append(rec)
+                    continue
+                except:
+                    pass
+            if filtercol == &#39;name&#39; and userecnames == True:
+                item = rec
+            else:
+                item = str(data[rec][filtercol])
+            if func(value, item):
+                names.append(rec)
+    return names</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getAllCells"><code class="name flex">
+<span>def <span class="ident">getAllCells</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return a dict of the form rowname: list of cell contents
+Useful for a simple table export for example</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getAllCells(self):
+    &#34;&#34;&#34;Return a dict of the form rowname: list of cell contents
+      Useful for a simple table export for example&#34;&#34;&#34;
+
+    records={}
+    for row in range(len(self.reclist)):
+        recdata=[]
+        for col in range(len(self.columnNames)):
+            recdata.append(self.getValueAt(row,col))
+        records[row]=recdata
+    return records</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getCellRecord"><code class="name flex">
+<span>def <span class="ident">getCellRecord</span></span>(<span>self, rowIndex, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the data held in this row and column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getCellRecord(self, rowIndex, columnIndex):
+    &#34;&#34;&#34;Get the data held in this row and column&#34;&#34;&#34;
+
+    value = None
+    colname = self.getColumnName(columnIndex)
+    coltype = self.columntypes[colname]
+    name = self.getRecName(rowIndex)
+    #print self.data[name]
+    if colname in self.data[name]:
+        celldata=self.data[name][colname]
+    else:
+        celldata=None
+    return celldata</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColCells"><code class="name flex">
+<span>def <span class="ident">getColCells</span></span>(<span>self, colIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the viewable contents of a col into a list</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColCells(self, colIndex):
+    &#34;&#34;&#34;Get the viewable contents of a col into a list&#34;&#34;&#34;
+
+    collist = []
+    if self.getColumnType(colIndex) == &#39;Link&#39;:
+        return [&#39;xxxxxx&#39;]
+    else:
+        for row in range(len(self.reclist)):
+            v = self.getValueAt(row, colIndex)
+            collist.append(v)
+    return collist</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColorAt"><code class="name flex">
+<span>def <span class="ident">getColorAt</span></span>(<span>self, rowIndex, columnIndex, key='bg')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return color of that record field for the table</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColorAt(self, rowIndex, columnIndex, key=&#39;bg&#39;):
+    &#34;&#34;&#34;Return color of that record field for the table&#34;&#34;&#34;
+    name = self.getRecName(rowIndex)
+    colname = self.getColumnName(columnIndex)
+    if name in self.colors[key] and colname in self.colors[key][name]:
+        return self.colors[key][name][colname]
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnCount"><code class="name flex">
+<span>def <span class="ident">getColumnCount</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the number of columns in the data model.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnCount(self):
+     &#34;&#34;&#34;Returns the number of columns in the data model.&#34;&#34;&#34;
+     return len(self.columnNames)</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnData"><code class="name flex">
+<span>def <span class="ident">getColumnData</span></span>(<span>self, columnIndex=None, columnName=None, filters=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return the data in a list for this col,
+filters is a tuple of the form (key,value,operator,bool)</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnData(self, columnIndex=None, columnName=None,
+                    filters=None):
+    &#34;&#34;&#34;Return the data in a list for this col,
+        filters is a tuple of the form (key,value,operator,bool)&#34;&#34;&#34;
+    if columnIndex != None and columnIndex &lt; len(self.columnNames):
+        columnName = self.getColumnName(columnIndex)
+    names = Filtering.doFiltering(searchfunc=self.filterBy,
+                                     filters=filters)
+    coldata = [self.data[n][columnName] for n in names]
+    return coldata</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnIndex"><code class="name flex">
+<span>def <span class="ident">getColumnIndex</span></span>(<span>self, columnName)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the column index for this column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnIndex(self, columnName):
+    &#34;&#34;&#34;Returns the column index for this column&#34;&#34;&#34;
+    colindex = self.columnNames.index(columnName)
+    return colindex</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnLabel"><code class="name flex">
+<span>def <span class="ident">getColumnLabel</span></span>(<span>self, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the label for this column</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnLabel(self, columnIndex):
+    &#34;&#34;&#34;Returns the label for this column&#34;&#34;&#34;
+    colname = self.getColumnName(columnIndex)
+    return self.columnlabels[colname]</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnName"><code class="name flex">
+<span>def <span class="ident">getColumnName</span></span>(<span>self, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the name of the given column by columnIndex.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnName(self, columnIndex):
+     &#34;&#34;&#34;Returns the name of the given column by columnIndex.&#34;&#34;&#34;
+     return self.columnNames[columnIndex]</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumnType"><code class="name flex">
+<span>def <span class="ident">getColumnType</span></span>(<span>self, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the column type</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumnType(self, columnIndex):
+    &#34;&#34;&#34;Get the column type&#34;&#34;&#34;
+    colname = self.getColumnName(columnIndex)
+    coltype = self.columntypes[colname]
+    return coltype</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getColumns"><code class="name flex">
+<span>def <span class="ident">getColumns</span></span>(<span>self, colnames, filters=None, allowempty=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><dl>
+<dt>Get column data for multiple cols, with given filter options,</dt>
+<dt><strong><code>filterby</code></strong> :&ensp;<code>list</code> of <code>tuples</code> of <code>the</code> <code>form</code> (<code>key</code>,<code>value</code>,<code>operator</code>,<code>bool</code>)</dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>allowempty</code></strong> :&ensp;<code>boolean</code> <code>if</code> <code>false</code> <code>means</code> <code>rows</code> <code>with</code> <code>empty</code> <code>vals</code> <code>for</code> <code>any</code></dt>
+<dd>&nbsp;</dd>
+<dt>required fields are not returned</dt>
+<dt><strong><code>returns</code></strong> :&ensp;<code>lists</code> of <code>column</code> <code>data</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getColumns(self, colnames, filters=None, allowempty=True):
+    &#34;&#34;&#34;Get column data for multiple cols, with given filter options,
+        filterby: list of tuples of the form (key,value,operator,bool)
+        allowempty: boolean if false means rows with empty vals for any
+        required fields are not returned
+        returns: lists of column data&#34;&#34;&#34;
+
+    def evaluate(l):
+        for i in l:
+            if i == &#39;&#39; or i == None:
+                return False
+        return True
+    coldata=[]
+    for c in colnames:
+        vals = self.getColumnData(columnName=c, filters=filters)
+        coldata.append(vals)
+    if allowempty == False:
+        result = [i for i in zip(*coldata) if evaluate(i) == True]
+        coldata = zip(*result)
+    return coldata</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getData"><code class="name flex">
+<span>def <span class="ident">getData</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return the current data for saving</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getData(self):
+    &#34;&#34;&#34;Return the current data for saving&#34;&#34;&#34;
+
+    data = copy.deepcopy(self.data)
+    data[&#39;colors&#39;] = self.colors
+    data[&#39;columnnames&#39;] = self.columnNames
+    #we keep original record order
+    data[&#39;reclist&#39;] = self.reclist
+    #record current col order
+    data[&#39;columnorder&#39;]={}
+    i=0
+    for name in self.columnNames:
+        data[&#39;columnorder&#39;][i] = name
+        i=i+1
+    data[&#39;columntypes&#39;] = self.columntypes
+    data[&#39;columnlabels&#39;] = self.columnlabels
+    return data</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getDefaultTypes"><code class="name flex">
+<span>def <span class="ident">getDefaultTypes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get possible field types for this table model</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getDefaultTypes(self):
+    &#34;&#34;&#34;Get possible field types for this table model&#34;&#34;&#34;
+    return self.defaulttypes</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getDict"><code class="name flex">
+<span>def <span class="ident">getDict</span></span>(<span>self, colnames, filters=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the model data as a dict for given columns with filter options</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getDict(self, colnames, filters=None):
+    &#34;&#34;&#34;Get the model data as a dict for given columns with filter options&#34;&#34;&#34;
+    data={}
+    names = self.reclist
+    cols = self.getColumns(colnames, filters)
+    coldata = zip(*cols)
+    for name,cdata in zip(names, coldata):
+        data[name] = dict(zip(colnames,cdata))
+    return data</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getNextKey"><code class="name flex">
+<span>def <span class="ident">getNextKey</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return the next numeric key in the dict</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getNextKey(self):
+    &#34;&#34;&#34;Return the next numeric key in the dict&#34;&#34;&#34;
+    num = len(self.reclist)+1
+    return num</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecAtRow"><code class="name flex">
+<span>def <span class="ident">getRecAtRow</span></span>(<span>self, recname, colname, offset=1, dim='y')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the record name at a specified offset in the current
+table from the record given, by using the current sort order</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecAtRow(self, recname, colname, offset=1, dim=&#39;y&#39;):
+    &#34;&#34;&#34;Get the record name at a specified offset in the current
+       table from the record given, by using the current sort order&#34;&#34;&#34;
+    thisrow = self.getRecordIndex(recname)
+    thiscol = self.getColumnIndex(colname)
+    #table goto next row
+    if dim == &#39;y&#39;:
+        nrow = thisrow + offset
+        ncol = thiscol
+    else:
+        nrow = thisrow
+        ncol = thiscol + offset
+
+    newrecname, newcolname = self.getRecColNames(nrow, ncol)
+    print (&#39;recname, colname&#39;, recname, colname)
+    print (&#39;thisrow, col&#39;, thisrow, thiscol)
+    return newrecname, newcolname</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecColNames"><code class="name flex">
+<span>def <span class="ident">getRecColNames</span></span>(<span>self, rowIndex, ColIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the rec and col name as a tuple</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecColNames(self, rowIndex, ColIndex):
+    &#34;&#34;&#34;Returns the rec and col name as a tuple&#34;&#34;&#34;
+    recname = self.getRecName(rowIndex)
+    colname = self.getColumnName(ColIndex)
+    return (recname, colname)</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecName"><code class="name flex">
+<span>def <span class="ident">getRecName</span></span>(<span>self, rowIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get record name from row number</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecName(self, rowIndex):
+    &#34;&#34;&#34;Get record name from row number&#34;&#34;&#34;
+
+    if len(self.reclist)==0:
+        return None
+    if self.filteredrecs != None:
+        name = self.filteredrecs[rowIndex]
+    else:
+        name = self.reclist[rowIndex]
+    return name</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecordAtRow"><code class="name flex">
+<span>def <span class="ident">getRecordAtRow</span></span>(<span>self, rowIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the entire record at the specifed row.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecordAtRow(self, rowIndex):
+    &#34;&#34;&#34;Get the entire record at the specifed row.&#34;&#34;&#34;
+
+    name = self.getRecName(rowIndex)
+    record = self.data[name]
+    return record</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecordAttributeAtColumn"><code class="name flex">
+<span>def <span class="ident">getRecordAttributeAtColumn</span></span>(<span>self, rowIndex=None, columnIndex=None, recName=None, columnName=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the attribute of the record at the specified column index.
+This determines what will be displayed in the cell</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecordAttributeAtColumn(self, rowIndex=None, columnIndex=None,
+                                    recName=None, columnName=None):
+     &#34;&#34;&#34;Get the attribute of the record at the specified column index.
+        This determines what will be displayed in the cell&#34;&#34;&#34;
+
+     value = None
+     if columnName != None and recName != None:
+         if columnName not in self.data[recName]:
+             return &#39;&#39;
+         cell = self.data[recName][columnName]
+     else:
+         cell = self.getCellRecord(rowIndex, columnIndex)
+         columnName = self.getColumnName(columnIndex)
+     if cell == None:
+         cell=&#39;&#39;
+     # Set the value based on the data record field
+     coltype = self.columntypes[columnName]
+     if Formula.isFormula(cell) == True:
+         value = self.doFormula(cell)
+         return value
+
+     if not type(cell) is dict:
+         if coltype == &#39;text&#39; or coltype == &#39;Text&#39;:
+             value = cell
+         elif coltype == &#39;number&#39;:
+             value = str(cell)
+         else:
+             value = &#39;other&#39;
+     if value==None:
+         value=&#39;&#39;
+     return value</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRecordIndex"><code class="name flex">
+<span>def <span class="ident">getRecordIndex</span></span>(<span>self, recname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRecordIndex(self, recname):
+    rowIndex = int(self.reclist.index(recname))
+    return rowIndex</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getRowCount"><code class="name flex">
+<span>def <span class="ident">getRowCount</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the number of rows in the table model.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getRowCount(self):
+     &#34;&#34;&#34;Returns the number of rows in the table model.&#34;&#34;&#34;
+     return len(self.reclist)</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getValueAt"><code class="name flex">
+<span>def <span class="ident">getValueAt</span></span>(<span>self, rowIndex, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the cell value at location specified
+by columnIndex and rowIndex.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getValueAt(self, rowIndex, columnIndex):
+     &#34;&#34;&#34;Returns the cell value at location specified
+         by columnIndex and rowIndex.&#34;&#34;&#34;
+     value = self.getRecordAttributeAtColumn(rowIndex, columnIndex)
+     return value</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.getlongestEntry"><code class="name flex">
+<span>def <span class="ident">getlongestEntry</span></span>(<span>self, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the longest cell entry in the col</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getlongestEntry(self, columnIndex):
+    &#34;&#34;&#34;Get the longest cell entry in the col&#34;&#34;&#34;
+
+    collist = self.getColCells(columnIndex)
+    maxw=5
+    for c in collist:
+        try:
+            w = len(str(c))
+        except UnicodeEncodeError:
+            pass
+        if w &gt; maxw:
+            maxw = w
+    #print &#39;longest width&#39;, maxw
+    return maxw</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.importCSV"><code class="name flex">
+<span>def <span class="ident">importCSV</span></span>(<span>self, filename, sep=',')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Import table data from a comma separated file.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def importCSV(self, filename, sep=&#39;,&#39;):
+    &#34;&#34;&#34;Import table data from a comma separated file.&#34;&#34;&#34;
+
+    if not os.path.isfile(filename) or not os.path.exists(filename):
+        print (&#39;no such file&#39;)
+        return None
+
+    #takes first row as field names
+    dictreader = csv.DictReader(open(filename, &#34;r&#34;), delimiter=sep)
+    dictdata = {}
+    count=0
+    for rec in dictreader:
+        dictdata[count]=rec
+        count=count+1
+    self.importDict(dictdata)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.importDict"><code class="name flex">
+<span>def <span class="ident">importDict</span></span>(<span>self, newdata)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Try to create a table model from a dict of the form
+{{'rec1': {'col1': 3, 'col2': 2}, ..}</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def importDict(self, newdata):
+    &#34;&#34;&#34;Try to create a table model from a dict of the form
+       {{&#39;rec1&#39;: {&#39;col1&#39;: 3, &#39;col2&#39;: 2}, ..}&#34;&#34;&#34;
+
+    #get cols from sub data keys
+    colnames = []
+    for k in newdata:
+        fields = newdata[k].keys()
+        for f in fields:
+            if not f in colnames:
+                colnames.append(f)
+    for c in colnames:
+        self.addColumn(c)
+    #add the data
+    self.data.update(newdata)
+    self.reclist = list(self.data.keys())
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.initialiseFields"><code class="name flex">
+<span>def <span class="ident">initialiseFields</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create base fields, some of which are not saved</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def initialiseFields(self):
+    &#34;&#34;&#34;Create base fields, some of which are not saved&#34;&#34;&#34;
+    self.data = None    # holds the table dict
+    self.colors = {}    # holds cell colors
+    self.colors[&#39;fg&#39;]={}
+    self.colors[&#39;bg&#39;]={}
+    #default types
+    self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+    #list of editable column types
+    self.editable={}
+    self.nodisplay = []
+    self.columnwidths={}  #used to store col widths, not held in saved data
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.load"><code class="name flex">
+<span>def <span class="ident">load</span></span>(<span>self, filename)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Load model from pickle file</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def load(self, filename):
+    &#34;&#34;&#34;Load model from pickle file&#34;&#34;&#34;
+    fd=open(filename,&#39;rb&#39;)
+    data = pickle.load(fd)
+    self.setupModel(data)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.merge"><code class="name flex">
+<span>def <span class="ident">merge</span></span>(<span>self, model, key='name', fields=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Merge another table model with this one based on a key field,
+we only add records from the new model where the key is present
+in both models</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def merge(self, model, key=&#39;name&#39;, fields=None):
+    &#34;&#34;&#34;Merge another table model with this one based on a key field,
+       we only add records from the new model where the key is present
+       in both models&#34;&#34;&#34;
+    if fields == None: fields = model.columnNames
+    for rec in self.reclist:
+        if not key in self.data[rec]:
+            continue
+        for new in model.reclist:
+            if not key in model.data[new]:
+                continue
+            if self.data[rec][key] == model.data[new][key]:
+            #if new == rec:
+                for f in fields:
+                    if not f in model.data[rec]:
+                        continue
+                    if not f in self.columnNames:
+                        self.addColumn(f)
+                    self.data[rec][f] = model.data[rec][f]
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.moveColumn"><code class="name flex">
+<span>def <span class="ident">moveColumn</span></span>(<span>self, oldcolumnIndex, newcolumnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes the order of columns</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def moveColumn(self, oldcolumnIndex, newcolumnIndex):
+    &#34;&#34;&#34;Changes the order of columns&#34;&#34;&#34;
+    self.oldnames = self.columnNames
+    self.columnNames=[]
+
+    #write out a new column names list - tedious
+    moved = self.oldnames[oldcolumnIndex]
+    del self.oldnames[oldcolumnIndex]
+    #print self.oldnames
+    i=0
+    for c in self.oldnames:
+        if i==newcolumnIndex:
+            self.columnNames.append(moved)
+        self.columnNames.append(c)
+        i=i+1
+    #if new col is at end just append
+    if moved not in self.columnNames:
+        self.columnNames.append(moved)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.relabel_Column"><code class="name flex">
+<span>def <span class="ident">relabel_Column</span></span>(<span>self, columnIndex, newname)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Change the column label - can be used in a table header</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def relabel_Column(self, columnIndex, newname):
+    &#34;&#34;&#34;Change the column label - can be used in a table header&#34;&#34;&#34;
+    colname = self.getColumnName(columnIndex)
+    self.columnlabels[colname]=newname
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.resetcolors"><code class="name flex">
+<span>def <span class="ident">resetcolors</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove all color formatting</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def resetcolors(self):
+    &#34;&#34;&#34;Remove all color formatting&#34;&#34;&#34;
+    self.colors={}
+    self.colors[&#39;fg&#39;]={}
+    self.colors[&#39;bg&#39;]={}
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>self, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save model to file</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save(self, filename=None):
+    &#34;&#34;&#34;Save model to file&#34;&#34;&#34;
+    if filename == None:
+        return
+    data = self.getData()
+    fd = open(filename,&#39;wb&#39;)
+    pickle.dump(data,fd)
+    fd.close()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setColorAt"><code class="name flex">
+<span>def <span class="ident">setColorAt</span></span>(<span>self, rowIndex, columnIndex, color, key='bg')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set color</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setColorAt(self, rowIndex, columnIndex, color, key=&#39;bg&#39;):
+    &#34;&#34;&#34;Set color&#34;&#34;&#34;
+    name = self.getRecName(rowIndex)
+    colname = self.getColumnName(columnIndex)
+    if not name in self.colors[key]:
+        self.colors[key][name] = {}
+    self.colors[key][name][colname] = str(color)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setFormulaAt"><code class="name flex">
+<span>def <span class="ident">setFormulaAt</span></span>(<span>self, f, rowIndex, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set a formula at cell given</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setFormulaAt(self, f, rowIndex, columnIndex):
+    &#34;&#34;&#34;Set a formula at cell given&#34;&#34;&#34;
+    name = self.getRecName(rowIndex)
+    colname = self.getColumnName(columnIndex)
+    coltype = self.columntypes[colname]
+    rec = {}
+    rec[&#39;formula&#39;] = f
+    self.data[name][colname] = rec
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setRecName"><code class="name flex">
+<span>def <span class="ident">setRecName</span></span>(<span>self, newname, rowIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the record name to another value - requires re-setting in all
+dicts that this rec is referenced</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setRecName(self, newname, rowIndex):
+    &#34;&#34;&#34;Set the record name to another value - requires re-setting in all
+       dicts that this rec is referenced&#34;&#34;&#34;
+
+    if len(self.reclist)==0:
+        return None
+    currname = self.getRecName(rowIndex)
+    self.reclist[rowIndex] = newname
+    temp = copy.deepcopy(self.data[currname])
+    self.data[newname] = temp
+    #self.data[newname][&#39;Name&#39;] = newname
+    del self.data[currname]
+    for key in [&#39;bg&#39;, &#39;fg&#39;]:
+        if currname in self.colors[key]:
+            temp = copy.deepcopy(self.colors[key][currname])
+            self.colors[key][newname] = temp
+            del self.colors[key][currname]
+    print (&#39;renamed&#39;)
+    #would also need to resolve all refs to this rec in formulas here!
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setSortOrder"><code class="name flex">
+<span>def <span class="ident">setSortOrder</span></span>(<span>self, columnIndex=None, columnName=None, reverse=0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes the order that records are sorted in, which will
+be reflected in the table upon redrawing</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setSortOrder(self, columnIndex=None, columnName=None, reverse=0):
+    &#34;&#34;&#34;Changes the order that records are sorted in, which will
+       be reflected in the table upon redrawing&#34;&#34;&#34;
+
+    if columnName != None and columnName in self.columnNames:
+        self.sortkey = columnName
+    elif columnIndex != None:
+        self.sortkey = self.getColumnName(columnIndex)
+    else:
+        return
+    self.reclist = list(self.createSortMap(self.reclist, self.sortkey, reverse))
+    if self.filteredrecs != None:
+        self.filteredrecs = self.createSortMap(self.filteredrecs, self.sortkey, reverse)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setValueAt"><code class="name flex">
+<span>def <span class="ident">setValueAt</span></span>(<span>self, value, rowIndex, columnIndex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changed the dictionary when cell is updated by user</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setValueAt(self, value, rowIndex, columnIndex):
+    &#34;&#34;&#34;Changed the dictionary when cell is updated by user&#34;&#34;&#34;
+
+    name = self.getRecName(rowIndex)
+    colname = self.getColumnName(columnIndex)
+    coltype = self.columntypes[colname]
+    if coltype == &#39;number&#39;:
+        try:
+            if value == &#39;&#39;: #need this to allow deletion of values
+                self.data[name][colname] = &#39;&#39;
+            else:
+                self.data[name][colname] = float(value)
+        except:
+            pass
+    else:
+        self.data[name][colname] = value
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.setupModel"><code class="name flex">
+<span>def <span class="ident">setupModel</span></span>(<span>self, newdict, rows=None, columns=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create table model</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setupModel(self, newdict, rows=None, columns=None):
+    &#34;&#34;&#34;Create table model&#34;&#34;&#34;
+
+    if newdict != None:
+        self.data = copy.deepcopy(newdict)
+        for k in self.keywords:
+            if k in self.data:
+                self.__dict__[self.keywords[k]] = self.data[k]
+                del self.data[k]
+        #read in the record list order
+        if &#39;reclist&#39; in self.data:
+            temp = self.data[&#39;reclist&#39;]
+            del self.data[&#39;reclist&#39;]
+            self.reclist = temp
+        else:
+            self.reclist = self.data.keys()
+    else:
+        #just make a new empty model
+        self.createEmptyModel()
+
+    if not set(self.reclist) == set(self.data.keys()):
+        print (&#39;reclist does not match data keys&#39;)
+    #restore last column order
+    if hasattr(self, &#39;columnOrder&#39;) and self.columnOrder != None:
+        self.columnNames=[]
+        for i in self.columnOrder.keys():
+            self.columnNames.append(self.columnOrder[i])
+            i=i+1
+    self.defaulttypes = [&#39;text&#39;, &#39;number&#39;]
+    #setup default display for column types
+    self.default_display = {&#39;text&#39; : &#39;showstring&#39;,
+                            &#39;number&#39; : &#39;numtostring&#39;}
+    #set default sort order as first col
+    if len(self.columnNames)&gt;0:
+        self.sortkey = self.columnNames[0]
+    else:
+        self.sortkey = None
+    #add rows and cols if they are given in the constructor
+    if newdict == None:
+        if rows != None:
+            self.autoAddRows(rows)
+        if columns != None:
+            self.autoAddColumns(columns)
+    self.filteredrecs = None
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.TableModels.TableModel.toFloats"><code class="name flex">
+<span>def <span class="ident">toFloats</span></span>(<span>self, l)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toFloats(self, l):
+    x=[]
+    for i in l:
+        if i == &#39;&#39;:
+            x.append(0.0)
+        else:
+            x.append(float(i))
+    return x</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tkintertable.TableModels.TableModel" href="#tkintertable.TableModels.TableModel">TableModel</a></code></h4>
+<ul class="">
+<li><code><a title="tkintertable.TableModels.TableModel.addColumn" href="#tkintertable.TableModels.TableModel.addColumn">addColumn</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.addRow" href="#tkintertable.TableModels.TableModel.addRow">addRow</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.appendtoFormula" href="#tkintertable.TableModels.TableModel.appendtoFormula">appendtoFormula</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.autoAddColumns" href="#tkintertable.TableModels.TableModel.autoAddColumns">autoAddColumns</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.autoAddRows" href="#tkintertable.TableModels.TableModel.autoAddRows">autoAddRows</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.copy" href="#tkintertable.TableModels.TableModel.copy">copy</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.copyFormula" href="#tkintertable.TableModels.TableModel.copyFormula">copyFormula</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.createEmptyModel" href="#tkintertable.TableModels.TableModel.createEmptyModel">createEmptyModel</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.createSortMap" href="#tkintertable.TableModels.TableModel.createSortMap">createSortMap</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.deleteCellRecord" href="#tkintertable.TableModels.TableModel.deleteCellRecord">deleteCellRecord</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.deleteColumn" href="#tkintertable.TableModels.TableModel.deleteColumn">deleteColumn</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.deleteColumns" href="#tkintertable.TableModels.TableModel.deleteColumns">deleteColumns</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.deleteRow" href="#tkintertable.TableModels.TableModel.deleteRow">deleteRow</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.deleteRows" href="#tkintertable.TableModels.TableModel.deleteRows">deleteRows</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.doFormula" href="#tkintertable.TableModels.TableModel.doFormula">doFormula</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.filterBy" href="#tkintertable.TableModels.TableModel.filterBy">filterBy</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getAllCells" href="#tkintertable.TableModels.TableModel.getAllCells">getAllCells</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getCellRecord" href="#tkintertable.TableModels.TableModel.getCellRecord">getCellRecord</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColCells" href="#tkintertable.TableModels.TableModel.getColCells">getColCells</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColorAt" href="#tkintertable.TableModels.TableModel.getColorAt">getColorAt</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnCount" href="#tkintertable.TableModels.TableModel.getColumnCount">getColumnCount</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnData" href="#tkintertable.TableModels.TableModel.getColumnData">getColumnData</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnIndex" href="#tkintertable.TableModels.TableModel.getColumnIndex">getColumnIndex</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnLabel" href="#tkintertable.TableModels.TableModel.getColumnLabel">getColumnLabel</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnName" href="#tkintertable.TableModels.TableModel.getColumnName">getColumnName</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumnType" href="#tkintertable.TableModels.TableModel.getColumnType">getColumnType</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getColumns" href="#tkintertable.TableModels.TableModel.getColumns">getColumns</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getData" href="#tkintertable.TableModels.TableModel.getData">getData</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getDefaultTypes" href="#tkintertable.TableModels.TableModel.getDefaultTypes">getDefaultTypes</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getDict" href="#tkintertable.TableModels.TableModel.getDict">getDict</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getNextKey" href="#tkintertable.TableModels.TableModel.getNextKey">getNextKey</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecAtRow" href="#tkintertable.TableModels.TableModel.getRecAtRow">getRecAtRow</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecColNames" href="#tkintertable.TableModels.TableModel.getRecColNames">getRecColNames</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecName" href="#tkintertable.TableModels.TableModel.getRecName">getRecName</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecordAtRow" href="#tkintertable.TableModels.TableModel.getRecordAtRow">getRecordAtRow</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecordAttributeAtColumn" href="#tkintertable.TableModels.TableModel.getRecordAttributeAtColumn">getRecordAttributeAtColumn</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRecordIndex" href="#tkintertable.TableModels.TableModel.getRecordIndex">getRecordIndex</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getRowCount" href="#tkintertable.TableModels.TableModel.getRowCount">getRowCount</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getValueAt" href="#tkintertable.TableModels.TableModel.getValueAt">getValueAt</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.getlongestEntry" href="#tkintertable.TableModels.TableModel.getlongestEntry">getlongestEntry</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.importCSV" href="#tkintertable.TableModels.TableModel.importCSV">importCSV</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.importDict" href="#tkintertable.TableModels.TableModel.importDict">importDict</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.initialiseFields" href="#tkintertable.TableModels.TableModel.initialiseFields">initialiseFields</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.keywords" href="#tkintertable.TableModels.TableModel.keywords">keywords</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.load" href="#tkintertable.TableModels.TableModel.load">load</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.merge" href="#tkintertable.TableModels.TableModel.merge">merge</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.moveColumn" href="#tkintertable.TableModels.TableModel.moveColumn">moveColumn</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.relabel_Column" href="#tkintertable.TableModels.TableModel.relabel_Column">relabel_Column</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.resetcolors" href="#tkintertable.TableModels.TableModel.resetcolors">resetcolors</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.save" href="#tkintertable.TableModels.TableModel.save">save</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setColorAt" href="#tkintertable.TableModels.TableModel.setColorAt">setColorAt</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setFormulaAt" href="#tkintertable.TableModels.TableModel.setFormulaAt">setFormulaAt</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setRecName" href="#tkintertable.TableModels.TableModel.setRecName">setRecName</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setSortOrder" href="#tkintertable.TableModels.TableModel.setSortOrder">setSortOrder</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setValueAt" href="#tkintertable.TableModels.TableModel.setValueAt">setValueAt</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.setupModel" href="#tkintertable.TableModels.TableModel.setupModel">setupModel</a></code></li>
+<li><code><a title="tkintertable.TableModels.TableModel.toFloats" href="#tkintertable.TableModels.TableModel.toFloats">toFloats</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

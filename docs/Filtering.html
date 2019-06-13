@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.Filtering API documentation</title>
+<meta name="description" content="Module implements Table filtering and searching functionality.
+Created Oct 2008
+Copyright (C) Damien Farrell …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.Filtering</code></h1>
+</header>
+<section id="section-intro">
+<p>Module implements Table filtering and searching functionality.
+Created Oct 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Module implements Table filtering and searching functionality.
+    Created Oct 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, division, print_function
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+    from tkinter import filedialog, messagebox, simpledialog
+except:
+    from Tkinter import *
+    from ttk import *
+#import Pmw
+from types import *
+import re
+
+def contains(v1,v2):
+    if v1 in v2:
+        return True
+
+def excludes(v1, v2):
+    if not v1 in v2:
+        return True
+
+def equals(v1,v2):
+    if v1==v2:
+        return True
+
+def notequals(v1,v2):
+    if v1!=v2:
+        return True
+
+def greaterthan(v1,v2):
+    if v2&gt;v1:
+        return True
+    return False
+
+def lessthan(v1,v2):
+    if v2&lt;v1:
+        return True
+    return False
+
+def startswith(v1,v2):
+    if v2.startswith(v1):
+        return True
+
+def endswith(v1,v2):
+    if v2.endswith(v1):
+        return True
+
+def haslength(v1,v2):
+    if len(v2)&gt;v1:
+        return True
+
+def isnumber(v1,v2):
+    try:
+        float(v2)
+        return True
+    except:
+        return False
+
+def regex(v1,v2):
+    &#34;&#34;&#34;Apply a regular expression&#34;&#34;&#34;
+    print (re.findall(v1,v2))
+    return
+
+operatornames = {&#39;=&#39;:equals,&#39;!=&#39;:notequals,
+                   &#39;contains&#39;:contains,&#39;excludes&#39;:excludes,
+                   &#39;&gt;&#39;:greaterthan,&#39;&lt;&#39;:lessthan,
+                   &#39;starts with&#39;:startswith,
+                   &#39;ends with&#39;:endswith,
+                   &#39;has length&#39;:haslength,
+                   &#39;is number&#39;:isnumber}
+
+def doFiltering(searchfunc, filters=None):
+    &#34;&#34;&#34;Module level method. Filter recs by several filters using a user provided
+       search function.
+       filters is a list of tuples of the form (key,value,operator,bool)
+       returns: found record keys&#34;&#34;&#34;
+
+    if filters == None:
+        return
+    F = filters
+    sets = []
+    for f in F:
+        col, val, op, boolean = f
+        names = searchfunc(col, val, op)
+        sets.append((set(names), boolean))
+    names = sets[0][0]
+    for s in sets[1:]:
+        b=s[1]
+        if b == &#39;AND&#39;:
+            names = names &amp; s[0]
+        elif b == &#39;OR&#39;:
+            names = names | s[0]
+        elif b == &#39;NOT&#39;:
+            names = names - s[0]
+        #print len(names)
+    names = list(names)
+    return names
+
+class FilterFrame(Frame):
+
+    def __init__(self, parent, fields, callback=None, closecallback=None):
+        &#34;&#34;&#34;Create a filtering gui frame.
+        Callback must be some method that can accept tuples of filter
+        parameters connected by boolean operators &#34;&#34;&#34;
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.callback = callback
+        self.closecallback = closecallback
+        self.fields = fields
+        self.filters = []
+        self.addFilterBar()
+        addbutton=Button(self,text=&#39;Go&#39;, command=self.callback)
+        addbutton.grid(row=0,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        addbutton=Button(self,text=&#39;+Add Filter&#39;, command=self.addFilterBar)
+        addbutton.grid(row=0,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+        cbutton=Button(self,text=&#39;Close&#39;, command=self.close)
+        cbutton.grid(row=0,column=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.resultsvar=IntVar()
+        Label(self,text=&#39;found:&#39;).grid(row=0,column=3,sticky=&#39;nes&#39;)
+        Label(self,textvariable=self.resultsvar).grid(row=0,column=4,sticky=&#39;nws&#39;,padx=2,pady=2)
+        return
+
+    def addFilterBar(self):
+        &#34;&#34;&#34;Add filter&#34;&#34;&#34;
+        index = len(self.filters)
+        f = FilterBar(self, index, self.fields)
+        self.filters.append(f)
+        f.grid(row=index+1,column=0,columnspan=5,sticky=&#39;news&#39;,padx=2,pady=2)
+        return
+
+    def close(self):
+        &#34;&#34;&#34;Close frame and do stuff in parent app if needed&#34;&#34;&#34;
+        self.closecallback()
+        self.destroy()
+        return
+
+    def doFiltering(self, searchfunc):
+        F=[]
+        for f in self.filters:
+            F.append(f.getFilter())
+        names = doFiltering(searchfunc, F)
+        self.updateResults(len(names))
+        return names
+
+    def updateResults(self, i):
+        self.resultsvar.set(i)
+        return
+
+class FilterBar(Frame):
+    &#34;&#34;&#34;Class providing filter widgets&#34;&#34;&#34;
+    operators = [&#39;contains&#39;,&#39;excludes&#39;,&#39;=&#39;,&#39;!=&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;,&#39;starts with&#39;,
+                 &#39;ends with&#39;,&#39;has length&#39;,&#39;is number&#39;]
+    booleanops = [&#39;AND&#39;,&#39;OR&#39;,&#39;NOT&#39;]
+    def __init__(self, parent, index, fields):
+        Frame.__init__(self, parent)
+        self.parent=parent
+        self.index = index
+        self.filtercol=StringVar()
+        initial = fields[0]
+        filtercolmenu = Combobox(self,
+                #labelpos = &#39;w&#39;,
+                #label_text = &#39;Column:&#39;,
+                textvariable = self.filtercol,
+                values = fields,
+                #initialitem = initial,
+                width = 10)
+        filtercolmenu.grid(row=0,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.operator=StringVar()
+        operatormenu = Combobox(self,
+                textvariable = self.operator,
+                values = self.operators,
+                #initialitem = &#39;contains&#39;,
+                width = 8)
+        operatormenu.grid(row=0,column=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.filtercolvalue=StringVar()
+        valsbox=Entry(self,textvariable=self.filtercolvalue,width=20)
+        valsbox.grid(row=0,column=3,sticky=&#39;news&#39;,padx=2,pady=2)
+        valsbox.bind(&#34;&lt;Return&gt;&#34;, self.parent.callback)
+        self.booleanop=StringVar()
+        self.booleanop.set(&#39;AND&#39;)
+        booleanopmenu = Combobox(self,
+                textvariable = self.booleanop,
+                values = self.booleanops,
+                #initialitem = &#39;AND&#39;,
+                width = 6)
+        booleanopmenu.grid(row=0,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        #disable the boolean operator if it&#39;s the first filter
+        #if self.index == 0:
+        #    booleanopmenu.component(&#39;menubutton&#39;).configure(state=DISABLED)
+        cbutton=Button(self,text=&#39;-&#39;, command=self.close)
+        cbutton.grid(row=0,column=5,sticky=&#39;news&#39;,padx=2,pady=2)
+        return
+
+    def close(self):
+        &#34;&#34;&#34;Destroy and remove from parent&#34;&#34;&#34;
+        self.parent.filters.remove(self)
+        self.destroy()
+        return
+
+    def getFilter(self):
+        &#34;&#34;&#34;Get filter values for this instance&#34;&#34;&#34;
+        col = self.filtercol.get()
+        val = self.filtercolvalue.get()
+        op = self.operator.get()
+        booleanop = self.booleanop.get()
+        return col, val, op, booleanop</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="tkintertable.Filtering.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def contains(v1,v2):
+    if v1 in v2:
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.doFiltering"><code class="name flex">
+<span>def <span class="ident">doFiltering</span></span>(<span>searchfunc, filters=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><dl>
+<dt>Module level method. Filter recs by several filters using a user provided</dt>
+<dt>search function.</dt>
+<dt>filters is a list of tuples of the form (key,value,operator,bool)</dt>
+<dt><strong><code>returns</code></strong> :&ensp;<code>found</code> <code>record</code> <code>keys</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doFiltering(searchfunc, filters=None):
+    &#34;&#34;&#34;Module level method. Filter recs by several filters using a user provided
+       search function.
+       filters is a list of tuples of the form (key,value,operator,bool)
+       returns: found record keys&#34;&#34;&#34;
+
+    if filters == None:
+        return
+    F = filters
+    sets = []
+    for f in F:
+        col, val, op, boolean = f
+        names = searchfunc(col, val, op)
+        sets.append((set(names), boolean))
+    names = sets[0][0]
+    for s in sets[1:]:
+        b=s[1]
+        if b == &#39;AND&#39;:
+            names = names &amp; s[0]
+        elif b == &#39;OR&#39;:
+            names = names | s[0]
+        elif b == &#39;NOT&#39;:
+            names = names - s[0]
+        #print len(names)
+    names = list(names)
+    return names</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.endswith"><code class="name flex">
+<span>def <span class="ident">endswith</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def endswith(v1,v2):
+    if v2.endswith(v1):
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.equals"><code class="name flex">
+<span>def <span class="ident">equals</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def equals(v1,v2):
+    if v1==v2:
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.excludes"><code class="name flex">
+<span>def <span class="ident">excludes</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def excludes(v1, v2):
+    if not v1 in v2:
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.greaterthan"><code class="name flex">
+<span>def <span class="ident">greaterthan</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def greaterthan(v1,v2):
+    if v2&gt;v1:
+        return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.haslength"><code class="name flex">
+<span>def <span class="ident">haslength</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def haslength(v1,v2):
+    if len(v2)&gt;v1:
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.isnumber"><code class="name flex">
+<span>def <span class="ident">isnumber</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def isnumber(v1,v2):
+    try:
+        float(v2)
+        return True
+    except:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.lessthan"><code class="name flex">
+<span>def <span class="ident">lessthan</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def lessthan(v1,v2):
+    if v2&lt;v1:
+        return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.notequals"><code class="name flex">
+<span>def <span class="ident">notequals</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def notequals(v1,v2):
+    if v1!=v2:
+        return True</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.regex"><code class="name flex">
+<span>def <span class="ident">regex</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Apply a regular expression</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def regex(v1,v2):
+    &#34;&#34;&#34;Apply a regular expression&#34;&#34;&#34;
+    print (re.findall(v1,v2))
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.startswith"><code class="name flex">
+<span>def <span class="ident">startswith</span></span>(<span>v1, v2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def startswith(v1,v2):
+    if v2.startswith(v1):
+        return True</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tkintertable.Filtering.FilterBar"><code class="flex name class">
+<span>class <span class="ident">FilterBar</span></span>
+<span>(</span><span>parent, index, fields)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class providing filter widgets</p>
+<p>Construct a Ttk Frame with parent master.</p>
+<p>STANDARD OPTIONS</p>
+<pre><code>class, cursor, style, takefocus
+</code></pre>
+<p>WIDGET-SPECIFIC OPTIONS</p>
+<pre><code>borderwidth, relief, padding, width, height
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FilterBar(Frame):
+    &#34;&#34;&#34;Class providing filter widgets&#34;&#34;&#34;
+    operators = [&#39;contains&#39;,&#39;excludes&#39;,&#39;=&#39;,&#39;!=&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;,&#39;starts with&#39;,
+                 &#39;ends with&#39;,&#39;has length&#39;,&#39;is number&#39;]
+    booleanops = [&#39;AND&#39;,&#39;OR&#39;,&#39;NOT&#39;]
+    def __init__(self, parent, index, fields):
+        Frame.__init__(self, parent)
+        self.parent=parent
+        self.index = index
+        self.filtercol=StringVar()
+        initial = fields[0]
+        filtercolmenu = Combobox(self,
+                #labelpos = &#39;w&#39;,
+                #label_text = &#39;Column:&#39;,
+                textvariable = self.filtercol,
+                values = fields,
+                #initialitem = initial,
+                width = 10)
+        filtercolmenu.grid(row=0,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.operator=StringVar()
+        operatormenu = Combobox(self,
+                textvariable = self.operator,
+                values = self.operators,
+                #initialitem = &#39;contains&#39;,
+                width = 8)
+        operatormenu.grid(row=0,column=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.filtercolvalue=StringVar()
+        valsbox=Entry(self,textvariable=self.filtercolvalue,width=20)
+        valsbox.grid(row=0,column=3,sticky=&#39;news&#39;,padx=2,pady=2)
+        valsbox.bind(&#34;&lt;Return&gt;&#34;, self.parent.callback)
+        self.booleanop=StringVar()
+        self.booleanop.set(&#39;AND&#39;)
+        booleanopmenu = Combobox(self,
+                textvariable = self.booleanop,
+                values = self.booleanops,
+                #initialitem = &#39;AND&#39;,
+                width = 6)
+        booleanopmenu.grid(row=0,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        #disable the boolean operator if it&#39;s the first filter
+        #if self.index == 0:
+        #    booleanopmenu.component(&#39;menubutton&#39;).configure(state=DISABLED)
+        cbutton=Button(self,text=&#39;-&#39;, command=self.close)
+        cbutton.grid(row=0,column=5,sticky=&#39;news&#39;,padx=2,pady=2)
+        return
+
+    def close(self):
+        &#34;&#34;&#34;Destroy and remove from parent&#34;&#34;&#34;
+        self.parent.filters.remove(self)
+        self.destroy()
+        return
+
+    def getFilter(self):
+        &#34;&#34;&#34;Get filter values for this instance&#34;&#34;&#34;
+        col = self.filtercol.get()
+        val = self.filtercolvalue.get()
+        op = self.operator.get()
+        booleanop = self.booleanop.get()
+        return col, val, op, booleanop</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>tkinter.ttk.Frame</li>
+<li>tkinter.ttk.Widget</li>
+<li>tkinter.Widget</li>
+<li>tkinter.BaseWidget</li>
+<li>tkinter.Misc</li>
+<li>tkinter.Pack</li>
+<li>tkinter.Place</li>
+<li>tkinter.Grid</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="tkintertable.Filtering.FilterBar.booleanops"><code class="name">var <span class="ident">booleanops</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Filtering.FilterBar.operators"><code class="name">var <span class="ident">operators</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.Filtering.FilterBar.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Destroy and remove from parent</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;Destroy and remove from parent&#34;&#34;&#34;
+    self.parent.filters.remove(self)
+    self.destroy()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.FilterBar.getFilter"><code class="name flex">
+<span>def <span class="ident">getFilter</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get filter values for this instance</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getFilter(self):
+    &#34;&#34;&#34;Get filter values for this instance&#34;&#34;&#34;
+    col = self.filtercol.get()
+    val = self.filtercolvalue.get()
+    op = self.operator.get()
+    booleanop = self.booleanop.get()
+    return col, val, op, booleanop</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="tkintertable.Filtering.FilterFrame"><code class="flex name class">
+<span>class <span class="ident">FilterFrame</span></span>
+<span>(</span><span>parent, fields, callback=None, closecallback=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Ttk Frame widget is a container, used to group other widgets
+together.</p>
+<p>Create a filtering gui frame.
+Callback must be some method that can accept tuples of filter
+parameters connected by boolean operators</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FilterFrame(Frame):
+
+    def __init__(self, parent, fields, callback=None, closecallback=None):
+        &#34;&#34;&#34;Create a filtering gui frame.
+        Callback must be some method that can accept tuples of filter
+        parameters connected by boolean operators &#34;&#34;&#34;
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.callback = callback
+        self.closecallback = closecallback
+        self.fields = fields
+        self.filters = []
+        self.addFilterBar()
+        addbutton=Button(self,text=&#39;Go&#39;, command=self.callback)
+        addbutton.grid(row=0,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        addbutton=Button(self,text=&#39;+Add Filter&#39;, command=self.addFilterBar)
+        addbutton.grid(row=0,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+        cbutton=Button(self,text=&#39;Close&#39;, command=self.close)
+        cbutton.grid(row=0,column=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        self.resultsvar=IntVar()
+        Label(self,text=&#39;found:&#39;).grid(row=0,column=3,sticky=&#39;nes&#39;)
+        Label(self,textvariable=self.resultsvar).grid(row=0,column=4,sticky=&#39;nws&#39;,padx=2,pady=2)
+        return
+
+    def addFilterBar(self):
+        &#34;&#34;&#34;Add filter&#34;&#34;&#34;
+        index = len(self.filters)
+        f = FilterBar(self, index, self.fields)
+        self.filters.append(f)
+        f.grid(row=index+1,column=0,columnspan=5,sticky=&#39;news&#39;,padx=2,pady=2)
+        return
+
+    def close(self):
+        &#34;&#34;&#34;Close frame and do stuff in parent app if needed&#34;&#34;&#34;
+        self.closecallback()
+        self.destroy()
+        return
+
+    def doFiltering(self, searchfunc):
+        F=[]
+        for f in self.filters:
+            F.append(f.getFilter())
+        names = doFiltering(searchfunc, F)
+        self.updateResults(len(names))
+        return names
+
+    def updateResults(self, i):
+        self.resultsvar.set(i)
+        return</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>tkinter.ttk.Frame</li>
+<li>tkinter.ttk.Widget</li>
+<li>tkinter.Widget</li>
+<li>tkinter.BaseWidget</li>
+<li>tkinter.Misc</li>
+<li>tkinter.Pack</li>
+<li>tkinter.Place</li>
+<li>tkinter.Grid</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.Filtering.FilterFrame.addFilterBar"><code class="name flex">
+<span>def <span class="ident">addFilterBar</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add filter</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def addFilterBar(self):
+    &#34;&#34;&#34;Add filter&#34;&#34;&#34;
+    index = len(self.filters)
+    f = FilterBar(self, index, self.fields)
+    self.filters.append(f)
+    f.grid(row=index+1,column=0,columnspan=5,sticky=&#39;news&#39;,padx=2,pady=2)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.FilterFrame.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Close frame and do stuff in parent app if needed</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;Close frame and do stuff in parent app if needed&#34;&#34;&#34;
+    self.closecallback()
+    self.destroy()
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.FilterFrame.doFiltering"><code class="name flex">
+<span>def <span class="ident">doFiltering</span></span>(<span>self, searchfunc)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doFiltering(self, searchfunc):
+    F=[]
+    for f in self.filters:
+        F.append(f.getFilter())
+    names = doFiltering(searchfunc, F)
+    self.updateResults(len(names))
+    return names</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Filtering.FilterFrame.updateResults"><code class="name flex">
+<span>def <span class="ident">updateResults</span></span>(<span>self, i)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def updateResults(self, i):
+    self.resultsvar.set(i)
+    return</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="tkintertable.Filtering.contains" href="#tkintertable.Filtering.contains">contains</a></code></li>
+<li><code><a title="tkintertable.Filtering.doFiltering" href="#tkintertable.Filtering.doFiltering">doFiltering</a></code></li>
+<li><code><a title="tkintertable.Filtering.endswith" href="#tkintertable.Filtering.endswith">endswith</a></code></li>
+<li><code><a title="tkintertable.Filtering.equals" href="#tkintertable.Filtering.equals">equals</a></code></li>
+<li><code><a title="tkintertable.Filtering.excludes" href="#tkintertable.Filtering.excludes">excludes</a></code></li>
+<li><code><a title="tkintertable.Filtering.greaterthan" href="#tkintertable.Filtering.greaterthan">greaterthan</a></code></li>
+<li><code><a title="tkintertable.Filtering.haslength" href="#tkintertable.Filtering.haslength">haslength</a></code></li>
+<li><code><a title="tkintertable.Filtering.isnumber" href="#tkintertable.Filtering.isnumber">isnumber</a></code></li>
+<li><code><a title="tkintertable.Filtering.lessthan" href="#tkintertable.Filtering.lessthan">lessthan</a></code></li>
+<li><code><a title="tkintertable.Filtering.notequals" href="#tkintertable.Filtering.notequals">notequals</a></code></li>
+<li><code><a title="tkintertable.Filtering.regex" href="#tkintertable.Filtering.regex">regex</a></code></li>
+<li><code><a title="tkintertable.Filtering.startswith" href="#tkintertable.Filtering.startswith">startswith</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tkintertable.Filtering.FilterBar" href="#tkintertable.Filtering.FilterBar">FilterBar</a></code></h4>
+<ul class="">
+<li><code><a title="tkintertable.Filtering.FilterBar.booleanops" href="#tkintertable.Filtering.FilterBar.booleanops">booleanops</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterBar.close" href="#tkintertable.Filtering.FilterBar.close">close</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterBar.getFilter" href="#tkintertable.Filtering.FilterBar.getFilter">getFilter</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterBar.operators" href="#tkintertable.Filtering.FilterBar.operators">operators</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="tkintertable.Filtering.FilterFrame" href="#tkintertable.Filtering.FilterFrame">FilterFrame</a></code></h4>
+<ul class="">
+<li><code><a title="tkintertable.Filtering.FilterFrame.addFilterBar" href="#tkintertable.Filtering.FilterFrame.addFilterBar">addFilterBar</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterFrame.close" href="#tkintertable.Filtering.FilterFrame.close">close</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterFrame.doFiltering" href="#tkintertable.Filtering.FilterFrame.doFiltering">doFiltering</a></code></li>
+<li><code><a title="tkintertable.Filtering.FilterFrame.updateResults" href="#tkintertable.Filtering.FilterFrame.updateResults">updateResults</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

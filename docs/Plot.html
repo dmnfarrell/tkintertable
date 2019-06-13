@@ -1,0 +1,1760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.1" />
+<title>tkintertable.Plot API documentation</title>
+<meta name="description" content="Module for basic plotting inside the TableCanvas. Uses matplotlib.
+Created August 2008
+Copyright (C) Damien Farrell …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tkintertable.Plot</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for basic plotting inside the TableCanvas. Uses matplotlib.
+Created August 2008
+Copyright (C) Damien Farrell</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+02111-1307
+USA</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#!/usr/bin/env python
+&#34;&#34;&#34;
+    Module for basic plotting inside the TableCanvas. Uses matplotlib.
+    Created August 2008
+    Copyright (C) Damien Farrell
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+&#34;&#34;&#34;
+
+from __future__ import absolute_import, print_function
+import sys, os
+import copy
+try:
+    from tkinter import *
+    from tkinter.ttk import *
+except:
+    from Tkinter import *
+    from ttk import *
+if (sys.version_info &gt; (3, 0)):
+    from tkinter import filedialog, messagebox, simpledialog
+else:
+    import tkFileDialog as filedialog
+    import tkSimpleDialog as simpledialog
+    import tkMessageBox as messagebox
+
+from math import *
+try:
+    import numpy
+except:
+    pass
+
+import matplotlib
+matplotlib.use(&#39;TkAgg&#39;)
+from matplotlib.font_manager import FontProperties
+import pylab
+
+
+class pylabPlotter(object):
+    &#34;&#34;&#34;An interface to matplotlib for general plotting and stats, using tk backend&#34;&#34;&#34;
+
+    colors = [&#39;#0049B4&#39;,&#39;#C90B11&#39;,&#39;#437C17&#39;,&#39;#AFC7C7&#39;,&#39;#E9AB17&#39;,&#39;#7F525D&#39;,&#39;#F6358A&#39;,
+              &#39;#52D017&#39;,&#39;#FFFC17&#39;,&#39;#F76541&#39;,&#39;#F62217&#39; ]
+    linestyles = [&#39;-&#39;,&#39;--&#39;]
+    shapes = [&#39;o&#39;,&#39;-&#39;,&#39;--&#39;,&#39;:&#39;,&#39;.&#39; ,&#39;p&#39;,&#39;^&#39;,&#39;&lt;&#39;,&#39;s&#39;,&#39;+&#39;,&#39;x&#39;,&#39;D&#39;,&#39;1&#39;,&#39;4&#39;,&#39;h&#39;]
+    legend_positions = [&#39;best&#39;, &#39;upper left&#39;,&#39;upper center&#39;,&#39;upper right&#39;,
+                         &#39;center left&#39;,&#39;center&#39;,&#39;center right&#39;
+                         &#39;lower left&#39;,&#39;lower center&#39;,&#39;lower right&#39;]
+
+    graphtypes = [&#39;XY&#39;, &#39;hist&#39;, &#39;bar&#39;, &#39;pie&#39;]
+    fonts = [&#39;serif&#39;, &#39;sans-serif&#39;, &#39;cursive&#39;, &#39;fantasy&#39;, &#39;monospace&#39;]
+
+
+    def __init__(self):
+        #Setup variables
+        self.shape = &#39;o&#39;
+        self.grid = 0
+        self.xscale = 0
+        self.yscale = 0
+        self.showlegend = 0
+        self.legendloc = &#39;best&#39;
+        self.legendlines = []
+        self.legendnames = []
+        self.graphtype = &#39;XY&#39;
+        self.datacolors = self.colors
+        self.dpi = 300
+        self.linewidth = 1.5
+        self.font = &#39;sans-serif&#39;
+        self.fontsize = 12
+        try:
+            self.setupPlotVars()
+        except:
+            print (&#39;no tk running&#39;)
+        self.currdata = None
+        #self.format = None  #data format
+        self.plottitle = &#39;&#39;
+        self.plotxlabel = &#39;&#39;
+        self.plotylabel = &#39;&#39;
+        return
+
+    def plotXY(self, x, y, title=&#39;&#39;, xlabel=None, ylabel=None, shape=None,
+                            clr=None, lw=1):
+        &#34;&#34;&#34;Do x-y plot of 2 lists&#34;&#34;&#34;
+        if shape == None:
+            shape = self.shape
+        if clr == None:
+            clr = &#39;b&#39;
+        if self.xscale == 1:
+            if self.yscale == 1:
+                line, = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
+            else:
+                line, = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
+        elif self.yscale == 1:
+            line, = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
+        else:
+            line, = pylab.plot(x, y, shape, color=clr, linewidth=lw)
+        return line
+
+    def doHistogram(self, data, bins=10):
+        &#34;&#34;&#34;Do a pylab histogram of 1 or more lists&#34;&#34;&#34;
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
+        dim=int(ceil(len(data)/2.0))
+        i=1
+        #fig = pylab.figure()
+        for r in data:
+            if len(r)==0:
+                continue
+            ax = pylab.subplot(ydim,dim,i)
+            print (r)
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.hist(r,bins=bins)
+            i=i+1
+        return ax
+
+    def doBarChart(self, x, y, clr):
+        &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+        #xloc = range(len(x))
+        for i in range(len(x)):
+            x[i] = float(x[i]);y[i] = float(y[i])
+        plotfig = pylab.bar(x, y, color=clr, alpha=0.6)
+
+        return plotfig
+
+    def doPieChart(self, data):
+        &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
+        dim=int(ceil(len(data)/2.0))
+        i=1
+        for r in data:
+            if len(r)==0:
+                continue
+            fig = pylab.subplot(ydim,dim,i)
+
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.pie(r)
+            i=i+1
+
+        return
+
+    def setData(self, data):
+        &#34;&#34;&#34;Set the current plot data, useful for re-plotting without re-calling
+           explicit functions from the parent&#34;&#34;&#34;
+
+        self.currdata = data
+        return
+
+    def hasData(self):
+        &#34;&#34;&#34;Is there some plot data?&#34;&#34;&#34;
+        if self.currdata != None and len(self.currdata) &gt; 0:
+            return True
+        else:
+            return False
+
+    def setDataSeries(self, names=None, start=1):
+        &#34;&#34;&#34;Set the series names, for use in legend&#34;&#34;&#34;
+        self.dataseriesvars=[]
+        for i in range(start,len(names)):
+           s=StringVar()
+           s.set(names[i])
+           self.dataseriesvars.append(s)
+        #print self.dataseriesvars
+        return
+
+    def setFormat(self, format):
+        &#34;&#34;&#34;Set current data format of currdata&#34;&#34;&#34;
+        self.format = format
+        return
+
+    def plotCurrent(self, data=None, graphtype=&#39;bar&#39;, show=True, guiopts=False,title=None):
+        &#34;&#34;&#34;Re-do the plot with the current options and data&#34;&#34;&#34;
+        if guiopts == True:
+            self.applyOptions()
+        if title != None:
+            self.settitle(title)
+        self.clear()
+        currfig = pylab.figure(1)
+
+        if data == None:
+            try:
+                data = self.currdata
+            except:
+                print (&#39;no data to plot&#39;)
+                return
+        else:
+            self.setData(data)
+
+        seriesnames = []
+        legendlines = []
+        for d in self.dataseriesvars:
+            seriesnames.append(d.get())
+
+        self.graphtype = graphtype
+        #do an X-Y plot, with the first list as X xals
+        if self.graphtype == &#39;bar&#39; or len(data) == 1:
+            i=0
+            pdata = copy.deepcopy(data)
+            if len(pdata)&gt;1:
+                x = pdata[0]
+                pdata.remove(x)
+                for y in pdata:
+                    if i &gt;= len(self.colors):
+                        i = 0
+                    c = self.colors[i]
+                    self.doBarChart(x, y, clr=c)
+                    i+=1
+            else:
+                y = pdata[0]
+                x = range(len(y))
+                self.doBarChart(x, y, clr=&#39;b&#39;)
+
+        elif self.graphtype == &#39;XY&#39;:
+            pdata = copy.deepcopy(data)
+            x = pdata[0]
+            pdata.remove(x)
+            i=0
+            for y in pdata:
+                if i &gt;= len(self.colors):
+                    i = 0
+                c = self.colors[i]
+                line = self.plotXY(x, y, clr=c, lw=self.linewidth)
+                legendlines.append(line)
+                i+=1
+
+        elif self.graphtype == &#39;hist&#39;:
+            self.doHistogram(data)
+        elif self.graphtype == &#39;pie&#39;:
+            self.doPieChart(data)
+
+        pylab.title(self.plottitle)
+        pylab.xlabel(self.plotxlabel)
+        pylab.ylabel(self.plotylabel)
+        #create legend data
+        if self.showlegend == 1:
+            pylab.legend(legendlines,seriesnames,
+                         loc=self.legendloc)
+        if self.grid == 1:
+            pylab.grid(True)
+
+        if show == True:
+            self.show()
+        return currfig
+
+    def clear(self):
+        &#34;&#34;&#34;clear plot&#34;&#34;&#34;
+        pylab.clf()
+        self.legendlines = []
+        self.legendnames = []
+        return
+
+    def show(self):
+        pylab.show()
+        return
+
+    def saveCurrent(self, filename=None):
+        import tkFileDialog, os
+        filename=tkFileDialog.asksaveasfilename(parent=self.plotprefswin,
+                                                defaultextension=&#39;.png&#39;,
+                                                filetypes=[(&#34;Png file&#34;,&#34;*.png&#34;),
+                                                           (&#34;All files&#34;,&#34;*.*&#34;)])
+        if not filename:
+            return
+        fig = self.plotCurrent(show=False)
+        fig.savefig(filename, dpi=self.dpi)
+        return
+
+    def setTitle(self, title=None):
+        self.plottitle = title
+
+    def setxlabel(self, label=None):
+        self.plotxlabel = label
+
+    def setylabel(self, label=None):
+        self.plotylabel = label
+
+    def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
+                    showlegend=None, legendloc=None, linewidth=None,
+                    graphtype=None, font=None, fontsize=None):
+        &#34;&#34;&#34;Set the options before plotting&#34;&#34;&#34;
+        if shape != None:
+            self.shape = shape
+        if grid != None:
+            self.grid = grid
+        if xscale != None:
+            self.xscale = xscale
+        if yscale != None:
+            self.yscale = yscale
+        if showlegend != None:
+            self.showlegend = showlegend
+        if legendloc != None:
+            self.legendloc = legendloc
+        if linewidth != None:
+            self.linewidth = linewidth
+        if graphtype !=None:
+            self.graphtype = graphtype
+        if font != None:
+            self.font = font
+        if fontsize != None:
+            self.fontsize = fontsize
+        pylab.rc(&#34;font&#34;, family=self.font, size=self.fontsize)
+        return
+
+    def setupPlotVars(self):
+        &#34;&#34;&#34;Plot Vars &#34;&#34;&#34;
+        self.pltgrid = IntVar()
+        self.pltlegend = IntVar()
+        self.pltsymbol = StringVar()
+        self.pltsymbol.set(self.shape)
+        self.legendlocvar = StringVar()
+        self.legendlocvar.set(self.legendloc)
+        self.xscalevar = IntVar()
+        self.yscalevar = IntVar()
+        self.xscalevar.set(0)
+        self.yscalevar.set(0)
+        self.graphtypevar = StringVar()
+        self.graphtypevar.set(self.graphtype)
+        self.linewidthvar = DoubleVar()
+        self.linewidthvar.set(self.linewidth)
+        self.fontvar = StringVar()
+        self.fontvar.set(self.font)
+        self.fontsizevar = DoubleVar()
+        self.fontsizevar.set(self.fontsize)
+        #plot specific
+        self.plottitlevar = StringVar()
+        self.plottitlevar.set(&#39;&#39;)
+        self.plotxlabelvar = StringVar()
+        self.plotxlabelvar.set(&#39;&#39;)
+        self.plotylabelvar = StringVar()
+        self.plotylabelvar.set(&#39;&#39;)
+        self.dataseriesvars=[]
+        return
+
+
+    def applyOptions(self):
+        &#34;&#34;&#34;Apply the gui option vars to the plotter options&#34;&#34;&#34;
+        self.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
+               xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
+               showlegend = self.pltlegend.get(),
+               legendloc = self.legendlocvar.get(),
+               linewidth = self.linewidthvar.get(),
+               graphtype = self.graphtypevar.get(),
+               font = self.fontvar.get(),
+               fontsize = self.fontsizevar.get())
+        self.setTitle(self.plottitlevar.get())
+        self.setxlabel(self.plotxlabelvar.get())
+        self.setylabel(self.plotylabelvar.get())
+        return
+
+    def plotSetup(self, data=None):
+        &#34;&#34;&#34;Plot options dialog&#34;&#34;&#34;
+
+        if data != None:
+            self.setData(data)
+        self.plotprefswin=Toplevel()
+        self.plotprefswin.geometry(&#39;+300+450&#39;)
+        self.plotprefswin.title(&#39;Plot Preferences&#39;)
+        row=0
+        frame1=LabelFrame(self.plotprefswin, text=&#39;General&#39;)
+        frame1.grid(row=row,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        def close_prefsdialog():
+            self.plotprefswin.destroy()
+
+        def choosecolor(x):
+            &#34;&#34;&#34;Choose color for data series&#34;&#34;&#34;
+            d=x[0]
+            c=x[1]
+            #print &#39;passed&#39;, &#39;d&#39;,d, &#39;c&#39;,c
+            import tkColorChooser
+            colour,colour_string = tkColorChooser.askcolor(c,parent=self.plotprefswin)
+            if colour != None:
+                self.datacolors[d] = str(colour_string)
+                cbuttons[d].configure(bg=colour_string)
+
+            return
+
+        Checkbutton(frame1, text=&#34;Grid lines&#34;, variable=self.pltgrid,
+                    onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky=&#39;news&#39;)
+        Checkbutton(frame1, text=&#34;Legend&#34;, variable=self.pltlegend,
+                    onvalue=1, offvalue=0).grid(row=1,column=0, columnspan=2, sticky=&#39;news&#39;)
+
+        Label(frame1,text=&#39;Symbol:&#39;).grid(row=2,column=0,padx=2,pady=2)
+        symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        symbol_menu = Menu(symbolbutton, tearoff=0)
+        symbolbutton[&#39;menu&#39;] = symbol_menu
+        for text in self.shapes:
+            symbol_menu.add_radiobutton(label=text,
+                                            variable=self.pltsymbol,
+                                            value=text,
+                                            indicatoron=1)
+        symbolbutton.grid(row=2,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+        row=row+1
+
+        Label(frame1,text=&#39;Legend pos:&#39;).grid(row=3,column=0,padx=2,pady=2)
+        legendposbutton = Menubutton(frame1,textvariable=self.legendlocvar,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        legendpos_menu = Menu(legendposbutton, tearoff=0)
+        legendposbutton[&#39;menu&#39;] = legendpos_menu
+        i=0
+        for p in self.legend_positions:
+            legendpos_menu.add_radiobutton(label=p,
+                                        variable=self.legendlocvar,
+                                        value=p,
+                                        indicatoron=1)
+            i+=1
+        legendposbutton.grid(row=3,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+
+        Label(frame1,text=&#39;Font:&#39;).grid(row=4,column=0,padx=2,pady=2)
+        fontbutton = Menubutton(frame1,textvariable=self.fontvar,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        font_menu = Menu(fontbutton, tearoff=0)
+        fontbutton[&#39;menu&#39;] = font_menu
+        for f in self.fonts:
+            font_menu.add_radiobutton(label=f,
+                                            variable=self.fontvar,
+                                            value=f,
+                                            indicatoron=1)
+        fontbutton.grid(row=4,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+        row=row+1
+        Label(frame1,text=&#39;Font size:&#39;).grid(row=5,column=0,padx=2,pady=2)
+        Scale(frame1,from_=8,to=26,resolution=0.5,orient=&#39;horizontal&#39;,
+                            relief=GROOVE,variable=self.fontsizevar).grid(row=5,column=1,padx=2,pady=2)
+
+        Label(frame1,text=&#39;linewidth:&#39;).grid(row=6,column=0,padx=2,pady=2)
+        Scale(frame1,from_=1,to=10,resolution=0.5,orient=&#39;horizontal&#39;,
+                            relief=GROOVE,variable=self.linewidthvar).grid(row=6,column=1,padx=2,pady=2)
+        row=0
+        scalesframe = LabelFrame(self.plotprefswin, text=&#34;Axes Scales&#34;)
+        scales={0:&#39;norm&#39;,1:&#39;log&#39;}
+        for i in range(0,2):
+            Radiobutton(scalesframe,text=&#39;x-&#39;+scales[i],variable=self.xscalevar,
+                            value=i).grid(row=0,column=i,pady=2)
+            Radiobutton(scalesframe,text=&#39;y-&#39;+scales[i],variable=self.yscalevar,
+                            value=i).grid(row=1,column=i,pady=2)
+        scalesframe.grid(row=row,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+
+        row=row+1
+        frame=LabelFrame(self.plotprefswin, text=&#39;Graph type&#39;)
+        frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        for i in range(len(self.graphtypes)):
+            Radiobutton(frame,text=self.graphtypes[i],variable=self.graphtypevar,
+                            value=self.graphtypes[i]).grid(row=0,column=i,pady=2)
+
+        row=row+1
+        labelsframe = LabelFrame(self.plotprefswin,text=&#39;Labels&#39;)
+        labelsframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        Label(labelsframe,text=&#39;Title:&#39;).grid(row=0,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plottitlevar,bg=&#39;white&#39;,relief=GROOVE).grid(row=0,column=1,padx=2,pady=2)
+        Label(labelsframe,text=&#39;X-axis label:&#39;).grid(row=1,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotxlabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
+        Label(labelsframe,text=&#39;Y-axis label:&#39;).grid(row=2,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotylabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
+
+        if self.currdata != None:
+            #print self.dataseriesvars
+            row=row+1
+            seriesframe = LabelFrame(self.plotprefswin, text=&#34;Data Series Labels&#34;)
+            seriesframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+            #self.dataseriesvars=[]
+            if len(self.dataseriesvars) == 0:
+                self.setDataSeries(range(len(self.currdata)))
+            r=1
+            sr=1
+            cl=0
+            for s in self.dataseriesvars:
+                Label(seriesframe,text=&#39;Series &#39;+str(r)).grid(row=r,column=cl,padx=2,pady=2)
+                Entry(seriesframe,textvariable=s,bg=&#39;white&#39;,
+                                          relief=GROOVE).grid(row=r,column=cl+1,padx=2,pady=2)
+                r+=1
+                if r &gt; 8:
+                    r=1
+                    cl+=2
+            row=row+1
+            cbuttons = {}
+            frame = LabelFrame(self.plotprefswin, text=&#34;Dataset Colors&#34;)
+            r=1
+            cl=0
+            sr=1
+            ci=0
+            for d in range(len(self.dataseriesvars)):
+                if d &gt;= len(self.datacolors):
+                    self.datacolors.append(self.colors[ci])
+                    ci+=1
+                c = self.datacolors[d]
+                action = lambda x =(d,c): choosecolor(x)
+                cbuttons[d]=Button(frame,text=&#39;Series &#39;+str(sr),bg=c,command=action)
+                cbuttons[d].grid(row=r,column=cl,sticky=&#39;news&#39;,padx=2,pady=2)
+                r+=1
+                sr+=1
+                if r &gt; 8:
+                    r=1
+                    cl+=1
+            frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+
+        row=row+1
+        frame=Frame(self.plotprefswin)
+        frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        replotb = Button(frame, text=&#34;Replot&#34;,
+                command=lambda:self.plotCurrent(graphtype=self.graphtype,guiopts=True),
+                relief=GROOVE, bg=&#39;#99ccff&#39;)
+        replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
+        b = Button(frame, text=&#34;Apply&#34;, command=self.applyOptions, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        b = Button(frame, text=&#34;Save&#34;, command=self.saveCurrent, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        c=Button(frame,text=&#39;Close&#39;, command=close_prefsdialog, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        c.pack(side=LEFT,fill=X,padx=2,pady=2)
+        if self.currdata == None:
+            replotb.configure(state=DISABLED)
+
+        self.plotprefswin.focus_set()
+        self.plotprefswin.grab_set()
+
+        return</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tkintertable.Plot.pylabPlotter"><code class="flex name class">
+<span>class <span class="ident">pylabPlotter</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>An interface to matplotlib for general plotting and stats, using tk backend</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class pylabPlotter(object):
+    &#34;&#34;&#34;An interface to matplotlib for general plotting and stats, using tk backend&#34;&#34;&#34;
+
+    colors = [&#39;#0049B4&#39;,&#39;#C90B11&#39;,&#39;#437C17&#39;,&#39;#AFC7C7&#39;,&#39;#E9AB17&#39;,&#39;#7F525D&#39;,&#39;#F6358A&#39;,
+              &#39;#52D017&#39;,&#39;#FFFC17&#39;,&#39;#F76541&#39;,&#39;#F62217&#39; ]
+    linestyles = [&#39;-&#39;,&#39;--&#39;]
+    shapes = [&#39;o&#39;,&#39;-&#39;,&#39;--&#39;,&#39;:&#39;,&#39;.&#39; ,&#39;p&#39;,&#39;^&#39;,&#39;&lt;&#39;,&#39;s&#39;,&#39;+&#39;,&#39;x&#39;,&#39;D&#39;,&#39;1&#39;,&#39;4&#39;,&#39;h&#39;]
+    legend_positions = [&#39;best&#39;, &#39;upper left&#39;,&#39;upper center&#39;,&#39;upper right&#39;,
+                         &#39;center left&#39;,&#39;center&#39;,&#39;center right&#39;
+                         &#39;lower left&#39;,&#39;lower center&#39;,&#39;lower right&#39;]
+
+    graphtypes = [&#39;XY&#39;, &#39;hist&#39;, &#39;bar&#39;, &#39;pie&#39;]
+    fonts = [&#39;serif&#39;, &#39;sans-serif&#39;, &#39;cursive&#39;, &#39;fantasy&#39;, &#39;monospace&#39;]
+
+
+    def __init__(self):
+        #Setup variables
+        self.shape = &#39;o&#39;
+        self.grid = 0
+        self.xscale = 0
+        self.yscale = 0
+        self.showlegend = 0
+        self.legendloc = &#39;best&#39;
+        self.legendlines = []
+        self.legendnames = []
+        self.graphtype = &#39;XY&#39;
+        self.datacolors = self.colors
+        self.dpi = 300
+        self.linewidth = 1.5
+        self.font = &#39;sans-serif&#39;
+        self.fontsize = 12
+        try:
+            self.setupPlotVars()
+        except:
+            print (&#39;no tk running&#39;)
+        self.currdata = None
+        #self.format = None  #data format
+        self.plottitle = &#39;&#39;
+        self.plotxlabel = &#39;&#39;
+        self.plotylabel = &#39;&#39;
+        return
+
+    def plotXY(self, x, y, title=&#39;&#39;, xlabel=None, ylabel=None, shape=None,
+                            clr=None, lw=1):
+        &#34;&#34;&#34;Do x-y plot of 2 lists&#34;&#34;&#34;
+        if shape == None:
+            shape = self.shape
+        if clr == None:
+            clr = &#39;b&#39;
+        if self.xscale == 1:
+            if self.yscale == 1:
+                line, = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
+            else:
+                line, = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
+        elif self.yscale == 1:
+            line, = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
+        else:
+            line, = pylab.plot(x, y, shape, color=clr, linewidth=lw)
+        return line
+
+    def doHistogram(self, data, bins=10):
+        &#34;&#34;&#34;Do a pylab histogram of 1 or more lists&#34;&#34;&#34;
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
+        dim=int(ceil(len(data)/2.0))
+        i=1
+        #fig = pylab.figure()
+        for r in data:
+            if len(r)==0:
+                continue
+            ax = pylab.subplot(ydim,dim,i)
+            print (r)
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.hist(r,bins=bins)
+            i=i+1
+        return ax
+
+    def doBarChart(self, x, y, clr):
+        &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+        #xloc = range(len(x))
+        for i in range(len(x)):
+            x[i] = float(x[i]);y[i] = float(y[i])
+        plotfig = pylab.bar(x, y, color=clr, alpha=0.6)
+
+        return plotfig
+
+    def doPieChart(self, data):
+        &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+        if len(data) == 1:
+            ydim=1
+        else:
+            ydim=2
+        dim=int(ceil(len(data)/2.0))
+        i=1
+        for r in data:
+            if len(r)==0:
+                continue
+            fig = pylab.subplot(ydim,dim,i)
+
+            for j in range(len(r)):
+                r[j] = float(r[j])
+            pylab.pie(r)
+            i=i+1
+
+        return
+
+    def setData(self, data):
+        &#34;&#34;&#34;Set the current plot data, useful for re-plotting without re-calling
+           explicit functions from the parent&#34;&#34;&#34;
+
+        self.currdata = data
+        return
+
+    def hasData(self):
+        &#34;&#34;&#34;Is there some plot data?&#34;&#34;&#34;
+        if self.currdata != None and len(self.currdata) &gt; 0:
+            return True
+        else:
+            return False
+
+    def setDataSeries(self, names=None, start=1):
+        &#34;&#34;&#34;Set the series names, for use in legend&#34;&#34;&#34;
+        self.dataseriesvars=[]
+        for i in range(start,len(names)):
+           s=StringVar()
+           s.set(names[i])
+           self.dataseriesvars.append(s)
+        #print self.dataseriesvars
+        return
+
+    def setFormat(self, format):
+        &#34;&#34;&#34;Set current data format of currdata&#34;&#34;&#34;
+        self.format = format
+        return
+
+    def plotCurrent(self, data=None, graphtype=&#39;bar&#39;, show=True, guiopts=False,title=None):
+        &#34;&#34;&#34;Re-do the plot with the current options and data&#34;&#34;&#34;
+        if guiopts == True:
+            self.applyOptions()
+        if title != None:
+            self.settitle(title)
+        self.clear()
+        currfig = pylab.figure(1)
+
+        if data == None:
+            try:
+                data = self.currdata
+            except:
+                print (&#39;no data to plot&#39;)
+                return
+        else:
+            self.setData(data)
+
+        seriesnames = []
+        legendlines = []
+        for d in self.dataseriesvars:
+            seriesnames.append(d.get())
+
+        self.graphtype = graphtype
+        #do an X-Y plot, with the first list as X xals
+        if self.graphtype == &#39;bar&#39; or len(data) == 1:
+            i=0
+            pdata = copy.deepcopy(data)
+            if len(pdata)&gt;1:
+                x = pdata[0]
+                pdata.remove(x)
+                for y in pdata:
+                    if i &gt;= len(self.colors):
+                        i = 0
+                    c = self.colors[i]
+                    self.doBarChart(x, y, clr=c)
+                    i+=1
+            else:
+                y = pdata[0]
+                x = range(len(y))
+                self.doBarChart(x, y, clr=&#39;b&#39;)
+
+        elif self.graphtype == &#39;XY&#39;:
+            pdata = copy.deepcopy(data)
+            x = pdata[0]
+            pdata.remove(x)
+            i=0
+            for y in pdata:
+                if i &gt;= len(self.colors):
+                    i = 0
+                c = self.colors[i]
+                line = self.plotXY(x, y, clr=c, lw=self.linewidth)
+                legendlines.append(line)
+                i+=1
+
+        elif self.graphtype == &#39;hist&#39;:
+            self.doHistogram(data)
+        elif self.graphtype == &#39;pie&#39;:
+            self.doPieChart(data)
+
+        pylab.title(self.plottitle)
+        pylab.xlabel(self.plotxlabel)
+        pylab.ylabel(self.plotylabel)
+        #create legend data
+        if self.showlegend == 1:
+            pylab.legend(legendlines,seriesnames,
+                         loc=self.legendloc)
+        if self.grid == 1:
+            pylab.grid(True)
+
+        if show == True:
+            self.show()
+        return currfig
+
+    def clear(self):
+        &#34;&#34;&#34;clear plot&#34;&#34;&#34;
+        pylab.clf()
+        self.legendlines = []
+        self.legendnames = []
+        return
+
+    def show(self):
+        pylab.show()
+        return
+
+    def saveCurrent(self, filename=None):
+        import tkFileDialog, os
+        filename=tkFileDialog.asksaveasfilename(parent=self.plotprefswin,
+                                                defaultextension=&#39;.png&#39;,
+                                                filetypes=[(&#34;Png file&#34;,&#34;*.png&#34;),
+                                                           (&#34;All files&#34;,&#34;*.*&#34;)])
+        if not filename:
+            return
+        fig = self.plotCurrent(show=False)
+        fig.savefig(filename, dpi=self.dpi)
+        return
+
+    def setTitle(self, title=None):
+        self.plottitle = title
+
+    def setxlabel(self, label=None):
+        self.plotxlabel = label
+
+    def setylabel(self, label=None):
+        self.plotylabel = label
+
+    def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
+                    showlegend=None, legendloc=None, linewidth=None,
+                    graphtype=None, font=None, fontsize=None):
+        &#34;&#34;&#34;Set the options before plotting&#34;&#34;&#34;
+        if shape != None:
+            self.shape = shape
+        if grid != None:
+            self.grid = grid
+        if xscale != None:
+            self.xscale = xscale
+        if yscale != None:
+            self.yscale = yscale
+        if showlegend != None:
+            self.showlegend = showlegend
+        if legendloc != None:
+            self.legendloc = legendloc
+        if linewidth != None:
+            self.linewidth = linewidth
+        if graphtype !=None:
+            self.graphtype = graphtype
+        if font != None:
+            self.font = font
+        if fontsize != None:
+            self.fontsize = fontsize
+        pylab.rc(&#34;font&#34;, family=self.font, size=self.fontsize)
+        return
+
+    def setupPlotVars(self):
+        &#34;&#34;&#34;Plot Vars &#34;&#34;&#34;
+        self.pltgrid = IntVar()
+        self.pltlegend = IntVar()
+        self.pltsymbol = StringVar()
+        self.pltsymbol.set(self.shape)
+        self.legendlocvar = StringVar()
+        self.legendlocvar.set(self.legendloc)
+        self.xscalevar = IntVar()
+        self.yscalevar = IntVar()
+        self.xscalevar.set(0)
+        self.yscalevar.set(0)
+        self.graphtypevar = StringVar()
+        self.graphtypevar.set(self.graphtype)
+        self.linewidthvar = DoubleVar()
+        self.linewidthvar.set(self.linewidth)
+        self.fontvar = StringVar()
+        self.fontvar.set(self.font)
+        self.fontsizevar = DoubleVar()
+        self.fontsizevar.set(self.fontsize)
+        #plot specific
+        self.plottitlevar = StringVar()
+        self.plottitlevar.set(&#39;&#39;)
+        self.plotxlabelvar = StringVar()
+        self.plotxlabelvar.set(&#39;&#39;)
+        self.plotylabelvar = StringVar()
+        self.plotylabelvar.set(&#39;&#39;)
+        self.dataseriesvars=[]
+        return
+
+
+    def applyOptions(self):
+        &#34;&#34;&#34;Apply the gui option vars to the plotter options&#34;&#34;&#34;
+        self.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
+               xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
+               showlegend = self.pltlegend.get(),
+               legendloc = self.legendlocvar.get(),
+               linewidth = self.linewidthvar.get(),
+               graphtype = self.graphtypevar.get(),
+               font = self.fontvar.get(),
+               fontsize = self.fontsizevar.get())
+        self.setTitle(self.plottitlevar.get())
+        self.setxlabel(self.plotxlabelvar.get())
+        self.setylabel(self.plotylabelvar.get())
+        return
+
+    def plotSetup(self, data=None):
+        &#34;&#34;&#34;Plot options dialog&#34;&#34;&#34;
+
+        if data != None:
+            self.setData(data)
+        self.plotprefswin=Toplevel()
+        self.plotprefswin.geometry(&#39;+300+450&#39;)
+        self.plotprefswin.title(&#39;Plot Preferences&#39;)
+        row=0
+        frame1=LabelFrame(self.plotprefswin, text=&#39;General&#39;)
+        frame1.grid(row=row,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+        def close_prefsdialog():
+            self.plotprefswin.destroy()
+
+        def choosecolor(x):
+            &#34;&#34;&#34;Choose color for data series&#34;&#34;&#34;
+            d=x[0]
+            c=x[1]
+            #print &#39;passed&#39;, &#39;d&#39;,d, &#39;c&#39;,c
+            import tkColorChooser
+            colour,colour_string = tkColorChooser.askcolor(c,parent=self.plotprefswin)
+            if colour != None:
+                self.datacolors[d] = str(colour_string)
+                cbuttons[d].configure(bg=colour_string)
+
+            return
+
+        Checkbutton(frame1, text=&#34;Grid lines&#34;, variable=self.pltgrid,
+                    onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky=&#39;news&#39;)
+        Checkbutton(frame1, text=&#34;Legend&#34;, variable=self.pltlegend,
+                    onvalue=1, offvalue=0).grid(row=1,column=0, columnspan=2, sticky=&#39;news&#39;)
+
+        Label(frame1,text=&#39;Symbol:&#39;).grid(row=2,column=0,padx=2,pady=2)
+        symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        symbol_menu = Menu(symbolbutton, tearoff=0)
+        symbolbutton[&#39;menu&#39;] = symbol_menu
+        for text in self.shapes:
+            symbol_menu.add_radiobutton(label=text,
+                                            variable=self.pltsymbol,
+                                            value=text,
+                                            indicatoron=1)
+        symbolbutton.grid(row=2,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+        row=row+1
+
+        Label(frame1,text=&#39;Legend pos:&#39;).grid(row=3,column=0,padx=2,pady=2)
+        legendposbutton = Menubutton(frame1,textvariable=self.legendlocvar,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        legendpos_menu = Menu(legendposbutton, tearoff=0)
+        legendposbutton[&#39;menu&#39;] = legendpos_menu
+        i=0
+        for p in self.legend_positions:
+            legendpos_menu.add_radiobutton(label=p,
+                                        variable=self.legendlocvar,
+                                        value=p,
+                                        indicatoron=1)
+            i+=1
+        legendposbutton.grid(row=3,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+
+        Label(frame1,text=&#39;Font:&#39;).grid(row=4,column=0,padx=2,pady=2)
+        fontbutton = Menubutton(frame1,textvariable=self.fontvar,
+                                                        relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+        font_menu = Menu(fontbutton, tearoff=0)
+        fontbutton[&#39;menu&#39;] = font_menu
+        for f in self.fonts:
+            font_menu.add_radiobutton(label=f,
+                                            variable=self.fontvar,
+                                            value=f,
+                                            indicatoron=1)
+        fontbutton.grid(row=4,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+        row=row+1
+        Label(frame1,text=&#39;Font size:&#39;).grid(row=5,column=0,padx=2,pady=2)
+        Scale(frame1,from_=8,to=26,resolution=0.5,orient=&#39;horizontal&#39;,
+                            relief=GROOVE,variable=self.fontsizevar).grid(row=5,column=1,padx=2,pady=2)
+
+        Label(frame1,text=&#39;linewidth:&#39;).grid(row=6,column=0,padx=2,pady=2)
+        Scale(frame1,from_=1,to=10,resolution=0.5,orient=&#39;horizontal&#39;,
+                            relief=GROOVE,variable=self.linewidthvar).grid(row=6,column=1,padx=2,pady=2)
+        row=0
+        scalesframe = LabelFrame(self.plotprefswin, text=&#34;Axes Scales&#34;)
+        scales={0:&#39;norm&#39;,1:&#39;log&#39;}
+        for i in range(0,2):
+            Radiobutton(scalesframe,text=&#39;x-&#39;+scales[i],variable=self.xscalevar,
+                            value=i).grid(row=0,column=i,pady=2)
+            Radiobutton(scalesframe,text=&#39;y-&#39;+scales[i],variable=self.yscalevar,
+                            value=i).grid(row=1,column=i,pady=2)
+        scalesframe.grid(row=row,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+
+        row=row+1
+        frame=LabelFrame(self.plotprefswin, text=&#39;Graph type&#39;)
+        frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        for i in range(len(self.graphtypes)):
+            Radiobutton(frame,text=self.graphtypes[i],variable=self.graphtypevar,
+                            value=self.graphtypes[i]).grid(row=0,column=i,pady=2)
+
+        row=row+1
+        labelsframe = LabelFrame(self.plotprefswin,text=&#39;Labels&#39;)
+        labelsframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        Label(labelsframe,text=&#39;Title:&#39;).grid(row=0,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plottitlevar,bg=&#39;white&#39;,relief=GROOVE).grid(row=0,column=1,padx=2,pady=2)
+        Label(labelsframe,text=&#39;X-axis label:&#39;).grid(row=1,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotxlabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
+        Label(labelsframe,text=&#39;Y-axis label:&#39;).grid(row=2,column=0,padx=2,pady=2)
+        Entry(labelsframe,textvariable=self.plotylabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
+
+        if self.currdata != None:
+            #print self.dataseriesvars
+            row=row+1
+            seriesframe = LabelFrame(self.plotprefswin, text=&#34;Data Series Labels&#34;)
+            seriesframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+            #self.dataseriesvars=[]
+            if len(self.dataseriesvars) == 0:
+                self.setDataSeries(range(len(self.currdata)))
+            r=1
+            sr=1
+            cl=0
+            for s in self.dataseriesvars:
+                Label(seriesframe,text=&#39;Series &#39;+str(r)).grid(row=r,column=cl,padx=2,pady=2)
+                Entry(seriesframe,textvariable=s,bg=&#39;white&#39;,
+                                          relief=GROOVE).grid(row=r,column=cl+1,padx=2,pady=2)
+                r+=1
+                if r &gt; 8:
+                    r=1
+                    cl+=2
+            row=row+1
+            cbuttons = {}
+            frame = LabelFrame(self.plotprefswin, text=&#34;Dataset Colors&#34;)
+            r=1
+            cl=0
+            sr=1
+            ci=0
+            for d in range(len(self.dataseriesvars)):
+                if d &gt;= len(self.datacolors):
+                    self.datacolors.append(self.colors[ci])
+                    ci+=1
+                c = self.datacolors[d]
+                action = lambda x =(d,c): choosecolor(x)
+                cbuttons[d]=Button(frame,text=&#39;Series &#39;+str(sr),bg=c,command=action)
+                cbuttons[d].grid(row=r,column=cl,sticky=&#39;news&#39;,padx=2,pady=2)
+                r+=1
+                sr+=1
+                if r &gt; 8:
+                    r=1
+                    cl+=1
+            frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+
+        row=row+1
+        frame=Frame(self.plotprefswin)
+        frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        replotb = Button(frame, text=&#34;Replot&#34;,
+                command=lambda:self.plotCurrent(graphtype=self.graphtype,guiopts=True),
+                relief=GROOVE, bg=&#39;#99ccff&#39;)
+        replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
+        b = Button(frame, text=&#34;Apply&#34;, command=self.applyOptions, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        b = Button(frame, text=&#34;Save&#34;, command=self.saveCurrent, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        b.pack(side=LEFT,fill=X,padx=2,pady=2)
+        c=Button(frame,text=&#39;Close&#39;, command=close_prefsdialog, relief=GROOVE, bg=&#39;#99ccff&#39;)
+        c.pack(side=LEFT,fill=X,padx=2,pady=2)
+        if self.currdata == None:
+            replotb.configure(state=DISABLED)
+
+        self.plotprefswin.focus_set()
+        self.plotprefswin.grab_set()
+
+        return</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="tkintertable.Plot.pylabPlotter.colors"><code class="name">var <span class="ident">colors</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.fonts"><code class="name">var <span class="ident">fonts</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.graphtypes"><code class="name">var <span class="ident">graphtypes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.legend_positions"><code class="name">var <span class="ident">legend_positions</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.linestyles"><code class="name">var <span class="ident">linestyles</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.shapes"><code class="name">var <span class="ident">shapes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="tkintertable.Plot.pylabPlotter.applyOptions"><code class="name flex">
+<span>def <span class="ident">applyOptions</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Apply the gui option vars to the plotter options</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def applyOptions(self):
+    &#34;&#34;&#34;Apply the gui option vars to the plotter options&#34;&#34;&#34;
+    self.setOptions(shape=self.pltsymbol.get(), grid=self.pltgrid.get(),
+           xscale=self.xscalevar.get(), yscale=self.yscalevar.get(),
+           showlegend = self.pltlegend.get(),
+           legendloc = self.legendlocvar.get(),
+           linewidth = self.linewidthvar.get(),
+           graphtype = self.graphtypevar.get(),
+           font = self.fontvar.get(),
+           fontsize = self.fontsizevar.get())
+    self.setTitle(self.plottitlevar.get())
+    self.setxlabel(self.plotxlabelvar.get())
+    self.setylabel(self.plotylabelvar.get())
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.clear"><code class="name flex">
+<span>def <span class="ident">clear</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>clear plot</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clear(self):
+    &#34;&#34;&#34;clear plot&#34;&#34;&#34;
+    pylab.clf()
+    self.legendlines = []
+    self.legendnames = []
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.doBarChart"><code class="name flex">
+<span>def <span class="ident">doBarChart</span></span>(<span>self, x, y, clr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Do a pylab bar chart</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doBarChart(self, x, y, clr):
+    &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+    #xloc = range(len(x))
+    for i in range(len(x)):
+        x[i] = float(x[i]);y[i] = float(y[i])
+    plotfig = pylab.bar(x, y, color=clr, alpha=0.6)
+
+    return plotfig</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.doHistogram"><code class="name flex">
+<span>def <span class="ident">doHistogram</span></span>(<span>self, data, bins=10)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Do a pylab histogram of 1 or more lists</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doHistogram(self, data, bins=10):
+    &#34;&#34;&#34;Do a pylab histogram of 1 or more lists&#34;&#34;&#34;
+    if len(data) == 1:
+        ydim=1
+    else:
+        ydim=2
+    dim=int(ceil(len(data)/2.0))
+    i=1
+    #fig = pylab.figure()
+    for r in data:
+        if len(r)==0:
+            continue
+        ax = pylab.subplot(ydim,dim,i)
+        print (r)
+        for j in range(len(r)):
+            r[j] = float(r[j])
+        pylab.hist(r,bins=bins)
+        i=i+1
+    return ax</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.doPieChart"><code class="name flex">
+<span>def <span class="ident">doPieChart</span></span>(<span>self, data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Do a pylab bar chart</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def doPieChart(self, data):
+    &#34;&#34;&#34;Do a pylab bar chart&#34;&#34;&#34;
+    if len(data) == 1:
+        ydim=1
+    else:
+        ydim=2
+    dim=int(ceil(len(data)/2.0))
+    i=1
+    for r in data:
+        if len(r)==0:
+            continue
+        fig = pylab.subplot(ydim,dim,i)
+
+        for j in range(len(r)):
+            r[j] = float(r[j])
+        pylab.pie(r)
+        i=i+1
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.hasData"><code class="name flex">
+<span>def <span class="ident">hasData</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Is there some plot data?</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def hasData(self):
+    &#34;&#34;&#34;Is there some plot data?&#34;&#34;&#34;
+    if self.currdata != None and len(self.currdata) &gt; 0:
+        return True
+    else:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.plotCurrent"><code class="name flex">
+<span>def <span class="ident">plotCurrent</span></span>(<span>self, data=None, graphtype='bar', show=True, guiopts=False, title=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Re-do the plot with the current options and data</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plotCurrent(self, data=None, graphtype=&#39;bar&#39;, show=True, guiopts=False,title=None):
+    &#34;&#34;&#34;Re-do the plot with the current options and data&#34;&#34;&#34;
+    if guiopts == True:
+        self.applyOptions()
+    if title != None:
+        self.settitle(title)
+    self.clear()
+    currfig = pylab.figure(1)
+
+    if data == None:
+        try:
+            data = self.currdata
+        except:
+            print (&#39;no data to plot&#39;)
+            return
+    else:
+        self.setData(data)
+
+    seriesnames = []
+    legendlines = []
+    for d in self.dataseriesvars:
+        seriesnames.append(d.get())
+
+    self.graphtype = graphtype
+    #do an X-Y plot, with the first list as X xals
+    if self.graphtype == &#39;bar&#39; or len(data) == 1:
+        i=0
+        pdata = copy.deepcopy(data)
+        if len(pdata)&gt;1:
+            x = pdata[0]
+            pdata.remove(x)
+            for y in pdata:
+                if i &gt;= len(self.colors):
+                    i = 0
+                c = self.colors[i]
+                self.doBarChart(x, y, clr=c)
+                i+=1
+        else:
+            y = pdata[0]
+            x = range(len(y))
+            self.doBarChart(x, y, clr=&#39;b&#39;)
+
+    elif self.graphtype == &#39;XY&#39;:
+        pdata = copy.deepcopy(data)
+        x = pdata[0]
+        pdata.remove(x)
+        i=0
+        for y in pdata:
+            if i &gt;= len(self.colors):
+                i = 0
+            c = self.colors[i]
+            line = self.plotXY(x, y, clr=c, lw=self.linewidth)
+            legendlines.append(line)
+            i+=1
+
+    elif self.graphtype == &#39;hist&#39;:
+        self.doHistogram(data)
+    elif self.graphtype == &#39;pie&#39;:
+        self.doPieChart(data)
+
+    pylab.title(self.plottitle)
+    pylab.xlabel(self.plotxlabel)
+    pylab.ylabel(self.plotylabel)
+    #create legend data
+    if self.showlegend == 1:
+        pylab.legend(legendlines,seriesnames,
+                     loc=self.legendloc)
+    if self.grid == 1:
+        pylab.grid(True)
+
+    if show == True:
+        self.show()
+    return currfig</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.plotSetup"><code class="name flex">
+<span>def <span class="ident">plotSetup</span></span>(<span>self, data=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Plot options dialog</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plotSetup(self, data=None):
+    &#34;&#34;&#34;Plot options dialog&#34;&#34;&#34;
+
+    if data != None:
+        self.setData(data)
+    self.plotprefswin=Toplevel()
+    self.plotprefswin.geometry(&#39;+300+450&#39;)
+    self.plotprefswin.title(&#39;Plot Preferences&#39;)
+    row=0
+    frame1=LabelFrame(self.plotprefswin, text=&#39;General&#39;)
+    frame1.grid(row=row,column=0,sticky=&#39;news&#39;,padx=2,pady=2)
+    def close_prefsdialog():
+        self.plotprefswin.destroy()
+
+    def choosecolor(x):
+        &#34;&#34;&#34;Choose color for data series&#34;&#34;&#34;
+        d=x[0]
+        c=x[1]
+        #print &#39;passed&#39;, &#39;d&#39;,d, &#39;c&#39;,c
+        import tkColorChooser
+        colour,colour_string = tkColorChooser.askcolor(c,parent=self.plotprefswin)
+        if colour != None:
+            self.datacolors[d] = str(colour_string)
+            cbuttons[d].configure(bg=colour_string)
+
+        return
+
+    Checkbutton(frame1, text=&#34;Grid lines&#34;, variable=self.pltgrid,
+                onvalue=1, offvalue=0).grid(row=0,column=0, columnspan=2, sticky=&#39;news&#39;)
+    Checkbutton(frame1, text=&#34;Legend&#34;, variable=self.pltlegend,
+                onvalue=1, offvalue=0).grid(row=1,column=0, columnspan=2, sticky=&#39;news&#39;)
+
+    Label(frame1,text=&#39;Symbol:&#39;).grid(row=2,column=0,padx=2,pady=2)
+    symbolbutton = Menubutton(frame1,textvariable=self.pltsymbol,
+                                                    relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+    symbol_menu = Menu(symbolbutton, tearoff=0)
+    symbolbutton[&#39;menu&#39;] = symbol_menu
+    for text in self.shapes:
+        symbol_menu.add_radiobutton(label=text,
+                                        variable=self.pltsymbol,
+                                        value=text,
+                                        indicatoron=1)
+    symbolbutton.grid(row=2,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+    row=row+1
+
+    Label(frame1,text=&#39;Legend pos:&#39;).grid(row=3,column=0,padx=2,pady=2)
+    legendposbutton = Menubutton(frame1,textvariable=self.legendlocvar,
+                                                    relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+    legendpos_menu = Menu(legendposbutton, tearoff=0)
+    legendposbutton[&#39;menu&#39;] = legendpos_menu
+    i=0
+    for p in self.legend_positions:
+        legendpos_menu.add_radiobutton(label=p,
+                                    variable=self.legendlocvar,
+                                    value=p,
+                                    indicatoron=1)
+        i+=1
+    legendposbutton.grid(row=3,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+
+    Label(frame1,text=&#39;Font:&#39;).grid(row=4,column=0,padx=2,pady=2)
+    fontbutton = Menubutton(frame1,textvariable=self.fontvar,
+                                                    relief=GROOVE, width=16, bg=&#39;lightblue&#39;)
+    font_menu = Menu(fontbutton, tearoff=0)
+    fontbutton[&#39;menu&#39;] = font_menu
+    for f in self.fonts:
+        font_menu.add_radiobutton(label=f,
+                                        variable=self.fontvar,
+                                        value=f,
+                                        indicatoron=1)
+    fontbutton.grid(row=4,column=1, sticky=&#39;news&#39;,padx=2,pady=2)
+    row=row+1
+    Label(frame1,text=&#39;Font size:&#39;).grid(row=5,column=0,padx=2,pady=2)
+    Scale(frame1,from_=8,to=26,resolution=0.5,orient=&#39;horizontal&#39;,
+                        relief=GROOVE,variable=self.fontsizevar).grid(row=5,column=1,padx=2,pady=2)
+
+    Label(frame1,text=&#39;linewidth:&#39;).grid(row=6,column=0,padx=2,pady=2)
+    Scale(frame1,from_=1,to=10,resolution=0.5,orient=&#39;horizontal&#39;,
+                        relief=GROOVE,variable=self.linewidthvar).grid(row=6,column=1,padx=2,pady=2)
+    row=0
+    scalesframe = LabelFrame(self.plotprefswin, text=&#34;Axes Scales&#34;)
+    scales={0:&#39;norm&#39;,1:&#39;log&#39;}
+    for i in range(0,2):
+        Radiobutton(scalesframe,text=&#39;x-&#39;+scales[i],variable=self.xscalevar,
+                        value=i).grid(row=0,column=i,pady=2)
+        Radiobutton(scalesframe,text=&#39;y-&#39;+scales[i],variable=self.yscalevar,
+                        value=i).grid(row=1,column=i,pady=2)
+    scalesframe.grid(row=row,column=1,sticky=&#39;news&#39;,padx=2,pady=2)
+
+    row=row+1
+    frame=LabelFrame(self.plotprefswin, text=&#39;Graph type&#39;)
+    frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+    for i in range(len(self.graphtypes)):
+        Radiobutton(frame,text=self.graphtypes[i],variable=self.graphtypevar,
+                        value=self.graphtypes[i]).grid(row=0,column=i,pady=2)
+
+    row=row+1
+    labelsframe = LabelFrame(self.plotprefswin,text=&#39;Labels&#39;)
+    labelsframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+    Label(labelsframe,text=&#39;Title:&#39;).grid(row=0,column=0,padx=2,pady=2)
+    Entry(labelsframe,textvariable=self.plottitlevar,bg=&#39;white&#39;,relief=GROOVE).grid(row=0,column=1,padx=2,pady=2)
+    Label(labelsframe,text=&#39;X-axis label:&#39;).grid(row=1,column=0,padx=2,pady=2)
+    Entry(labelsframe,textvariable=self.plotxlabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=1,column=1,padx=2,pady=2)
+    Label(labelsframe,text=&#39;Y-axis label:&#39;).grid(row=2,column=0,padx=2,pady=2)
+    Entry(labelsframe,textvariable=self.plotylabelvar,bg=&#39;white&#39;,relief=GROOVE).grid(row=2,column=1,padx=2,pady=2)
+
+    if self.currdata != None:
+        #print self.dataseriesvars
+        row=row+1
+        seriesframe = LabelFrame(self.plotprefswin, text=&#34;Data Series Labels&#34;)
+        seriesframe.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+        #self.dataseriesvars=[]
+        if len(self.dataseriesvars) == 0:
+            self.setDataSeries(range(len(self.currdata)))
+        r=1
+        sr=1
+        cl=0
+        for s in self.dataseriesvars:
+            Label(seriesframe,text=&#39;Series &#39;+str(r)).grid(row=r,column=cl,padx=2,pady=2)
+            Entry(seriesframe,textvariable=s,bg=&#39;white&#39;,
+                                      relief=GROOVE).grid(row=r,column=cl+1,padx=2,pady=2)
+            r+=1
+            if r &gt; 8:
+                r=1
+                cl+=2
+        row=row+1
+        cbuttons = {}
+        frame = LabelFrame(self.plotprefswin, text=&#34;Dataset Colors&#34;)
+        r=1
+        cl=0
+        sr=1
+        ci=0
+        for d in range(len(self.dataseriesvars)):
+            if d &gt;= len(self.datacolors):
+                self.datacolors.append(self.colors[ci])
+                ci+=1
+            c = self.datacolors[d]
+            action = lambda x =(d,c): choosecolor(x)
+            cbuttons[d]=Button(frame,text=&#39;Series &#39;+str(sr),bg=c,command=action)
+            cbuttons[d].grid(row=r,column=cl,sticky=&#39;news&#39;,padx=2,pady=2)
+            r+=1
+            sr+=1
+            if r &gt; 8:
+                r=1
+                cl+=1
+        frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+
+    row=row+1
+    frame=Frame(self.plotprefswin)
+    frame.grid(row=row,column=0,columnspan=2,sticky=&#39;news&#39;,padx=2,pady=2)
+    replotb = Button(frame, text=&#34;Replot&#34;,
+            command=lambda:self.plotCurrent(graphtype=self.graphtype,guiopts=True),
+            relief=GROOVE, bg=&#39;#99ccff&#39;)
+    replotb.pack(side=LEFT,fill=X,padx=2,pady=2)
+    b = Button(frame, text=&#34;Apply&#34;, command=self.applyOptions, relief=GROOVE, bg=&#39;#99ccff&#39;)
+    b.pack(side=LEFT,fill=X,padx=2,pady=2)
+    b = Button(frame, text=&#34;Save&#34;, command=self.saveCurrent, relief=GROOVE, bg=&#39;#99ccff&#39;)
+    b.pack(side=LEFT,fill=X,padx=2,pady=2)
+    c=Button(frame,text=&#39;Close&#39;, command=close_prefsdialog, relief=GROOVE, bg=&#39;#99ccff&#39;)
+    c.pack(side=LEFT,fill=X,padx=2,pady=2)
+    if self.currdata == None:
+        replotb.configure(state=DISABLED)
+
+    self.plotprefswin.focus_set()
+    self.plotprefswin.grab_set()
+
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.plotXY"><code class="name flex">
+<span>def <span class="ident">plotXY</span></span>(<span>self, x, y, title='', xlabel=None, ylabel=None, shape=None, clr=None, lw=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Do x-y plot of 2 lists</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def plotXY(self, x, y, title=&#39;&#39;, xlabel=None, ylabel=None, shape=None,
+                        clr=None, lw=1):
+    &#34;&#34;&#34;Do x-y plot of 2 lists&#34;&#34;&#34;
+    if shape == None:
+        shape = self.shape
+    if clr == None:
+        clr = &#39;b&#39;
+    if self.xscale == 1:
+        if self.yscale == 1:
+            line, = pylab.loglog(x, y, shape, color=clr, linewidth=lw)
+        else:
+            line, = pylab.semilogx(x, y, shape, color=clr, linewidth=lw)
+    elif self.yscale == 1:
+        line, = pylab.semilogy(x, y, shape, color=clr, linewidth=lw)
+    else:
+        line, = pylab.plot(x, y, shape, color=clr, linewidth=lw)
+    return line</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.saveCurrent"><code class="name flex">
+<span>def <span class="ident">saveCurrent</span></span>(<span>self, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def saveCurrent(self, filename=None):
+    import tkFileDialog, os
+    filename=tkFileDialog.asksaveasfilename(parent=self.plotprefswin,
+                                            defaultextension=&#39;.png&#39;,
+                                            filetypes=[(&#34;Png file&#34;,&#34;*.png&#34;),
+                                                       (&#34;All files&#34;,&#34;*.*&#34;)])
+    if not filename:
+        return
+    fig = self.plotCurrent(show=False)
+    fig.savefig(filename, dpi=self.dpi)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setData"><code class="name flex">
+<span>def <span class="ident">setData</span></span>(<span>self, data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the current plot data, useful for re-plotting without re-calling
+explicit functions from the parent</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setData(self, data):
+    &#34;&#34;&#34;Set the current plot data, useful for re-plotting without re-calling
+       explicit functions from the parent&#34;&#34;&#34;
+
+    self.currdata = data
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setDataSeries"><code class="name flex">
+<span>def <span class="ident">setDataSeries</span></span>(<span>self, names=None, start=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the series names, for use in legend</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setDataSeries(self, names=None, start=1):
+    &#34;&#34;&#34;Set the series names, for use in legend&#34;&#34;&#34;
+    self.dataseriesvars=[]
+    for i in range(start,len(names)):
+       s=StringVar()
+       s.set(names[i])
+       self.dataseriesvars.append(s)
+    #print self.dataseriesvars
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setFormat"><code class="name flex">
+<span>def <span class="ident">setFormat</span></span>(<span>self, format)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set current data format of currdata</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setFormat(self, format):
+    &#34;&#34;&#34;Set current data format of currdata&#34;&#34;&#34;
+    self.format = format
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setOptions"><code class="name flex">
+<span>def <span class="ident">setOptions</span></span>(<span>self, shape=None, grid=None, xscale=None, yscale=None, showlegend=None, legendloc=None, linewidth=None, graphtype=None, font=None, fontsize=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the options before plotting</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setOptions(self, shape=None, grid=None, xscale=None, yscale=None,
+                showlegend=None, legendloc=None, linewidth=None,
+                graphtype=None, font=None, fontsize=None):
+    &#34;&#34;&#34;Set the options before plotting&#34;&#34;&#34;
+    if shape != None:
+        self.shape = shape
+    if grid != None:
+        self.grid = grid
+    if xscale != None:
+        self.xscale = xscale
+    if yscale != None:
+        self.yscale = yscale
+    if showlegend != None:
+        self.showlegend = showlegend
+    if legendloc != None:
+        self.legendloc = legendloc
+    if linewidth != None:
+        self.linewidth = linewidth
+    if graphtype !=None:
+        self.graphtype = graphtype
+    if font != None:
+        self.font = font
+    if fontsize != None:
+        self.fontsize = fontsize
+    pylab.rc(&#34;font&#34;, family=self.font, size=self.fontsize)
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setTitle"><code class="name flex">
+<span>def <span class="ident">setTitle</span></span>(<span>self, title=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setTitle(self, title=None):
+    self.plottitle = title</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setupPlotVars"><code class="name flex">
+<span>def <span class="ident">setupPlotVars</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Plot Vars</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setupPlotVars(self):
+    &#34;&#34;&#34;Plot Vars &#34;&#34;&#34;
+    self.pltgrid = IntVar()
+    self.pltlegend = IntVar()
+    self.pltsymbol = StringVar()
+    self.pltsymbol.set(self.shape)
+    self.legendlocvar = StringVar()
+    self.legendlocvar.set(self.legendloc)
+    self.xscalevar = IntVar()
+    self.yscalevar = IntVar()
+    self.xscalevar.set(0)
+    self.yscalevar.set(0)
+    self.graphtypevar = StringVar()
+    self.graphtypevar.set(self.graphtype)
+    self.linewidthvar = DoubleVar()
+    self.linewidthvar.set(self.linewidth)
+    self.fontvar = StringVar()
+    self.fontvar.set(self.font)
+    self.fontsizevar = DoubleVar()
+    self.fontsizevar.set(self.fontsize)
+    #plot specific
+    self.plottitlevar = StringVar()
+    self.plottitlevar.set(&#39;&#39;)
+    self.plotxlabelvar = StringVar()
+    self.plotxlabelvar.set(&#39;&#39;)
+    self.plotylabelvar = StringVar()
+    self.plotylabelvar.set(&#39;&#39;)
+    self.dataseriesvars=[]
+    return</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setxlabel"><code class="name flex">
+<span>def <span class="ident">setxlabel</span></span>(<span>self, label=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setxlabel(self, label=None):
+    self.plotxlabel = label</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.setylabel"><code class="name flex">
+<span>def <span class="ident">setylabel</span></span>(<span>self, label=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setylabel(self, label=None):
+    self.plotylabel = label</code></pre>
+</details>
+</dd>
+<dt id="tkintertable.Plot.pylabPlotter.show"><code class="name flex">
+<span>def <span class="ident">show</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def show(self):
+    pylab.show()
+    return</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tkintertable" href="index.html">tkintertable</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tkintertable.Plot.pylabPlotter" href="#tkintertable.Plot.pylabPlotter">pylabPlotter</a></code></h4>
+<ul class="two-column">
+<li><code><a title="tkintertable.Plot.pylabPlotter.applyOptions" href="#tkintertable.Plot.pylabPlotter.applyOptions">applyOptions</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.clear" href="#tkintertable.Plot.pylabPlotter.clear">clear</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.colors" href="#tkintertable.Plot.pylabPlotter.colors">colors</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.doBarChart" href="#tkintertable.Plot.pylabPlotter.doBarChart">doBarChart</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.doHistogram" href="#tkintertable.Plot.pylabPlotter.doHistogram">doHistogram</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.doPieChart" href="#tkintertable.Plot.pylabPlotter.doPieChart">doPieChart</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.fonts" href="#tkintertable.Plot.pylabPlotter.fonts">fonts</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.graphtypes" href="#tkintertable.Plot.pylabPlotter.graphtypes">graphtypes</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.hasData" href="#tkintertable.Plot.pylabPlotter.hasData">hasData</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.legend_positions" href="#tkintertable.Plot.pylabPlotter.legend_positions">legend_positions</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.linestyles" href="#tkintertable.Plot.pylabPlotter.linestyles">linestyles</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.plotCurrent" href="#tkintertable.Plot.pylabPlotter.plotCurrent">plotCurrent</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.plotSetup" href="#tkintertable.Plot.pylabPlotter.plotSetup">plotSetup</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.plotXY" href="#tkintertable.Plot.pylabPlotter.plotXY">plotXY</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.saveCurrent" href="#tkintertable.Plot.pylabPlotter.saveCurrent">saveCurrent</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setData" href="#tkintertable.Plot.pylabPlotter.setData">setData</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setDataSeries" href="#tkintertable.Plot.pylabPlotter.setDataSeries">setDataSeries</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setFormat" href="#tkintertable.Plot.pylabPlotter.setFormat">setFormat</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setOptions" href="#tkintertable.Plot.pylabPlotter.setOptions">setOptions</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setTitle" href="#tkintertable.Plot.pylabPlotter.setTitle">setTitle</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setupPlotVars" href="#tkintertable.Plot.pylabPlotter.setupPlotVars">setupPlotVars</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setxlabel" href="#tkintertable.Plot.pylabPlotter.setxlabel">setxlabel</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.setylabel" href="#tkintertable.Plot.pylabPlotter.setylabel">setylabel</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.shapes" href="#tkintertable.Plot.pylabPlotter.shapes">shapes</a></code></li>
+<li><code><a title="tkintertable.Plot.pylabPlotter.show" href="#tkintertable.Plot.pylabPlotter.show">show</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
