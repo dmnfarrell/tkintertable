@@ -2220,7 +2220,7 @@ class TableCanvas(Canvas):
     def importTable(self):
         self.importCSV()
 
-    def importCSV(self, filename=None):
+    def importCSV(self, filename=None, sep=','):
         """Import from csv file"""
 
         if filename is None:
