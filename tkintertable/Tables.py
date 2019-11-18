@@ -125,6 +125,7 @@ class TableCanvas(Canvas):
         self.showkeynamesinheader=False
         self.thefont = ('Arial',12)
         self.cellbackgr = '#F7F7FA'
+        self.headerbackgr = 'gray25'
         self.entrybackgr = 'white'
         self.grid_color = '#ABB1AD'
         self.selectedcolor = 'yellow'
@@ -226,7 +227,7 @@ class TableCanvas(Canvas):
 
         #Add the table and header to the frame
         self.tablerowheader = RowHeader(self.parentframe, self, width=self.rowheaderwidth)
-        self.tablecolheader = ColumnHeader(self.parentframe, self)
+        self.tablecolheader = ColumnHeader(self.parentframe, self, bg=self.headerbackgr)
         self.Yscrollbar = AutoScrollbar(self.parentframe,orient=VERTICAL,command=self.set_yviews)
         self.Yscrollbar.grid(row=1,column=2,rowspan=1,sticky='news',pady=0,ipady=0)
         self.Xscrollbar = AutoScrollbar(self.parentframe,orient=HORIZONTAL,command=self.set_xviews)
@@ -2029,7 +2030,8 @@ class TableCanvas(Canvas):
                         'autoresizecols': 0,
                         'align': 'w',
                         'celltextsize':11, 'celltextfont':'Arial',
-                        'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
+                        'cellbackgr': self.cellbackgr, 'headerbackgr':self.headerbackgr,
+                        'grid_color': self.grid_color,
                         'linewidth' : self.linewidth,
                         'rowselectedcolor': self.rowselectedcolor,
                         'rowheaderwidth': self.rowheaderwidth}
@@ -2064,6 +2066,7 @@ class TableCanvas(Canvas):
         self.celltextsizevar = IntVar()
         self.celltextsizevar.set(self.prefs.get('celltextsize'))
         self.cellbackgr = self.prefs.get('cellbackgr')
+        self.headerbackgr = self.prefs.get('headerbackgr')
         self.grid_color = self.prefs.get('grid_color')
         self.rowselectedcolor = self.prefs.get('rowselectedcolor')
         self.fontsize = self.celltextsizevar.get()
@@ -2094,6 +2097,7 @@ class TableCanvas(Canvas):
             self.prefs.set('celltextsize', self.celltextsizevar.get())
             self.prefs.set('celltextfont', self.fontvar.get())
             self.prefs.set('cellbackgr', self.cellbackgr)
+            self.prefs.set('headerbackgr', self.headerbackgr)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
             self.prefs.set('rowheaderwidth', self.rowheaderwidth)
@@ -2283,8 +2287,8 @@ class ColumnHeader(Canvas):
     """Class that takes it's size and rendering from a parent table
         and column names from the table model."""
 
-    def __init__(self, parent=None, table=None):
-        Canvas.__init__(self, parent, bg='gray25', width=500, height=20)
+    def __init__(self, parent=None, table=None, bg="gray25"):
+        Canvas.__init__(self, parent, bg=bg, width=500, height=20)
         self.thefont='Arial 14'
         if table != None:
             self.table = table
