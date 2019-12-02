@@ -51,9 +51,9 @@ class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
     def __init__(self, parent=None, model=None, data=None, read_only=False,
-                 width=None, height=None,
+                 width=None, height=None, bgcolor='#F7F7FA', fgcolor='black',
                  rows=10, cols=5, **kwargs):
-        Canvas.__init__(self, parent, bg='white',
+        Canvas.__init__(self, parent, bg=bgcolor,
                          width=width, height=height,
                          relief=GROOVE,
                          scrollregion=(0,0,300,200))
@@ -64,6 +64,7 @@ class TableCanvas(Canvas):
         self.width = width
         self.height = height
         self.set_defaults()
+        self.fgcolor = fgcolor
 
         self.currentpage = None
         self.navFrame = None
@@ -124,7 +125,8 @@ class TableCanvas(Canvas):
         self.rowheaderwidth=40
         self.showkeynamesinheader=False
         self.thefont = ('Arial',12)
-        self.cellbackgr = '#F7F7FA'
+        self.bgcolor = '#F7F7FA'
+        self.fgcolor = 'black'
         self.entrybackgr = 'white'
         self.grid_color = '#ABB1AD'
         self.selectedcolor = 'yellow'
@@ -312,7 +314,7 @@ class TableCanvas(Canvas):
         self.cols = self.model.getColumnCount()
 
         self.tablewidth = (self.cellwidth) * self.cols
-        self.configure(bg=self.cellbackgr)
+        self.configure(bg=self.bgcolor)
         self.setColPositions()
 
         #are we drawing a filtered subset of the recs?
@@ -1578,7 +1580,7 @@ class TableCanvas(Canvas):
         """Cell is colored"""
         if delete==1:
             self.delete('cellbg'+str(row)+str(col))
-        if color==None or color==self.cellbackgr:
+        if color==None or color==self.bgcolor:
             return
         else:
             bg=color
@@ -1695,7 +1697,7 @@ class TableCanvas(Canvas):
             return
 
         if fgcolor == None or fgcolor == "None":
-            fgcolor = 'black'
+            fgcolor = self.fgcolor
         if align == None:
             align = 'w'
         if align == 'w':
@@ -1852,10 +1854,10 @@ class TableCanvas(Canvas):
         self.lift(obj)
         return
 
-    def setcellbackgr(self):
-        clr = self.getaColor(self.cellbackgr)
+    def setbgcolor(self):
+        clr = self.getaColor(self.bgcolor)
         if clr != None:
-            self.cellbackgr = clr
+            self.bgcolor = clr
         return
 
     def setgrid_color(self):
@@ -1978,10 +1980,10 @@ class TableCanvas(Canvas):
 
         #colors
         style = Style()
-        style.configure("cb.TButton", background=self.cellbackgr)
-        cellbackgrbutton = Button(frame2, text='table background', style="cb.TButton", #bg=self.cellbackgr,
-                                 command=self.setcellbackgr)
-        cellbackgrbutton.grid(row=row,column=0,columnspan=2, sticky='news',padx=3,pady=2)
+        style.configure("cb.TButton", background=self.bgcolor)
+        bgcolorbutton = Button(frame2, text='table background', style="cb.TButton", #bg=self.bgcolor,
+                                 command=self.setbgcolor)
+        bgcolorbutton.grid(row=row,column=0,columnspan=2, sticky='news',padx=3,pady=2)
         row=row+1
         style = Style()
         style.configure("gc.TButton", background=self.grid_color)
@@ -2029,7 +2031,7 @@ class TableCanvas(Canvas):
                         'autoresizecols': 0,
                         'align': 'w',
                         'celltextsize':11, 'celltextfont':'Arial',
-                        'cellbackgr': self.cellbackgr, 'grid_color': self.grid_color,
+                        'bgcolor': self.bgcolor, 'grid_color': self.grid_color,
                         'linewidth' : self.linewidth,
                         'rowselectedcolor': self.rowselectedcolor,
                         'rowheaderwidth': self.rowheaderwidth}
@@ -2063,7 +2065,7 @@ class TableCanvas(Canvas):
         self.alternaterowsvar.set(self.prefs.get('alternaterows'))
         self.celltextsizevar = IntVar()
         self.celltextsizevar.set(self.prefs.get('celltextsize'))
-        self.cellbackgr = self.prefs.get('cellbackgr')
+        self.bgcolor = self.prefs.get('bgcolor')
         self.grid_color = self.prefs.get('grid_color')
         self.rowselectedcolor = self.prefs.get('rowselectedcolor')
         self.fontsize = self.celltextsizevar.get()
@@ -2093,7 +2095,7 @@ class TableCanvas(Canvas):
             self.linewidth = self.linewidthvar.get()
             self.prefs.set('celltextsize', self.celltextsizevar.get())
             self.prefs.set('celltextfont', self.fontvar.get())
-            self.prefs.set('cellbackgr', self.cellbackgr)
+            self.prefs.set('bgcolor', self.bgcolor)
             self.prefs.set('grid_color', self.grid_color)
             self.prefs.set('rowselectedcolor', self.rowselectedcolor)
             self.prefs.set('rowheaderwidth', self.rowheaderwidth)
@@ -2117,7 +2119,7 @@ class TableCanvas(Canvas):
     def AskForColorButton(self, frame, text, func):
         def SetColor():
             ctuple, variable = tkColorChooser.askcolor(title='pick a color',
-                                                       initialcolor=self.cellbackgr)
+                                                       initialcolor=self.bgcolor)
 
             return
         bgcolorbutton = Button(frame, text=text,command=SetColor)

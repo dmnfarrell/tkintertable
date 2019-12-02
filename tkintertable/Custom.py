@@ -40,7 +40,8 @@ class MyTable(TableCanvas):
         a customised table - just an example"""
      def __init__(self, parent=None, model=None):
          TableCanvas.__init__(self, parent, model)
-         self.cellbackgr = '#FFFAF0'
+         self.bgcolor = '#FFFAF1'
+         self.fgcolor = 'black'
          self.entrybackgr = 'white'
 
          self.selectedcolor = 'yellow'
