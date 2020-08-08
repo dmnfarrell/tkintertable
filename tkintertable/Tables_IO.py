@@ -147,8 +147,9 @@ class TableExporter:
         """Provides export utility methods for the Table and Table Model classes"""
 
         return
-
-    def ExportTableData(self, table, sep=None):
+    
+    @staticmethod
+    def ExportTableData(table, sep=None):
         """Export table data to a comma separated file"""
         
         import platform
