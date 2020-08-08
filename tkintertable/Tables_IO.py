@@ -150,7 +150,9 @@ class TableExporter:
 
     def ExportTableData(self, table, sep=None):
         """Export table data to a comma separated file"""
-
+        
+        import platform
+        
         parent=table.parentframe
         filename = filedialog.asksaveasfilename(parent=parent,defaultextension='.csv',
                                                   filetypes=[("CSV files","*.csv")] )
@@ -158,7 +160,10 @@ class TableExporter:
             return
         if sep == None:
             sep = ','
-        writer = csv.writer(open(filename, "w"), delimiter=sep)
+        if platform.system() == "Windows":
+            writer = csv.writer(open(filename, "w", newline=""), delimiter=sep)
+        else: 
+            writer = csv.writer(open(filename, "w"), delimiter=sep)
         model=table.getModel()
         recs = model.getAllCells()
         #take column labels as field names
