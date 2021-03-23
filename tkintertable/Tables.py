@@ -2235,7 +2235,7 @@ class TableCanvas(Canvas):
             model.importDict(importer.data)
         else:
             model = TableModel()
-            model.importCSV(filename)
+            model.importCSV(filename, sep=sep)
         self.updateModel(model)
         return
 
