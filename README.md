@@ -11,11 +11,21 @@ Python uses a GUI library called Tkinter as default. This set of classes allows 
 
 ## Installation
 
-```pip install tkintertable``` or ```easy_install tkintertable```
+```
+pip install tkintertable
+``` 
 
-You can clone the current source using
+Install latest from github:
 
+```
+pip install -e git+https://github.com/dmnfarrell/tkintertable.git#egg=tkintertable
+```
+
+You can clone the current source using:
+
+```
 git clone https://github.com/dmnfarrell/tkintertable.git
+```
 
 ## Usage
 
@@ -28,4 +38,3 @@ For programmers, the module documentation is at http://dmnfarrell.github.io/tkin
 ##  See also
 
 https://github.com/dmnfarrell/pandastable
-
