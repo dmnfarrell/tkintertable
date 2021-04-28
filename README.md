@@ -7,15 +7,26 @@
 
 Python uses a GUI library called Tkinter as default. This set of classes allows interactive spreadsheet-style tables to be added into an application. Tkinter is the standard GUI toolkit for python. It is old but still quite popular. There are various libraries that extend Tkinter functionality, such as Pmw, but there is currently no extendable table class for Tkinter. A sample application using these classes is included in the distribution.
 
-**This library is also now Python 3 compatible**
+> **Note:** This library is also now **Python 3.x** compatible
 
 ## Installation
 
-```pip install tkintertable``` or ```easy_install tkintertable```
+You can install this library: 
 
-You can clone the current source using
+```bash
+# PIP
+pip install tkintertable
 
+# Easy Install
+easy_install tkintertable
+```
+
+Or if you prefer, you can download this current source using:
+
+```bash
+# Git
 git clone https://github.com/dmnfarrell/tkintertable.git
+```
 
 ## Usage
 
