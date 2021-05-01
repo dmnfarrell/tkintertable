@@ -39,4 +39,3 @@ For programmers, the module documentation is at http://dmnfarrell.github.io/tkin
 ##  See also
 
 https://github.com/dmnfarrell/pandastable
-
