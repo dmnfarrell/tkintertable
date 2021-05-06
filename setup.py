@@ -7,7 +7,7 @@ with open('description.txt') as f:
 
 setup(
     name = 'tkintertable',
-    version = '1.3.2',
+    version = '1.3.3',
     description = 'Extendable table class for Tkinter',
     long_description = long_description,
     url='https://github.com/dmnfarrell/tkintertable',

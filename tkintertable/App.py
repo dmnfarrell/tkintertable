@@ -20,6 +20,7 @@
 """
 
 from __future__ import absolute_import, division, print_function
+import sys, os
 try:
     from tkinter import *
     from tkinter.ttk import *
@@ -463,7 +464,7 @@ class TablesApp(Frame):
         self.ab_win=Toplevel()
         self.ab_win.geometry('+100+350')
         self.ab_win.title('About TablesApp')
-
+        from . import __version__
         from . import Table_images
         logo = Table_images.tableapp_logo()
         label = Label(self.ab_win,image=logo)
@@ -474,7 +475,8 @@ class TablesApp(Frame):
                 'Copyright (C) Damien Farrell 2008-', 'This program is free software; you can redistribute it and/or',
                 'modify it under the terms of the GNU General Public License',
                 'as published by the Free Software Foundation; either version 2',
-                'of the License, or (at your option) any later version.']
+                'of the License, or (at your option) any later version.',
+                'tkintertable version %s' %__version__]
         row=1
         for line in text:
             tmp=Label(self.ab_win,text=line)
@@ -486,7 +488,7 @@ class TablesApp(Frame):
         """Open the online documentation"""
 
         import webbrowser
-        link='http://sourceforge.net/projects/tkintertable/'
+        link='https://github.com/dmnfarrell/tkintertable/wiki'
         webbrowser.open(link,autoraise=1)
         return
 
@@ -540,7 +542,7 @@ class ToolBar(Frame):
 
 def main():
     "Run the application"
-    import sys, os
+   
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-f", "--file", dest="tablefile",

@@ -3,15 +3,46 @@ Description
 
 This package allows interactive spreadsheet-style tables to be added into a Tkinter application.
 Tkinter is the standard GUI toolkit for Python. A sample application using these classes
-is included in the distribution. Now works with Python 3.
+is included in the distribution. Now works with Python 3. A sample application using these classes is included in the distribution.
 
 Installation
 ------------
 
-pip install tkintertable
+From pypi::
 
-You can clone the current source using
+    pip install tkintertable
 
-git clone https://github.com/dmnfarrell/tkintertable.git
+From github::
 
-https://github.com/dmnfarrell/tkintertable/wiki for more info.
+    pip install -e git+https://github.com/dmnfarrell/tkintertable.git#egg=tkintertable
+
+You can clone the current source using::
+
+    git clone https://github.com/dmnfarrell/tkintertable.git
+
+
+Usage
+-----
+
+Import::
+
+    from tkintertable import TableCanvas, TableModel
+
+Create table::
+
+    tframe = Frame(master)
+    tframe.pack()
+    table = TableCanvas(tframe)
+    table.show()
+    
+Constructor options::
+ 
+    table = TableCanvas(frame, model,
+			cellwidth=60, cellbackgr='#e3f698',
+			thefont=('Arial',12),rowheight=18, rowheaderwidth=30,
+			rowselectedcolor='yellow', editable=True)
+			
+Links
+-----
+
+See https://github.com/dmnfarrell/tkintertable/wiki for help.
