@@ -20,6 +20,7 @@
 """
 
 from __future__ import absolute_import, division, print_function
+import sys
 try:
     from tkinter import *
     from tkinter.ttk import *
