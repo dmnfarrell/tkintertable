@@ -1488,7 +1488,7 @@ class TableCanvas(Canvas):
         """Call pylab plot dialog setup, send data if we haven't already
             plotted"""
 
-        from PylabPlot import pylabPlotter
+        from .Plot import pylabPlotter
         if not hasattr(self, 'pyplot'):
             self.pyplot = pylabPlotter()
         plotdata = self.getSelectionValues()
