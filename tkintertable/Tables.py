@@ -66,7 +66,7 @@ class TableCanvas(Canvas):
         self.height = height
         self.set_defaults()
         self.fgcolor = fgcolor
-
+        self.bgcolor = bgcolor
         self.currentpage = None
         self.navFrame = None
         self.currentrow = 0
