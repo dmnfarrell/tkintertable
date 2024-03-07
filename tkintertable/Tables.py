@@ -756,15 +756,17 @@ class TableCanvas(Canvas):
         w=self.cellwidth
         x = int(self.canvasx(event.x))
         x_start=self.x_start
-        #print self.col_positions
-        for colpos in self.col_positions:
+        # print(self.col_positions)
+        for idx, colpos in enumerate(self.col_positions):
             try:
-                nextpos=self.col_positions[self.col_positions.index(colpos)+1]
+                # nextpos=self.col_positions[self.col_positions.index(colpos)+1]
+                nextpos = self.col_positions[idx+1]
             except:
-                nextpos=self.tablewidth
+                nextpos = self.tablewidth
+                
             if x > colpos and x <= nextpos:
-                #print 'x=', x, 'colpos', colpos, self.col_positions.index(colpos)
-                return self.col_positions.index(colpos)
+                #print 'x=', x, 'colpos', colpos, idx
+                return idx
             else:
                 #print None
                 pass
@@ -2317,7 +2319,7 @@ class ColumnHeader(Canvas):
         self.configure(scrollregion=(0,0, self.table.tablewidth+self.table.x_start, self.height))
         self.delete('gridline','text')
         self.delete('rect')
-        self.atdivider = None
+        self.atdivider = -1
         align='w'
         pad=4
         h=self.height
@@ -2368,7 +2370,7 @@ class ColumnHeader(Canvas):
         self.table.allrows = True
         self.table.setSelectedCol(colclicked)
 
-        if self.atdivider == 1:
+        if self.atdivider >= 0:
             return
         self.drawRect(self.table.currentcol)
         #also draw a copy of the rect to be dragged
@@ -2385,10 +2387,11 @@ class ColumnHeader(Canvas):
         """When mouse released implement resize or col move"""
 
         self.delete('dragrect')
-        if self.atdivider == 1:
-            #col = self.table.get_col_clicked(event)
+        if self.atdivider >= 0:
             x=int(self.canvasx(event.x))
-            col = self.table.currentcol
+            #col = self.table.get_col_clicked(event)
+            #col = self.table.currentcol
+            col = self.atdivider
             x1,y1,x2,y2 = self.table.getCellCoords(0,col)
             newwidth=x - x1
             if newwidth < 5:
@@ -2397,7 +2400,7 @@ class ColumnHeader(Canvas):
             self.table.delete('resizeline')
             self.delete('resizeline')
             self.delete('resizesymbol')
-            self.atdivider = 0
+            self.atdivider = -1
             return
         self.delete('resizesymbol')
         #move column
@@ -2413,7 +2416,7 @@ class ColumnHeader(Canvas):
         """Handle column drag, will be either to move cols or resize"""
 
         x=int(self.canvasx(event.x))
-        if self.atdivider == 1:
+        if self.atdivider >= 0:
             self.table.delete('resizeline')
             self.delete('resizeline')
             self.table.create_line(x, 0, x, self.table.rowheight*self.table.rows,
@@ -2431,13 +2434,21 @@ class ColumnHeader(Canvas):
 
         return
 
+    # def within(self, val, l, d):
+    #     """Utility funtion to see if val is within d of any
+    #         items in the list l"""
+    #     for v in l:
+    #         if abs(val-v) <= d:
+    #             return 1
+    #     return 0
+    
     def within(self, val, l, d):
         """Utility funtion to see if val is within d of any
             items in the list l"""
-        for v in l:
+        for idx, v in enumerate(l):
             if abs(val-v) <= d:
-                return 1
-        return 0
+                return idx
+        return -1
 
     def handle_mouse_move(self, event):
         """Handle mouse moved in header, if near divider draw resize symbol"""
@@ -2450,15 +2461,16 @@ class ColumnHeader(Canvas):
         x=int(self.canvasx(event.x))
         if x > self.tablewidth+w:
             return
+        
         #if event x is within x pixels of divider, draw resize symbol
-        if x!=x_start and self.within(x, self.table.col_positions, 4):
-            col = self.table.get_col_clicked(event)
-            if col == None:
+        if x!=x_start:
+            divider_idx = self.within(x, self.table.col_positions, 16)
+            if divider_idx > 0:
+                self.draw_resize_symbol(divider_idx-1)
+                self.atdivider = divider_idx-1
                 return
-            self.draw_resize_symbol(col)
-            self.atdivider = 1
-        else:
-            self.atdivider = 0
+
+        self.atdivider = -1
         return
 
     def handle_right_click(self, event):
