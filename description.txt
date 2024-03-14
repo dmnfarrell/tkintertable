@@ -8,7 +8,7 @@ is included in the distribution. Now works with Python 3. A sample application u
 Installation
 ------------
 
-From pypi::
+From pyp::
 
     pip install tkintertable
 
