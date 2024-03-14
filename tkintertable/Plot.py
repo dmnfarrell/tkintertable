@@ -24,10 +24,10 @@ import sys, os
 import copy
 try:
     from tkinter import *
-    from tkinter.ttk import *
+#     from tkinter.ttk import *
 except:
     from Tkinter import *
-    from ttk import *
+#     from ttk import *
 if (sys.version_info > (3, 0)):
     from tkinter import filedialog, messagebox, simpledialog
 else:
