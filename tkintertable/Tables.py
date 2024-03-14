@@ -52,7 +52,7 @@ class TableCanvas(Canvas):
     """A tkinter class for providing table functionality"""
 
     def __init__(self, parent=None, model=None, data=None, read_only=False,
-                 width=None, height=None, bgcolor='#F7F7FA', fgcolor='black',
+                 width=None, height=None, autoselected_row=True, bgcolor='#F7F7FA', fgcolor='black',
                  rows=10, cols=5, **kwargs):
         Canvas.__init__(self, parent, bg=bgcolor,
                          width=width, height=height,
@@ -64,6 +64,7 @@ class TableCanvas(Canvas):
         self.platform = platform.system()
         self.width = width
         self.height = height
+        self.autoselected_row = autoselected_row
         self.set_defaults()
         self.fgcolor = fgcolor
         self.bgcolor = bgcolor
@@ -360,8 +361,9 @@ class TableCanvas(Canvas):
         self.tablecolheader.redraw()
         self.tablerowheader.redraw(align=self.align, showkeys=self.showkeynamesinheader)
         #self.setSelectedRow(self.currentrow)
-        self.drawSelectedRow()
-        self.drawSelectedRect(self.currentrow, self.currentcol)
+        if self.autoselected_row:
+            self.drawSelectedRow()
+            self.drawSelectedRect(self.currentrow, self.currentcol)
         #print self.multiplerowlist
 
         if len(self.multiplerowlist)>1:
